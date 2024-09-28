@@ -1,0 +1,8 @@
+- name: Build Hosts
+  uid: build-hosts
+- name: TeamCity
+  uid: teamcity
+- name: Custom Host
+  uid: custom-host
+- name: Uncontrolled Host
+  uid: uncontrolled-host

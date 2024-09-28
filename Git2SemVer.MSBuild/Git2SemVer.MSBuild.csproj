@@ -1,0 +1,79 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net472</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix>0.5.0</VersionPrefix>
+    <Title>Simple automatic Git to Semantic Versioning for .NET projects.</Title>
+    <Description>Automated Semantic Versioning for Visual Studio and dotnet cli.</Description>
+    <PackageProjectUrl>https://github.com/NoeticTools/Git2SemVer</PackageProjectUrl>
+    <PackageIcon>Git2SemVer_icon_32x32.png</PackageIcon>
+    <ApplicationIcon>Git2SemVer_icon_64x64.ico</ApplicationIcon>
+    <PackageReadmeFile>NuGet_description.md</PackageReadmeFile>
+    <PackageTags>versioning semver git noetictools msbuild</PackageTags>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <TargetsForTfmSpecificBuildOutput>
+      $(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage
+    </TargetsForTfmSpecificBuildOutput>
+    <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <GenerateDependencyFile>true</GenerateDependencyFile>
+    <UpdateVersionProperties>true</UpdateVersionProperties>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>NoeticTools.Git2SemVer.MSBuild.Tests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>NoeticTools.Git2SemVer.MSBuild.IntegrationTests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <Target Name="AddBuildDependencyFileToBuiltProjectOutputGroupOutput" BeforeTargets="BuiltProjectOutputGroup" Condition=" '$(GenerateDependencyFile)' == 'true'">
+    <ItemGroup>
+      <BuiltProjectOutputGroupOutput Include="$(ProjectDepsFilePath)" TargetPath="$(ProjectDepsFileName)" FinalOutputPath="$(ProjectDepsFilePath)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths)" TargetPath="%(ReferenceCopyLocalPaths.DestinationSubPath)" />
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="17.11.4" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.4" PrivateAssets="all" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="4.11.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" PrivateAssets="all" />
+    <PackageReference Include="NuGet.Versioning" Version="6.11.0" PrivateAssets="all" />
+    <PackageReference Include="Semver" Version="2.3.0" PrivateAssets="all" />
+    <PackageReference Include="System.Text.Json" Version="8.0.4" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Git2SemVer_icon_64x64.ico" Pack="False" />
+    <None Include="..\Documentation\Images\Git2SemVer_icon_32x32.png" Link="Git2SemVer_icon_32x32.png" Pack="True" PackagePath="\" />
+    <None Include="NuGet_description.md" Pack="True" PackagePath="\" />
+    <Content Include="Build\NoeticTools.Git2SemVer.MSBuild.props" PackagePath="build/" />
+    <Content Include="Build\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="build/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Git2Semver.Common\Git2Semver.Common.csproj" />
+    <ProjectReference Include="..\MSBuildScripting\MSBuild.Tasking.csproj" />
+    <ProjectReference Include="..\MSBuildTask.Logging\MSBuild.TaskLogging.csproj" />
+    <ProjectReference Include="..\Tools\Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Tools\CliExecution\" />
+    <Folder Include="Tools\Git\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Git2SemVer.Tool": {
+      "commandName": "Project"
+    }
+  }
+}

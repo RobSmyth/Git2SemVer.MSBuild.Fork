@@ -1,0 +1,10 @@
+- name: C# Script
+  uid: csharp-script
+- name: Example scripts
+  uid: example-scripts
+- name: SemVersion
+  uid: semversion
+- name: Script logging
+  uid: script-logging
+- name: Namespaces & references
+  uid: csharp-script-namespaces

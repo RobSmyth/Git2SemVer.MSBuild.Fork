@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net472</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+    <Configurations>Debug;Release;DebugPack</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\TestSolutions\StandAloneVersioning\TestApplication\Git2SemVer.csx" Link="Git2SemVer.csx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Git2SemVer.MSBuild\Git2SemVer.MSBuild.csproj" />
+  </ItemGroup>
+
+</Project>
