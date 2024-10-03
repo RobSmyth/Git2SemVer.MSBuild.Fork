@@ -89,18 +89,6 @@ public interface IVersionGeneratorInputs : IMSBuildTask
     string BuildScriptPath { get; }
 
     /// <summary>
-    ///     The directory that will be used to run git.exe from.
-    ///     This may usually be any folder within the cloned repository directory,
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         The default is for this to be the project's directory.
-    ///         It must be possible to execute git.exe from this directory.
-    ///     </para>
-    /// </remarks>
-    string WorkingDirectory { get; }
-
-    /// <summary>
     ///     Optional input MSBuild <c>Git2SemVer_HostType</c> property.
     ///     If set overrides automatic host type detection.
     /// </summary>
@@ -178,6 +166,18 @@ public interface IVersionGeneratorInputs : IMSBuildTask
     ///     </para>
     /// </remarks>
     string VersionSuffix { get; }
+
+    /// <summary>
+    ///     The directory that will be used to run git.exe from.
+    ///     This may usually be any folder within the cloned repository directory,
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         The default is for this to be the project's directory.
+    ///         It must be possible to execute git.exe from this directory.
+    ///     </para>
+    /// </remarks>
+    string WorkingDirectory { get; }
 
     bool Validate(ILogger logger);
 }

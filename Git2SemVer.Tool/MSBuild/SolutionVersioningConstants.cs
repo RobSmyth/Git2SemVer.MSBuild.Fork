@@ -1,7 +1,4 @@
-﻿using Spectre.Console;
-
-
-namespace NoeticTools.Git2SemVer.Tool.MSBuild;
+﻿namespace NoeticTools.Git2SemVer.Tool.MSBuild;
 
 internal static class SolutionVersioningConstants
 {

@@ -19,6 +19,34 @@ public interface IBuildHost
     string BuildContext { get; set; }
 
     /// <summary>
+    ///     The host's build ID.
+    /// </summary>
+    /// <remarks>
+    ///     <p>
+    ///         The build ID is constructed from the host's <c>BuildNumber</c> and <c>BuildContext</c> using format return from
+    ///         <c>BuildIdFormat</c>.
+    ///         On build systems that provide a build number for every build it is the <c>BuildNumber</c>.
+    ///     </p>
+    /// </remarks>
+    IReadOnlyList<string> BuildId { get; }
+
+    /// <summary>
+    ///     The format for generating the host's <c>BuildId</c>.
+    /// </summary>
+    /// <remarks>
+    ///     <p>
+    ///         The build ID is constructed from the host's <c>BuildNumber</c> and <c>BuildContext</c> using format return from
+    ///         <c>BuildIdFormat</c>.
+    ///         On build systems that provide a build number for every build it is the <c>BuildNumber</c>.
+    ///     </p>
+    ///     <p>
+    ///         The default value is host dependent.
+    ///         This property can be set by the MSBuild <c>Git2SemVer_BuildIDFormat</c> property.
+    ///     </p>
+    /// </remarks>
+    string BuildIdFormat { get; set; }
+
+    /// <summary>
     ///     Host provided build number.
     /// </summary>
     /// <remarks>
@@ -42,31 +70,6 @@ public interface IBuildHost
     ///     </para>
     /// </remarks>
     string BuildNumber { get; set; }
-
-    /// <summary>
-    ///     The host's build ID.
-    /// </summary>
-    /// <remarks>
-    ///     <p>
-    ///         The build ID is constructed from the host's <c>BuildNumber</c> and <c>BuildContext</c> using format return from <c>BuildIdFormat</c>.
-    ///         On build systems that provide a build number for every build it is the <c>BuildNumber</c>.
-    ///     </p>
-    /// </remarks>
-    IReadOnlyList<string> BuildId { get; }
-
-    /// <summary>
-    ///     The format for generating the host's <c>BuildId</c>.
-    /// </summary>
-    /// <remarks>
-    ///     <p>
-    ///         The build ID is constructed from the host's <c>BuildNumber</c> and <c>BuildContext</c> using format return from <c>BuildIdFormat</c>.
-    ///         On build systems that provide a build number for every build it is the <c>BuildNumber</c>.
-    ///     </p><p>
-    ///         The default value is host dependent.
-    ///         This property can be set by the MSBuild <c>Git2SemVer_BuildIDFormat</c> property.
-    ///     </p>
-    /// </remarks>
-    string BuildIdFormat { get; set; }
 
     /// <summary>
     ///     The host's type ID. Gives an ID for the type of host detected or the type used if

@@ -38,6 +38,11 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase
     }
 
     /// <summary>
+    ///     Optional case-insensitive regular expression that maps branch name to build maturity such as "release" or "beata".
+    /// </summary>
+    public string Input_BranchMaturityPattern { get; set; } = "^((?<release>main|release)|(?<beta>feature)|(?<alpha>.+))[\\/_]?";
+
+    /// <summary>
     ///     The optional MSBuild <c>Git2SemVer_BuildContext</c> property value.
     /// </summary>
     /// <remarks>
@@ -97,11 +102,6 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase
     /// </summary>
     [Required]
     public string Input_BuildScriptPath { get; set; } = "";
-
-    /// <summary>
-    ///     Optional case-insensitive regular expression that maps branch name to build maturity such as "release" or "beata".
-    /// </summary>
-    public string Input_BranchMaturityPattern { get; set; } = "^((?<release>main|release)|(?<beta>feature)|(?<alpha>.+))[\\/_]?";
 
     /// <summary>
     ///     Path to directory to write versioning report to.

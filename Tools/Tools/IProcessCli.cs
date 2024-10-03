@@ -5,14 +5,14 @@ namespace NoeticTools.Common.Tools;
 
 public interface IProcessCli
 {
+    ILogger Logger { get; }
+
     /// <summary>
-    /// Process run time limit in milliseconds.
+    ///     Process run time limit in milliseconds.
     /// </summary>
     int TimeLimitMilliseconds { get; set; }
 
     string WorkingDirectory { get; set; }
-
-    ILogger Logger { get; }
 
     (int returnCode, string stdOutput) Run(string application, string commandLineArguments);
 

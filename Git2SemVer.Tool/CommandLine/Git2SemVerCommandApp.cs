@@ -1,10 +1,4 @@
 ﻿using Spectre.Console.Cli;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Spectre.Console;
 
 
 namespace NoeticTools.Git2SemVer.Tool.CommandLine;

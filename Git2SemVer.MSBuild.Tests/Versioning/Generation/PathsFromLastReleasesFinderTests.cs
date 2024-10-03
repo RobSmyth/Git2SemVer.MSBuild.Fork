@@ -14,8 +14,8 @@ internal class PathsFromLastReleasesFinderTests
 {
     private Dictionary<string, Commit> _commitsLookup;
     private Mock<ICommitsRepository> _commitsRepo;
-    private NUnitTaskLogger _logger;
     private Mock<IGitTool> _gitTool;
+    private NUnitTaskLogger _logger;
 
     [SetUp]
     public void SetUp()
@@ -32,7 +32,7 @@ internal class PathsFromLastReleasesFinderTests
         _gitTool.Setup(x => x.BranchName)
                 .Returns("master");
         _gitTool.Setup(x => x.GetCommits(0, It.IsAny<int>()))
-                .Returns((int skip, int take) => 
+                .Returns((int skip, int take) =>
                              _commitsLookup.Values
                                            .Skip(skip)
                                            .Take(take)
@@ -64,4 +64,3 @@ internal class PathsFromLastReleasesFinderTests
         _commitsRepo.Setup(x => x.Head).Returns(_commitsLookup[headCommitId]);
     }
 }
-

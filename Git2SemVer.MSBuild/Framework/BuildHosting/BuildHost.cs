@@ -15,18 +15,18 @@ internal class BuildHost : IBuildHost
         set => _inner.BuildContext = value;
     }
 
-    public string BuildNumber
-    {
-        get => _inner.BuildNumber;
-        set => _inner.BuildNumber = value;
-    }
-
     public IReadOnlyList<string> BuildId => _inner.BuildId;
 
     public string BuildIdFormat
     {
-        get => _inner.BuildIdFormat; 
+        get => _inner.BuildIdFormat;
         set => _inner.BuildIdFormat = value;
+    }
+
+    public string BuildNumber
+    {
+        get => _inner.BuildNumber;
+        set => _inner.BuildNumber = value;
     }
 
     public HostTypeIds HostTypeId => _inner.HostTypeId;

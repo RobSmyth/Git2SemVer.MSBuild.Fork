@@ -3,6 +3,8 @@ using NoeticTools.Common.Tools;
 using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
 
 
+#pragma warning disable NUnit2045
+
 namespace NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
 public abstract class SolutionTestsBase : ScriptingTestsBase
@@ -26,7 +28,7 @@ public abstract class SolutionTestsBase : ScriptingTestsBase
         TestSolutionDirectory = Path.Combine(SolutionDirectory, "TestSolutions", SolutionFolderName);
         BuildConfiguration = new DirectoryInfo(CurrentDirectory).Parent!.Name;
         TestSolutionPath = Path.Combine(TestSolutionDirectory, SolutionName);
-        Git2SemVerToolPath = Path.Combine(SolutionDirectory, "Git2SemVer.Tool/bin", BuildConfiguration, "net8.0", "NoeticTools.Git2SemVer.Tool.exe");
+        Git2SemVerToolPath = Path.Combine(SolutionDirectory, "Git2SemVer.Tool/bin", BuildConfiguration, "net8.0", "NoeticTools.Git2SemVer.Tool.dll");
     }
 
     protected static void DeleteAllNuGetPackages(string packageOutputDir)
@@ -43,14 +45,16 @@ public abstract class SolutionTestsBase : ScriptingTestsBase
     protected void BuildGit2SemVerTool()
     {
         var projectPath = Path.Combine(SolutionDirectory, "Git2SemVer.Tool/Git2SemVer.Tool.csproj");
-        DotNetCli.Build(projectPath, BuildConfiguration);
+        var result = DotNetCli.Build(projectPath, BuildConfiguration);
+        Assert.That(result.returnCode, Is.EqualTo(0));
         Assert.That(Logger.HasError, Is.False);
     }
 
     protected void BuildGit2SemVerMSBuild()
     {
         var projectPath = Path.Combine(SolutionDirectory, "Git2SemVer.MSBuild/Git2SemVer.MSBuild.csproj");
-        DotNetCli.Build(projectPath, BuildConfiguration);
+        var result = DotNetCli.Build(projectPath, BuildConfiguration);
+        Assert.That(result.returnCode, Is.EqualTo(0));
         Assert.That(Logger.HasError, Is.False);
     }
 
@@ -68,6 +72,6 @@ public abstract class SolutionTestsBase : ScriptingTestsBase
             WorkingDirectory = TestSolutionDirectory
         };
 
-        return process.Run(Git2SemVerToolPath, commandLineArguments);
+        return process.Run("dotnet", $"{Git2SemVerToolPath} {commandLineArguments}");
     }
 }

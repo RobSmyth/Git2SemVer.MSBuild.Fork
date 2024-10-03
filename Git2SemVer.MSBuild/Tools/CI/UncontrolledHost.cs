@@ -1,6 +1,5 @@
 ﻿using NoeticTools.Common.Exceptions;
 using NoeticTools.Common.Logging;
-using NoeticTools.Git2SemVer.MSBuild.Framework;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Config;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Semver;

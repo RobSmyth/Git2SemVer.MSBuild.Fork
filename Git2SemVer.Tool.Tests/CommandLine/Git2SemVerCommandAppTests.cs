@@ -1,9 +1,5 @@
 ﻿using NoeticTools.Git2SemVer.Tool.CommandLine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace NoeticTools.Git2SemVer.Tool.Tests.CommandLine;
 
@@ -20,7 +16,5 @@ internal class Git2SemVerCommandAppTests
         //target.Execute(["add", "-s", "xxxx", "-x"]);
 
         target.Execute(["--version"]);
-
     }
 }
-

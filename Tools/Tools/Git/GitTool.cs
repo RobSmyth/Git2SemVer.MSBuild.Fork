@@ -1,6 +1,6 @@
-﻿using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Injectio.Attributes;
+using NoeticTools.Common.Exceptions;
 using NoeticTools.Common.Logging;
 
 
@@ -17,7 +17,7 @@ public class GitTool : IGitTool
     {
     }
 
-    public GitTool(IGitProcessCli inner, ILogger logger)
+    private GitTool(IGitProcessCli inner, ILogger logger)
     {
         _logger = logger;
         _inner = inner;
@@ -40,8 +40,12 @@ public class GitTool : IGitTool
         var commits = new List<Commit>();
 
         var result = Run($"log --skip={skipCount} --max-count={takeCount} --pretty=\"format:%H|%P|%s|%d|\"");
+        if (result.returnCode != 0)
+        {
+            _logger.LogError($"'Git log' command returned non-zero return code {result.returnCode}.");
+        }
 
-        foreach (var line in result.Split('\n'))
+        foreach (var line in result.stdOutput.Split('\n'))
         {
             if (line.Length == 0)
             {
@@ -68,44 +72,58 @@ public class GitTool : IGitTool
         return commits;
     }
 
-    /// <summary>
-    ///     Run dotnet cli with provided command line arguments.
-    /// </summary>
-    public int Run(string commandLineArguments,
-                   TextWriter standardOut, TextWriter? errorOut = null)
+    public (int returnCode, string stdOutput) Run(string arguments)
     {
-        return _inner.Run(commandLineArguments, standardOut, errorOut);
-    }
+        var outWriter = new StringWriter();
+        var errorWriter = new StringWriter();
 
-    public string Run(string arguments)
-    {
-        var outStringBuilder = new StringBuilder();
-        var outWriter = new StringWriter(outStringBuilder);
-        var errorStringBuilder = new StringBuilder();
-        var errorWriter = new StringWriter(errorStringBuilder);
-        _inner.Run(arguments, outWriter, errorWriter);
-        var errorOutput = errorStringBuilder.ToString();
+        var returnCode = _inner.Run(arguments, outWriter, errorWriter);
+
+        if (returnCode != 0)
+        {
+            throw new Git2SemVerGitOperationException($"Git command '{arguments}' returned non-zero return code: {returnCode}");
+        }
+
+        var errorOutput = errorWriter.ToString();
         if (!string.IsNullOrWhiteSpace(errorOutput))
         {
             _logger.LogError($"Git command '{arguments}' returned error: {errorOutput}");
         }
 
-        return outStringBuilder.ToString();
+        return (returnCode, outWriter.ToString());
     }
 
     private string GetBranchName()
     {
-        var stdOutput = Run("status -b -s --porcelain");
+        var result = Run("status -b -s --porcelain");
+        if (result.returnCode != 0) // todo - not required as Run checks return code
+        {
+            _logger.LogInfo(result.stdOutput);
+            _logger.LogError("Unable to run 'git status'. Appears git is not executable.");
+            return "";
+        }
 
         var regex = new Regex(@"^## (?<branchName>\S+)\.\.\.");
-        var match = regex.Match(stdOutput);
+        var match = regex.Match(result.stdOutput);
 
         if (!match.Success)
         {
-            _logger.LogError($"Unable to read branch name from Git status. Received: '{stdOutput}'");
+            _logger.LogError($"Unable to read branch name from Git status. Received: '{result.stdOutput}'");
         }
 
         return match.Groups["branchName"].Value;
+    }
+
+    private string GetGitVersion()
+    {
+        var process = new ProcessCli(_logger);
+        var result = process.Run("git", "--version");
+        if (result.returnCode != 0)
+        {
+            _logger.LogError($"Unable to read git version. Return code was '{result.returnCode}'.");
+        }
+
+        return result.stdOutput;
     }
 
     private static string GetGroupValue(Match match, string groupName)
@@ -116,7 +134,7 @@ public class GitTool : IGitTool
 
     private bool GetHasLocalChanges()
     {
-        var stdOutput = Run("status -u -s --porcelain");
-        return stdOutput.Length > 0;
+        var result = Run("status -u -s --porcelain");
+        return result.stdOutput.Length > 0;
     }
 }

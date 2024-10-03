@@ -6,8 +6,6 @@
 //using NoeticTools.Testing.Common;
 //using NoeticTools.Testing.Common.Interops.DotNet;
 
-
-
 //namespace NoeticTools.Git2SemVer.Tool.Tests
 //{
 //    public class SetupCommandRunnerTests
@@ -80,3 +78,4 @@
 //        //}
 //    }
 //}
+

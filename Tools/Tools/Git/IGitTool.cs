@@ -8,5 +8,5 @@ public interface IGitTool
 
     IReadOnlyList<Commit> GetCommits(int skipCount, int takeCount);
 
-    string Run(string arguments);
+    (int returnCode, string stdOutput) Run(string arguments);
 }

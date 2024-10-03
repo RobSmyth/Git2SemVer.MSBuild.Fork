@@ -1,9 +1,10 @@
-﻿using NoeticTools.Git2SemVer.Tool.Commands;
+﻿using Microsoft.Extensions.DependencyInjection;
+using NoeticTools.Git2SemVer.Tool.Commands;
 using NoeticTools.Git2SemVer.Tool.Framework;
 using Spectre.Console.Cli;
-using Microsoft.Extensions.DependencyInjection;
-// ReSharper disable ClassNeverInstantiated.Global
 
+
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace NoeticTools.Git2SemVer.Tool.CommandLine;
 

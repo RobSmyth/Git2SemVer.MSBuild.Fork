@@ -14,9 +14,9 @@ namespace NoeticTools.Git2SemVer.Tool.Commands.SetupCommand;
 [RegisterSingleton]
 internal sealed class SetupPreconditionValidator : ISetupPreconditionValidator
 {
+    private readonly IConsoleIO _console;
     private readonly ILogger _logger;
     private readonly IProjectDocumentReader _projectDocumentReader;
-    private readonly IConsoleIO _console;
 
     public SetupPreconditionValidator(IProjectDocumentReader projectDocumentReader,
                                       IConsoleIO console, ILogger logger)
@@ -32,6 +32,7 @@ internal sealed class SetupPreconditionValidator : ISetupPreconditionValidator
         {
             return false;
         }
+
         return ValidateNonCritical(directory, unattended);
     }
 

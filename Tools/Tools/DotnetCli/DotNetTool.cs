@@ -21,8 +21,12 @@ public sealed class DotNetTool : IDotNetTool
         _inner = inner;
     }
 
+    public IDotNetProjectCommands Projects => new DotNetProjectCommands(this);
+
+    public IDotNetSolutionCommands Solution => new DotNetSolutionCommands(this);
+
     /// <summary>
-    /// Command time limit in milliseconds.
+    ///     Command time limit in milliseconds.
     /// </summary>
     public int TimeLimitMilliseconds
     {
@@ -31,24 +35,10 @@ public sealed class DotNetTool : IDotNetTool
     }
 
     /// <summary>
-    ///     Run dotnet cli with provided command line arguments.
-    /// </summary>
-    public int Run(string commandLineArguments,
-                   TextWriter standardOut, TextWriter? errorOut = null)
-    {
-        return _inner.Run("dotnet", commandLineArguments, standardOut, errorOut);
-    }
-
-    public (int returnCode, string stdOutput) Run(string commandLineArguments)
-    {
-        return _inner.Run("dotnet", commandLineArguments);
-    }
-
-    /// <summary>
     ///     Build solution with build caching disabled.
     /// </summary>
     /// <remarks>
-    /// See: <see href="https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-build">dotnet build</see>
+    ///     See: <see href="https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-build">dotnet build</see>
     /// </remarks>
     public (int returnCode, string stdOutput) Build(string solution, string configuration, params string[] arguments)
     {
@@ -68,7 +58,17 @@ public sealed class DotNetTool : IDotNetTool
         return Run(dotNetCommandLine);
     }
 
-    public IDotNetProjectCommands Projects => new DotNetProjectCommands(this);
+    /// <summary>
+    ///     Run dotnet cli with provided command line arguments.
+    /// </summary>
+    public int Run(string commandLineArguments,
+                   TextWriter standardOut, TextWriter? errorOut = null)
+    {
+        return _inner.Run("dotnet", commandLineArguments, standardOut, errorOut);
+    }
 
-    public IDotNetSolutionCommands Solution => new DotNetSolutionCommands(this);
+    public (int returnCode, string stdOutput) Run(string commandLineArguments)
+    {
+        return _inner.Run("dotnet", commandLineArguments);
+    }
 }
