@@ -6,12 +6,12 @@ namespace NoeticTools.Testing.Common;
 public class NUnitTaskLogger : ILogger
 {
     private const string LogScopeIndent = "  ";
+    private readonly string _debugPrefix = "DEBUG: ";
     private readonly List<string> _errorMessages = [];
     private readonly string _errorPrefix = "ERROR: ";
-    private readonly string _warnPrefix = "WARN: ";
     private readonly string _infoPrefix = "INFO: ";
-    private readonly string _debugPrefix = "DEBUG: ";
     private readonly string _tracePrefix = "TRACE: ";
+    private readonly string _warnPrefix = "WARN: ";
     private string _logPrefix = "";
 
     public NUnitTaskLogger(bool showMessageLevelPrefix = true)

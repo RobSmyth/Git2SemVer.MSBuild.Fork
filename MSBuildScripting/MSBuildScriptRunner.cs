@@ -12,7 +12,6 @@ using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.CodeAnalysis.Scripting.Hosting;
 using Microsoft.Extensions.Primitives;
 using NoeticTools.Common.Logging;
-using NoeticTools.MSBuild.TaskLogging;
 using Task = System.Threading.Tasks.Task;
 
 

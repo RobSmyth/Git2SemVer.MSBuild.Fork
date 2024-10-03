@@ -9,13 +9,13 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Git2SemVer_Installed Condition="'$(Git2SemVer_Installed)' == ''">false</Git2SemVer_Installed>
-    <Git2SemVer_Enabled Condition="'$(Git2SemVer_Enabled)' == '' Or '$(Git2SemVer_Installed)' == 'false'">false</Git2SemVer_Enabled>
-    <Git2SemVer_ExcludeProject Condition="'$(Git2SemVer_ExcludeProject)' == ''">false</Git2SemVer_ExcludeProject>
     <Git2SemVer_VersioningProjectName>####</Git2SemVer_VersioningProjectName>
     <Git2SemVer_VersioningProjectDirectory>$(MSBuildThisFileDirectory)$(Git2SemVer_VersioningProjectName)</Git2SemVer_VersioningProjectDirectory>
     <Git2SemVer_ScriptPath Condition="'$(Git2SemVer_ScriptPath)' == ''">$(MSBuildThisFileDirectory)$(Git2SemVer_VersioningProjectName)/Git2SemVer.csx</Git2SemVer_ScriptPath>
-    <Git2SemVer_ShareDirectory>$(MSBuildThisFileDirectory).git2semver/</Git2SemVer_ShareDirectory>
+    <Git2SemVer_Enabled Condition="'$(Git2SemVer_Enabled)' == '' Or '$(Git2SemVer_Installed)' == 'false'">false</Git2SemVer_Enabled>
+    <Git2SemVer_Installed Condition="'$(Git2SemVer_Installed)' == ''">false</Git2SemVer_Installed>
+    <Git2SemVer_ExcludeProject Condition="'$(Git2SemVer_ExcludeProject)' == ''">false</Git2SemVer_ExcludeProject>
+    <Git2SemVer_ShareDirectory>$(MSBuildThisFileDirectory)$(Git2SemVer_VersioningProjectName)/.git2semver/</Git2SemVer_ShareDirectory>
     <Git2SemVer_SharedEnvPropsFile>$(Git2SemVer_ShareDirectory)Shared.Build.Git2SemVerEnv.props</Git2SemVer_SharedEnvPropsFile>
     <Git2SemVer_SharedVersioningPropsFile>$(Git2SemVer_ShareDirectory)Generated.Properties.json</Git2SemVer_SharedVersioningPropsFile>
     <Git2SemVer_NuGetLoad_Disable Condition="'$(Git2SemVer_NuGetLoad_Disable)' == ''">false</Git2SemVer_NuGetLoad_Disable>

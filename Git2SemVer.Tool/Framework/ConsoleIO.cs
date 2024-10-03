@@ -25,6 +25,8 @@ public class ConsoleIO : IConsoleIO
 
     public bool HasError => _logger.HasError;
 
+    public LoggingLevel Level { get; set; } = LoggingLevel.Info;
+
     public bool Unattended { get; set; }
 
     public T Ask<T>(string prompt, T defaultValue)
@@ -98,8 +100,6 @@ public class ConsoleIO : IConsoleIO
         _logger.LogDebug($"User returned '{result}' to prompt yes/no '{prompt}'.");
         return result;
     }
-
-    public LoggingLevel Level { get; set; } = LoggingLevel.Info;
 
     public void WriteDebugLine(string message)
     {

@@ -6,5 +6,5 @@ public enum ReturnCodes
     CommandLineParsingError = 1,
     CommandError = 2,
     NoCommandError = 3,
-    UnknownError = 5,
+    UnknownError = 5
 }

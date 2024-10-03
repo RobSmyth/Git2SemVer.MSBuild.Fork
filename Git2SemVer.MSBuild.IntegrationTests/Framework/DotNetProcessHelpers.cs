@@ -24,18 +24,19 @@ public static class DotNetProcessHelpers
         Assert.That(result, Is.EqualTo(0), $"Command failed: dotnet {dotNetCommandLine}");
     }
 
-    public static string RunExe(string exePath, ILogger logger)
+    public static string RunDotnetApp(string appDllPath, ILogger logger)
     {
         TestContext.Progress.WriteLine();
+        TestContext.Progress.WriteLine($"Running '{appDllPath}'");
         var process = new ProcessCli(logger)
         {
-            WorkingDirectory = Path.GetDirectoryName(exePath)!
+            WorkingDirectory = Path.GetDirectoryName(appDllPath)!
         };
         var outputStringBuilder = new StringBuilder();
         var outputWriter = new StringWriter(outputStringBuilder);
-        var returnCode = process.Run(exePath, "", outputWriter, TestContext.Error);
-        Assert.That(returnCode, Is.EqualTo(0));
+        var returnCode = process.Run("dotnet", appDllPath, outputWriter, TestContext.Error);
         var output = outputStringBuilder.ToString();
+        Assert.That(returnCode, Is.EqualTo(0));
         TestContext.Progress.WriteLine();
         return output;
     }

@@ -17,6 +17,7 @@ internal sealed class GeneratedOutputsFile : IGeneratedOutputsFile
         {
             return new VersionOutputs();
         }
+
         var json = File.ReadAllText(propertiesFilePath);
         return JsonSerializer.Deserialize<VersionOutputs>(json)!;
     }

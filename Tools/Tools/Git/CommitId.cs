@@ -1,6 +1,5 @@
 ﻿// ReSharper disable ReplaceSubstringWithRangeIndexer
 
-
 namespace NoeticTools.Common.Tools.Git;
 
 public sealed class CommitId : IEquatable<CommitId>, IEquatable<string>

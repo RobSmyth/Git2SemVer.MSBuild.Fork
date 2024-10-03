@@ -59,19 +59,17 @@ internal class VersionGeneratorInputs : IVersionGeneratorInputs
     /// <inheritdoc />
     public string BuildContext { get; }
 
-    public string BuildIdFormat { get; }
-
     /// <inheritdoc />
     public IBuildEngine BuildEngine { get; }
 
     /// <inheritdoc />
     public IBuildEngine9 BuildEngine9 { get; }
 
+    public string BuildIdFormat { get; }
+
     public string BuildNumber { get; }
 
     public string BuildScriptPath { get; }
-
-    public string WorkingDirectory { get; }
 
     public string HostType { get; }
 
@@ -92,6 +90,8 @@ internal class VersionGeneratorInputs : IVersionGeneratorInputs
     public string Version { get; }
 
     public string VersionSuffix { get; }
+
+    public string WorkingDirectory { get; }
 
     public bool Validate(ILogger logger)
     {

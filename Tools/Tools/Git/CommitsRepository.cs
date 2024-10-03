@@ -13,7 +13,12 @@ public sealed class CommitsRepository : ICommitsRepository
     public CommitsRepository(IGitTool gitTool)
     {
         var commits = gitTool.GetCommits(0, GitCommitsReadMaxCount);
-        Head = commits.First();
+        if (commits.Count == 0)
+        {
+            throw new Git2SemVerGitOperationException("Unable to get commits. Either new repository and no commits or problem accessing git.");
+        }
+
+        Head = commits[0];
         _commits = commits.ToDictionary(k => k.CommitId, v => v);
         _gitTool = gitTool;
     }

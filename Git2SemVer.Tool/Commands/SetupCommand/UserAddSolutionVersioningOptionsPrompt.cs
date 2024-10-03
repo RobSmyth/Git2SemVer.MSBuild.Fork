@@ -21,11 +21,11 @@ internal sealed class UserAddSolutionVersioningOptionsPrompt : IUserOptionsPromp
 
     public UserOptions GetOptions(FileInfo solution)
     {
-        _console.MarkupLine($"Projects in the current directory and sub directories will be configured to use Git2SemVer solution versioning. " +
+        _console.MarkupLine("Projects in the current directory and sub directories will be configured to use Git2SemVer solution versioning. " +
                             "A versioning project will be added to the solution '[em]{solution.Name}[/]' and solution versioning directory properties files will be added to the current directory.");
 
         var leadingProjectName = _console.Prompt(new TextPrompt<string>("Versioning project name?")
-                                                     .Validate((folderName) => ValidateFolderDoesNotExist(folderName, solution.Directory!)),
+                                                     .Validate(folderName => ValidateFolderDoesNotExist(folderName, solution.Directory!)),
                                                  SolutionVersioningConstants.DefaultVersioningProjectName);
 
         var versionTagPrefix = _console.Ask<string>("Release git tag prefix?", "v");

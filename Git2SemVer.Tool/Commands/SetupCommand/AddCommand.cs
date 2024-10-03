@@ -8,7 +8,6 @@ using NoeticTools.Git2SemVer.Tool.MSBuild;
 using NoeticTools.Git2SemVer.Tool.MSBuild.Projects;
 using NoeticTools.Git2SemVer.Tool.MSBuild.Solutions;
 using NoeticTools.Git2SemVer.Tool.SetupCommand;
-using Spectre.Console;
 
 
 namespace NoeticTools.Git2SemVer.Tool.Commands.SetupCommand;
@@ -16,23 +15,23 @@ namespace NoeticTools.Git2SemVer.Tool.Commands.SetupCommand;
 [RegisterSingleton]
 internal sealed class AddCommand : ISetupCommand
 {
+    private readonly IConsoleIO _console;
     private readonly IDotNetTool _dotNetCli;
     private readonly IEmbeddedResources<Git2SemverEmbeddedResources> _embeddedResources;
     private readonly ILogger _logger;
     private readonly ISetupPreconditionValidator _preconditionsValidator;
-    private readonly IConsoleIO _console;
     private readonly IProjectDocumentReader _projectDocumentReader;
     private readonly ISolutionFinder _solutionFinder;
     private readonly IUserOptionsPrompt _userOptionsPrompt;
 
     public AddCommand(ISolutionFinder solutionFinder,
-                       IUserOptionsPrompt userOptionsPrompt,
-                       IDotNetTool dotNetCli,
-                       IEmbeddedResources<Git2SemverEmbeddedResources> embeddedResources,
-                       IProjectDocumentReader projectDocumentReader,
-                       ISetupPreconditionValidator preconditionsValidator,
-                       IConsoleIO console,
-                       ILogger logger)
+                      IUserOptionsPrompt userOptionsPrompt,
+                      IDotNetTool dotNetCli,
+                      IEmbeddedResources<Git2SemverEmbeddedResources> embeddedResources,
+                      IProjectDocumentReader projectDocumentReader,
+                      ISetupPreconditionValidator preconditionsValidator,
+                      IConsoleIO console,
+                      ILogger logger)
     {
         _solutionFinder = solutionFinder;
         _userOptionsPrompt = userOptionsPrompt;
@@ -148,20 +147,20 @@ internal sealed class AddCommand : ISetupCommand
             }
             else
             {
-                File.WriteAllText(buildPropsFile.FullName, existingContent.Replace($"</Project>", $"""
-                                                                                                     <Import Project="{SolutionVersioningConstants.DirectoryVersionPropsFilename}"/>
-                                                                                                 </Project>
-                                                                                                 """));
+                File.WriteAllText(buildPropsFile.FullName, existingContent.Replace("</Project>", $"""
+                                                                                                      <Import Project="{SolutionVersioningConstants.DirectoryVersionPropsFilename}"/>
+                                                                                                  </Project>
+                                                                                                  """));
                 _console.WriteInfoLine($"\t- Updated '{buildPropsFile.Name}'.");
             }
         }
         else
         {
             File.WriteAllText(buildPropsFile.FullName, $"""
-                                                       <Project>
-                                                           <Import Project="{SolutionVersioningConstants.DirectoryVersionPropsFilename}"/>
-                                                       </Project>
-                                                       """);
+                                                        <Project>
+                                                            <Import Project="{SolutionVersioningConstants.DirectoryVersionPropsFilename}"/>
+                                                        </Project>
+                                                        """);
             _console.WriteInfoLine($"\t- Added '{buildPropsFile.Name}' file to solution directory.");
         }
     }

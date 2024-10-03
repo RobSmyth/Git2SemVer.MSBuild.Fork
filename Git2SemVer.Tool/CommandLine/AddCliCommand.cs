@@ -2,8 +2,9 @@
 using NoeticTools.Git2SemVer.Tool.Commands;
 using NoeticTools.Git2SemVer.Tool.Framework;
 using Spectre.Console.Cli;
-// ReSharper disable ClassNeverInstantiated.Global
 
+
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace NoeticTools.Git2SemVer.Tool.CommandLine;
 

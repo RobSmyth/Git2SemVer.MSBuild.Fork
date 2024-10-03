@@ -2,9 +2,9 @@
 
 public interface IDotNetTool
 {
-    IDotNetSolutionCommands Solution { get; }
-
     IDotNetProjectCommands Projects { get; }
+
+    IDotNetSolutionCommands Solution { get; }
 
     (int returnCode, string stdOutput) Run(string commandLineArguments);
 

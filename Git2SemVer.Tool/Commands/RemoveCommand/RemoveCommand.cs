@@ -9,7 +9,6 @@ using NoeticTools.Git2SemVer.Tool.Framework;
 using NoeticTools.Git2SemVer.Tool.MSBuild;
 using NoeticTools.Git2SemVer.Tool.MSBuild.Projects;
 using NoeticTools.Git2SemVer.Tool.MSBuild.Solutions;
-using Spectre.Console;
 
 
 namespace NoeticTools.Git2SemVer.Tool.Commands.RemoveCommand;
@@ -17,9 +16,9 @@ namespace NoeticTools.Git2SemVer.Tool.Commands.RemoveCommand;
 [RegisterSingleton]
 internal sealed class RemoveCommand : IRemoveCommand
 {
+    private readonly IConsoleIO _console;
     private readonly IDotNetTool _dotNetCli;
     private readonly IProjectDocumentReader _projectDocumentReader;
-    private readonly IConsoleIO _console;
 
     private readonly ISolutionFinder _solutionFinder;
 
@@ -70,7 +69,7 @@ internal sealed class RemoveCommand : IRemoveCommand
             }
         }
 
-        // todo - Get name of leader project
+        // todo - Get name of versioning project
         const string leaderProjectName = SolutionVersioningConstants.DefaultVersioningProjectName;
         var solutionDirectory = solution!.Directory!;
 
@@ -80,8 +79,8 @@ internal sealed class RemoveCommand : IRemoveCommand
         changeMade |= RemoveDirectoryPropertiesInclude(solutionDirectory);
         changeMade |= DeleteDirectoryVersioningPropertiesFile(solutionDirectory);
         changeMade |= DeleteSharedDirectory(solutionDirectory);
-        changeMade |= DeleteLeaderProjectFolder(solutionDirectory, leaderProjectName);
-        changeMade |= RemoveLeaderProjectFromSolution(solution, leaderProjectName);
+        changeMade |= DeleteVersioningProjectFolder(solutionDirectory, leaderProjectName);
+        changeMade |= RemoveVersioningProjectFromSolution(solution, leaderProjectName);
 
         if (HasError)
         {
@@ -116,20 +115,6 @@ internal sealed class RemoveCommand : IRemoveCommand
         return false;
     }
 
-    private bool DeleteLeaderProjectFolder(DirectoryInfo solutionDirectory, string leaderProjectName)
-    {
-        var leaderProjectDirectory = solutionDirectory.WithSubDirectory(leaderProjectName);
-        if (leaderProjectDirectory.Exists)
-        {
-            leaderProjectDirectory.Delete(true);
-            _console.WriteInfoLine($"\t- Deleted project: '{leaderProjectName}.");
-            return true;
-        }
-
-        _console.WriteWarningLine($"\t- No change. Versioning project folder '{leaderProjectDirectory.Name}' not found.");
-        return false;
-    }
-
     private bool DeleteSharedDirectory(DirectoryInfo solutionDirectory)
     {
         var sharedDirectory = solutionDirectory.WithSubDirectory(Git2SemverConstants.ShareFolderName);
@@ -144,6 +129,20 @@ internal sealed class RemoveCommand : IRemoveCommand
         return false;
     }
 
+    private bool DeleteVersioningProjectFolder(DirectoryInfo solutionDirectory, string leaderProjectName)
+    {
+        var versioningProjectDirectory = solutionDirectory.WithSubDirectory(leaderProjectName);
+        if (versioningProjectDirectory.Exists)
+        {
+            versioningProjectDirectory.Delete(true);
+            _console.WriteInfoLine($"\t- Deleted project: '{leaderProjectName}.");
+            return true;
+        }
+
+        _console.WriteWarningLine($"\t- No change. Versioning project folder '{versioningProjectDirectory.Name}' not found.");
+        return false;
+    }
+
     private bool RemoveDirectoryPropertiesInclude(DirectoryInfo solutionDirectory)
     {
         var buildPropsFile = solutionDirectory.WithFile(SolutionVersioningConstants.DirectoryBuildPropsFilename);
@@ -155,7 +154,8 @@ internal sealed class RemoveCommand : IRemoveCommand
 
         var existingContent = File.ReadAllText(buildPropsFile.FullName);
         const string
-            includeLine = $"<Import Project=\"{SolutionVersioningConstants.DirectoryVersionPropsFilename}\"/>"; // todo - regex & add detection to add command
+            includeLine =
+                $"<Import Project=\"{SolutionVersioningConstants.DirectoryVersionPropsFilename}\"/>"; // todo - regex & add detection to add command
         if (existingContent.Contains(includeLine, StringComparison.CurrentCultureIgnoreCase))
         {
             // todo - regex to be less whitespace dependent
@@ -169,7 +169,7 @@ internal sealed class RemoveCommand : IRemoveCommand
         return false;
     }
 
-    private bool RemoveLeaderProjectFromSolution(FileInfo solution, string leaderProjectName)
+    private bool RemoveVersioningProjectFromSolution(FileInfo solution, string leaderProjectName)
     {
         if (HasError)
         {

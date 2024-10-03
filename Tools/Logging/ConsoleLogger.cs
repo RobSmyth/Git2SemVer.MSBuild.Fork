@@ -40,7 +40,7 @@ public class ConsoleLogger : ILogger
     {
         HasError = true;
         _errorMessages.Add(message);
-        AnsiConsole.MarkupLine("[red]"+message+"[/]");
+        AnsiConsole.MarkupLine("[red]" + message + "[/]");
     }
 
     public void LogError(string message, params object[] messageArgs)

@@ -34,14 +34,14 @@ public class Commit
 
     public string Message { get; }
 
+    [JsonIgnore]
+    public static Commit Null => new("00000000", [], "null commit", "");
+
     public CommitId[] Parents { get; }
 
     public SemVersion? ReleasedVersion { get; }
 
     public string Tags { get; }
-
-    [JsonIgnore]
-    public static Commit Null => new("00000000", [], "null commit", "");
 
     private SemVersion? GetReleaseTag()
     {

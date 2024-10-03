@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Text;
 using Injectio.Attributes;
 using NoeticTools.Common.Exceptions;
 using NoeticTools.Common.Logging;
@@ -44,7 +43,7 @@ public sealed class ProcessCli : IProcessCli
     public int Run(string application, string commandLineArguments,
                    TextWriter standardOut, TextWriter? errorOut = null)
     {
-        Logger.LogTrace($"Running '{application} {commandLineArguments}'.");
+        Logger.LogInfo($"Running '{application} {commandLineArguments}'.");
 
         using var process = new Process();
         process.StartInfo.FileName = application;
@@ -70,12 +69,16 @@ public sealed class ProcessCli : IProcessCli
         process.BeginErrorReadLine();
 
         var completed = process.WaitForExit(TimeLimitMilliseconds);
+        if (completed)
+        {
+            process.WaitForExit();
+        }
 
         if (!completed)
         {
             var message =
                 $"ProcessCli.Run command timed out after {TimeLimitMilliseconds} milliseconds. Command was 'dotnet {commandLineArguments}'.";
-            errorOut?.WriteLine(message);
+            OnError(errorOut, message);
             process.Kill();
             process.WaitForExit(5000);
         }
@@ -84,14 +87,21 @@ public sealed class ProcessCli : IProcessCli
         if (exitCode != 0)
         {
             var message = $"ProcessCli.Run command returned non-zero exit code {exitCode}.";
-            errorOut?.WriteLine(message);
-            if (errorOut == null)
-            {
-                Logger.LogError(message);
-            }
+            OnError(errorOut, message);
         }
 
+        standardOut.Flush();
+
         return exitCode;
+    }
+
+    private void OnError(TextWriter? errorOut, string message)
+    {
+        errorOut?.WriteLine(message);
+        if (errorOut == null)
+        {
+            Logger.LogError(message);
+        }
     }
 
     private static void OnErrorDataReceived(string? data, TextWriter errorOut)

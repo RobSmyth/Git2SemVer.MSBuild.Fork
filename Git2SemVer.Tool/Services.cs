@@ -1,8 +1,9 @@
 ﻿using Injectio.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using NoeticTools.Common.Logging;
-// ReSharper disable ClassNeverInstantiated.Global
 
+
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace NoeticTools.Git2SemVer.Tool;
 

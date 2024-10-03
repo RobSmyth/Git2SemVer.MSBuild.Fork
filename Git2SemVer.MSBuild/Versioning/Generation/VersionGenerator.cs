@@ -52,6 +52,7 @@ internal class VersionGenerator
                 {
                     _host.SetBuildLabel(output.BuildSystemVersion.ToString());
                 }
+
                 return output;
             }
 

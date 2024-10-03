@@ -59,23 +59,24 @@ internal class SolutionVersioningBuildTests : SolutionTestsBase
     public void ToolHelpAddCommand()
     {
         var result = ExecuteGit2SemVerTool("add --help");
+        TestContext.Out.WriteLine(result.stdOutput);
 
         Assert.That(Logger.HasError, Is.False);
         Assert.That(result.returnCode, Is.EqualTo(0));
-        Assert.That(result.stdOutput, Contains.Substring("-h, --help"));
-        Assert.That(result.stdOutput, Contains.Substring("USAGE:\r\n    Git2SemVer.Tool add [OPTIONS]"));
+        Assert.That(result.stdOutput, Does.Contain("-h, --help"));
+        Assert.That(result.stdOutput, Does.Contain("-u, --unattended")); // checking for "Git2SemVer.Tool add [OPTIONS]" not reliable on linux
     }
 
     [Test]
     public void ToolHelpCommand()
     {
         var result = ExecuteGit2SemVerTool("--help");
-        Console.WriteLine(result.stdOutput);
+        TestContext.Out.WriteLine(result.stdOutput);
 
         Assert.That(Logger.HasError, Is.False);
         Assert.That(result.returnCode, Is.EqualTo(0));
-        Assert.That(result.stdOutput, Contains.Substring("-h, --help"));
-        Assert.That(result.stdOutput, Contains.Substring("USAGE:\r\n    Git2SemVer.Tool [OPTIONS] <COMMAND>"));
+        Assert.That(result.stdOutput, Does.Contain("-h, --help"));
+        Assert.That(result.stdOutput, Does.Not.Contain("-u, --unattended")); // checking for "Git2SemVer.Tool add [OPTIONS]" not reliable on linux
     }
 
     [Test]

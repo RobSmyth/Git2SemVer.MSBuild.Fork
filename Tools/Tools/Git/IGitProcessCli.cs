@@ -8,5 +8,5 @@ public interface IGitProcessCli
     ///     Run dotnet cli with provided command line arguments.
     /// </summary>
     int Run(string commandLineArguments,
-            TextWriter standardOut, TextWriter? errorOut = null);
+            TextWriter standardOut, TextWriter errorOut);
 }
