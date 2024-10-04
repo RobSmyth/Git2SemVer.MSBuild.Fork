@@ -54,18 +54,18 @@ It then executes an optional project C# script that can change any or all of the
   <tr>
     <td>
         <div class="featureDiv">
-            <a href="Reference/WhyUseGit2SemVer.md">Environment parity</a>
+            <a href="Reference/Glossary.html#environment-parity">Environment parity</a>
         </div>
     </td>
     <td>
-        All versioning is done within the csproj build, without installed tools.
-        The same for dotnet.exe, Visual Studio, on build system, or on a dev environments.
+        Builds the same for dotnet.exe, Visual Studio, on build system, or on a dev environments.
+        All versioning is done within the csproj build.
     </td>
   </tr>
   <tr>
     <td>
         <div class="featureDiv">
-            <a href="Reference/WhyUseGit2SemVer.md">Initial development versioning</a>
+            <a href="https://semver.org/#spec-item-4">Initial development versioning</a>
         </div>
     </td>
     <td>
@@ -75,7 +75,7 @@ It then executes an optional project C# script that can change any or all of the
   <tr>
     <td>
         <div class="featureDiv">
-            <a href="Reference/WhyUseGit2SemVer.md">Controlled/uncontrolled versioning</a>
+            <a href="Reference/Glossary.html#controlled-host">Controlled/uncontrolled versioning</a>
         </div>
     </td>
     <td>
@@ -85,7 +85,7 @@ It then executes an optional project C# script that can change any or all of the
   <tr>
     <td>
         <div class="featureDiv">
-            <a href="Reference/WhyUseGit2SemVer.md">Build numbering</a>
+            <a href="Reference/Glossary.html#build-number">Build numbering</a>
         </div>
     </td>
     <td>
@@ -96,7 +96,7 @@ It then executes an optional project C# script that can change any or all of the
   <tr>
     <td>
         <div class="featureDiv">
-            <a href="Reference/WhyUseGit2SemVer.md">No limit automatic versioning</a>
+            No limit automatic versioning
         </div>
     </td>
     <td>
@@ -106,7 +106,7 @@ It then executes an optional project C# script that can change any or all of the
   <tr>
     <td>
         <div class="featureDiv">
-            <a href="Reference/WhyUseGit2SemVer.md">Testability</a>
+            Testability
         </div>
     </td>
     <td>
@@ -135,7 +135,7 @@ Git2SemVer uses the [MIT license](https://choosealicense.com/licenses/mit/).
 
 This project uses the following tools and libraries. Many thanks to those who created and manage them.
 
-* [CommandLineUtils](https://github.com/natemcmaster/CommandLineUtils)
+* [Spectre.Console](https://github.com/spectreconsole/spectre.console)
 * [Injectio](https://github.com/loresoft/Injectio)
 * [JetBrains Annotations](https://www.jetbrains.com/help/resharper/Code_Analysis__Code_Annotations.html)
 * [Semver](https://www.nuget.org/packages/Semver) - files copied to create subset
