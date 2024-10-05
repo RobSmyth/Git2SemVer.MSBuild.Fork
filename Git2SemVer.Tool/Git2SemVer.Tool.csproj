@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackAsTool>false</PackAsTool>
+    <PackAsTool>true</PackAsTool>
     <ToolCommandName>git2semver</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
     <VersionPrefix>0.2.0</VersionPrefix>

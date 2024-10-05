@@ -9,13 +9,10 @@ uid: getting-started
 
 Git2SemVer requires:
 
-* `git` CLI to be callable from any project directory.
-* `dotnet` CLI to be callable from any project directory.
+* `git` CLI to be executable from any project directory.
+* `dotnet` CLI to be executable from any project directory.
 
 ## Installing
-
-> [!IMPORTANT]
-> Both `git` CLI and `dotnet` CLI must both be executable from any project directory on all build hosts.
 
 To setup a solution to use Git2SemVer solution versioning, first install the dotnet tool Git2SemVer.Tool:
 
