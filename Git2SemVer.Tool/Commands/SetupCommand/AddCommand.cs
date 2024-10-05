@@ -115,7 +115,6 @@ internal sealed class AddCommand : ISetupCommand
         {
             _logger.WriteTraceLine("`{0}` already existed. Overwriting files in directory.", sharedDirectory.Name);
         }
-
         sharedDirectory.Create();
 
         _embeddedResources.WriteResourceFile(Git2SemverConstants.SharedVersionPropertiesFilename, sharedDirectory);
@@ -133,7 +132,7 @@ internal sealed class AddCommand : ISetupCommand
         _embeddedResources.WriteResourceFile(Git2SemverConstants.DefaultScriptFilename, csxFileDestination.FullName);
         _console.WriteInfoLine($"\t- Added '{projectName}' project to solution.");
 
-        var versioningProjectDirectory = solution.Directory!;
+        var versioningProjectDirectory = solution.Directory!.WithSubDirectory(userOptions.VersioningProjectName);
         CreateSharedDirectory(versioningProjectDirectory);
     }
 
