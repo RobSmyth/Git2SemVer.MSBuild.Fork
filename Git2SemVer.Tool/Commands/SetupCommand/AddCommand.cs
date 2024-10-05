@@ -77,7 +77,6 @@ internal sealed class AddCommand : ISetupCommand
         propertiesDocument.Properties["Git2SemVer_VersioningProjectName"].Value = userOptions.VersioningProjectName;
 
         CreateVersioningProject(userOptions, solution);
-        CreateSharedDirectory(solutionDirectory);
         SetupGitIgnore(solutionDirectory);
 
         if (_console.HasError)
@@ -109,20 +108,19 @@ internal sealed class AddCommand : ISetupCommand
         return _projectDocumentReader.Read(versioningPropsFile);
     }
 
-    private void CreateSharedDirectory(DirectoryInfo solutionDirectory)
+    private void CreateSharedDirectory(DirectoryInfo parentDirectory)
     {
-        var sharedDirectory = solutionDirectory.WithSubDirectory(Git2SemverConstants.ShareFolderName);
+        var sharedDirectory = parentDirectory.WithSubDirectory(Git2SemverConstants.ShareFolderName);
         if (sharedDirectory.Exists)
         {
             _logger.WriteTraceLine("`{0}` already existed. Overwriting files in directory.", sharedDirectory.Name);
         }
-
         sharedDirectory.Create();
 
         _embeddedResources.WriteResourceFile(Git2SemverConstants.SharedVersionPropertiesFilename, sharedDirectory);
         _embeddedResources.WriteResourceFile(Git2SemverConstants.SharedEnvPropertiesFilename, sharedDirectory);
 
-        _console.WriteInfoLine($"\t- Added '{Git2SemverConstants.ShareFolderName}' shared directory to solution directory.");
+        _console.WriteInfoLine($"\t- Added '{Git2SemverConstants.ShareFolderName}' shared directory to versioning project directory.");
     }
 
     private void CreateVersioningProject(UserOptions userOptions, FileInfo solution)
@@ -133,6 +131,9 @@ internal sealed class AddCommand : ISetupCommand
         var csxFileDestination = solution.Directory!.WithSubDirectory(projectName).WithFile(Git2SemverConstants.DefaultScriptFilename);
         _embeddedResources.WriteResourceFile(Git2SemverConstants.DefaultScriptFilename, csxFileDestination.FullName);
         _console.WriteInfoLine($"\t- Added '{projectName}' project to solution.");
+
+        var versioningProjectDirectory = solution.Directory!.WithSubDirectory(userOptions.VersioningProjectName);
+        CreateSharedDirectory(versioningProjectDirectory);
     }
 
     private void PrepareDirectoryBuildPropsFile(DirectoryInfo directory)

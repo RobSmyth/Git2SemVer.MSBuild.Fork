@@ -78,7 +78,6 @@ internal sealed class RemoveCommand : IRemoveCommand
         _console.WriteLine();
         changeMade |= RemoveDirectoryPropertiesInclude(solutionDirectory);
         changeMade |= DeleteDirectoryVersioningPropertiesFile(solutionDirectory);
-        changeMade |= DeleteSharedDirectory(solutionDirectory);
         changeMade |= DeleteVersioningProjectFolder(solutionDirectory, leaderProjectName);
         changeMade |= RemoveVersioningProjectFromSolution(solution, leaderProjectName);
 
@@ -112,20 +111,6 @@ internal sealed class RemoveCommand : IRemoveCommand
         }
 
         _console.WriteWarningLine($"\t- No change. Properties file '{directoryVersioningPropsFile.Name}' not found.");
-        return false;
-    }
-
-    private bool DeleteSharedDirectory(DirectoryInfo solutionDirectory)
-    {
-        var sharedDirectory = solutionDirectory.WithSubDirectory(Git2SemverConstants.ShareFolderName);
-        if (sharedDirectory.Exists)
-        {
-            sharedDirectory.Delete(true);
-            _console.WriteInfoLine($"\t- Deleted shared version folder: '{sharedDirectory.Name}.");
-            return true;
-        }
-
-        _console.WriteWarningLine($"\t- No change. Version share directory '{sharedDirectory.Name}' not found.");
         return false;
     }
 
