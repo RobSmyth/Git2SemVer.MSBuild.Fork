@@ -26,7 +26,7 @@ dotnet tool install --global NoeticTools.Git2SemVer.Tool
 Then, in the solution's directory, run:
 
 ```winbatch
-Git2SemVer setup
+Git2SemVer add
 ```
 
 You will be prompted with a few options and then setup is done. :-)
