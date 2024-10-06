@@ -52,7 +52,7 @@ public class GitTool : IGitTool
                 continue;
             }
 
-            var regex = new Regex(@"^(?<shortSha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(( \(tag: (?<tags>[^\|,]+),.*\))|([^\|]*))\|$",
+            var regex = new Regex(@"^(?<shortSha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(( \(tag: (?<tags>[^\|]+)*\))|([^\|]*))\|$",
                                   RegexOptions.Multiline);
             var match = regex.Match(line.Trim());
             if (!match.Success)
@@ -64,6 +64,9 @@ public class GitTool : IGitTool
             var shortSha = GetGroupValue(match, "shortSha");
             var parents = GetGroupValue(match, "parents").Split(' ');
             var summary = GetGroupValue(match, "summary");
+
+            _logger.LogTrace($"Parsed git log line '{line}': sha {shortSha}, tags: {tags}");
+
             commits.Add(new Commit(shortSha, parents, summary, tags));
         }
 
