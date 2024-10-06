@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>0.5.0</VersionPrefix>
+    <VersionPrefix>0.6.1</VersionPrefix>
     <Title>Simple automatic Git to Semantic Versioning for .NET projects.</Title>
     <Description>Automated Semantic Versioning for Visual Studio and dotnet cli.</Description>
     <PackageProjectUrl>https://github.com/NoeticTools/Git2SemVer</PackageProjectUrl>
@@ -24,6 +24,15 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Tools\CliExecution\**" />
+    <Compile Remove="Tools\Git\**" />
+    <EmbeddedResource Remove="Tools\CliExecution\**" />
+    <EmbeddedResource Remove="Tools\Git\**" />
+    <None Remove="Tools\CliExecution\**" />
+    <None Remove="Tools\Git\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
@@ -70,11 +79,6 @@
     <ProjectReference Include="..\MSBuildScripting\MSBuild.Tasking.csproj" />
     <ProjectReference Include="..\MSBuildTask.Logging\MSBuild.TaskLogging.csproj" />
     <ProjectReference Include="..\Tools\Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Tools\CliExecution\" />
-    <Folder Include="Tools\Git\" />
   </ItemGroup>
 
 </Project>

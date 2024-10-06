@@ -1,6 +1,8 @@
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy document to GitHub Pages
 
+run-name: Build and deploy documentation to GitHub Pages. Run ${{ github.run_number }}.${{ github.run_attempt }}
+
 on:
   # Runs on pushes targeting the default branch
   push:
