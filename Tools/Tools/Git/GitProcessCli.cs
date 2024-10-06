@@ -8,16 +8,15 @@ namespace NoeticTools.Common.Tools.Git;
 public class GitProcessCli : IGitProcessCli
 {
     private readonly IProcessCli _inner;
-    private readonly ILogger _logger;
+    private readonly string _gitPath;
 
-    public GitProcessCli(ILogger logger) : this(new ProcessCli(logger), logger)
+    public GitProcessCli(ILogger logger)
     {
-    }
+        _inner = new ProcessCli(logger);
 
-    public GitProcessCli(IProcessCli inner, ILogger logger)
-    {
-        _inner = inner;
-        _logger = logger;
+        var teamCityGitPath = Environment.GetEnvironmentVariable("TEAMCITY_GIT_PATH") ?? "";
+        _gitPath = teamCityGitPath.Length > 0 ? teamCityGitPath : "git";
+        logger.LogDebug($"Using git path: '{_gitPath}'");
     }
 
     public string WorkingDirectory
@@ -29,6 +28,6 @@ public class GitProcessCli : IGitProcessCli
     public int Run(string commandLineArguments,
                    TextWriter standardOut, TextWriter errorOut)
     {
-        return _inner.Run("git", commandLineArguments, standardOut, errorOut);
+        return _inner.Run(_gitPath, commandLineArguments, standardOut, errorOut);
     }
 }
