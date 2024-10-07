@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using NoeticTools.Common.Logging;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Config;
@@ -48,32 +49,41 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
         var commitId = context.Outputs.Git.HeadCommit.CommitId.Id;
         var branchName = context.Outputs.Git.BranchName.ToNormalisedSemVerIdentifier();
         var host = context.Host;
-        var informationalVersion = version.IsRelease
-            ? version.WithMetadata(host.BuildNumber, host.BuildContext, branchName, commitId)
-            : version.WithMetadata(branchName, commitId);
-        return informationalVersion;
+        var metadata = new List<string>();
+        if (version.IsRelease)
+        {
+            metadata.AddRange(host.BuildId);
+        }
+        metadata.AddRange([branchName, commitId]);
+        return version.WithMetadata(metadata.ToArray());
     }
 
     private string GetPrereleaseLabel(IVersioningContext context)
     {
         var versionPrefix = _paths.BestPath.Version;
-        if (versionPrefix.Major > 0)
+        var labelPrefix = "";
+        if (versionPrefix.Major == 0)
         {
-            return VersioningConstants.DefaultInitialDevelopmentLabel;
+            labelPrefix = VersioningConstants.DefaultInitialDevelopmentLabel;
         }
 
         var inputs = context.Inputs;
         if (VersioningConstants.BranchMaturityPatternReleaseGroupName.Equals(inputs.VersionSuffix,
                                                                              StringComparison.CurrentCultureIgnoreCase))
         {
-            return "";
+            return labelPrefix;
         }
 
         var prereleaseLabel = string.IsNullOrWhiteSpace(inputs.VersionSuffix)
             ? GetPrereleaseLabelFromBranchName(context)
             : inputs.VersionSuffix;
 
-        return prereleaseLabel;
+        if (labelPrefix.Length > 0)
+        {
+            prereleaseLabel = char.ToUpper(prereleaseLabel[0]) + prereleaseLabel.Substring(1);
+        }
+
+        return labelPrefix + prereleaseLabel;
     }
 
     private static string GetPrereleaseLabelFromBranchName(IVersioningContext context)
@@ -109,8 +119,13 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
     {
         var versionPrefix = _paths.BestPath.Version;
         var isARelease = string.IsNullOrWhiteSpace(prereleaseLabel);
-        return isARelease
-            ? versionPrefix
-            : versionPrefix.WithPrerelease(prereleaseLabel, host.BuildNumber, host.BuildContext);
+        if (isARelease)
+        {
+            return versionPrefix;
+        }
+
+        var prereleaseIdentifiers = new List<string> { prereleaseLabel };
+        prereleaseIdentifiers.AddRange(host.BuildId);
+        return versionPrefix.WithPrerelease(prereleaseIdentifiers.ToArray());
     }
 }

@@ -18,8 +18,6 @@ internal class GitHubHost : BuildHostBase, IBuildHost
 
     public HostTypeIds HostTypeId => HostTypeIds.GitHub;
 
-    public bool IsControlled => true;
-
     public string Name => "GitHub";
 
     public string BumpBuildNumber()

@@ -18,16 +18,18 @@ internal class UncontrolledHost : BuildHostBase, IDetectableBuildHost
         _logger = logger;
         BuildContext = Environment.MachineName.ToNormalisedSemVerIdentifier();
         BuildNumber = _config.BuildNumber.ToString();
+        DefaultBuildNumberFunc = () => [BuildContext, BuildNumber];
 
         if (string.IsNullOrWhiteSpace(BuildContext))
         {
             throw new Git2SemVerConfigurationException("UncontrolledHost: Host.BuildContext is required.");
         }
+
+        var buildId = DefaultBuildNumberFunc();
+        logger.LogInfo($"Uncontrolled host. Build ID = {BuildId} | {buildId[0]},{buildId[1]}");//>>>
     }
 
     public HostTypeIds HostTypeId => HostTypeIds.Uncontrolled;
-
-    public bool IsControlled => false;
 
     public string Name => "Uncontrolled";
 
