@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>0.7.7</VersionPrefix>
+    <VersionPrefix>0.7.8</VersionPrefix>
     <Title>Simple automatic Git to Semantic Versioning for .NET projects.</Title>
     <Description>Automated Semantic Versioning for Visual Studio and dotnet CLI.</Description>
     <PackageProjectUrl>https://github.com/NoeticTools/Git2SemVer</PackageProjectUrl>
@@ -40,6 +40,9 @@
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>NoeticTools.Git2SemVer.MSBuild.IntegrationTests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 

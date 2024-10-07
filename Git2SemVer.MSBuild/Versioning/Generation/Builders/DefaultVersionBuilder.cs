@@ -64,7 +64,7 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
         var labelPrefix = "";
         if (versionPrefix.Major == 0)
         {
-            labelPrefix = VersioningConstants.DefaultInitialDevelopmentLabel;
+            labelPrefix = VersioningConstants.InitialDevelopmentLabel;
         }
 
         var inputs = context.Inputs;
@@ -78,11 +78,10 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
             ? GetPrereleaseLabelFromBranchName(context)
             : inputs.VersionSuffix;
 
-        if (labelPrefix.Length > 0)
+        if (labelPrefix.Length > 0 && prereleaseLabel.Length > 1)
         {
             prereleaseLabel = char.ToUpper(prereleaseLabel[0]) + prereleaseLabel.Substring(1);
         }
-
         return labelPrefix + prereleaseLabel;
     }
 
