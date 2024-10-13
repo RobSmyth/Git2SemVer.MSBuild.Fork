@@ -39,8 +39,9 @@ public static class GitObfuscation
         var tags = GetGroupValue(match, "refs")!;
         var redactedRefs = new Regex(@"\(HEAD -> .*?\)").Replace(tags, "(HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH)");
         redactedRefs = new Regex(@"\(origin/.*?\)").Replace(redactedRefs, "(origin/REDACTED_BRANCH, REDACTED_BRANCH)");
+        var parentShas = parents.Length > 0 ? string.Join(" ", parents.Select(GetObfuscatedSha)) : string.Empty;
 
-        return $"{graph,-15} .|{GetObfuscatedSha(sha)}|{string.Join(" ", parents.Select(GetObfuscatedSha))}|REDACTED|{redactedRefs}|";
+        return sha.Length == 0 ? $"{graph,-12}" : $"{graph,-15} .|{GetObfuscatedSha(sha)}|{parentShas}|REDACTED|{redactedRefs}|";
     }
 
     private static string GetGroupValue(Match match, string groupName)
@@ -56,7 +57,7 @@ public static class GitObfuscation
             return value;
         }
 
-        var newValue = (ObfuscatedCommitShaLookup.Count + 1).ToString("D").PadLeft(4, '0');
+        var newValue = sha.Length > 6 ? (ObfuscatedCommitShaLookup.Count + 1).ToString("D").PadLeft(4, '0') : sha;
         ObfuscatedCommitShaLookup.Add(sha, newValue);
         return newValue;
     }

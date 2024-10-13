@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Xml.Schema;
 using NoeticTools.Common.Logging;
 using NoeticTools.Common.Tools.Git;
 
@@ -100,10 +101,9 @@ internal sealed class VersionHistorySegmentsBuilder
         }
 
         var parents = commit.Parents.ToList();
-
         if (!parents.Any())
         {
-            // First commit in repository
+            _logger.LogTrace("Commit {0} is the first (initial) commit in the repository (defaults to 0.1.0).", commit.CommitId.ObfuscatedSha);
             return SegmentWalkResult.FoundStart;
         }
 
@@ -118,26 +118,35 @@ internal sealed class VersionHistorySegmentsBuilder
 
     private void OnMergeCommit(Commit commit)
     {
+        var mergedBranchCommit = commit.Parents[0];
+        var continuingBranchCommit = commit.Parents[1];
         using (_logger.EnterLogScope())
         {
-            foreach (var parent in commit.Parents.ToList())
-            {
-                _logger.LogDebug($"Commit {commit.CommitId.ObfuscatedSha} is a merge commit from commit {parent.ObfuscatedSha}:");
-                using (_logger.EnterLogScope())
-                {
-                    var parentCommit = _commits.Get(parent);
+            _logger.LogDebug($"Commit {commit.CommitId.ObfuscatedSha} is a merge commit.");
+        }
 
-                    if (_commitsCache.ContainsKey(parentCommit.CommitId))
-                    {
-                        OnBranchFromExistingSegment(parentCommit);
-                    }
-                    else
-                    {
-                        var newSegmentVisitor = new VersionHistorySegmentsBuilder(_segment.CreateMergedSegment(), this);
-                        newSegmentVisitor.BuildSegmentsTo(parentCommit);
-                    }
-                }
-            }
+        _logger.LogTrace($"Continuing branch:");
+        NextCommitBeforeMerge(continuingBranchCommit);
+
+        _logger.LogDebug($"Commit {commit.CommitId.ObfuscatedSha} is a merge commit from branch commit {mergedBranchCommit.ObfuscatedSha}:");
+        using (_logger.EnterLogScope())
+        {
+            NextCommitBeforeMerge(mergedBranchCommit);
+        }
+    }
+
+    private void NextCommitBeforeMerge(CommitId parent)
+    {
+        var parentCommit = _commits.Get(parent);
+
+        if (_commitsCache.ContainsKey(parentCommit.CommitId))
+        {
+            OnBranchFromExistingSegment(parentCommit);
+        }
+        else
+        {
+            var newSegmentVisitor = new VersionHistorySegmentsBuilder(_segment.CreateMergedSegment(), this);
+            newSegmentVisitor.BuildSegmentsTo(parentCommit);
         }
     }
 

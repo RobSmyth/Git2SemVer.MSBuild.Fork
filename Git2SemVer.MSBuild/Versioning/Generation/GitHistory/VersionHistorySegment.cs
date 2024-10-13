@@ -33,7 +33,6 @@ internal sealed class VersionHistorySegment
     {
         _logger = logger;
         Id = _nextId++;
-        logger.LogTrace("New path segment {0}:", Id);
     }
 
     public ApiChanges Bumps => GetVersionBumps();
@@ -158,7 +157,6 @@ internal sealed class VersionHistorySegment
             throw new Git2SemVerInvalidOperationException("Cannot split a segment that does not contain the commit.");
         }
 
-        _logger.LogTrace("Splitting segment {0} at commit {1}:", Id, commit.CommitId.ObfuscatedSha);
         using (_logger.EnterLogScope())
         {
             var keepCommits = _commits.Take(index).ToList();
@@ -167,6 +165,14 @@ internal sealed class VersionHistorySegment
             _commits.AddRange(keepCommits);
 
             var fromSegment = new VersionHistorySegment(newSegmentCommits, _logger);
+            _logger.LogTrace("Split out new segment {2} from segment {0} at commit {1}.", 
+                             Id, commit.CommitId.ObfuscatedSha,
+                             fromSegment.Id);
+            foreach (var olderSegment in _older)
+            {
+                fromSegment._older.Add(olderSegment);
+            }
+            _older.Clear();
             fromSegment.LinkToYounger(this);
             return fromSegment;
         }

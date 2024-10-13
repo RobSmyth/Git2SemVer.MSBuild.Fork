@@ -33,57 +33,112 @@ internal class VersionHistorySegmentsBuilderTests
         _logger.Dispose();
     }
 
-    [Test]
-    public void Scenario01()
+    public static object[] Scenarios =
+        ["""
+         .|0001|0002 0003|REDACTED| (HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH)|
+         .|0002|0004|REDACTED||
+         .|0004|0005 0006|REDACTED||
+         .|0005|0007|REDACTED||
+         .|0003|0008|REDACTED||
+         .|0006|0007 0008|REDACTED||
+         .|0007|0009|REDACTED||
+         .|0008|0010|REDACTED||
+         .|0009|0011|REDACTED||
+         .|0011|0010|REDACTED||
+         .|0010|0012|REDACTED||
+         .|0012|0013|REDACTED||
+         .|0013|0014|REDACTED| (tag: v0.3.1)|
+         .|0014|0015|REDACTED||
+         .|0015|0016 0017|REDACTED||
+         .|0017|0018|REDACTED||
+         .|0018|0019|REDACTED||
+         .|0019|0020|REDACTED||
+         .|0020|0021|REDACTED||
+         .|0021|0016|REDACTED||
+         .|0016|0022|REDACTED||
+         .|0022|0023 0024|REDACTED||
+         .|0024|0025|REDACTED||
+         .|0025|0026|REDACTED||
+         .|0026|0027|REDACTED||
+         .|0027|0028|REDACTED||
+         .|0028|0029|REDACTED||
+         .|0029|0030|REDACTED||
+         .|0030|0031|REDACTED||
+         .|0031|0032|REDACTED||
+         .|0032|0033|REDACTED||
+         .|0033|0034|REDACTED||
+         .|0034|0035|REDACTED||
+         .|0035|0036|REDACTED||
+         .|0036|0037|REDACTED||
+         .|0037|0038|REDACTED||
+         .|0038|0039|REDACTED||
+         .|0039|0040|REDACTED||
+         .|0040|0041|REDACTED||
+         .|0041|0042|REDACTED||
+         .|0023|0042|REDACTED||
+         .|0042|0043|REDACTED||
+         .|0043|0044|REDACTED||
+         .|0044|0045|REDACTED||
+         .|0045|0046|REDACTED| (tag: v0.3.0)|
+         .|0046|0047|REDACTED||
+        """,
+        """
+        *               .|0002|0001|REDACTED| (HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH)|
+        *               .|0001|0003|REDACTED||
+        *               .|0003|0004|REDACTED||
+        *               .|0004|0005|REDACTED||
+        *               .|0005|0006|REDACTED||
+        *               .|0006|0007|REDACTED||
+        *               .|0007|0008|REDACTED||
+        *               .|0008|0009|REDACTED||
+        *               .|0009|0010|REDACTED||
+        *               .|0010|0011 0012|REDACTED||
+        |\             
+        | *             .|0012|0014|REDACTED||
+        * |             .|0011|0014|REDACTED||
+        |/             
+        *               .|0014|0015|REDACTED||
+        *               .|0015|0016 0017|REDACTED||
+        |\             
+        | *             .|0017|0018|REDACTED||
+        | *             .|0018|0019|REDACTED||
+        | *             .|0019|0020|REDACTED||
+        | *             .|0020|0016|REDACTED||
+        |/             
+        *               .|0016|0021 0022|REDACTED||
+        |\             
+        | *             .|0022|0023|REDACTED||
+        | *             .|0023|0021|REDACTED||
+        |/             
+        *               .|0021|0024|REDACTED||
+        *               .|0024|0025 0026|REDACTED||
+        |\             
+        | *             .|0026|0027|REDACTED||
+        * |             .|0025|0027 0028|REDACTED||
+        |\ \           
+        | |/           
+        |/|            
+        | *             .|0028|0029|REDACTED||
+        | *             .|0029|0030|REDACTED||
+        | *             .|0030|0027|REDACTED||
+        |/             
+        *               .|0027||REDACTED||
+        """];
+    
+    [TestCaseSource(nameof(Scenarios))]
+    public void BasicScenariosTest(string gitLog)
     {
-        const string gitLog = """
-                              .|0001|0002 0003|REDACTED| (HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH)|
-                              .|0002|0004|REDACTED||
-                              .|0004|0005 0006|REDACTED||
-                              .|0005|0007|REDACTED||
-                              .|0003|0008|REDACTED||
-                              .|0006|0007 0008|REDACTED||
-                              .|0007|0009|REDACTED||
-                              .|0008|0010|REDACTED||
-                              .|0009|0011|REDACTED||
-                              .|0011|0010|REDACTED||
-                              .|0010|0012|REDACTED||
-                              .|0012|0013|REDACTED||
-                              .|0013|0014|REDACTED| (tag: v0.3.1)|
-                              .|0014|0015|REDACTED||
-                              .|0015|0016 0017|REDACTED||
-                              .|0017|0018|REDACTED||
-                              .|0018|0019|REDACTED||
-                              .|0019|0020|REDACTED||
-                              .|0020|0021|REDACTED||
-                              .|0021|0016|REDACTED||
-                              .|0016|0022|REDACTED||
-                              .|0022|0023 0024|REDACTED||
-                              .|0024|0025|REDACTED||
-                              .|0025|0026|REDACTED||
-                              .|0026|0027|REDACTED||
-                              .|0027|0028|REDACTED||
-                              .|0028|0029|REDACTED||
-                              .|0029|0030|REDACTED||
-                              .|0030|0031|REDACTED||
-                              .|0031|0032|REDACTED||
-                              .|0032|0033|REDACTED||
-                              .|0033|0034|REDACTED||
-                              .|0034|0035|REDACTED||
-                              .|0035|0036|REDACTED||
-                              .|0036|0037|REDACTED||
-                              .|0037|0038|REDACTED||
-                              .|0038|0039|REDACTED||
-                              .|0039|0040|REDACTED||
-                              .|0040|0041|REDACTED||
-                              .|0041|0042|REDACTED||
-                              .|0023|0042|REDACTED||
-                              .|0042|0043|REDACTED||
-                              .|0043|0044|REDACTED||
-                              .|0044|0045|REDACTED||
-                              .|0045|0046|REDACTED| (tag: v0.3.0)|
-                              .|0046|0047|REDACTED||
-                              """;
+        var commits = SetupGitRepository(gitLog);
+
+        var segments = _target.BuildTo(commits["0001"]);
+
+        Assert.That(segments, Is.Not.Null);
+    }
+
+    [TestCase]
+    public void DetailedScenario01SegmentsTest()
+    {
+        var gitLog = (string)Scenarios[0];
         var commits = SetupGitRepository(gitLog);
 
         var segments = _target.BuildTo(commits["0001"]);
@@ -101,11 +156,11 @@ internal class VersionHistorySegmentsBuilderTests
             Assert.That(segment.From, Has.Count.EqualTo(2));
             Assert.That(segment.TaggedReleasedVersion, Is.Null);
         });
-        Assert.That(segments[1].Commits, Has.Count.EqualTo(2));
-        Assert.That(segments[2].Commits, Has.Count.EqualTo(1));
+        Assert.That(segments[1].Commits, Has.Count.EqualTo(1));
+        Assert.That(segments[2].Commits, Has.Count.EqualTo(2));
         Assert.That(segments[3].Commits, Has.Count.EqualTo(1));
-        Assert.That(segments[4].Commits, Has.Count.EqualTo(3));
-        Assert.That(segments[5].Commits, Has.Count.EqualTo(1));
+        Assert.That(segments[4].Commits, Has.Count.EqualTo(1));
+        Assert.That(segments[5].Commits, Has.Count.EqualTo(3));
         Assert.Multiple(() =>
         {
             var segment = segments[6];
@@ -130,6 +185,11 @@ internal class VersionHistorySegmentsBuilderTests
         var commits = new List<Commit>();
         foreach (var logLine in gitLog.Split('\n'))
         {
+            if (!logLine.Contains(" .|"))
+            {
+                continue;
+            }
+
             var commit = GitTool.ParseLogLine(logLine.Trim(), _logger);
             commits.Add(commit);
         }
