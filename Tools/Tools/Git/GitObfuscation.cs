@@ -25,12 +25,14 @@ public static class GitObfuscation
             return line;
         }
 
-        var regex = new Regex(@"^\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(?<refs>[^\|]*)?\|$", RegexOptions.Multiline);
+        var regex = new Regex(@"^(?<graph>[^-]*)(-\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(?<refs>[^\|]*)?\|)?$", RegexOptions.Multiline);
         var match = regex.Match(line.Trim());
         if (!match.Success)
         {
             throw new Git2SemVerGitOperationException($"Unable to obtain obfuscated log line from line: {line}.");
         }
+
+        var graph = GetGroupValue(match, "graph");
 
         var sha = GetGroupValue(match, "sha");
         var parents = GetGroupValue(match, "parents").Split(' ');
@@ -38,7 +40,7 @@ public static class GitObfuscation
         var redactedRefs = new Regex(@"\(HEAD -> .*?\)").Replace(tags, "(HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH)");
         redactedRefs = new Regex(@"\(origin/.*?\)").Replace(redactedRefs, "(origin/REDACTED_BRANCH, REDACTED_BRANCH)");
 
-        return $"  |{GetObfuscatedSha(sha)}|{string.Join(" ", parents.Select(GetObfuscatedSha))}|REDACTED|{redactedRefs}|";
+        return $"{graph,20} -|{GetObfuscatedSha(sha)}|{string.Join(" ", parents.Select(GetObfuscatedSha))}|REDACTED|{redactedRefs}|";
     }
 
     private static string GetGroupValue(Match match, string groupName)

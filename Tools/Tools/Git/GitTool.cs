@@ -35,14 +35,15 @@ public class GitTool : IGitTool
     {
         var commits = new List<Commit>();
 
-        var result = Run($"log --skip={skipCount} --max-count={takeCount} --pretty=\"format:|%H|%P|%s|%d|\"");
+        var result = Run($"log --graph --skip={skipCount} --max-count={takeCount} --pretty=\"format:-|%H|%P|%<(30,trunc)%s|%d|\"");
 
         var obfuscatedGitLog = new List<string>();
-        foreach (var line in result.stdOutput.Split('\n'))
+        var lines = result.stdOutput.Split('\n');
+        foreach (var line in lines)
         {
             obfuscatedGitLog.Add(GitObfuscation.ObfuscateLogLine(line));
 
-            if (line.Length == 0)
+            if (!line.Contains(" -|"))
             {
                 continue;
             }
@@ -54,12 +55,17 @@ public class GitTool : IGitTool
         _logger.LogTrace($"Read {commits.Count} commits from git history. Skipped {skipCount}.");
         _logger.LogTrace("Partially obfuscated git log ({0} skipped):\n\n  |Commit|Parents|Summary|Tags|\n{1}", skipCount, string.Join("\n", obfuscatedGitLog));
 
+        //if (lines.Length > 0)
+        //{
+        //    var graph = Run($"log --log --skip={skipCount} --max-count={takeCount} --pretty=\"format:|%H|%P|%s|%d|\"");
+        //} 
+
         return commits;
     }
 
     public static Commit ParseLogLine(string line, ILogger logger)
     {
-        var regex = new Regex(@"^\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(( \(tag: (?<tags>[^\|]+)*\))|([^\|]*))\|$",
+        var regex = new Regex(@"^(?<graph>[^-]*)(-\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(( \(tag: (?<tags>[^\|]+)*\))|([^\|]*))\|)?$",
                               RegexOptions.Multiline);
         var match = regex.Match(line.Trim());
         if (!match.Success)
@@ -67,8 +73,8 @@ public class GitTool : IGitTool
             logger.LogWarning($"Unexpected git log line: {line}.");
         }
 
-        var tags = GetGroupValue(match, "tags")!;
         var sha = GetGroupValue(match, "sha");
+        var tags = GetGroupValue(match, "tags")!;
         var parents = GetGroupValue(match, "parents").Split(' ');
         var summary = GetGroupValue(match, "summary");
 
