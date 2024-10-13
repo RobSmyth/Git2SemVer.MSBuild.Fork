@@ -1,22 +1,30 @@
 ﻿using System.Text.RegularExpressions;
 using NoeticTools.Common.Exceptions;
-#pragma warning disable SYSLIB1045
 
+
+#pragma warning disable SYSLIB1045
 
 namespace NoeticTools.Common.Tools.Git;
 
 #pragma warning disable CS1591
 public static class GitObfuscation
 {
-    private static readonly Dictionary<string, string> ObfuscatedCommitShaLookup = new Dictionary<string, string>();
+    private static readonly Dictionary<string, string> ObfuscatedCommitShaLookup = new();
 
-    public static void Reset()
+    public static string GetObfuscatedSha(string sha)
     {
-        ObfuscatedCommitShaLookup.Clear();
+        if (ObfuscatedCommitShaLookup.TryGetValue(sha, out var value))
+        {
+            return value;
+        }
+
+        var newValue = sha.Length > 6 ? (ObfuscatedCommitShaLookup.Count + 1).ToString("D").PadLeft(4, '0') : sha;
+        ObfuscatedCommitShaLookup.Add(sha, newValue);
+        return newValue;
     }
 
     /// <summary>
-    /// Get partially obfuscated version of the log line (--pretty="format:|%H|%P|%s|%d|") suitable for logging.
+    ///     Get partially obfuscated version of the log line (--pretty="format:|%H|%P|%s|%d|") suitable for logging.
     /// </summary>
     public static string ObfuscateLogLine(string line)
     {
@@ -25,7 +33,8 @@ public static class GitObfuscation
             return line;
         }
 
-        var regex = new Regex(@"^(?<graph>[^\.]*)(\.\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(?<refs>[^\|]*)?\|)?$", RegexOptions.Multiline);
+        var regex = new Regex(@"^(?<graph>[^\.]*)(\.\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(?<refs>[^\|]*)?\|)?$",
+                              RegexOptions.Multiline);
         var match = regex.Match(line.Trim());
         if (!match.Success)
         {
@@ -44,21 +53,14 @@ public static class GitObfuscation
         return sha.Length == 0 ? $"{graph,-12}" : $"{graph,-15} .|{GetObfuscatedSha(sha)}|{parentShas}|REDACTED|{redactedRefs}|";
     }
 
+    public static void Reset()
+    {
+        ObfuscatedCommitShaLookup.Clear();
+    }
+
     private static string GetGroupValue(Match match, string groupName)
     {
         var group = match.Groups[groupName];
         return group.Success ? group.Value : "";
-    }
-
-    public static string GetObfuscatedSha(string sha)
-    {
-        if (ObfuscatedCommitShaLookup.TryGetValue(sha, out var value))
-        {
-            return value;
-        }
-
-        var newValue = sha.Length > 6 ? (ObfuscatedCommitShaLookup.Count + 1).ToString("D").PadLeft(4, '0') : sha;
-        ObfuscatedCommitShaLookup.Add(sha, newValue);
-        return newValue;
     }
 }

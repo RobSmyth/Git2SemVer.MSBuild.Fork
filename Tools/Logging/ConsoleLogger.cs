@@ -9,7 +9,6 @@ public class ConsoleLogger : ILogger
 {
     private const string LogScopeIndent = "  ";
     private readonly List<string> _errorMessages = [];
-    private string _logPrefix = "";
 
     public string Errors => string.Join("\n", _errorMessages);
 
@@ -17,9 +16,15 @@ public class ConsoleLogger : ILogger
 
     public LoggingLevel Level { get; set; } = LoggingLevel.Info;
 
+    public string LogPrefix { get; private set; } = "";
+
+    public void Dispose()
+    {
+    }
+
     public IDisposable EnterLogScope()
     {
-        _logPrefix += LogScopeIndent;
+        LogPrefix += LogScopeIndent;
         return new UsingScope(LeaveLogScope);
     }
 
@@ -33,7 +38,7 @@ public class ConsoleLogger : ILogger
                 { LoggingLevel.Debug, LogDebug },
                 { LoggingLevel.Info, LogInfo },
                 { LoggingLevel.Warning, LogWarning },
-                { LoggingLevel.Error, LogError },
+                { LoggingLevel.Error, LogError }
             };
 
             lookup[level](message);
@@ -44,7 +49,7 @@ public class ConsoleLogger : ILogger
     {
         if (Level <= LoggingLevel.Debug)
         {
-            Console.Out.WriteLine(_logPrefix + message);
+            Console.Out.WriteLine(LogPrefix + message);
         }
     }
 
@@ -62,7 +67,7 @@ public class ConsoleLogger : ILogger
 
     public void LogError(string message, params object[] messageArgs)
     {
-        LogError(_logPrefix + string.Format(message, messageArgs));
+        LogError(LogPrefix + string.Format(message, messageArgs));
     }
 
     public void LogError(Exception exception)
@@ -74,7 +79,7 @@ public class ConsoleLogger : ILogger
 
     public void LogInfo(string message)
     {
-        Console.Out.WriteLine(_logPrefix + message);
+        Console.Out.WriteLine(LogPrefix + message);
     }
 
     public void LogInfo(string message, params object[] messageArgs)
@@ -86,7 +91,7 @@ public class ConsoleLogger : ILogger
     {
         if (Level >= LoggingLevel.Trace)
         {
-            Console.Out.WriteLine(_logPrefix + message);
+            Console.Out.WriteLine(LogPrefix + message);
         }
     }
 
@@ -102,7 +107,7 @@ public class ConsoleLogger : ILogger
     {
         if (Level >= LoggingLevel.Warning)
         {
-            Console.Out.WriteLine(_logPrefix + message);
+            Console.Out.WriteLine(LogPrefix + message);
             AnsiConsole.MarkupLine("[fuchsia]" + message + "[/]");
         }
     }
@@ -119,10 +124,6 @@ public class ConsoleLogger : ILogger
 
     private void LeaveLogScope()
     {
-        _logPrefix = _logPrefix.Substring(0, _logPrefix.Length - LogScopeIndent.Length);
-    }
-
-    public void Dispose()
-    {
+        LogPrefix = LogPrefix.Substring(0, LogPrefix.Length - LogScopeIndent.Length);
     }
 }

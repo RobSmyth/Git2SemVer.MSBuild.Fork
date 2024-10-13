@@ -1,5 +1,4 @@
 ﻿using Injectio.Attributes;
-using Spectre.Console;
 
 
 namespace NoeticTools.Common.Logging;
@@ -9,7 +8,6 @@ public class FileLogger : ILogger
 {
     private const string LogScopeIndent = "  ";
     private readonly List<string> _errorMessages = [];
-    private string _logPrefix = "";
     private readonly StreamWriter _stream;
 
     public FileLogger(string filePath)
@@ -23,9 +21,17 @@ public class FileLogger : ILogger
 
     public LoggingLevel Level { get; set; } = LoggingLevel.Trace;
 
+    public string LogPrefix { get; private set; } = "";
+
+    public void Dispose()
+    {
+        _stream.Flush();
+        _stream.Close();
+    }
+
     public IDisposable EnterLogScope()
     {
-        _logPrefix += LogScopeIndent;
+        LogPrefix += LogScopeIndent;
         return new UsingScope(LeaveLogScope);
     }
 
@@ -42,10 +48,10 @@ public class FileLogger : ILogger
             { LoggingLevel.Debug, "DEBUG|" },
             { LoggingLevel.Info, "INFO|" },
             { LoggingLevel.Warning, "WARN|" },
-            { LoggingLevel.Error, "ERROR|" },
+            { LoggingLevel.Error, "ERROR|" }
         };
 
-        _stream.WriteLine(levelPrefix[level] + _logPrefix + message);
+        _stream.WriteLine(levelPrefix[level] + LogPrefix + message);
     }
 
     public void LogDebug(string message)
@@ -117,12 +123,6 @@ public class FileLogger : ILogger
 
     private void LeaveLogScope()
     {
-        _logPrefix = _logPrefix.Substring(0, _logPrefix.Length - LogScopeIndent.Length);
-    }
-
-    public void Dispose()
-    {
-        _stream.Flush();
-        _stream.Close();
+        LogPrefix = LogPrefix.Substring(0, LogPrefix.Length - LogScopeIndent.Length);
     }
 }

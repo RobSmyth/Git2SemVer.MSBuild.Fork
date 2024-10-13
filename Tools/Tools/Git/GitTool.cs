@@ -53,15 +53,18 @@ public class GitTool : IGitTool
         }
 
         _logger.LogTrace($"Read {commits.Count} commits from git history. Skipped {skipCount}.");
-        _logger.LogTrace("Partially obfuscated git log ({0} skipped):\n\n                .|Commit|Parents|Summary|Refs|\n{1}", skipCount, string.Join("\n", obfuscatedGitLog));
+        _logger.LogTrace("Partially obfuscated git log ({0} skipped):\n\n                .|Commit|Parents|Summary|Refs|\n{1}", skipCount,
+                         string.Join("\n", obfuscatedGitLog));
 
         return commits;
     }
 
     public static Commit ParseLogLine(string line, ILogger logger)
     {
-        var regex = new Regex(@"^(?<graph>[^\.]*)(\.\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(( \(tag: (?<tags>[^\|]+)*\))|([^\|]*))\|)?$",
-                              RegexOptions.Multiline);
+        var regex =
+            new
+                Regex(@"^(?<graph>[^\.]*)(\.\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(( \(tag: (?<tags>[^\|]+)*\))|([^\|]*))\|)?$",
+                      RegexOptions.Multiline);
         var match = regex.Match(line.Trim());
         if (!match.Success)
         {

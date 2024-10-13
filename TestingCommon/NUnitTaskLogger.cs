@@ -12,7 +12,7 @@ public class NUnitTaskLogger : ILogger
     private readonly string _infoPrefix = "INFO: ";
     private readonly string _tracePrefix = "TRACE: ";
     private readonly string _warnPrefix = "WARN: ";
-    private string _logPrefix = "";
+    public string LogPrefix { get; private set; } = "";
 
     public NUnitTaskLogger(bool showMessageLevelPrefix = true)
     {
@@ -34,8 +34,8 @@ public class NUnitTaskLogger : ILogger
 
     public IDisposable EnterLogScope()
     {
-        _logPrefix += LogScopeIndent;
-        return new UsingScope(() => { _logPrefix = _logPrefix.Substring(0, _logPrefix.Length - LogScopeIndent.Length); });
+        LogPrefix += LogScopeIndent;
+        return new UsingScope(() => { LogPrefix = LogPrefix.Substring(0, LogPrefix.Length - LogScopeIndent.Length); });
     }
 
     public void Log(LoggingLevel level, string message)
@@ -59,7 +59,7 @@ public class NUnitTaskLogger : ILogger
     {
         if (Level >= LoggingLevel.Debug)
         {
-            TestContext.Progress.WriteLine(_debugPrefix + _logPrefix + message);
+            TestContext.Progress.WriteLine(_debugPrefix + LogPrefix + message);
         }
     }
 
@@ -74,7 +74,7 @@ public class NUnitTaskLogger : ILogger
         _errorMessages.Add(message);
         if (Level >= LoggingLevel.Error)
         {
-            TestContext.Error.WriteLine(_errorPrefix + _logPrefix + message);
+            TestContext.Error.WriteLine(_errorPrefix + LogPrefix + message);
         }
     }
 
@@ -98,7 +98,7 @@ public class NUnitTaskLogger : ILogger
     {
         if (Level >= LoggingLevel.Info)
         {
-            TestContext.Progress.WriteLine(_infoPrefix + _logPrefix + message);
+            TestContext.Progress.WriteLine(_infoPrefix + LogPrefix + message);
         }
     }
 
@@ -111,7 +111,7 @@ public class NUnitTaskLogger : ILogger
     {
         if (Level >= LoggingLevel.Trace)
         {
-            TestContext.Progress.WriteLine(_tracePrefix + _logPrefix + message);
+            TestContext.Progress.WriteLine(_tracePrefix + LogPrefix + message);
         }
     }
 
@@ -124,7 +124,7 @@ public class NUnitTaskLogger : ILogger
     {
         if (Level >= LoggingLevel.Warning)
         {
-            TestContext.Progress.WriteLine(_warnPrefix + _logPrefix + message);
+            TestContext.Progress.WriteLine(_warnPrefix + LogPrefix + message);
         }
     }
 

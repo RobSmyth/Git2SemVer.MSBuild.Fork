@@ -5,7 +5,6 @@ public abstract class TaskLoggerBase : ILogger
     private const string LogScopeIndent = "  ";
     private readonly ITaskLoggerAdapter _adapter;
     private readonly List<string> _errorMessages = [];
-    private string _logPrefix = "";
 
     protected TaskLoggerBase(ITaskLoggerAdapter adapter)
     {
@@ -17,17 +16,23 @@ public abstract class TaskLoggerBase : ILogger
     public bool HasError { get; private set; }
 
     /// <summary>
-    /// This logger ignores the set log level as the underlying task logger sets the logging level.
+    ///     This logger ignores the set log level as the underlying task logger sets the logging level.
     /// </summary>
     public LoggingLevel Level
     {
         get => LoggingLevel.Trace;
-        set {}
+        set { }
+    }
+
+    public string LogPrefix { get; private set; } = "";
+
+    public void Dispose()
+    {
     }
 
     public IDisposable EnterLogScope()
     {
-        _logPrefix += LogScopeIndent;
+        LogPrefix += LogScopeIndent;
         return new UsingScope(LeaveLogScope);
     }
 
@@ -38,7 +43,7 @@ public abstract class TaskLoggerBase : ILogger
 
     public void LogDebug(string message)
     {
-        _adapter.LogDebug(_logPrefix + message);
+        _adapter.LogDebug(LogPrefix + message);
     }
 
     public void LogDebug(string message, params object[] messageArgs)
@@ -67,7 +72,7 @@ public abstract class TaskLoggerBase : ILogger
 
     public void LogInfo(string message)
     {
-        _adapter.LogInfo(_logPrefix + message);
+        _adapter.LogInfo(LogPrefix + message);
     }
 
     public void LogInfo(string message, params object[] messageArgs)
@@ -77,7 +82,7 @@ public abstract class TaskLoggerBase : ILogger
 
     public void LogTrace(string message)
     {
-        _adapter.LogTrace(_logPrefix + message);
+        _adapter.LogTrace(LogPrefix + message);
     }
 
     public void LogTrace(string message, params object[] messageArgs)
@@ -87,7 +92,7 @@ public abstract class TaskLoggerBase : ILogger
 
     public void LogWarning(string message)
     {
-        _adapter.LogWarning(_logPrefix + message);
+        _adapter.LogWarning(LogPrefix + message);
     }
 
     public void LogWarning(string format, params object[] args)
@@ -102,10 +107,6 @@ public abstract class TaskLoggerBase : ILogger
 
     private void LeaveLogScope()
     {
-        _logPrefix = _logPrefix.Substring(0, _logPrefix.Length - LogScopeIndent.Length);
-    }
-
-    public void Dispose()
-    {
+        LogPrefix = LogPrefix.Substring(0, LogPrefix.Length - LogScopeIndent.Length);
     }
 }

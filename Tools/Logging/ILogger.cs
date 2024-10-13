@@ -24,6 +24,8 @@ public interface ILogger : IDisposable
 
     LoggingLevel Level { get; set; }
 
+    string LogPrefix { get; }
+
     /// <summary>
     ///     A helper to indent messages within a scope.
     /// </summary>

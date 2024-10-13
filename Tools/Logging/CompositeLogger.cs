@@ -2,8 +2,8 @@
 
 public sealed class CompositeLogger : ILogger
 {
-    private readonly List<ILogger> _loggers;
     private readonly List<string> _errorMessages = [];
+    private readonly List<ILogger> _loggers;
     private LoggingLevel _level;
 
     public CompositeLogger(params ILogger[] loggers)
@@ -26,6 +26,19 @@ public sealed class CompositeLogger : ILogger
         }
     }
 
+    public string LogPrefix => _loggers[0].LogPrefix;
+
+    public void Add(ILogger logger)
+    {
+        _loggers.Add(logger);
+    }
+
+    public void Dispose()
+    {
+        _loggers.ForEach(logger => logger.Dispose());
+        _loggers.Clear();
+    }
+
     public IDisposable EnterLogScope()
     {
         var scopes = new List<IDisposable>();
@@ -39,11 +52,6 @@ public sealed class CompositeLogger : ILogger
         {
             _loggers.ForEach(logger => logger.Log(level, message));
         }
-    }
-
-    private static void LeaveLogScope(List<IDisposable> scopes)
-    {
-        scopes.ForEach(leaveScope => leaveScope.Dispose());
     }
 
     public void LogDebug(string message)
@@ -157,14 +165,8 @@ public sealed class CompositeLogger : ILogger
         }
     }
 
-    public void Dispose()
+    private static void LeaveLogScope(List<IDisposable> scopes)
     {
-        _loggers.ForEach(logger => logger.Dispose());
-        _loggers.Clear();
-    }
-
-    public void Add(ILogger logger)
-    {
-        _loggers.Add(logger);
+        scopes.ForEach(leaveScope => leaveScope.Dispose());
     }
 }

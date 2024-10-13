@@ -7,8 +7,8 @@ namespace NoeticTools.Common.Tools.Git;
 [RegisterTransient]
 public class GitProcessCli : IGitProcessCli
 {
-    private readonly IProcessCli _inner;
     private readonly string _gitPath;
+    private readonly IProcessCli _inner;
 
     public GitProcessCli(ILogger logger)
     {
