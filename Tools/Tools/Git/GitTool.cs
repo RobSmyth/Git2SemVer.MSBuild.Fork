@@ -35,7 +35,7 @@ public class GitTool : IGitTool
     {
         var commits = new List<Commit>();
 
-        var result = Run($"log --graph --skip={skipCount} --max-count={takeCount} --pretty=\"format:-|%H|%P|%<(30,trunc)%s|%d|\"");
+        var result = Run($"log --graph --skip={skipCount} --max-count={takeCount} --pretty=\"format:.|%H|%P|%<(30,trunc)%s|%d|\"");
 
         var obfuscatedGitLog = new List<string>();
         var lines = result.stdOutput.Split('\n');
@@ -43,7 +43,7 @@ public class GitTool : IGitTool
         {
             obfuscatedGitLog.Add(GitObfuscation.ObfuscateLogLine(line));
 
-            if (!line.Contains(" -|"))
+            if (!line.Contains(" .|"))
             {
                 continue;
             }
@@ -53,19 +53,14 @@ public class GitTool : IGitTool
         }
 
         _logger.LogTrace($"Read {commits.Count} commits from git history. Skipped {skipCount}.");
-        _logger.LogTrace("Partially obfuscated git log ({0} skipped):\n\n  |Commit|Parents|Summary|Tags|\n{1}", skipCount, string.Join("\n", obfuscatedGitLog));
-
-        //if (lines.Length > 0)
-        //{
-        //    var graph = Run($"log --log --skip={skipCount} --max-count={takeCount} --pretty=\"format:|%H|%P|%s|%d|\"");
-        //} 
+        _logger.LogTrace("Partially obfuscated git log ({0} skipped):\n\n                .|Commit|Parents|Summary|Refs|\n{1}", skipCount, string.Join("\n", obfuscatedGitLog));
 
         return commits;
     }
 
     public static Commit ParseLogLine(string line, ILogger logger)
     {
-        var regex = new Regex(@"^(?<graph>[^-]*)(-\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(( \(tag: (?<tags>[^\|]+)*\))|([^\|]*))\|)?$",
+        var regex = new Regex(@"^(?<graph>[^\.]*)(\.\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(( \(tag: (?<tags>[^\|]+)*\))|([^\|]*))\|)?$",
                               RegexOptions.Multiline);
         var match = regex.Match(line.Trim());
         if (!match.Success)

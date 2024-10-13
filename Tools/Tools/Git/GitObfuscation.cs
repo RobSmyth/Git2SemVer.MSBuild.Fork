@@ -25,7 +25,7 @@ public static class GitObfuscation
             return line;
         }
 
-        var regex = new Regex(@"^(?<graph>[^-]*)(-\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(?<refs>[^\|]*)?\|)?$", RegexOptions.Multiline);
+        var regex = new Regex(@"^(?<graph>[^\.]*)(\.\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(?<refs>[^\|]*)?\|)?$", RegexOptions.Multiline);
         var match = regex.Match(line.Trim());
         if (!match.Success)
         {
@@ -40,7 +40,7 @@ public static class GitObfuscation
         var redactedRefs = new Regex(@"\(HEAD -> .*?\)").Replace(tags, "(HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH)");
         redactedRefs = new Regex(@"\(origin/.*?\)").Replace(redactedRefs, "(origin/REDACTED_BRANCH, REDACTED_BRANCH)");
 
-        return $"{graph,20} -|{GetObfuscatedSha(sha)}|{string.Join(" ", parents.Select(GetObfuscatedSha))}|REDACTED|{redactedRefs}|";
+        return $"{graph,-15} .|{GetObfuscatedSha(sha)}|{string.Join(" ", parents.Select(GetObfuscatedSha))}|REDACTED|{redactedRefs}|";
     }
 
     private static string GetGroupValue(Match match, string groupName)
