@@ -10,7 +10,7 @@
 ///         Logged errors will fail the build.
 ///     </para>
 /// </remarks>
-public interface ILogger
+public interface ILogger : IDisposable
 {
     /// <summary>
     ///     Errors that have logged by this logger.
@@ -29,6 +29,8 @@ public interface ILogger
     /// </summary>
     /// <returns></returns>
     IDisposable EnterLogScope();
+
+    void Log(LoggingLevel level, string message);
 
     /// <summary>
     ///     Log a message with [normal
@@ -107,8 +109,4 @@ public interface ILogger
     ///     Log an exception as a warning.
     /// </summary>
     void LogWarning(Exception exception);
-
-    void WriteTraceLine(string format, params object[] args);
-
-    void WriteTraceLine(string message);
 }

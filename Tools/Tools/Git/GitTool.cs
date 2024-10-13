@@ -13,14 +13,10 @@ public class GitTool : IGitTool
     private readonly IGitProcessCli _inner;
     private readonly ILogger _logger;
 
-    public GitTool(ILogger logger) : this(new GitProcessCli(logger), logger)
-    {
-    }
-
-    private GitTool(IGitProcessCli inner, ILogger logger)
+    public GitTool(ILogger logger)
     {
         _logger = logger;
-        _inner = inner;
+        _inner = new GitProcessCli(logger);
         BranchName = GetBranchName();
         HasLocalChanges = GetHasLocalChanges();
     }
@@ -39,40 +35,45 @@ public class GitTool : IGitTool
     {
         var commits = new List<Commit>();
 
-        var result = Run($"log --skip={skipCount} --max-count={takeCount} --pretty=\"format:%H|%P|%s|%d|\"");
-        if (result.returnCode != 0)
-        {
-            _logger.LogError($"'Git log' command returned non-zero return code {result.returnCode}.");
-        }
+        var result = Run($"log --skip={skipCount} --max-count={takeCount} --pretty=\"format:|%H|%P|%s|%d|\"");
 
+        var obfuscatedGitLog = new List<string>();
         foreach (var line in result.stdOutput.Split('\n'))
         {
+            obfuscatedGitLog.Add(GitObfuscation.ObfuscateLogLine(line));
+
             if (line.Length == 0)
             {
                 continue;
             }
 
-            var regex = new Regex(@"^(?<shortSha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(( \(tag: (?<tags>[^\|]+)*\))|([^\|]*))\|$",
-                                  RegexOptions.Multiline);
-            var match = regex.Match(line.Trim());
-            if (!match.Success)
-            {
-                _logger.LogWarning($"Unexpected git log line: {line}.");
-            }
-
-            var tags = GetGroupValue(match, "tags");
-            var shortSha = GetGroupValue(match, "shortSha");
-            var parents = GetGroupValue(match, "parents").Split(' ');
-            var summary = GetGroupValue(match, "summary");
-
-            _logger.LogTrace($"Parsed git log line '{line}': sha {shortSha}, tags: {tags}");
-
-            commits.Add(new Commit(shortSha, parents, summary, tags));
+            var commit = ParseLogLine(line, _logger);
+            commits.Add(commit);
         }
 
         _logger.LogTrace($"Read {commits.Count} commits from git history. Skipped {skipCount}.");
+        _logger.LogTrace("Partially obfuscated git log ({0} skipped):\n\n  |Commit|Parents|Summary|Tags|\n{1}", skipCount, string.Join("\n", obfuscatedGitLog));
 
         return commits;
+    }
+
+    public static Commit ParseLogLine(string line, ILogger logger)
+    {
+        var regex = new Regex(@"^\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(( \(tag: (?<tags>[^\|]+)*\))|([^\|]*))\|$",
+                              RegexOptions.Multiline);
+        var match = regex.Match(line.Trim());
+        if (!match.Success)
+        {
+            logger.LogWarning($"Unexpected git log line: {line}.");
+        }
+
+        var tags = GetGroupValue(match, "tags")!;
+        var sha = GetGroupValue(match, "sha");
+        var parents = GetGroupValue(match, "parents").Split(' ');
+        var summary = GetGroupValue(match, "summary");
+
+        var commit = new Commit(sha, parents, summary, tags);
+        return commit;
     }
 
     public (int returnCode, string stdOutput) Run(string arguments)
@@ -99,14 +100,8 @@ public class GitTool : IGitTool
     private string GetBranchName()
     {
         var result = Run("status -b -s --porcelain");
-        if (result.returnCode != 0) // todo - not required as Run checks return code
-        {
-            _logger.LogInfo(result.stdOutput);
-            _logger.LogError("Unable to run 'git status'. Appears git is not executable.");
-            return "";
-        }
 
-        var regex = new Regex(@"^## (?<branchName>\S+)\.\.\.");
+        var regex = new Regex(@"^## (?<branchName>\S+)(\.\.\.)?");
         var match = regex.Match(result.stdOutput);
 
         if (!match.Success)

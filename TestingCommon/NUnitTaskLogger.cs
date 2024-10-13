@@ -38,6 +38,23 @@ public class NUnitTaskLogger : ILogger
         return new UsingScope(() => { _logPrefix = _logPrefix.Substring(0, _logPrefix.Length - LogScopeIndent.Length); });
     }
 
+    public void Log(LoggingLevel level, string message)
+    {
+        if (Level <= level)
+        {
+            var lookup = new Dictionary<LoggingLevel, Action<string>>
+            {
+                { LoggingLevel.Trace, LogTrace },
+                { LoggingLevel.Debug, LogDebug },
+                { LoggingLevel.Info, LogInfo },
+                { LoggingLevel.Warning, LogWarning },
+                { LoggingLevel.Error, LogError },
+            };
+
+            lookup[level](message);
+        }
+    }
+
     public void LogDebug(string message)
     {
         if (Level >= LoggingLevel.Debug)
@@ -121,13 +138,7 @@ public class NUnitTaskLogger : ILogger
         LogWarning($"Exception - {exception.Message}");
     }
 
-    public void WriteTraceLine(string format, params object[] args)
+    public void Dispose()
     {
-        LogTrace(format, args);
-    }
-
-    public void WriteTraceLine(string message)
-    {
-        LogTrace(message);
     }
 }

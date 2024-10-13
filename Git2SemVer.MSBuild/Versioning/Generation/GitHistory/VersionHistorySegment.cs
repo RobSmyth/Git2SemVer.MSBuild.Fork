@@ -1,7 +1,9 @@
-﻿using NoeticTools.Common.Exceptions;
+﻿using Microsoft.Build.Utilities;
+using NoeticTools.Common.Exceptions;
 using NoeticTools.Common.Logging;
 using NoeticTools.Common.Tools.Git;
 using Semver;
+using Spectre.Console.Rendering;
 
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -22,25 +24,39 @@ internal sealed class VersionHistorySegment
         _commits.AddRange(commits);
     }
 
+    internal static void Reset()
+    {
+        _nextId = 1;
+    }
+
     private VersionHistorySegment(ILogger logger)
     {
         _logger = logger;
         Id = _nextId++;
+        logger.LogTrace("New path segment {0}:", Id);
     }
 
     public ApiChanges Bumps => GetVersionBumps();
 
     public IReadOnlyList<Commit> Commits => _commits.ToList();
 
+    /// <summary>
+    /// First (oldest) commit in the segment.
+    /// </summary>
     public Commit FirstCommit => _commits.Last();
 
     public IReadOnlyList<VersionHistorySegment> From => _older.ToList();
 
     public int Id { get; }
 
+    /// <summary>
+    /// Last (youngest) commit in the segment.
+    /// </summary>
     public Commit LastCommit => _commits[0];
 
-    public SemVersion? TaggedReleasedVersion { get; set; }
+    public SemVersion? TaggedReleasedVersion => _commits.Count != 0 ? FirstCommit.ReleasedVersion : null;
+
+    public bool IsLeaf => TaggedReleasedVersion != null || From.Count == 0;
 
     public IReadOnlyList<VersionHistorySegment> To => _younger.ToList();
 
@@ -48,27 +64,31 @@ internal sealed class VersionHistorySegment
     {
         if (_commits.Count > 0 && FirstCommit.Parents.All(x => x.Id != commit.CommitId.Id))
         {
-            throw new InvalidOperationException($"Cannot append {commit.CommitId.ShortSha} as it is not connected to segment's first commit.");
+            throw new InvalidOperationException($"Cannot append {commit.CommitId.ObfuscatedSha} as it is not connected to segment's first (oldest) commit.");
         }
 
         _bumps = null;
         _commits.Add(commit);
+        _logger.LogTrace("Commit {0} added to segment {1}.", commit.CommitId.ObfuscatedSha, Id);
     }
 
     public VersionHistorySegment? BranchedFrom(VersionHistorySegment branchSegment, Commit commit)
     {
-        _logger.LogDebug($"Branched from commit: {commit.CommitId.ShortSha}");
-
-        if (commit.CommitId == LastCommit.CommitId)
+        _logger.LogDebug("Commit {0} in segment {1} branches to segment {2}:", commit.CommitId.ObfuscatedSha, Id, branchSegment.Id);
+        using (_logger.EnterLogScope())
         {
-            LinkToYounger(branchSegment);
-            return null;
-        }
+            if (commit.CommitId.Equals(LastCommit.CommitId))
+            {
+                _logger.LogTrace("Commit {0} is last (youngest) commit in segment {1}. Link segments.", commit.CommitId.ObfuscatedSha, Id);
+                LinkToYounger(branchSegment);
+                return null;
+            }
 
-        _bumps = null;
-        var fromSegment = SplitSegmentAt(commit);
-        fromSegment.LinkToYounger(branchSegment);
-        return fromSegment;
+            _bumps = null;
+            var fromSegment = SplitSegmentAt(commit);
+            fromSegment.LinkToYounger(branchSegment);
+            return fromSegment;
+        }
     }
 
     public static VersionHistorySegment CreateHeadSegment(ILogger logger)
@@ -79,7 +99,7 @@ internal sealed class VersionHistorySegment
     /// <summary>
     ///     Create a (younger) segment that this segment links to.
     /// </summary>
-    public VersionHistorySegment CreateToSegment()
+    public VersionHistorySegment CreateMergedSegment()
     {
         var fromBranch = new VersionHistorySegment(_logger);
         fromBranch.LinkToYounger(this);
@@ -92,14 +112,16 @@ internal sealed class VersionHistorySegment
             ? "To: none (head)"
             : $"To: {string.Join(",", To.Select(x => x.Id))}";
 
-        var fromSegments = !From.Any()
-            ? "From: none"
-            : $"From: {string.Join(",", From.Select(x => x.Id))}";
+        var fromSegments = From.Any()
+            ? $"From: {string.Join(",", From.Select(x => x.Id))}"
+            : "From: none";
 
         var commitsCount = $"({_commits.Count})";
 
+        var release = TaggedReleasedVersion != null ? TaggedReleasedVersion.ToString() : "";
+
         return
-            $"Segment {Id}: {LastCommit!.CommitId.ShortSha} -> {FirstCommit!.CommitId.ShortSha}  {commitsCount,5}  {Bumps.ToString() ?? "???"}  {toSegments,-16}  {fromSegments,-16}";
+            $"Segment {Id,3}: {LastCommit.CommitId.ObfuscatedSha} -> {FirstCommit.CommitId.ObfuscatedSha}  {commitsCount,5}  {Bumps.ToString() ?? "???"}  {toSegments,-16}  {fromSegments,-16}  {release}";
     }
 
     private ApiChanges GetVersionBumps()
@@ -136,13 +158,17 @@ internal sealed class VersionHistorySegment
             throw new Git2SemVerInvalidOperationException("Cannot split a segment that does not contain the commit.");
         }
 
-        var keepCommits = _commits.Take(index).ToList();
-        var newSegmentCommits = _commits.Skip(index).Take(_commits.Count - index).ToList();
-        _commits.Clear();
-        _commits.AddRange(keepCommits);
+        _logger.LogTrace("Splitting segment {0} at commit {1}:", Id, commit.CommitId.ObfuscatedSha);
+        using (_logger.EnterLogScope())
+        {
+            var keepCommits = _commits.Take(index).ToList();
+            var newSegmentCommits = _commits.Skip(index).Take(_commits.Count - index).ToList();
+            _commits.Clear();
+            _commits.AddRange(keepCommits);
 
-        var fromSegment = new VersionHistorySegment(newSegmentCommits, _logger);
-        fromSegment.LinkToYounger(this);
-        return fromSegment;
+            var fromSegment = new VersionHistorySegment(newSegmentCommits, _logger);
+            fromSegment.LinkToYounger(this);
+            return fromSegment;
+        }
     }
 }
