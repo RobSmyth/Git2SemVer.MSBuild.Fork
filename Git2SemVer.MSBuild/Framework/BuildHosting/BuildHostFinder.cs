@@ -40,13 +40,13 @@ internal class BuildHostFinder
             if (buildHostTypeId != HostTypeIds.Unknown)
             {
                 var selectedHost = _allBuildHosts.Find(x => x.HostTypeId == buildHostTypeId)!;
-                _logger.LogDebug($"Host selected by Git2SemVer_HostType is: '{selectedHost.Name}'\n");
+                _logger.LogDebug($"Host selected by Git2SemVer_HostType is: '{selectedHost.Name}'");
                 return selectedHost;
             }
         }
 
         var host = _detectableBuildHosts.First(x => x.MatchesHostSignature());
-        _logger.LogDebug($"Detected host: '{host.Name}'\n");
+        _logger.LogDebug($"Detected host: '{host.Name}'");
         return host;
     }
 }

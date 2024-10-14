@@ -44,7 +44,7 @@ internal sealed class VersionHistorySegmentsBuilder
 
         using (_logger.EnterLogScope())
         {
-            _logger.LogDebug("Segment #   Commits             Bumps To segments       From segments  Release");
+            _logger.LogDebug("Segment #   Commits             Bumps To segments       From segments    Release");
             foreach (var segment in _segments)
             {
                 _logger.LogDebug(segment.Value.ToString());
