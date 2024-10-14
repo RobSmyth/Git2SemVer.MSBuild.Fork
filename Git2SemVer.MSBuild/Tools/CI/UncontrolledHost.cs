@@ -12,7 +12,7 @@ internal class UncontrolledHost : BuildHostBase, IDetectableBuildHost
     private readonly IConfiguration _config;
     private readonly ILogger _logger;
 
-    public UncontrolledHost(IConfiguration config, ILogger logger)
+    public UncontrolledHost(IConfiguration config, ILogger logger) : base(logger)
     {
         _config = config;
         _logger = logger;
@@ -34,6 +34,7 @@ internal class UncontrolledHost : BuildHostBase, IDetectableBuildHost
     {
         _config.BuildNumber++;
         _config.Save();
+        _logger.LogTrace("Bumped build number to {0}.", _config.BuildNumber);
         BuildNumber = _config.BuildNumber.ToString();
         return BuildNumber;
     }
