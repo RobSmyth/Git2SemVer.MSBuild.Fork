@@ -2,7 +2,7 @@
 using Semver;
 
 
-namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistory;
+namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 
 #pragma warning disable CS1591
 internal sealed class VersionHistoryPath
@@ -42,7 +42,7 @@ internal sealed class VersionHistoryPath
         var commitsCount = $"({CommitsSinceLastRelease})";
         var segmentIdsString = string.Join("-", _segments.Select(x => x.Id));
         return
-            $"Path {Id,-3} {segmentIdsString,-20} {commitsCount,5}  {_bumps.ToString()}  {LastReleasedVersion?.ToString() ?? " none"} -> {GetNextReleaseVersion()}";
+            $"Path {Id,-3} {segmentIdsString,-20} {commitsCount,5}   {_bumps.ToString()}   {LastReleasedVersion?.ToString() ?? " none"} -> {GetNextReleaseVersion()}";
     }
 
     public IReadOnlyList<VersionHistoryPath> With(IReadOnlyList<VersionHistorySegment> toSegments)

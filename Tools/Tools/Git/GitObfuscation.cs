@@ -33,6 +33,9 @@ public static class GitObfuscation
             return line;
         }
 
+        //| (HEAD -> main, tag: v0.3.3, origin/main, origin/HEAD)|
+        //(HEAD -> main, tag: v0.3.3, origin/main, origin/HEAD)
+
         var regex = new Regex(@"^(?<graph>[^\.]*)(\.\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|(?<refs>[^\|]*)?\|)?$",
                               RegexOptions.Multiline);
         var match = regex.Match(line.Trim());
@@ -45,12 +48,12 @@ public static class GitObfuscation
 
         var sha = GetGroupValue(match, "sha");
         var parents = GetGroupValue(match, "parents").Split(' ');
-        var tags = GetGroupValue(match, "refs")!;
-        var redactedRefs = new Regex(@"\(HEAD -> .*?\)").Replace(tags, "(HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH)");
-        redactedRefs = new Regex(@"\(origin/.*?\)").Replace(redactedRefs, "(origin/REDACTED_BRANCH, REDACTED_BRANCH)");
+        var refs = GetGroupValue(match, "refs")!;
+        var redactedRefs = new Regex(@"HEAD -> \S+?(?=[,\)])").Replace(refs, "HEAD -> REDACTED_BRANCH");
+        var redactedRefs2 = new Regex(@"origin\/\S+?(?=[,\)])").Replace(redactedRefs, "origin/REDACTED_BRANCH");
         var parentShas = parents.Length > 0 ? string.Join(" ", parents.Select(GetObfuscatedSha)) : string.Empty;
 
-        return sha.Length == 0 ? $"{graph,-12}" : $"{graph,-15} .|{GetObfuscatedSha(sha)}|{parentShas}|REDACTED|{redactedRefs}|";
+        return sha.Length == 0 ? $"{graph,-12}" : $"{graph,-15} .|{GetObfuscatedSha(sha)}|{parentShas}|REDACTED|{redactedRefs2}|";
     }
 
     public static void Reset()

@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics;
-using System.Xml.Schema;
 using NoeticTools.Common.Logging;
 using NoeticTools.Common.Tools.Git;
 
 
-namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistory;
+namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 
 internal sealed class VersionHistorySegmentsBuilder
 {
@@ -44,7 +43,7 @@ internal sealed class VersionHistorySegmentsBuilder
 
         using (_logger.EnterLogScope())
         {
-            _logger.LogDebug("Segment #   Commits             Bumps To segments       From segments    Release");
+            _logger.LogDebug("Segment #   Commits (count)      Bumps  To segments       From segments    Release");
             foreach (var segment in _segments)
             {
                 _logger.LogDebug(segment.Value.ToString());

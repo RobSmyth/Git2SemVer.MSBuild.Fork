@@ -1,8 +1,7 @@
-﻿using System.Text;
-using NoeticTools.Common.Logging;
+﻿using NoeticTools.Common.Logging;
 
 
-namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistory;
+namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 
 #pragma warning disable CS1591
 internal sealed class VersionHistoryPathsBuilder
@@ -43,7 +42,7 @@ internal sealed class VersionHistoryPathsBuilder
         _logger.LogDebug($"Found {paths.Count} paths.");
         using (_logger.EnterLogScope())
         {
-            _logger.LogDebug("Path #   Segments                   Bumps  Ver from/to");
+            _logger.LogDebug("Path #   Segments (count)            Bumps    Ver from/to");
             foreach (var path in paths)
             {
                 _logger.LogDebug(path.ToString());
