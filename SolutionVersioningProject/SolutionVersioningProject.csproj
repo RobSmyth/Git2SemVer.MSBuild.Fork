@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Git2SemVer_UpdateHostBuildLabel>true</Git2SemVer_UpdateHostBuildLabel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Git2SemVer.csx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Git2SemVer.csx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NoeticTools.Git2SemVer.MSBuild" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="NoeticTools.Git2SemVer.MSBuild" Version="0.17.4-Alpha-InitialDev.188" />
+  </ItemGroup>
+
+</Project>

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NoeticTools.Common.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Versioning;
+using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
 using Semver;
 
@@ -45,43 +46,46 @@ namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning
                 BuildSystemVersion = new SemVersion(5, 6, 7).WithPrerelease("TEST")
             };
 
-            var result = GeneratedOutputsFile.ToJson(target);
+            var result = GeneratedVersionsJsonFile.GetContent(target);
 
             Assert.That(result, Is.Not.Null);
 
             const string expected = """
                                     {
-                                      "AssemblyVersion": "10.11.12",
-                                      "BuildContext": "CONTEXT",
-                                      "BuildNumber": "777",
-                                      "BuildSystemVersion": "5.6.7-TEST",
-                                      "FileVersion": null,
-                                      "Git": {
-                                        "$type": "GitOutputs",
-                                        "BranchName": "",
-                                        "CommitsSinceLastRelease": 0,
-                                        "HasLocalChanges": false,
-                                        "HeadCommit": {
-                                          "$type": "Commit",
-                                          "CommitId": {
-                                            "Id": "00000000",
-                                            "ObfuscatedSha": "0001",
-                                            "ShortSha": "0000000"
+                                      "Git2SemVerVersionInfo": {
+                                        "AssemblyVersion": "10.11.12",
+                                        "BuildContext": "CONTEXT",
+                                        "BuildNumber": "777",
+                                        "BuildSystemVersion": "5.6.7-TEST",
+                                        "FileVersion": null,
+                                        "Git": {
+                                          "$type": "GitOutputs",
+                                          "BranchName": "",
+                                          "CommitsSinceLastRelease": 0,
+                                          "HasLocalChanges": false,
+                                          "HeadCommit": {
+                                            "$type": "Commit",
+                                            "CommitId": {
+                                              "Id": "00000000",
+                                              "ObfuscatedSha": "0001",
+                                              "ShortSha": "0000000"
+                                            },
+                                            "Message": "null commit",
+                                            "Parents": [],
+                                            "ReleasedVersion": null
                                           },
-                                          "Message": "null commit",
-                                          "Parents": [],
-                                          "ReleasedVersion": null
+                                          "LastReleaseCommit": null,
+                                          "LastReleaseVersion": null
                                         },
-                                        "LastReleaseCommit": null,
-                                        "LastReleaseVersion": null
+                                        "InformationalVersion": null,
+                                        "IsInInitialDevelopment": false,
+                                        "Output1": "",
+                                        "Output2": "",
+                                        "PackageVersion": null,
+                                        "PrereleaseLabel": "",
+                                        "Version": null
                                       },
-                                      "InformationalVersion": null,
-                                      "IsInInitialDevelopment": false,
-                                      "Output1": "",
-                                      "Output2": "",
-                                      "PackageVersion": null,
-                                      "PrereleaseLabel": "",
-                                      "Version": null
+                                      "Version": "1.0.0"
                                     }
                                     """;
             Assert.That(result, Is.EqualTo(expected));

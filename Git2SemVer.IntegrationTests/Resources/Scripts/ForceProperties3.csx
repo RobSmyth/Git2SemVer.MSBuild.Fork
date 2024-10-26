@@ -11,17 +11,18 @@ context.Logger.LogInfo("\nRunning script ForceProperties2.csx.\n");
 
 // force base version outputs & clear derived.
 // Version will be dominant.
-context.Outputs.Version = new SemVersion(21, 22, 23).WithPrerelease("beta");
+context.Outputs.Version = new SemVersion(2, 2, 2).WithPrerelease("beta");
 context.Outputs.InformationalVersion = null;
-context.Outputs.AssemblyVersion = null;
-context.Outputs.FileVersion = null;
-context.Outputs.PackageVersion = null;
+context.Outputs.AssemblyVersion = new Version(200, 201, 202);
+context.Outputs.FileVersion = new Version(200, 201, 212);
+context.Outputs.PackageVersion = new SemVersion(1, 2, 3).WithPrerelease("alpha");
 
 /*
  * Expected outcome:
  *
- *  Assembly version:       21.22.23.0
- *  File version:           21.22.23.0
- *  Informational version:  21.22.23-beta
- *  Product version:        21.22.23-beta
+ *  Assembly version:       200.201.202.0
+ *  File version:           200.201.212
+ *  Informational version:  2.2.2-beta
+ *  Product version:        2.2.2-beta
+ *  Pacakge version:        2.2.3-alpha
  */
