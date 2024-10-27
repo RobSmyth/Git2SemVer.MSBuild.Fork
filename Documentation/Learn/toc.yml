@@ -1,3 +1,5 @@
+- name: Solution versioning
+  uid: soltuion-versioning
 - name: Default versioning
   uid: default-versioning
 - name: Working with the code

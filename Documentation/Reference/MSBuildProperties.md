@@ -145,7 +145,7 @@ The MSBuild input poperties are:
         </p><p>
             Default is <code>^((?<release>main|release)|(?<beta>feature)|(?<alpha>.+))[\\/_]?</code>
         </p><p>
-            The <code>release<code> group is required.
+            The <code>release</code> group is required.
             All others a prereleases and the group name is the prerelease label.
         </p>
         </div>

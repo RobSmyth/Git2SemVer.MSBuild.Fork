@@ -53,13 +53,13 @@ Git2SemVer is a <a href="https://semver.org">Semantic Versioning</a> framework f
 It works the same in both dotnet CLI and Visual Studio builds and for both developers and build system builds.
 It just happens using <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> message elements and Git tagging of each release.
 
-Git2SemVer includes a dotnet CLI tool (Git2SemVer.Tool) for simple solution versioning setup. 
-The setup configures add the Git2SemVer.MSBuild NuGet package to all solution projects.
+For solution versioning, were all projects in a .NET solution to share a common versioning, use the dotnet CLI tool `Git2SemVer.Tool` is used to setup the solution.
+For project versioning, adding the nuget package `Git2SemVer.MSBuild` to the .NET project.
 With the versioning being done within MSBuild, no build system version generation steps are needed and it works the same for both dotnet CLI and Visual Studio.
 
-No complex configuration of branching strategy (like GitFlow or GitHubFlow) and completely customisable using an optional project C# script that can change any or all of the generated version information
-Git2SemVer determines Semantic Version from Git commit history and the host environment.
+For no limits customisation, Git2SemVer has an in-built C# script API that can change any part of the versioning.
 
+# Features
 <br/>
 
 <div style="margin:5px; text-align:center; width:95%">
@@ -104,11 +104,10 @@ Git2SemVer determines Semantic Version from Git commit history and the host envi
 
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
-      <p style="text-align:center">Benefit from comprehensive Semmantic Version compliance.</p>
-    </div>
-    <div class="featureBody">
-         <p>Supports <a href="https:Reference/Glossary.html#initial-development">initial development</a> versioning.</p>
-         <p><a href="https://semver.org/#spec-item-5">Release versioning.</a></p>
+      <p style="text-align:center">Benefit from comprehensive Semmantic Version compliance with:
+      <a href="https:Reference/Glossary.html#initial-development">Initial development</a> versioning, 
+      <a href="https://semver.org/#spec-item-5">Release versioning.</a>, 
+      and automatic <a href="Reference/Glossary.html#build-number">build numbering</a>.</p>
     </div>
   </td>
 
@@ -155,16 +154,24 @@ Git2SemVer determines Semantic Version from Git commit history and the host envi
 <tr>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody" style="vertical-align:top">
-      <p>VS Code, dotnet CLI, Visual Studio are all the same.
-        All versioning is done within MSBuild (csproj file).</p>
-      <p>Build system and developer environments are all the same.
-      No custom versioning build steps or scripts required.</p>
+      <p>
+      Visual Studio, VS Code, and dotnet CLI are all the same to Git2SemVer.
+      Build system and developer environments all get versioning too.
+      </p>
+      <p>
+      No custom versioning build steps or scripts required.
+      All versioning is done within MSBuild (csproj file).
+      </p>
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
-        <p>Automatic <a href="Reference/Glossary.html#build-number">build numbering</a> on all builds on <b>developer boxes</b> and the build system.<p>
-        <p>Full traceability. <a href="Reference/Glossary.html#build-height">Build height</a> (commit counting) <b>NOT</b> used.</p>
+        <p>
+        Automatic <a href="Reference/Glossary.html#build-number">build numbering</a> on all builds on <b>developer boxes</b> and the build system.
+        <p>
+        <p>
+        Full traceability. <a href="Reference/Glossary.html#build-height">Build height</a> (commit counting) <b>NOT</b> used.
+        </p>
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
@@ -196,7 +203,7 @@ Git2SemVer determines Semantic Version from Git commit history and the host envi
   </td>
   <td>
     <div class="featureTitle">
-        Build Host Aware
+        Build Host Adaptive Versioning
     </div>
   </td>
   <td>
@@ -221,7 +228,9 @@ Git2SemVer determines Semantic Version from Git commit history and the host envi
   </td>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
-        <p>No Git workflow configuration required. It works the same for GitFlow and GitHub Flow.</p>
+        <p>
+        No Git workflow configuration required. It works the same for GitFlow and GitHub Flow.
+        </p>
     </div>
   </td>
 </tr>

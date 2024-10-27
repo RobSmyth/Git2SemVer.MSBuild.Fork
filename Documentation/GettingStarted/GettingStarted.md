@@ -12,9 +12,17 @@ Git2SemVer requires:
 * `git` CLI to be executable from any project directory.
 * `dotnet` CLI to be executable from any project directory.
 
+Known compatibility:
+
+* `dotnet.exe` `8.0.403` or later.
+* `git` `2.41.0` or later.
+* Windows 11
+* Ubuntu 20.04 LTS
+
 ## Installing
 
-To setup a solution to use Git2SemVer solution versioning, first install the dotnet tool Git2SemVer.Tool:
+
+To setup a solution to use Git2SemVer solution versioning, first install the dotnet tool `Git2SemVer.Tool`:
 
 ```winbatch
 dotnet tool install --global NoeticTools.Git2SemVer.Tool
@@ -29,7 +37,7 @@ Then, in the solution's directory, run:
 Git2SemVer add
 ```
 
-You will be prompted with a few options and then setup is done. :-)
+You will be prompted with a few options and then setup is done.
 
 Try building the solution, all projects will be automatically versioned using [Git2SemVer's default versioning](xref:default-versioning).
 

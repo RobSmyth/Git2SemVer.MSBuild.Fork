@@ -1,4 +1,9 @@
-﻿# Versioning Schemes
+﻿---
+uid: versioning
+---
+![](../Images/Git2SemVer_banner_840x70.png)
+
+# Versioning Schemes
 
 
 ### Terminology: Versions, releases, builds, and product names
