@@ -233,7 +233,7 @@ Git2SemVer determines Semantic Version from Git commit history and the host envi
       <img src="Images/TeamCity_128x128.png" height=128 />
     </td>
     <td >
-      <img src="Images/GitHub_gray_128x128.png" height=128 />
+      <img src="Images/github_gray_128x128.png" height=128 />
     </td>
     <td >
       <!-- Empty -->
