@@ -18,7 +18,8 @@ a
 
 ![](Images/Git2SemVer_banner_840x70.png)
 
-![Current Version](https://img.shields.io/nuget/vpre/NoeticTools.Git2SemVer)
+![Current Version](https://img.shields.io/nuget/v/NoeticTools.Git2SemVer.MSBuild?label=Git2SemVer.Msbuild)
+![Current Version](https://img.shields.io/nuget/v/NoeticTools.Git2SemVer.Tool?label=Git2SemVer.Tool)
 [![Release Build](https://github.com/NoeticTools/Git2SemVer/actions/workflows/dotnet.yml/badge.svg)](https://github.com/NoeticTools/Git2SemVer/actions/workflows/dotnet.yml)
 
 
@@ -33,17 +34,16 @@ No limits .NET solution versioning.</div>
 >
 > Early testing and feedback would be great!
 
-Git2SemVer provides automatic Semantic Versioning to .NET solutions and projects. 
-It automatically versions both dotnet CLI and Visual Studio builds so both developers and build system builds are versioned.
+Git2SemVer is a <a href="https://semver.org">Semantic Versioning</a> framework for .NET solution and project versioning.
+It works the same in both dotnet CLI and Visual Studio builds and for both developers and build system builds.
 It just happens using <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> message elements and Git tagging of each release.
 
-Git2SemVer includes a dotnet CLI tool (Git2SemVer.Tool) for simple solution setup. 
+Git2SemVer includes a dotnet CLI tool (Git2SemVer.Tool) for simple solution versioning setup. 
 The setup configures add the Git2SemVer.MSBuild NuGet package to all solution projects.
-With the versioning being done within the dotnet/MSBuild build no build system version generation steps are needed.
+With the versioning being done within MSBuild, no build system version generation steps are needed and it works the same for both dotnet CLI and Visual Studio.
 
-No complex configuration of branching strategy (like GitFlow or GitHubFlow) and completely customisable.
-Git2SemVer determines Semantic Version from Git commit history and build host parameters and environment. 
-It then executes an optional project C# script that can change any or all of the generated version information.
+No complex configuration of branching strategy (like GitFlow or GitHubFlow) and completely customisable using an optional project C# script that can change any or all of the generated version information
+Git2SemVer determines Semantic Version from Git commit history and the host environment.
 
 <br/>
 
@@ -59,7 +59,7 @@ It then executes an optional project C# script that can change any or all of the
     </td>
     <td>
         Builds the same for dotnet.exe, Visual Studio, on build system, or on a dev environments.
-        All versioning is done within the csproj build.
+        All versioning is done within MSBuild (csproj file).
     </td>
   </tr>
   <tr>
