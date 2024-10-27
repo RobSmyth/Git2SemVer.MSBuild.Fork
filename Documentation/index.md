@@ -2,12 +2,27 @@
 _layout: landing
 ---
 <style>
-.featureDiv {
+
+.featureTitle {
   font-size:1.2em;
 }
 
-table, tr, td {
+.featureBody {
+  font-size:1.0em;
+}
+
+.featureBodyLeftAlign {
+  font-size:1.0em;
+  text-align:left;
+}
+
+table, tr {
   border:none !important;
+}
+
+td {
+  border:none !important;
+  width:300px;
 }
 
 a 
@@ -47,75 +62,223 @@ Git2SemVer determines Semantic Version from Git commit history and the host envi
 
 <br/>
 
-## Why Use Git2SemVer?
+<div style="margin:5px; text-align:center; width:95%">
+<table>
 
-<div style="margin:10px;">
- <table>
-  <tr>
-    <td>
-        <div class="featureDiv">
-            <a href="Reference/Glossary.html#environment-parity">Environment parity</a>
-        </div>
+ <tr>
+    <td style="width:33%">
+      <img src="Images/OpenSource_128x128.png" height=128 />
     </td>
-    <td>
-        Builds the same for dotnet.exe, Visual Studio, on build system, or on a dev environments.
-        All versioning is done within MSBuild (csproj file).
+    <td style="width:33%">
+      <img src="Images/SemVer213x128(dark).png" height=128 />
     </td>
-  </tr>
-  <tr>
-    <td>
-        <div class="featureDiv">
-            <a href="https://semver.org/#spec-item-4">Initial development versioning</a>
-        </div>
+    <td  style="width:33%">
+      <img src="Images/ConventionalCommits_128x128.png" height=128 />
     </td>
-    <td>
-        Make all <a href="https://semver.org/#spec-item-4">0.x.x versions intial development</a> pre-releases.
+</tr>
+
+<tr>
+  <td>
+    <div class="featureTitle" >
+        Open Source
+    </div>
+  </td>
+  <td>
+    <div class="featureTitle">
+      <a href="https://semver.org/">Semmantic Versioning</a>
+    </div>
+  </td>
+  <td>
+    <div class="featureTitle" >
+        <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a>
+    </div>
+  </td>
+</tr>
+
+<tr>
+  <td class="featureBody" style="vertical-align:top">
+    <div class="featureBody">
+        <p>Free and open source.</p>
+    </div>
+  </td>
+
+  <td class="featureBody" style="vertical-align:top">
+    <div class="featureBody">
+      <p style="text-align:center">Benefit from comprehensive Semmantic Version compliance.</p>
+    </div>
+    <div class="featureBody">
+         <p>Supports <a href="https://semver.org/#spec-item-4">Initial development versioning.</a></p>
+         <p><a href="https://semver.org/#spec-item-5">Release versioning.</a></p>
+    </div>
+  </td>
+
+  <td class="featureBody" style="vertical-align:top">
+    <div class="featureBody">
+        <p>Use Conventional Commits commit message elements to bump versions:</p>
+        <p style="margin-top: 0em;margin-bottom: 0em;">
+          <i>fix:</i> | <i>feat:</i> | <i>BREAKING CHANGE:</i>
+        </p>
+    </div>
+  </td>
+</tr>
+
+<!-- Row 2 -->
+
+<tr>
+    <td >
+      <img src="Images/consistency_128x128.png" height=128 />
     </td>
-  </tr>
-  <tr>
-    <td>
-        <div class="featureDiv">
-            <a href="Reference/Glossary.html#controlled-host">Controlled/uncontrolled versioning</a>
-        </div>
+    <td >
+      <p style="font-size:100px; margin:0px">#</p>
     </td>
-    <td>
-        Different versioning on controlled and uncontrolled hosts (build system and dev env).
+    <td >
+      <img src="Images/CSharp_128x128.png" height=128 />
     </td>
-  </tr>
-  <tr>
-    <td>
-        <div class="featureDiv">
-            <a href="Reference/Glossary.html#build-number">Build numbering</a>
-        </div>
+</tr>
+<tr>
+  <td>
+    <div class="featureTitle">
+        <a href="Reference/Glossary.html#environment-parity">Environment Parity</a>
+    </div>
+  </td>
+  <td>
+    <div class="featureTitle">
+        Build Numbering
+    </div>
+  </td>
+  <td>
+    <div class="featureTitle">
+        C# Scripting
+    </div>
+  </td>
+</tr>
+<tr>
+  <td class="featureBody" style="vertical-align:top">
+    <div class="featureBody" style="vertical-align:top">
+      <p>VS Code, dotnet CLI, Visual Studio are all the same.
+        All versioning is done within MSBuild (csproj file).</p>
+      <p>Build system and developer environments are all the same.
+      No custom versioning build steps or scripts required.</p>
+    </div>
+  </td>
+  <td class="featureBody" style="vertical-align:top">
+    <div class="featureBody">
+        <p>Automatic build numbering on all builds on developer boxes or the build system.<p>
+        <p>Full traceability. Commit depth (commit counting) <b>NOT</b> used.</p>
+    </div>
+  </td>
+  <td class="featureBody" style="vertical-align:top">
+    <div class="featureBody">
+        <p>Built in C# scripting (csx) can be used to modify all or some of the generated versioning.</p>
+        <p>Unlimited customisation with API. A few lines of code makes customisation easy.</p>
+    </div>
+  </td>
+</tr>
+
+<!-- Row 3 -->
+
+<tr>
+    <td >
+      <img src="Images/VisualStudio_128x128.png" height=128 />
     </td>
-    <td>
-        Detect if building on build system and use build system's build number.
-        On a dev environment use a host counter.
+    <td >
+      <img src="Images/ComputerMonitor.png" height=128 />
     </td>
-  </tr>
-  <tr>
-    <td>
-        <div class="featureDiv">
-            No limit automatic versioning
-        </div>
+    <td >
+      <img src="Images/git_workflow_128x128.png" height=128 />
     </td>
-    <td>
-        Extended versioning by C# script with a DSL library, and access to host environment and files.
+</tr>
+<tr>
+  <td>
+    <div class="featureTitle">
+        Visual Studio Friendly
+    </div>
+  </td>
+  <td>
+    <div class="featureTitle">
+        Build Host Aware
+    </div>
+  </td>
+  <td>
+    <div class="featureTitle">
+        Git Workflow Agnostic
+    </div>
+  </td>
+</tr>
+<tr>
+  <td class="featureBody" style="vertical-align:top">
+    <div class="featureBody">
+      <p>Implemented in MSBuild it works the same with dotnet CLI and Visual Studio.</p>
+      <p>.NET developer friendly.</p>
+    </div>
+  </td>
+  <td class="featureBody" style="vertical-align:top">
+    <div class="featureBody">
+        <p>The versioning adapts according to the build host.</p>
+        <p>Developer box builds get prelease/metadata identifiers make it apparent that is a dev box build.</p>
+        <p>See: <a href="Reference/Glossary.html#controlled-host">Controlled/uncontrolled versioning</a></p>
+    </div>
+  </td>
+  <td class="featureBody" style="vertical-align:top">
+    <div class="featureBody">
+        <p>No Git workflow configuration required. It works the same for GitFlow and GitHub Flow.</p>
+    </div>
+  </td>
+</tr>
+
+<!-- Row 4 -->
+
+<tr>
+    <td >
+      <img src="Images/TeamCity_128x128.png" height=128 />
     </td>
-  </tr>
-  <tr>
-    <td>
-        <div class="featureDiv">
-            Testability
-        </div>
+    <td >
+      <img src="Images/GitHub_gray_128x128.png" height=128 />
     </td>
-    <td>
-        With environment parity, C# scripting, and built in overrides, test any scenario from a dev environment.
+    <td >
+      <!-- Empty -->
     </td>
-  </tr>
+</tr>
+<tr>
+  <td>
+    <div class="featureTitle">
+        TeamCity Integration
+    </div>
+  </td>
+  <td>
+    <div class="featureTitle">
+        GitHub Actions
+    </div>
+  </td>
+  <td>
+    <div class="featureTitle">
+      <!-- Empty -->
+    </div>
+  </td>
+</tr>
+<tr>
+  <td class="featureBody" style="vertical-align:top">
+    <div class="featureBody">
+      <p>Automatic build system detection with server build number (label) updating.</p>
+      <img src="Images/TeamCity-01.png">
+    </div>
+  </td>
+  <td class="featureBody" style="vertical-align:top">
+    <div class="featureBody">
+        <p>Built in support for builds using GitHub Actions.</p>
+        <p>Constructs build number from run and run attempt numbers.</p>
+    </div>
+  </td>
+  <td class="featureBody" style="vertical-align:top">
+    <div class="featureBody">
+      <!-- Empty -->
+    </div>
+  </td>
+</tr>
 </table> 
 </div>
 
+<br/>
 
 ## Quick links
 
@@ -144,3 +307,4 @@ This project uses the following tools and libraries. Many thanks to those who cr
 * [Moq](https://github.com/devlooped/moq)
 * [docfx](https://dotnet.github.io/docfx/)
 * <a href="https://www.flaticon.com/free-icons/brain" title="brain icons">Brain icons created by Freepik - Flaticon</a>
+* <a href="https://www.flaticon.com/free-icons/consistent" title="consistent icons">Consistent icons created by Freepik - Flaticon</a>

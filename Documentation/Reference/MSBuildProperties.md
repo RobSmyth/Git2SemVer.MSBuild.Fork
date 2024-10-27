@@ -65,7 +65,7 @@ The MSBuild input poperties are:
  <tr>
     <td>
       <div class="headerCell">
-        Property
+        Open Source
       </div>
     </td>
     <td>
@@ -102,15 +102,15 @@ The MSBuild input poperties are:
     </td>
     <td>
         <div class="descriptionCol">
-        <p>
-            If set overrides the build host's BuildIDFormat property to overrides how the host formats build ID
-        </p><p>
-            A a dot delimited string of identifiers. Identifiers <code>BUILD_NUMBER</code> and <code>BUILD_CONTEXT</code> are replaced with the values of the host's build number and build contxt.
-        </p><p>
-            Example values: <code>BUILD_NUMBER.BUILD_CONTEXT</code>, <code>BUILD_NUMBER.BUILD_CONTEXT</code>, <code>BUILD_NUMBER</code>, or <code>MyBuildId</code>.
-        </p><p>
-            Default is build host dependent.
-        </p>
+            <p>
+                If set overrides the build host's BuildIDFormat property to overrides how the host formats build ID
+            </p><p>
+                A a dot delimited string of identifiers. Identifiers <code>BUILD_NUMBER</code> and <code>BUILD_CONTEXT</code> are replaced with the values of the host's build number and build contxt.
+            </p><p>
+                Example values: <code>BUILD_NUMBER.BUILD_CONTEXT</code>, <code>BUILD_NUMBER.BUILD_CONTEXT</code>, <code>BUILD_NUMBER</code>, or <code>MyBuildId</code>.
+            </p><p>
+                Default is build host dependent.
+            </p>
         </div>
     </td>
   </tr>
