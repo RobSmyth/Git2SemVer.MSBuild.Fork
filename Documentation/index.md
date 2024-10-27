@@ -107,7 +107,7 @@ Git2SemVer determines Semantic Version from Git commit history and the host envi
       <p style="text-align:center">Benefit from comprehensive Semmantic Version compliance.</p>
     </div>
     <div class="featureBody">
-         <p>Supports <a href="https://semver.org/#spec-item-4">Initial development versioning.</a></p>
+         <p>Supports <a href="https:Reference/Glossary.html#initial-development">initial development</a> versioning.</p>
          <p><a href="https://semver.org/#spec-item-5">Release versioning.</a></p>
     </div>
   </td>
@@ -129,7 +129,7 @@ Git2SemVer determines Semantic Version from Git commit history and the host envi
       <img src="Images/consistency_128x128.png" height=128 />
     </td>
     <td >
-      <p style="font-size:100px; margin:0px">#</p>
+      <p style="font-size:100px; margin:0px;color:DarkCyan;">#</p>
     </td>
     <td >
       <img src="Images/CSharp_128x128.png" height=128 />
@@ -163,8 +163,8 @@ Git2SemVer determines Semantic Version from Git commit history and the host envi
   </td>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
-        <p>Automatic build numbering on all builds on developer boxes or the build system.<p>
-        <p>Full traceability. Commit depth (commit counting) <b>NOT</b> used.</p>
+        <p>Automatic <a href="Reference/Glossary.html#build-number">build numbering</a> on all builds on <b>developer boxes</b> and the build system.<p>
+        <p>Full traceability. <a href="Reference/Glossary.html#build-height">Build height</a> (commit counting) <b>NOT</b> used.</p>
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
