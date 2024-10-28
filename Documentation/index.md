@@ -68,16 +68,16 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 
  <tr>
     <td style="width:33%">
-      <img src="https://noetictools.github.io/Git2SemVer/Images/OpenSource_128x128.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer/Documentation/Images/OpenSource_128x128.png" height=128 />
     </td>
     <td style="width:33%">
       <a href="https://semver.org/">
-        <img src="https://noetictools.github.io/Git2SemVer/Images/SemVer213x128(dark).png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer/Documentation/Images/SemVer213x128(dark).png" height=128 />
       </a>
     </td>
     <td  style="width:33%">
       <a href="https://www.conventionalcommits.org/en/v1.0.0/">
-        <img src="https://noetictools.github.io/Git2SemVer/Images/ConventionalCommits_128x128.png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer/Documentation/Images/ConventionalCommits_128x128.png" height=128 />
       </a>
     </td>
 </tr>
@@ -110,9 +110,9 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
       <p style="text-align:center">Benefit from comprehensive Semmantic Version compliance with:
-      <a href="/Reference/Glossary.html##initial-development">Initial development</a> versioning, 
+      <a href="https://noetictools.github.io/Git2SemVer/Documentation/Reference/Glossary.html##initial-development">Initial development</a> versioning, 
       <a href="https://semver.org/#spec-item-5">Release versioning.</a>, 
-      and automatic <a href="/Reference/Glossary.html##build-number">build numbering</a>.</p>
+      and automatic <a href="https://noetictools.github.io/Git2SemVer/Documentation/Reference/Glossary.html##build-number">build numbering</a>.</p>
     </div>
   </td>
 
@@ -130,26 +130,26 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 
 <tr>
     <td >
-      <a href="/Reference/Glossary.html##environment-parity">
-        <img src="https://noetictools.github.io/Git2SemVer/Images/consistency_128x128.png" height=128 />
+      <a href="https://noetictools.github.io/Git2SemVer/Documentation/Reference/Glossary.html##environment-parity">
+        <img src="https://noetictools.github.io/Git2SemVer/Documentation/Images/consistency_128x128.png" height=128 />
       </a>
     </td>
     <td >
       <p style="font-size:100px; margin:0px;color:DarkCyan;">#</p>
     </td>
     <td >
-      <img src="https://noetictools.github.io/Git2SemVer/Images/CSharp_128x128.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer/Documentation/Images/CSharp_128x128.png" height=128 />
     </td>
 </tr>
 <tr>
   <td>
     <div class="featureTitle">
-        <a href="/Reference/Glossary.html##environment-parity">Environment Parity</a>
+        <a href="https://noetictools.github.io/Git2SemVer/Documentation/Reference/Glossary.html##environment-parity">Environment Parity</a>
     </div>
   </td>
   <td>
     <div class="featureTitle">
-      <a href="/Reference/Glossary.html##build-number">
+      <a href="https://noetictools.github.io/Git2SemVer/Documentation/Reference/Glossary.html##build-number">
         Build Numbering
       </a>
     </div>
@@ -178,7 +178,7 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
         Automatic build numbering on all builds on <b>developer boxes</b> and the build system.
       <p>
       <p>
-        Full traceability. <a href="/Reference/Glossary.html##build-height">Build height</a> (commit counting) <b>NOT</b> used.
+        Full traceability. <a href="https://noetictools.github.io/Git2SemVer/Documentation/Reference/Glossary.html##build-height">Build height</a> (commit counting) <b>NOT</b> used.
       </p>
     </div>
   </td>
@@ -193,13 +193,13 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 
 <tr>
     <td >
-      <img src="https://noetictools.github.io/Git2SemVer/Images/VisualStudio_128x128.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer/Documentation/Images/VisualStudio_128x128.png" height=128 />
     </td>
     <td >
-      <img src="https://noetictools.github.io/Git2SemVer/Images/ComputerMonitor.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer/Documentation/Images/ComputerMonitor.png" height=128 />
     </td>
     <td >
-      <img src="https://noetictools.github.io/Git2SemVer/Images/git_workflow_128x128.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer/Documentation/Images/git_workflow_128x128.png" height=128 />
     </td>
 </tr>
 <tr>
@@ -246,12 +246,12 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 <tr>
     <td >
       <a href="/Usage/BuildHosts/TeamCity.html">
-        <img src="https://noetictools.github.io/Git2SemVer/Images/TeamCity_128x128.png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer/Documentation/Images/TeamCity_128x128.png" height=128 />
       </a>
     </td>
     <td >
       <a href="/Usage/BuildHosts/GitHubWorkflows.html">
-        <img src="https://noetictools.github.io/Git2SemVer/Images/github_gray_128x128.png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer/Documentation/Images/github_gray_128x128.png" height=128 />
       </a>
     </td>
     <td >
@@ -286,7 +286,7 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
         Automatic build system detection with server build number (label) updated with
         a build version specifically adapted for TeamCity.
       </p>
-      <img src="https://noetictools.github.io/Git2SemVer/Images/TeamCity-01.png">
+      <img src="https://noetictools.github.io/Git2SemVer/Documentation/Images/TeamCity-01.png">
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
