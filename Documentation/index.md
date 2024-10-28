@@ -156,7 +156,7 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
   </td>
   <td>
     <div class="featureTitle">
-        <a href="/Usage/CSharpScripting/CSharpScript.html">C# Scripting</a>
+        <a href="https://noetictools.github.io/Git2SemVer/Usage/CSharpScripting/CSharpScript.html">C# Scripting</a>
     </div>
   </td>
 </tr>
@@ -245,12 +245,12 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 
 <tr>
     <td >
-      <a href="/Usage/BuildHosts/TeamCity.html">
+      <a href="https://noetictools.github.io/Git2SemVer/Usage/BuildHosts/TeamCity.html">
         <img src="https://noetictools.github.io/Git2SemVer/Images/TeamCity_128x128.png" height=128 />
       </a>
     </td>
     <td >
-      <a href="/Usage/BuildHosts/GitHubWorkflows.html">
+      <a href="https://noetictools.github.io/Git2SemVer/Usage/BuildHosts/GitHubWorkflows.html">
         <img src="https://noetictools.github.io/Git2SemVer/Images/github_gray_128x128.png" height=128 />
       </a>
     </td>
@@ -261,14 +261,14 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 <tr>
   <td>
     <div class="featureTitle">
-      <a href="/Usage/BuildHosts/TeamCity.html">
+      <a href="https://noetictools.github.io/Git2SemVer/Usage/BuildHosts/TeamCity.html">
         TeamCity Integration
       </a>
     </div>
   </td>
   <td>
     <div class="featureTitle">
-      <a href="/Usage/BuildHosts/GitHubWorkflows.html">
+      <a href="https://noetictools.github.io/Git2SemVer/Usage/BuildHosts/GitHubWorkflows.html">
         GitHub Workflows
       </a>
     </div>
