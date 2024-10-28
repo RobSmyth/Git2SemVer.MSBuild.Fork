@@ -72,12 +72,12 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
     </td>
     <td style="width:33%">
       <a href="https://semver.org/">
-        <img src="https://noetictools.github.io/Git2SemVer/Documentation/Images/SemVer213x128(dark).png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer/Images/SemVer213x128(dark).png" height=128 />
       </a>
     </td>
     <td  style="width:33%">
       <a href="https://www.conventionalcommits.org/en/v1.0.0/">
-        <img src="https://noetictools.github.io/Git2SemVer/Documentation/Images/ConventionalCommits_128x128.png" height=128 />
+        <img src="/Images/ConventionalCommits_128x128.png" height=128 />
       </a>
     </td>
 </tr>
