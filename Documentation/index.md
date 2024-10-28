@@ -68,16 +68,16 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 
  <tr>
     <td style="width:33%">
-      <img src="/Images/OpenSource_128x128.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer/Images/OpenSource_128x128.png" height=128 />
     </td>
     <td style="width:33%">
       <a href="https://semver.org/">
-        <img src="/Images/SemVer213x128(dark).png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer/Images/SemVer213x128(dark).png" height=128 />
       </a>
     </td>
     <td  style="width:33%">
       <a href="https://www.conventionalcommits.org/en/v1.0.0/">
-        <img src="/Images/ConventionalCommits_128x128.png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer/Images/ConventionalCommits_128x128.png" height=128 />
       </a>
     </td>
 </tr>
@@ -131,14 +131,14 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 <tr>
     <td >
       <a href="/Reference/Glossary.html##environment-parity">
-        <img src="/Images/consistency_128x128.png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer/Images/consistency_128x128.png" height=128 />
       </a>
     </td>
     <td >
       <p style="font-size:100px; margin:0px;color:DarkCyan;">#</p>
     </td>
     <td >
-      <img src="/Images/CSharp_128x128.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer/Images/CSharp_128x128.png" height=128 />
     </td>
 </tr>
 <tr>
@@ -193,13 +193,13 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 
 <tr>
     <td >
-      <img src="/Images/VisualStudio_128x128.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer/Images/VisualStudio_128x128.png" height=128 />
     </td>
     <td >
-      <img src="/Images/ComputerMonitor.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer/Images/ComputerMonitor.png" height=128 />
     </td>
     <td >
-      <img src="/Images/git_workflow_128x128.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer/Images/git_workflow_128x128.png" height=128 />
     </td>
 </tr>
 <tr>
@@ -246,12 +246,12 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 <tr>
     <td >
       <a href="/Usage/BuildHosts/TeamCity.html">
-        <img src="/Images/TeamCity_128x128.png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer/Images/TeamCity_128x128.png" height=128 />
       </a>
     </td>
     <td >
       <a href="/Usage/BuildHosts/GitHubWorkflows.html">
-        <img src="/Images/github_gray_128x128.png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer/Images/github_gray_128x128.png" height=128 />
       </a>
     </td>
     <td >
@@ -286,7 +286,7 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
         Automatic build system detection with server build number (label) updated with
         a build version specifically adapted for TeamCity.
       </p>
-      <img src="/Images/TeamCity-01.png">
+      <img src="https://noetictools.github.io/Git2SemVer/Images/TeamCity-01.png">
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
