@@ -63,5 +63,5 @@ Services:
 
 Git2SemVer's default version generator will:
 
-* Call `SetBuildLabel` with the generated build system version if [Git2SemVer_UpdateHostBuildLabel](xref:msbuild-properties#inputs) is set to true.
+* Call `SetBuildLabel` with the generated build system version if [Git2SemVer_UpdateHostBuildLabel](xref:msbuild-properties##inputs) is set to true.
 * Call `ReportBuildStatistic` with Git2SemVer's MSTask execution time.

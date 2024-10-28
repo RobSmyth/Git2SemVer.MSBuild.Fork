@@ -31,18 +31,18 @@ Examples setting script path:
 
 ## Globals and script runner instance
 
-[VersioningContext](xref:NoeticTools.Git2SemVer.MSBuild.Scripting.IVersioningContext) instance properties are exposed to the script's global context.
+[VersioningContext](xref:NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting.IVersioningContext) instance properties are exposed to the script's global context.
 This makes the following properties available as globals:
 
 | Property                      | Description   |
 |:---                           |:---           |
-| [Host](xref:NoeticTools.Git2SemVer.IScriptRunner.Host)               | A build host instance modeling the detected, or set, current host type. Provides a `BuildNumber` property.   |
-| [Inputs](xref:NoeticTools.Git2SemVer.IScriptRunner.Inputs)           | The task's MSBuild input property values. Includes a property for optional script arguments.          |
-| [Logger](xref:NoeticTools.Git2SemVer.IScriptRunner.Logger)                | An MSBuild logger. Logging an error will cause the build to fail.                                     |
-| [MsBuildGlobalProperties](xref:NoeticTools.Git2SemVer.IScriptRunner.MsBuildGlobalProperties) | Harvested MSBuild global properties for optional script use.                                          |
-| [Outputs](xref:NoeticTools.Git2SemVer.IScriptRunner.Outputs)                 | Outputs that the script may optionally write to. These will be available to other MSBuild tasks.      |
+| [Host](xref:NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting.IBuildHost)               | A build host instance modeling the detected, or set, current host type. Provides a `BuildNumber` property.   |
+| [Inputs](xref:NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.IVersionGeneratorInputs) | The task's MSBuild input property values. Includes a property for optional script arguments.          |
+| [Logger](xref:NoeticTools.Common.Logging.ILogger)                                           | An MSBuild logger. Logging an error will cause the build to fail.                                     |
+| [MsBuildGlobalProperties](xref:NoeticTools.MSBuild.Tasking.MSBuildGlobalProperties)         | Harvested MSBuild global properties for optional script use.                                          |
+| [Outputs](xref:NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.IVersionOutputs)        | Outputs that the script may optionally write to. These will be available to other MSBuild tasks.      |
 
-[VersioningContext](xref:NoeticTools.Git2SemVer.MSBuild.Scripting.IVersioningContext) also provides a static property `Instance` with the context's instance.
+[VersioningContext](xref:NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting.VersioningContext) also provides a static property `Instance` with the context's instance.
 
 If using a C# script editing project for syntax highlighting and itellisence (highly recommended), 
 intellisens does not recognise global property types.
@@ -51,13 +51,13 @@ It is the same instance but will be easier to edit.
 
 Script examples logging a message using `Logger`:
 
-# [Using global properties](#tab/global-logging)
+# Using global properties
 
 ```csharp
 Logger.LogInfo("Hello world.")
 ```
 
-# [Using runner global instance (recommened)](#tab/runner-instance-logging)
+# Using runner global instance (recommened)
 
 ```csharp
 var context = VersioningContext.Instance!;

@@ -2,6 +2,8 @@
   uid: build-hosts
 - name: TeamCity
   uid: teamcity
+- name: GitHub Workflows
+  uid: github-workflows
 - name: Custom Host
   uid: custom-host
 - name: Uncontrolled Host

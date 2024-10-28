@@ -58,12 +58,21 @@ public class Commit : ICommit
             return null;
         }
 
+
         var versions = new List<SemVersion>();
         foreach (Match match in matches)
         {
             var version = SemVersion.Parse(match.Groups["version"].Value, SemVersionStyles.Strict);
             versions.Add(version);
         }
-        return versions.Max()!;
+        return versions.OrderByDescending(x => x, new SemverSortOrderComparer()).FirstOrDefault();
+    }
+}
+
+internal sealed class SemverSortOrderComparer : IComparer<SemVersion>
+{
+    public int Compare(SemVersion x, SemVersion y)
+    {
+        return x.CompareSortOrderTo(y);
     }
 }

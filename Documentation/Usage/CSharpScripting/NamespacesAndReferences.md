@@ -59,5 +59,4 @@ NoeticTools.Git2SemVer.MSBuild
 ```
 
 > [!NOTE]
-> For the dotnet and Visual Studio compatibility given in <xref:requirements>
-> references must be .NET Standard 2.0 compatible or both .NET 7.0 & .NET Framework 4.7.1 compatible.
+> For the dotnet and Visual Studio compatibility references must be .NET Standard 2.0 compatible.

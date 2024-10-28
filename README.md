@@ -5,7 +5,10 @@
 Automatic true [Semmantic Versioning](https://semver.org/) for both **Visual Studio** and donet CLI builds of .NET solutions and projects.
 Provides versioning _out of box_. It is fully customisable by by built-in C# scripting and versioning API.
 
-Just works on every build.
+Just works on every <b>Visual Studio</b> or dotnet CLI build on every box.
+
+Go to [documentation](https://noetictools.github.io/Git2SemVer/) for more information.
+
 
 ## Features
 
@@ -21,6 +24,9 @@ Just works on every build.
 * Branching model (such as GitHub Flow or GitFlow) agnostic. No model configuration.
 * Easy solution setup with dotnet tool Git2SemVer.Tool.
 
+See more about features [here](https://noetictools.github.io/Git2SemVer).
+
+
 ## Why use? 
 
 Use if you want:
@@ -31,7 +37,6 @@ Use if you want:
 * Semmantic Versioning _release_ versioning.
 * To use Visual Studio as well as dotnet CLI.
 
-Go to [documentation](https://noetictools.github.io/Git2SemVer/) for more information.
 
 ## License
 

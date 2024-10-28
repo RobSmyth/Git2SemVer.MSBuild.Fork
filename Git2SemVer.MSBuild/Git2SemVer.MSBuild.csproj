@@ -58,14 +58,14 @@
   </Target>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
     <PackageReference Include="JsonPeek" Version="1.2.0" />
     <PackageReference Include="Microsoft.Build.Framework" Version="17.11.4" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.4" PrivateAssets="all" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="4.11.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" PrivateAssets="all" />
     <PackageReference Include="NuGet.Versioning" Version="6.11.1" PrivateAssets="all" />
-    <PackageReference Include="Semver" Version="2.3.0" PrivateAssets="all" />
+    <PackageReference Include="Semver" Version="3.0.0" PrivateAssets="all" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" PrivateAssets="all" />
     <PackageReference Include="TeamCity.ServiceMessages" Version="4.1.1" />
   </ItemGroup>
@@ -87,34 +87,23 @@
   </ItemGroup>
 
   <!-- Ensure that the Git2SemVer version information JSON file is available. -->
-  <Target Name="Git2SemVerEnsureVersionInfoBuilt"
-          Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'"
-          AfterTargets="PrepareResources"
-          BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
+  <Target Name="Git2SemVerEnsureVersionInfoBuilt" Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
 
     <PropertyGroup>
       <SharedPropsFileExists Condition="Exists($(Git2SemVer_SharedVersioningJsonFile))">true</SharedPropsFileExists>
-      <SharedPropsFileExists Condition="'$(SharedPropsFileExists)' == ''" >false</SharedPropsFileExists>
+      <SharedPropsFileExists Condition="'$(SharedPropsFileExists)' == ''">false</SharedPropsFileExists>
     </PropertyGroup>
 
-    <Message Text="Git2SemVer: Generating versioning information."
-             Importance="high"
-             Condition=" '$(SharedPropsFileExists)' == 'false' "/>
+    <Message Text="Git2SemVer: Generating versioning information." Importance="high" Condition=" '$(SharedPropsFileExists)' == 'false' " />
 
-    <MSBuild Projects="$(Git2SemVer_VersioningProjectPath)"
-             Condition=" '$(SharedPropsFileExists)' == 'false' " />
+    <MSBuild Projects="$(Git2SemVer_VersioningProjectPath)" Condition=" '$(SharedPropsFileExists)' == 'false' " />
 
   </Target>
 
   <!-- Load generated versioning information -->
-  <Target Name="Git2SemVerLoadVersionInformation"
-          Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'"
-          DependsOnTargets="Git2SemVerEnsureVersionInfoBuilt"
-          AfterTargets="PrepareResources"
-          BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
+  <Target Name="Git2SemVerLoadVersionInformation" Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'" DependsOnTargets="Git2SemVerEnsureVersionInfoBuilt" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
 
-    <Message Text="Git2SemVer: Loading versioning information."
-             Importance="normal"/>
+    <Message Text="Git2SemVer: Loading versioning information." Importance="normal" />
 
     <JsonPeek ContentPath="$(Git2SemVer_SharedVersioningJsonFile)" Query="$.Git2SemVerVersionInfo">
       <Output TaskParameter="Result" ItemName="Git2SemVerVersionInfo" />

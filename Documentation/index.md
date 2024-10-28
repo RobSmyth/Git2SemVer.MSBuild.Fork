@@ -33,10 +33,12 @@ a
 
 ![](Images/Git2SemVer_banner_840x70.png)
 
-![Current Version](https://img.shields.io/nuget/v/NoeticTools.Git2SemVer.MSBuild?label=Git2SemVer.Msbuild)
-![Current Version](https://img.shields.io/nuget/v/NoeticTools.Git2SemVer.Tool?label=Git2SemVer.Tool)
+[![Current Version](https://img.shields.io/nuget/v/NoeticTools.Git2SemVer.MSBuild?label=Git2SemVer.Msbuild)](https://www.nuget.org/packages/NoeticTools.Git2SemVer.MSBuild)
+[![Current Version](https://img.shields.io/nuget/v/NoeticTools.Git2SemVer.Tool?label=Git2SemVer.Tool)](https://www.nuget.org/packages/NoeticTools.Git2SemVer.Tool)
 [![Release Build](https://github.com/NoeticTools/Git2SemVer/actions/workflows/dotnet.yml/badge.svg)](https://github.com/NoeticTools/Git2SemVer/actions/workflows/dotnet.yml)
-
+<a href="https://github.com/NoeticTools/Git2SemVer">
+  ![Static Badge](https://img.shields.io/badge/GitHub%20project-944248?logo=github)
+</a>
 
 # Git2SemVer
 
@@ -53,27 +55,30 @@ Git2SemVer is a <a href="https://semver.org">Semantic Versioning</a> framework f
 It works the same in both dotnet CLI and Visual Studio builds and for both developers and build system builds.
 It just happens using <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> message elements and Git tagging of each release.
 
-For solution versioning, were all projects in a .NET solution to share a common versioning, use the dotnet CLI tool `Git2SemVer.Tool` is used to setup the solution.
+For solution versioning (were all projects in a .NET solution to share a common versioning) use the dotnet CLI tool `Git2SemVer.Tool` is used to setup the solution.
 For project versioning, adding the nuget package `Git2SemVer.MSBuild` to the .NET project.
 With the versioning being done within MSBuild, no build system version generation steps are needed and it works the same for both dotnet CLI and Visual Studio.
 
 For no limits customisation, Git2SemVer has an in-built C# script API that can change any part of the versioning.
 
 # Features
-<br/>
 
 <div style="margin:5px; text-align:center; width:95%">
 <table>
 
  <tr>
     <td style="width:33%">
-      <img src="Images/OpenSource_128x128.png" height=128 />
+      <img src="/Images/OpenSource_128x128.png" height=128 />
     </td>
     <td style="width:33%">
-      <img src="Images/SemVer213x128(dark).png" height=128 />
+      <a href="https://semver.org/">
+        <img src="/Images/SemVer213x128(dark).png" height=128 />
+      </a>
     </td>
     <td  style="width:33%">
-      <img src="Images/ConventionalCommits_128x128.png" height=128 />
+      <a href="https://www.conventionalcommits.org/en/v1.0.0/">
+        <img src="/Images/ConventionalCommits_128x128.png" height=128 />
+      </a>
     </td>
 </tr>
 
@@ -105,9 +110,9 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
       <p style="text-align:center">Benefit from comprehensive Semmantic Version compliance with:
-      <a href="https:Reference/Glossary.html#initial-development">Initial development</a> versioning, 
+      <a href="/Reference/Glossary.html##initial-development">Initial development</a> versioning, 
       <a href="https://semver.org/#spec-item-5">Release versioning.</a>, 
-      and automatic <a href="Reference/Glossary.html#build-number">build numbering</a>.</p>
+      and automatic <a href="/Reference/Glossary.html##build-number">build numbering</a>.</p>
     </div>
   </td>
 
@@ -125,29 +130,33 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 
 <tr>
     <td >
-      <img src="Images/consistency_128x128.png" height=128 />
+      <a href="/Reference/Glossary.html##environment-parity">
+        <img src="/Images/consistency_128x128.png" height=128 />
+      </a>
     </td>
     <td >
       <p style="font-size:100px; margin:0px;color:DarkCyan;">#</p>
     </td>
     <td >
-      <img src="Images/CSharp_128x128.png" height=128 />
+      <img src="/Images/CSharp_128x128.png" height=128 />
     </td>
 </tr>
 <tr>
   <td>
     <div class="featureTitle">
-        <a href="Reference/Glossary.html#environment-parity">Environment Parity</a>
+        <a href="/Reference/Glossary.html##environment-parity">Environment Parity</a>
     </div>
   </td>
   <td>
     <div class="featureTitle">
+      <a href="/Reference/Glossary.html##build-number">
         Build Numbering
+      </a>
     </div>
   </td>
   <td>
     <div class="featureTitle">
-        C# Scripting
+        <a href="/Usage/CSharpScripting/CSharpScript.html">C# Scripting</a>
     </div>
   </td>
 </tr>
@@ -160,24 +169,22 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
       </p>
       <p>
       No custom versioning build steps or scripts required.
-      All versioning is done within MSBuild (csproj file).
       </p>
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
-        <p>
-        Automatic <a href="Reference/Glossary.html#build-number">build numbering</a> on all builds on <b>developer boxes</b> and the build system.
-        <p>
-        <p>
-        Full traceability. <a href="Reference/Glossary.html#build-height">Build height</a> (commit counting) <b>NOT</b> used.
-        </p>
+      <p>
+        Automatic build numbering on all builds on <b>developer boxes</b> and the build system.
+      <p>
+      <p>
+        Full traceability. <a href="/Reference/Glossary.html##build-height">Build height</a> (commit counting) <b>NOT</b> used.
+      </p>
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
-        <p>Built in C# scripting (csx) can be used to modify all or some of the generated versioning.</p>
-        <p>Unlimited customisation with API. A few lines of code makes customisation easy.</p>
+        <p><b>No limits</b> customisable by built-in C# scripting and versioning API.</p>
     </div>
   </td>
 </tr>
@@ -186,13 +193,13 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 
 <tr>
     <td >
-      <img src="Images/VisualStudio_128x128.png" height=128 />
+      <img src="/Images/VisualStudio_128x128.png" height=128 />
     </td>
     <td >
-      <img src="Images/ComputerMonitor.png" height=128 />
+      <img src="/Images/ComputerMonitor.png" height=128 />
     </td>
     <td >
-      <img src="Images/git_workflow_128x128.png" height=128 />
+      <img src="/Images/git_workflow_128x128.png" height=128 />
     </td>
 </tr>
 <tr>
@@ -215,15 +222,14 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 <tr>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
-      <p>Implemented in MSBuild it works the same with dotnet CLI and Visual Studio.</p>
+      <p>Implemented in MSBuild it works the same with dotnet Visual Studio and CLI.</p>
       <p>.NET developer friendly.</p>
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
         <p>The versioning adapts according to the build host.</p>
-        <p>Developer box builds get prelease/metadata identifiers make it apparent that is a dev box build.</p>
-        <p>See: <a href="Reference/Glossary.html#controlled-host">Controlled/uncontrolled versioning</a></p>
+        <p>e.g: Prelease/metadata identifiers are added to identify dev box builds.</p>
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
@@ -239,10 +245,14 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 
 <tr>
     <td >
-      <img src="Images/TeamCity_128x128.png" height=128 />
+      <a href="/Usage/BuildHosts/TeamCity.html">
+        <img src="/Images/TeamCity_128x128.png" height=128 />
+      </a>
     </td>
     <td >
-      <img src="Images/github_gray_128x128.png" height=128 />
+      <a href="/Usage/BuildHosts/GitHubWorkflows.html">
+        <img src="/Images/github_gray_128x128.png" height=128 />
+      </a>
     </td>
     <td >
       <!-- Empty -->
@@ -251,12 +261,16 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 <tr>
   <td>
     <div class="featureTitle">
+      <a href="/Usage/BuildHosts/TeamCity.html">
         TeamCity Integration
+      </a>
     </div>
   </td>
   <td>
     <div class="featureTitle">
-        GitHub Actions
+      <a href="/Usage/BuildHosts/GitHubWorkflows.html">
+        GitHub Workflows
+      </a>
     </div>
   </td>
   <td>
@@ -268,14 +282,18 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 <tr>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
-      <p>Automatic build system detection with server build number (label) updating.</p>
-      <img src="Images/TeamCity-01.png">
+      <p>
+        Automatic build system detection with server build number (label) updated with
+        a build version specifically adapted for TeamCity.
+      </p>
+      <img src="/Images/TeamCity-01.png">
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
         <p>Built in support for builds using GitHub Actions.</p>
-        <p>Constructs build number from run and run attempt numbers.</p>
+        <p>Constructs build number from run and run attempt numbers
+        and adapts the version for GitHub builds.</p>
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
@@ -319,3 +337,4 @@ This project uses the following tools and libraries. Many thanks to those who cr
 * [JsonPeek](https://www.clarius.org/json/)
 * <a href="https://www.flaticon.com/free-icons/brain" title="brain icons">Brain icons created by Freepik - Flaticon</a>
 * <a href="https://www.flaticon.com/free-icons/consistent" title="consistent icons">Consistent icons created by Freepik - Flaticon</a>
+* <a href="https://www.flaticon.com/free-icons/programmer" title="programmer icons">Programmer icons created by Flowicon - Flaticon</a>

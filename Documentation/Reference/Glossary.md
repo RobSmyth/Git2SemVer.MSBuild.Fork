@@ -1,6 +1,17 @@
 ﻿---
 uid: glossary
 ---
+<style>
+
+table, tr {
+  border:none !important;
+}
+
+td {
+  border:none !important;
+}
+
+</style>
 ![](../Images/Git2SemVer_banner_840x70.png)
 
 # Glossary
@@ -19,7 +30,7 @@ Build height refers to a count of commits since a reference commit.
 
 ## Build number
 
-A build number uniquely identifies a build to provide traceability to build logs/records on a build system.
+The build number uniquely identifies a build to provide traceability to build logs/records on a build system.
 Traditionally a integer that increases with each build.
 It is useful if the build number always increases chronologically.
 
@@ -32,7 +43,7 @@ commit ID (SHA), and commits count are not unique.
 
 ## Controlled build
 
-See [Controlled host](#controlled-host)
+A build made on a [controlled host](#controlled-host)
 
 ## Controlled host
 
@@ -46,8 +57,23 @@ A build system is normally a controlled host.
 
 ## Environment parity
 
-Environment parity is a best pracitice.
-It is the practise of keeping all dev/production environments as similar as possible.
+<div style="margin:3px; text-align:left; width:95%">
+<table>
+
+ <tr>
+    <td style="width:68px">
+        <img src="https://noetictools.github.io/Git2SemVer/Images//consistency_128x128.png" width=64 />
+    </td>
+    <td>
+        <p>
+            Environment parity is a best pracitice.
+            It is the practise of keeping all dev/production environments as similar as possible.
+        </p>
+    </td>
+  </tr>
+
+</table>
+</div>
 
 ## Initial development
 
@@ -70,15 +96,35 @@ For prereleases to be ordered by maturing (after normal semver) it is the first 
 For the most mature prerelease to be shown first when sorted lexically in ASCII sort order.
 For example a beta build is more mature than an alpha build and `"beta" > "alpha"`.
 
+## Project versioning
+
+Project versionining is where a project is versioned independent of any other solution project.
+Project versionining is a best for single project solutions.
+
+See also: [Solution versioning](#solution-versioning)
+
 ## Semver
 
-An abbreviation for [Semantic Versioning](https://semver.org/).
+<img src="https://noetictools.github.io/Git2SemVer/Images//SemVer213x128(dark).png" height=64 /> 
+
+An abbreviation for [Semantic Versioning](https://semver.org).
+
+
+## Solution versioning
+
+Solution versionining is where all projects in a solution share the same versioning.
+That is all assemblies are versioned the same.
+Solution versioning is best for solutions that generate one product.
+
+See also: [Project versioning](#project-versioning)
 
 ## Uncontrolled build
 
-See [Uncontrolled host](#uncontrolled-host)
+A build made on an [uncontrolled host](#uncontrolled-host)
 
 ## Uncontrolled host
+
+![](../../Images/developer.png)
 
 An uncontrolled host is a build host that is not a [controlled host](#controlled-host).
 That is, at the time of a build, it is not known for certain what build tools, source code, and OS version was used.

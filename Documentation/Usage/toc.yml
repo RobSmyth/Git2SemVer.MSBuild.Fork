@@ -1,4 +1,8 @@
+- name: Git2SemVer.MSBuild
+  uid: git2semver-msbuild
+- name: Git2SemVer.Tool
+  uid: git2semver-tool
 - name: Build hosts
-  uid: BuildHhosts/
+  href: BuildHosts/
 - name: C# Script
   href: CSharpScripting/

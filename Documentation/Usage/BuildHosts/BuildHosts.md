@@ -1,7 +1,7 @@
 ﻿---
 uid: build-hosts
 ---
-![](../Images/Git2SemVer_banner_840x70.png)
+![](../../Images/Git2SemVer_banner_840x70.png)
 
 # Build Hosts
 
@@ -12,7 +12,7 @@ Example build hosts:
 * A developer's box or virtual machine. The machine is the host.
 * A build system software such as TeamCity or Jenkins.
 
-If [Git2SemVer_Env_HostType](xref:msbuild-properties#inputs) is set, that build host type will be used.
+If [Git2SemVer_Env_HostType](xref:msbuild-properties##inputs) is set, that build host type will be used.
 Otherwise Git2SemVer will detect detectable hosts (currently TeamCity is the only detectable host) which host type to use.
 If non found it will default to using the [uncontrolled host](xrf:uncontrolled-host) type.
 
@@ -34,7 +34,7 @@ If the build host does not support the service, it does nothing.
 
 On every build default version generator will:
 
-* Call `SetBuildLabel` with the generated build system version if [Git2SemVer_UpdateHostBuildLabel](xref:msbuild-properties#inputs) is set to true.
+* Call `SetBuildLabel` with the generated build system version if [Git2SemVer_UpdateHostBuildLabel](xref:msbuild-properties##inputs) is set to true.
 * Call `ReportBuildStatistic` with Git2SemVer's MSBuild task execution time.
 
 The [C# script](xref:csharp-script) has access to these services via `BuildHost`.

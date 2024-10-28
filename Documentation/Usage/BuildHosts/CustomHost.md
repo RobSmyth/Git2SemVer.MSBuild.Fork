@@ -10,17 +10,15 @@ uid: custom-host
 
 ### Detection
 
-A custom host is only used when [Git2SemVer_Env_HostType](xref:msbuild-properties#input) property is set to to `Custom`.
+A custom host is only used when [Git2SemVer_Env_HostType](xref:msbuild-properties##inputs) property is set to to `Custom`.
 
 ### Build number
 
 Set by MSBuild properties:
 
-* [Git2SemVer_BuildNumber](xref:msbuild-properties#input)
-* [Git2SemVer_BuildContext](xref:msbuild-properties#input)
-* [Git2SemVer_BuildIDFormat](xref:msbuild-properties#input)
-
-See [GitHub workflow](#github-workflow) example.
+* [Git2SemVer_BuildNumber](xref:msbuild-properties##inputs)
+* [Git2SemVer_BuildContext](xref:msbuild-properties##inputs)
+* [Git2SemVer_BuildIDFormat](xref:msbuild-properties##inputs)
 
 ### Properties & services
 
@@ -28,8 +26,8 @@ The build host object's properties:
 
 | Host property | Description  |
 |:-- |:-- |
-| Build number  | Default is 'UNKNOWN'. Set via MSBuild [Git2SemVer_BuildNumber](xref:msbuild-properties#input) property. |
-| Build context | Default is 'UNKNOWN'. Set via MSBuild [Git2SemVer_BuildContext](xref:msbuild-properties#input) property. |
+| Build number  | Default is 'UNKNOWN'. Set via MSBuild [Git2SemVer_BuildNumber](xref:msbuild-properties##inputs) property. |
+| Build context | Default is 'UNKNOWN'. Set via MSBuild [Git2SemVer_BuildContext](xref:msbuild-properties##inputs) property. |
 | Build ID      | `<build number>` |
 | IsControlled          | true          |
 | Name                  | 'GitHub'    |

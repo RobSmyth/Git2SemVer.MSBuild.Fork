@@ -1,6 +1,5 @@
 ﻿using NoeticTools.Common.Logging;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
-using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.MSBuild.Tasking;
 
 

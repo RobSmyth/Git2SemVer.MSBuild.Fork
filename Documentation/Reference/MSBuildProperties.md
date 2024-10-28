@@ -78,6 +78,7 @@ The MSBuild input poperties are:
   <tr>
     <td>
         <div class="propertyCol">
+            <a name="build-context"/>
             Git2SemVer_BuildContext
         </div>
     </td>
@@ -97,6 +98,7 @@ The MSBuild input poperties are:
   </tr>
     <td>
         <div class="propertyCol">
+            <a name="build-id-format"/>
             Git2SemVer_BuildIDFormat
         </div>
     </td>
@@ -118,6 +120,7 @@ The MSBuild input poperties are:
   <tr>
     <td>
         <div class="propertyCol">
+            <a name="build-number"/>
             Git2SemVer_BuildNumber
         </div>
     </td>
@@ -135,6 +138,7 @@ The MSBuild input poperties are:
   <tr>
     <td>
         <div class="propertyCol">
+            <a name="branch-maturity-pattern"/>
             Git2SemVer_BranchMaturityPattern
         </div>
     </td>
@@ -167,6 +171,7 @@ The MSBuild input poperties are:
 
   <tr>
     <td>
+        <a name="host-type"/>
         <div class="propertyCol">
             Git2SemVer_HostType
         </div>
