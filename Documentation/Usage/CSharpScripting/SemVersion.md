@@ -1,11 +1,14 @@
 ﻿---
 uid: semversion
 ---
-![](../../Images/Git2SemVer_banner_840x70.png)
+
+<div style="background-color:#944248;padding:0px;margin-bottom:0.5em">
+  <img src="https://noetictools.github.io/Git2SemVer/Images/Git2SemVer_banner_840x70.png"/>
+</div>
 
 # SemVersion
 
-Git2SemVer uses the [semver](https://www.nuget.org/packages/Semver/) Semmmantic Versioning library and makes this available to the C# Script.
+Git2SemVer uses the [semver](https://www.nuget.org/packages/Semver/) Semmmantic Versioning library and makes this available to the optional C# Script.
 This section provide examples for using this library.
 
 For more information goto the [Semver project](https://github.com/WalkerCodeRanger/semver).

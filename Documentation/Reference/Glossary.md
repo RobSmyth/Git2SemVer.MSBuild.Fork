@@ -1,25 +1,17 @@
 ﻿---
 uid: glossary
 ---
-<style>
 
-table, tr {
-  border:none !important;
-}
-
-td {
-  border:none !important;
-}
-
-</style>
-![](../Images/Git2SemVer_banner_840x70.png)
+<div style="background-color:#944248;padding:0px;margin-bottom:0.5em">
+  <img src="https://noetictools.github.io/Git2SemVer/Images/Git2SemVer_banner_840x70.png"/>
+</div>
 
 # Glossary
 
 
 ## Build ID
 
-A build ID is one or more identifiers used when a build number is not available ([uncontrolled builds](#uncontrolled-build)).
+A build ID is one or more identifiers used when a build number is not available or requires context ([uncontrolled builds](#uncontrolled-build)).
 A build ID is intended to provide a possibility of traceability.
 
 So that build IDs are not confused with build numbers it is useful for version prerelease and/or metadata to identify uncontrolled builds.
@@ -57,23 +49,10 @@ A build system is normally a controlled host.
 
 ## Environment parity
 
-<div style="margin:3px; text-align:left; width:95%">
-<table>
+![](../Images/consistency_64x64.png)
 
- <tr>
-    <td style="width:68px">
-        <img src="https://noetictools.github.io/Git2SemVer/Images//consistency_128x128.png" width=64 />
-    </td>
-    <td>
-        <p>
-            Environment parity is a best pracitice.
-            It is the practise of keeping all dev/production environments as similar as possible.
-        </p>
-    </td>
-  </tr>
-
-</table>
-</div>
+Environment parity is a best pracitice.
+It is the practise of keeping all dev/production environments as similar as possible.
 
 ## Initial development
 
@@ -105,7 +84,7 @@ See also: [Solution versioning](#solution-versioning)
 
 ## Semver
 
-<img src="https://noetictools.github.io/Git2SemVer/Images//SemVer213x128(dark).png" height=64 /> 
+![](../Images/SemVer122x64(dark).png)
 
 An abbreviation for [Semantic Versioning](https://semver.org).
 
@@ -124,7 +103,7 @@ A build made on an [uncontrolled host](#uncontrolled-host)
 
 ## Uncontrolled host
 
-![](../../Images/developer.png)
+![](../Images/developer.png)
 
 An uncontrolled host is a build host that is not a [controlled host](#controlled-host).
 That is, at the time of a build, it is not known for certain what build tools, source code, and OS version was used.
