@@ -86,9 +86,10 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
         var prereleaseLabel = string.IsNullOrWhiteSpace(inputs.VersionSuffix)
             ? GetPrereleaseLabelFromBranchName(inputs, outputs)
             : inputs.VersionSuffix;
-        if (!string.IsNullOrWhiteSpace(prereleaseLabel))
+        if (!string.IsNullOrWhiteSpace(prereleaseLabel) && 
+            !string.IsNullOrWhiteSpace(initialDevSuffix))
         {
-            prereleaseLabel += "-";
+            initialDevSuffix = "-" + initialDevSuffix;
         }
 
         return prereleaseLabel + initialDevSuffix;

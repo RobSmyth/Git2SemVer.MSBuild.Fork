@@ -82,6 +82,31 @@ Project versionining is a best for single project solutions.
 
 See also: [Solution versioning](#solution-versioning)
 
+## Release
+
+What is a "release" depends on context. 
+Semantic Versioning calls for certain version bumping after a release,
+so understanding what a release is is important.
+
+From the point of view of software artifact versioning, a release is when when a team releases tested artifacts to a customer.
+In a CI environment a release build is typically a release candidate that may become the release. 
+In a CD environment every (or almost every) release build is a release.
+
+To define what a release is the **software team** needs to identify who is the customer of its artifact releases. 
+Commonly it is another team within an organisation like:
+
+* A product integration test team.
+* Product management team that may include the artifacts in a product release.
+
+A product release however may include a product version that is different to the software artifacts versioning.
+A product releases are triggered by:
+
+* Software achieving a MVP.
+* When other components, that may not be software, are also available.
+* Separate V&V cycles.
+* Unforseen circumstances such as an urgent feature for new customer or an urgent bug fix.
+* Commercial needs.
+
 ## Semver
 
 ![](../Images/SemVer122x64(dark).png)
@@ -113,4 +138,6 @@ Builds from an uncontrolled host may not be reproducable and the build environme
 
 Typically developer boxes are uncontrolled hosts.
 
-**Note:** Uncontrolled hosts normally do not provide a the build with a [build number](#build-number).
+> [!NOTE]
+> Git2SemVer creates a [build number](#build-number) on an uncontrolled host that is used in the context of that host.
+> Hence it includes pre-release/metadata identifier with the host's name alongside the build number.

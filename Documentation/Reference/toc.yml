@@ -2,7 +2,5 @@
   href: Concepts.md
 - name: MSBuild properties
   href: MSBuildProperties.md
-- name: Versioning
-  href: Versioning.md
 - name: Glossary
   href: Glossary.md

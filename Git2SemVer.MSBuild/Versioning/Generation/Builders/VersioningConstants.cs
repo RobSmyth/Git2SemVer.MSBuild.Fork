@@ -3,6 +3,6 @@
 internal static class VersioningConstants
 {
     public const string ReleaseGroupName = "release";
-    public const string DefaultBranchMaturityPattern = "^((?<release>main|release)|(?<Beta>feature)|(?<Alpha>.+))[\\/_]?";
+    public const string DefaultBranchMaturityPattern = "^((?<rc>(main|release)[\\\\\\/_](.*[\\\\\\/_])?rc.*)|(?<release>main|release)|(?<beta>feature)|(?<alpha>.+))[\\\\\\/_]?";
     public const string InitialDevelopmentLabel = "InitialDev";
 }

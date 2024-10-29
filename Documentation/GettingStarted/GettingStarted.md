@@ -47,16 +47,36 @@ Try building the solution, all projects will be automatically versioned using [G
 
 ## Quick Start
 
-If you have not installed Git2Sember do it now. Instructions [here]((#installing)).
-Then, if your happy with [Git2SemVer's default versioning](xref:default-versioning), you have nothing more to do.
+### First build
 
-To customise the versioning open the file `Git2SemVer.csx` in the `SolutionVersioning` (or the name given during setup) project and add:
+If you have not installed Git2SemVer and configured your test solution for solution versioning, do it now. Instructions [here]((#installing)).
+Your test solution must be under Git revision control.
+
+Rebuild and you will see the generated version in compiler's output. It will be something like:
+
+```winbatch
+Git2SemVer calculated version: 0.18.2-Alpha-InitialDev.MyPC.1422+Documentation-updates.3bda6f4fbedf2fe469da35b9f1a58146d4a36927
+```
+
+> [!IMPORTANT]
+> If the message does not appear check that build output verbosity is at least `Normal` in Visual Studio `Tools | Options | Projects and Solutions`.
+> The message will not appear if set to `Minimal` or `Quiet`.
+
+> [!TIP]
+> A versioning log `Git2SemVer.MSBuild.log` is written to the project's intermediate file folder (obj).
+> This log includes information to show how the version was calculated.
+
+### Build with custom C# script
+
+Customise the versioning open the file `Git2SemVer.csx` in the `SolutionVersioning` (or the name given during setup) project and add:
 
 ```csharp
 Log.LogInfo("Hello world - my first Git2SemVer C# script is born.");
 ```
 
 Rebuild and you will the message `Hello world - my first After Burner C# script is born.` in the compiler's output.
+If the message does not appear check that build output verbosity is at least `Normal` in Visual Studio `Tools | Options | Projects and Solutions`.
+The message will not appear if set to `Minimal` or `Quiet`.
 
 That was using C# script globals. `Log` is a global property. 
 Another way is to use a context instance exposted by the `VersionContext` property:

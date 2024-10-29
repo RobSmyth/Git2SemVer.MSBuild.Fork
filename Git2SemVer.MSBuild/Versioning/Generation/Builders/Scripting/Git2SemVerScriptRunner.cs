@@ -33,6 +33,19 @@ public sealed class Git2SemVerScriptRunner
         _logger = logger;
     }
 
+    internal static IReadOnlyList<Type> MetadataReferences { get; } = new []
+    {
+        typeof(DotNetTool),
+        typeof(UncontrolledHost),
+        typeof(IBuildHost),
+        typeof(GitTool),
+        typeof(SemVersion),
+        typeof(NuGetVersion),
+        typeof(VersioningContext),
+        typeof(ILogger)
+    };
+
+
     internal async Task RunScript()
     {
         if (_inputs.RunScript == false)
@@ -54,18 +67,6 @@ public sealed class Git2SemVerScriptRunner
 
         var stopwatch = Stopwatch.StartNew();
 
-        var metadataReferences = new List<Type>(new[]
-        {
-            typeof(DotNetTool),
-            typeof(UncontrolledHost),
-            typeof(IBuildHost),
-            typeof(GitTool),
-            typeof(SemVersion),
-            typeof(NuGetVersion),
-            typeof(VersioningContext),
-            typeof(ILogger)
-        });
-
         var inMemoryTypes = new List<Type>(new[]
         {
             typeof(VersioningContext),
@@ -74,7 +75,7 @@ public sealed class Git2SemVerScriptRunner
         });
 
         var context = new VersioningContext(_inputs, _outputs, _host, _logger);
-        await _innerScriptRunner.RunScript(context, _inputs.BuildScriptPath, metadataReferences, inMemoryTypes);
+        await _innerScriptRunner.RunScript(context, _inputs.BuildScriptPath, MetadataReferences, inMemoryTypes);
 
         stopwatch.Stop();
         _logger.LogInfo($"Script run completed. (in {stopwatch.Elapsed.TotalSeconds:F1} sec)");

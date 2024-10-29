@@ -8,7 +8,7 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
-using NoeticTools.MSBuild.TaskLogging;
+using NoeticTools.MSBuild.Tasking.Logging;
 using ILogger = NoeticTools.Common.Logging.ILogger;
 
 

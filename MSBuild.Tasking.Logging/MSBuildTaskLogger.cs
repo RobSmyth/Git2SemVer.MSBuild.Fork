@@ -3,7 +3,7 @@ using Microsoft.Build.Utilities;
 using NoeticTools.Common.Logging;
 
 
-namespace NoeticTools.MSBuild.TaskLogging;
+namespace NoeticTools.MSBuild.Tasking.Logging;
 
 public class MSBuildTaskLogger : TaskLoggerBase
 {

@@ -23,8 +23,6 @@ public class VersionGeneratorInputsStub : IVersionGeneratorInputs
 
     public string IntermediateOutputDirectory { get; } = "";
 
-    public string IsAControlledBuild { get; set; } = "";
-
     public VersioningModeEnum Mode { get; set; }
 
     public bool? RunScript { get; set; }
@@ -38,8 +36,6 @@ public class VersionGeneratorInputsStub : IVersionGeneratorInputs
     public bool UpdateHostBuildLabel { get; set; }
 
     public string Version { get; set; } = "";
-
-    public string VersionPrefix { get; set; } = "";
 
     public string VersionSuffix { get; set; } = "";
 

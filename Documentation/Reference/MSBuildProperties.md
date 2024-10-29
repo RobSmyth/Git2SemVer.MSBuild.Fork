@@ -150,7 +150,7 @@ The MSBuild input poperties are:
         <p>
             Optional regular expression value to map branch name to release and prerelease labels.
         </p><p>
-            Default is <code>^((?<release>main|release)|(?<beta>feature)|(?<alpha>.+))[\\/_]?</code>
+            Default is <code>^((?<release>main|release)|(?<rc>(main|release)[\\/_]rc)|(?<beta>feature)|(?<alpha>.+))[\\/_]?</code>
         </p><p>
             The <code>release</code> group is required.
             All others a prereleases and the group name is the prerelease label.

@@ -41,6 +41,9 @@
       <_Parameter1>NoeticTools.Git2SemVer.MSBuild.IntegrationTests</_Parameter1>
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>NoeticTools.MSBuild.Tasking.Tests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
@@ -80,9 +83,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Git2Semver.Common\Git2Semver.Common.csproj" />
-    <ProjectReference Include="..\MSBuildScripting\MSBuild.Tasking.csproj" />
-
-    <ProjectReference Include="..\MSBuildTask.Logging\MSBuild.TaskLogging.csproj" />
+    <ProjectReference Include="..\MSBuild.Tasking\MSBuild.Tasking.csproj" />
+    <ProjectReference Include="..\MSBuild.Tasking.Logging\MSBuild.Tasking.Logging.csproj" />
     <ProjectReference Include="..\Tools\Common.csproj" />
   </ItemGroup>
 

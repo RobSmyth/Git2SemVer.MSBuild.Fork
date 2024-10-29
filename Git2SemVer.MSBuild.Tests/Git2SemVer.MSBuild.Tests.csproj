@@ -28,7 +28,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Git2SemVer.MSBuild\Git2SemVer.MSBuild.csproj" />
-    <ProjectReference Include="..\MSBuildTask.Logging\MSBuild.TaskLogging.csproj" />
+    <ProjectReference Include="..\MSBuild.Tasking\MSBuild.Tasking.csproj" />
+    <ProjectReference Include="..\MSBuild.Tasking.Logging\MSBuild.Tasking.Logging.csproj" />
     <ProjectReference Include="..\TestingCommon\Testing.Common.csproj" />
   </ItemGroup>
 

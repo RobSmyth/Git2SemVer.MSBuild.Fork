@@ -1,6 +1,6 @@
 ﻿using Microsoft.Build.Framework;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
-using NoeticTools.MSBuild.TaskLogging;
+using NoeticTools.MSBuild.Tasking.Logging;
 
 
 // ReSharper disable InconsistentNaming

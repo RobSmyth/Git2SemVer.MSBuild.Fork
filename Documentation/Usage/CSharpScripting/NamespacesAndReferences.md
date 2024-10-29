@@ -23,25 +23,25 @@ Semver
 NuGet.Versioning
 System
 System.IO
+System.Text.RegularExpressions
 System.Numerics
 System.Linq
+System.Runtime.Serialization
 System.Globalization
+System.Runtime.CompilerServices
+System.Runtime.InteropServices
+Microsoft.Extensions.Primitives
+System.Diagnostics.CodeAnalysis
 System.Diagnostics
 System.Collections
 System.Collections.Generic
-System.Runtime.Serialization
-System.Text.RegularExpressions
-System.Runtime.CompilerServices
-System.Runtime.InteropServices
-System.Diagnostics.CodeAnalysis
-Microsoft.Extensions.Primitives
-NoeticTools.MSBuild.Tasking
 NoeticTools.Common.Tools.DotnetCli
+NoeticTools.Common.Tools.Git
 NoeticTools.Git2SemVer.MSBuild.Tools.CI
 NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting
-NoeticTools.Common.Tools.Git
-NoeticTools.Git2SemVer.MSBuild.Scripting
+NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting
 NoeticTools.Common.Logging
+NoeticTools.MSBuild.Tasking
 ```
 
 ## References
@@ -51,14 +51,14 @@ The following assemblies are references in the C# script's context:
 ```
 Semver
 NuGet.Versioning
-System.Linq
 System.Private.CoreLib
 System.Text.RegularExpressions
 System.Runtime.Numerics
+System.Linq
 Microsoft.Extensions.Primitives
 NoeticTools.Common
-NoeticTools.MSBuild.Tasking
 NoeticTools.Git2SemVer.MSBuild
+NoeticTools.MSBuild.Tasking
 ```
 
 > [!NOTE]

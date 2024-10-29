@@ -7,7 +7,7 @@ using Semver;
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 
 /// <summary>
-///     Task outputs for C# script use.
+///     Task outputs for C# script use and source for MSBuild output properties.
 /// </summary>
 public interface IVersionOutputs
 {
@@ -31,8 +31,19 @@ public interface IVersionOutputs
     /// </remarks>
     Version? AssemblyVersion { get; set; }
 
+    /// <summary>
+    ///     Build number context.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         A build host (<see cref="IBuildHost">IBuildHost</see>) may include BuildContext in the <see cref="IBuildHost.BuildId"/> if a unique build number is not available.
+    ///     </para>
+    /// </remarks>
     string BuildContext { get; set; }
 
+    /// <summary>
+    ///     Build number.
+    /// </summary>
     string BuildNumber { get; set; }
 
     /// <summary>
@@ -80,6 +91,9 @@ public interface IVersionOutputs
     /// </remarks>
     Version? FileVersion { get; set; }
 
+    /// <summary>
+    ///     Git repository outputs for optional C# script (csx) use.
+    /// </summary>
     IGitOutputs Git { get; }
 
     /// <summary>

@@ -13,6 +13,24 @@
           "files": [
             "**/*.csproj"
           ]
+        },
+        {
+          "src": "../MSBuild.Tasking.Logging",
+          "files": [
+            "**/*.csproj"
+          ]
+        },
+        {
+          "src": "../MSBuild.Tasking",
+          "files": [
+            "**/*.csproj"
+          ]
+        },
+        {
+          "src": "../Git2Semver.Common",
+          "files": [
+            "**/*.csproj"
+          ]
         }
       ],
       "dest": "api"

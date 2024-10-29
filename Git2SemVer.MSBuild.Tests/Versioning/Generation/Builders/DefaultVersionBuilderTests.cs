@@ -70,11 +70,17 @@ namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.Builders
         [TestCase("0.5.1", "release", "InitialDev")]
         [TestCase("0.5.1", "release/anything", "InitialDev")]
         [TestCase("0.5.1", "Release/anything", "InitialDev")]
-        [TestCase("0.5.1", "JohnsOwnBranch", "Alpha-InitialDev")]
-        [TestCase("0.5.1", "devs/JohnsOwnBranch", "Alpha-InitialDev")]
-        [TestCase("0.999.0", "feature", "Beta-InitialDev")]
-        [TestCase("0.5.1", "Feature", "Beta-InitialDev")]
-        [TestCase("0.1.0", "features/mine", "Beta-InitialDev")]
+        [TestCase("0.5.1", "JohnsOwnBranch", "alpha-InitialDev")]
+        [TestCase("0.5.1", "devs/JohnsOwnBranch", "alpha-InitialDev")]
+        [TestCase("0.999.0", "feature", "beta-InitialDev")]
+        [TestCase("0.5.1", "Feature", "beta-InitialDev")]
+        [TestCase("99.5.1", "Feature", "beta")]
+        [TestCase("0.1.0", "features/mine", "beta-InitialDev")]
+        [TestCase("1.0.0", "features/mine", "beta")]
+        [TestCase("1.0.0", "release/rc", "rc")]
+        [TestCase("1.0.0", "release/gold/rc", "rc")]
+        [TestCase("1.0.0", "release/gold/rc1", "rc")]
+        [TestCase("1.0.0", "release/gold/rc_one", "rc")]
         public void PrereleaseBuildTest(string version, string branchName, string expectedPrereleaseLabel)
         {
             SetupInputs(version, branchName);

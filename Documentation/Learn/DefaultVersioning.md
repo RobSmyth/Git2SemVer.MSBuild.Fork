@@ -26,9 +26,38 @@ Example build ID shemas (using [build host](xref:build-hosts) build number and b
 
 See the [build host](xref:build-hosts) type for details.
 
+## Branch name
+
+The branch name included in version metadata has any [invalid Semmmantic Versioning characters](https://semver.org/#spec-item-10) replaced with "-".
+This is to ensure Semmmantic Versioning compliance and compatibility with common tools.
+
+## Commit SHA
+
+The full commit SHA is used rather than a short version to maintain consistency and compatibility with [SourceLink related changes in .NET SDK 8](https://learn.microsoft.com/en-us/dotnet/core/compatibility/sdk/8.0/source-link).
+
+## Maturity label
+
+The first identifier in a version's prelease identifiers is always the maturity label like `alpha` or `beta`.
+The maturity is derived from the branch name (see [Git2SemVer_BranchMaturityPattern](xref:msbuild-properties)).
+
+The default settings are (first match from top is used):
+
+| Maturity | Regex                                     | Matching examples  |
+| :---:    |:---                                       |:---                |
+| Release  | `^(main|release)[\\/_]?`                  | `main`, `release`, `release/release_name` |
+| RC       | `^(?<rc>(main|release)[\\/_]rc.*)[\\/_]?` | `main/rc`, `release/rc5`  |
+| Beta     | `^(feature)[\\/_]?`                       | `feature`, `feature/feature_name`  |
+| Alpha    | `^((.+))[\\/_]?`                          | `dev/MyBranch`, `tom` |
+
 # Schema
 
 ## Release versioning
+
+Format:
+
+```
+  <major>.<minor>.<patch>[+<build-id>.<branch>.<commit-sha>]
+```
 
 | Use                   | Schema                                           |
 |:---                   |:---                                              |
@@ -41,6 +70,12 @@ See the [build host](xref:build-hosts) type for details.
 
 ## Pre-release versioning
 
+Format:
+
+```
+  <major>.<minor>.<patch>-<maturity-label>.<build-id>[+<branch>.<commit-sha>]
+```
+
 | Use                   | Schema                                           |
 |:---                   |:---                                              |
 | Build system          | `1.2.3-<label>.<build-id>`                       |
@@ -49,14 +84,14 @@ See the [build host](xref:build-hosts) type for details.
 
 ## Pre-release maturity label
 
-The pre-release maturity label is the first pre-release identifier.
+The pre-release maturity label (`<maturity-label>`) is the first pre-release identifier.
 
 ### Initial development versions (0.x.x)
 
 All [initial development](https://semver.org/#spec-item-4) versions (0.x.x) are pre-releases.
 
 | Branch type      | Maturity Label     |
-|:-:               |:--                 |
+|:---              |:--                 |
 | Release          | `InitialDev`       |
 | RC               | `rc-InitialDev`    |
 | Feature          | `beta-InitialDev`  |
@@ -65,7 +100,7 @@ All [initial development](https://semver.org/#spec-item-4) versions (0.x.x) are 
 ### Post-Initial development versions (Major >= 1)
 
 | Branch type      | Maturity Label     |
-|:-:               |:--                 |
+|:---              |:--                 |
 | Release          | not applicable     |
 | RC               | `rc`               |
 | Feature          | `beta`             |

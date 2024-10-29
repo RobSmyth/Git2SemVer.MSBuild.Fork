@@ -15,16 +15,14 @@ The code has a set of automated unit and integration tests.
 
 ## Build systems
 
-Current build systems used are:
-
-**TeamCity**
+### TeamCity
 
 Currently all commits are built and all test run on a private TeamCity server.
 TeamCity is the source of all builds published to NuGet.
 
 It is intended to make the server public in 2025.
 
-**GitHub Workflow**
+### GitHub Workflow
 
 Each commit to the `main` branch triggers GitHub workflows that builds and tests the code
 and also build and deploy the documentation which is hosted on GitHub.
