@@ -238,6 +238,17 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
                               *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
                               """);
 
+    /// <summary>
+    ///     Tests that two fix bumps in segment only bumps patch once.
+    /// </summary>
+    public LoggedScenario Scenario10 { get; } =
+        new("0.19.1", "0002", $"""
+                              *               .|0002|0003|fix: Fix commit version when tag and conventional commit bump on same commit.||HEAD -> REDACTED_BRANCH, origin/main|
+                              *               .|0003|0004|fix: git2semver.msbuild unable to load|||
+                              *               .|0004|0005|feat: version bump||tag: v0.19.0|
+                              *               .|0005|0006|REDACTED||tag: v0.18.2|
+                              *               .|0006|0007|REDACTED|||
+                              """);
     public IEnumerator GetEnumerator()
     {
         yield return new object[] { "Scenario 01", Scenario01 };
@@ -249,5 +260,6 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
         yield return new object[] { "Scenario 07 - !", Scenario07 };
         yield return new object[] { "Scenario 08 - breaking change", Scenario08 };
         yield return new object[] { "Scenario 09 - tag trumps bump on same commit", Scenario09 };
+        yield return new object[] { "Scenario 10", Scenario10 };
     }
 }
