@@ -10,7 +10,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking
 internal sealed class VersionHistoryPath : IVersionHistoryPath
 {
     private readonly List<VersionHistorySegment> _segments = [];
-    private ApiChanges _bumps;
+    private ApiChanges _bumps = new ApiChanges();
     private int? _commitsCount;
 
     public VersionHistoryPath(params VersionHistorySegment[] segments)

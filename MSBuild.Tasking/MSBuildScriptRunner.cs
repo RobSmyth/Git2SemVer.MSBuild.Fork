@@ -28,7 +28,7 @@ public sealed class MSBuildScriptRunner
         _logger = logger;
     }
 
-    public static IReadOnlyList<string> ReferencedAssemblies { get; private set; }
+    public static IReadOnlyList<string> ReferencedAssemblies { get; private set; } = [];
 
     public async Task RunScript(object globalContext,
                                 string scriptPath,
