@@ -1,10 +1,11 @@
 ﻿using System.Text.RegularExpressions;
 using Injectio.Attributes;
+using NoeticTools.Common.ConventionCommits;
 using NoeticTools.Common.Exceptions;
 using NoeticTools.Common.Logging;
-using Semver;
-#pragma warning disable SYSLIB1045
 
+
+#pragma warning disable SYSLIB1045
 
 namespace NoeticTools.Common.Tools.Git;
 
@@ -12,13 +13,31 @@ namespace NoeticTools.Common.Tools.Git;
 [RegisterTransient]
 public class GitTool : IGitTool
 {
+    private const string GitLogParsingPattern =
+        """
+        ^(?<graph>[^\x1f$]*) 
+          (\x1f\.\|
+            (?<sha>[^\|]+) \|
+            (?<parents>[^\|]*)? \|
+            \x02(?<summary>[^\x03]*)?\x03 \|
+            \x02(?<body>[^\x03]*)?\x03 \|
+            (\s\((?<refs>.*?)\))?
+           \|$)?
+        """;
+
+    private const char RecordSeparator = CharacterConstants.RS;
+    private readonly ConventionalCommitsParser _conventionalCommitParser;
+    private readonly string _gitLogFormat;
+
     private readonly IGitProcessCli _inner;
     private readonly ILogger _logger;
 
     public GitTool(ILogger logger)
     {
+        _gitLogFormat = "%x1f.|%H|%P|%x02%s%x03|%x02%b%x03|%d|%x1e";
         _logger = logger;
         _inner = new GitProcessCli(logger);
+        _conventionalCommitParser = new ConventionalCommitsParser();
         BranchName = GetBranchName();
         HasLocalChanges = GetHasLocalChanges();
     }
@@ -37,48 +56,65 @@ public class GitTool : IGitTool
     {
         var commits = new List<Commit>();
 
-        var result = Run($"log --graph --skip={skipCount} --max-count={takeCount} --pretty=\"format:.|%H|%P|%<(30,trunc)%s|%d|\"");
+        var result = Run($"log --graph --skip={skipCount} --max-count={takeCount} --pretty=\"format:{_gitLogFormat}\"");
 
         var obfuscatedGitLog = new List<string>();
-        var lines = result.stdOutput.Split('\n');
+        var lines = result.stdOutput.Split(RecordSeparator); // todo - inadequate
+
+        _logger.LogTrace($"Read {commits.Count} commits from git history. Skipped {skipCount}.");
         foreach (var line in lines)
         {
-            obfuscatedGitLog.Add(GitObfuscation.ObfuscateLogLine(line));
-
-            if (!line.Contains(" .|"))
-            {
-                continue;
-            }
-
-            var commit = ParseLogLine(line, _logger);
-            commits.Add(commit);
+            ParseLogLine(line, obfuscatedGitLog, commits);
         }
 
         _logger.LogTrace($"Read {commits.Count} commits from git history. Skipped {skipCount}.");
-        _logger.LogTrace("Partially obfuscated git log ({0} skipped):\n\n                .|Commit|Parents|Summary|Refs|\n{1}", skipCount,
+        _logger.LogTrace("Partially obfuscated git log ({0} skipped):\n\n                .|Commit|Parents|Summary|Body|Refs|\n{1}", skipCount,
                          string.Join("\n", obfuscatedGitLog));
 
         return commits;
     }
 
-    public static Commit ParseLogLine(string line, ILogger logger)
+    public void ParseLogLine(string line, List<string> obfuscatedGitLog, List<Commit> commits)
     {
-        var regex =
-                  new Regex(@"^(?<graph>[^\.]*)(\.\|(?<sha>[^\|]*)?\|(?<parents>[^\|]*)?\|(?<summary>[^\|]*)?\|( \((?<refs>.*?)\))?\|)?$",
-                            RegexOptions.Multiline);
-        var match = regex.Match(line.Trim());
+        line = line.Trim();
+        var regex = new Regex(GitLogParsingPattern, RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
+        var match = regex.Match(line);
         if (!match.Success)
         {
-            logger.LogWarning($"Unexpected git log line: {line}.");
+            throw new Git2SemVerGitLogParsingException($"Unable to parse Git log line {line}.");
         }
 
-        var sha = GetGroupValue(match, "sha");
-        var refs = GetGroupValue(match, "refs")!;
-        var parents = GetGroupValue(match, "parents").Split(' ');
-        var summary = GetGroupValue(match, "summary");
+        var graph = match.GetGroupValue("graph");
+        var sha = match.GetGroupValue("sha");
+        var refs = match.GetGroupValue("refs")!;
+        var parents = match.GetGroupValue("parents").Split(' ');
+        var summary = match.GetGroupValue("summary");
+        var body = match.GetGroupValue("body");
 
-        var commit = new Commit(sha, parents, summary, refs);
-        return commit;
+        var commitMetadata = _conventionalCommitParser.Parse(summary, body);
+
+        var commit = line.Contains($"{CharacterConstants.US}.|")
+            ? new Commit(sha, parents, summary, body, refs, commitMetadata)
+            : null;
+        if (commit != null)
+        {
+            commits.Add(commit);
+        }
+
+        obfuscatedGitLog.Add(CommitObfuscator.GetObfuscatedLogLine(graph, commit));
+    }
+
+    public static string ParseStatusResponseBranchName(string stdOutput)
+    {
+        var regex = new Regex(@"^## (?<branchName>[a-zA-Z0-9!$*\._\/-]+?)(\.\.\..*)?\s*?$", RegexOptions.Multiline);
+        var match = regex.Match(stdOutput);
+
+        if (!match.Success)
+        {
+            throw new Git2SemVerGitOperationException($"Unable to read branch name from Git status response '{stdOutput}'.\n");
+        }
+
+        return match.Groups["branchName"].Value;
     }
 
     public (int returnCode, string stdOutput) Run(string arguments)
@@ -109,17 +145,10 @@ public class GitTool : IGitTool
         return ParseStatusResponseBranchName(result.stdOutput);
     }
 
-    public static string ParseStatusResponseBranchName(string stdOutput)
+    private bool GetHasLocalChanges()
     {
-        var regex = new Regex(@"^## (?<branchName>[a-zA-Z0-9!$*\._\/-]+?)(\.\.\..*)?\s*?$", RegexOptions.Multiline);
-        var match = regex.Match(stdOutput);
-        
-        if (!match.Success)
-        {
-            throw new Git2SemVerGitOperationException($"Unable to read branch name from Git status response '{stdOutput}'.\n");
-        }
-
-        return match.Groups["branchName"].Value;
+        var result = Run("status -u -s --porcelain");
+        return result.stdOutput.Length > 0;
     }
 
     private string GetVersion()
@@ -132,17 +161,5 @@ public class GitTool : IGitTool
         }
 
         return result.stdOutput;
-    }
-
-    private static string GetGroupValue(Match match, string groupName)
-    {
-        var group = match.Groups[groupName];
-        return group.Success ? group.Value : "";
-    }
-
-    private bool GetHasLocalChanges()
-    {
-        var result = Run("status -u -s --porcelain");
-        return result.stdOutput.Length > 0;
     }
 }

@@ -1,4 +1,5 @@
-﻿using NoeticTools.Common.Exceptions;
+﻿using NoeticTools.Common.ConventionCommits;
+using NoeticTools.Common.Exceptions;
 using NoeticTools.Common.Logging;
 using NoeticTools.Common.Tools.Git;
 using Semver;
@@ -22,23 +23,18 @@ internal sealed class VersionHistorySegment
         _commits.AddRange(commits);
     }
 
-    internal static void Reset()
-    {
-        _nextId = 1;
-    }
-
     private VersionHistorySegment(ILogger logger)
     {
         _logger = logger;
         Id = _nextId++;
     }
 
-    public ApiChanges Bumps => GetVersionBumps();
+    public ApiChanges Bumps => GetApiChanges();
 
     public IReadOnlyList<Commit> Commits => _commits.ToList();
 
     /// <summary>
-    /// First (oldest) commit in the segment.
+    ///     First (oldest) commit in the segment.
     /// </summary>
     public Commit FirstCommit => _commits.Last();
 
@@ -47,26 +43,28 @@ internal sealed class VersionHistorySegment
     public int Id { get; }
 
     /// <summary>
-    /// Last (youngest) commit in the segment.
+    ///     Last (youngest) commit in the segment.
     /// </summary>
     public Commit LastCommit => _commits[0];
 
     public SemVersion? TaggedReleasedVersion => _commits.Count != 0 ? FirstCommit.ReleasedVersion : null;
 
-    public bool IsLeaf => TaggedReleasedVersion != null || From.Count == 0;
-
     public IReadOnlyList<VersionHistorySegment> To => _younger.ToList();
 
-    public void Append(Commit commit)
+    /// <summary>
+    ///     Append prior (younger) commit to the segment.
+    /// </summary>
+    public void Append(Commit youngerCommit)
     {
-        if (_commits.Count > 0 && FirstCommit.Parents.All(x => x.Id != commit.CommitId.Id))
+        if (_commits.Count > 0 && FirstCommit.Parents.All(x => x.Id != youngerCommit.CommitId.Id))
         {
-            throw new InvalidOperationException($"Cannot append {commit.CommitId.ObfuscatedSha} as it is not connected to segment's first (oldest) commit.");
+            throw new
+                InvalidOperationException($"Cannot append {youngerCommit.CommitId.ObfuscatedSha} as it is not connected to segment's first (oldest) commit.");
         }
 
         _bumps = null;
-        _commits.Add(commit);
-        _logger.LogTrace("Commit {0} added to segment {1}.", commit.CommitId.ObfuscatedSha, Id);
+        _commits.Add(youngerCommit);
+        _logger.LogTrace("Commit {0} added to segment {1}.", youngerCommit.CommitId.ObfuscatedSha, Id);
     }
 
     public VersionHistorySegment? BranchedFrom(VersionHistorySegment branchSegment, Commit commit)
@@ -121,20 +119,17 @@ internal sealed class VersionHistorySegment
             $"Segment {Id,-3} {LastCommit.CommitId.ObfuscatedSha} -> {FirstCommit.CommitId.ObfuscatedSha}  {commitsCount,5}   {Bumps.ToString() ?? "???"}   {toSegments,-16}  {fromSegments,-16}  {release}";
     }
 
-    private ApiChanges GetVersionBumps()
+    private ApiChanges GetApiChanges()
     {
         if (_bumps != null)
         {
-            return _bumps.Value;
+            return _bumps;
         }
 
         var bumps = new ApiChanges();
-
-        var parser = new ConventionalCommitParser(_logger);
         foreach (var commit in _commits)
         {
-            var commitBumps = parser.Parse(commit);
-            bumps.Aggregate(commitBumps);
+            bumps.Aggregate(commit.Metadata.ApiChangeFlags);
         }
 
         _bumps = bumps;
@@ -163,16 +158,22 @@ internal sealed class VersionHistorySegment
             _commits.AddRange(keepCommits);
 
             var fromSegment = new VersionHistorySegment(newSegmentCommits, _logger);
-            _logger.LogTrace("Split out new segment {2} from segment {0} at commit {1}.", 
+            _logger.LogTrace("Split out new segment {2} from segment {0} at commit {1}.",
                              Id, commit.CommitId.ObfuscatedSha,
                              fromSegment.Id);
             foreach (var olderSegment in _older)
             {
                 fromSegment._older.Add(olderSegment);
             }
+
             _older.Clear();
             fromSegment.LinkToYounger(this);
             return fromSegment;
         }
+    }
+
+    internal static void Reset()
+    {
+        _nextId = 1;
     }
 }

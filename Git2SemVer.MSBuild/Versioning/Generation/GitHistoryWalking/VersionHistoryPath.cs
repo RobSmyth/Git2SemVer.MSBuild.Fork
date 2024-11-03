@@ -1,4 +1,5 @@
-﻿using NoeticTools.Common.Tools.Git;
+﻿using NoeticTools.Common.ConventionCommits;
+using NoeticTools.Common.Tools.Git;
 using Semver;
 
 
@@ -43,7 +44,7 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
         var commitsCount = $"({CommitsSinceLastRelease})";
         var segmentIdsString = string.Join("-", _segments.Select(x => x.Id));
         return
-            $"Path {Id,-3} {segmentIdsString,-20} {commitsCount,5}   {_bumps.ToString()}   {LastReleasedVersion?.ToString() ?? " none"} -> {GetNextReleaseVersion()}";
+            $"Path {Id,-3} {segmentIdsString,-20} {commitsCount,5}   {_bumps}   {LastReleasedVersion?.ToString() ?? " none"} -> {GetNextReleaseVersion()}";
     }
 
     public IReadOnlyList<VersionHistoryPath> With(IReadOnlyList<VersionHistorySegment> toSegments)
@@ -69,7 +70,7 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
         {
             bumps.BreakingChange |= segmentBumps.BreakingChange;
             bumps.FunctionalityChange |= segmentBumps.FunctionalityChange;
-            bumps.Patch |= segmentBumps.Patch;
+            bumps.Fix |= segmentBumps.Fix;
         }
 
         return bumps;

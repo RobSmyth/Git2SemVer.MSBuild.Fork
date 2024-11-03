@@ -1,6 +1,6 @@
-﻿namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
+﻿namespace NoeticTools.Common.ConventionCommits;
 
-internal struct ApiChanges
+public sealed class ApiChanges
 {
     /// <summary>
     ///     A breaking change has been made since last release.
@@ -15,6 +15,18 @@ internal struct ApiChanges
     ///     </para>
     /// </remarks>
     public bool BreakingChange { get; set; }
+
+    /// <summary>
+    ///     A backward compatible bug fix has been made since last release.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         From <see href="https://semver.org/#spec-item-6">Semantic Version spec item 6</see>:
+    ///         "Patch version Z (x.y.Z | x > 0) MUST be incremented if only backward compatible bug fixes are introduced.
+    ///         A bug fix is defined as an internal change that fixes incorrect behavior."
+    ///     </para>
+    /// </remarks>
+    public bool Fix { get; set; }
 
     /// <summary>
     ///     A backward compatible functional change has been made since last release.
@@ -32,27 +44,15 @@ internal struct ApiChanges
     /// </remarks>
     public bool FunctionalityChange { get; set; }
 
-    /// <summary>
-    ///     A backward compatible bug fix has been made since last release.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         From <see href="https://semver.org/#spec-item-6">Semantic Version spec item 6</see>:
-    ///         "Patch version Z (x.y.Z | x > 0) MUST be incremented if only backward compatible bug fixes are introduced.
-    ///         A bug fix is defined as an internal change that fixes incorrect behavior."
-    ///     </para>
-    /// </remarks>
-    public bool Patch { get; set; }
-
-    public override string ToString()
-    {
-        return $"{(BreakingChange ? "B" : "-")}{(FunctionalityChange ? "F" : "-")}{(Patch ? "P" : "-")}";
-    }
-
     public void Aggregate(ApiChanges changes)
     {
         BreakingChange |= changes.BreakingChange;
         FunctionalityChange |= changes.FunctionalityChange;
-        Patch |= changes.Patch;
+        Fix |= changes.Fix;
+    }
+
+    public override string ToString()
+    {
+        return $"{(BreakingChange ? "B" : "-")}{(FunctionalityChange ? "F" : "-")}{(Fix ? "P" : "-")}";
     }
 }

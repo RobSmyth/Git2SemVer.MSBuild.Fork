@@ -1,8 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using NoeticTools.Common.ConventionCommits;
 using Semver;
-#pragma warning disable SYSLIB1045
 
+
+#pragma warning disable SYSLIB1045
 
 // ReSharper disable MergeIntoPattern
 
@@ -12,13 +14,12 @@ namespace NoeticTools.Common.Tools.Git;
 public class Commit : ICommit
 {
     private const string TagVersionPrefix = "v";
-
-    private readonly string _refs;
     private readonly Regex _tagVersionRegex = new(@$"tag: {TagVersionPrefix}(?<version>\d+\.\d+\.\d+)", RegexOptions.IgnoreCase);
 
-    public Commit(string sha, string[] parents, string message, string refs)
+    public Commit(string sha, string[] parents, string summary, string messageBody, string refs, CommitMessageMetadata metadata)
     {
         CommitId = new CommitId(sha);
+
         if (parents.Length == 1 && parents[0].Length == 0)
         {
             Parents = [];
@@ -28,36 +29,50 @@ public class Commit : ICommit
             Parents = parents.Select(x => new CommitId(x)).ToArray();
         }
 
-        _refs = refs;
+        Refs = refs;
 
-        Message = message;
+        Summary = summary;
+        MessageBody = messageBody;
+        Metadata = metadata;
         ReleasedVersion = GetReleaseTag();
     }
 
+    [JsonPropertyOrder(11)]
     public CommitId CommitId { get; }
 
-    public string Message { get; }
+    [JsonPropertyOrder(22)]
+    public string MessageBody { get; }
+
+    [JsonPropertyOrder(90)]
+    public CommitMessageMetadata Metadata { get; }
 
     [JsonIgnore]
-    public static Commit Null => new("00000000", [], "null commit", "");
+    public static Commit Null => new("00000000", [], "null commit", "", "", new CommitMessageMetadata());
 
+    [JsonPropertyOrder(31)]
     public CommitId[] Parents { get; }
 
+    [JsonPropertyOrder(25)]
+    public string Refs { get; }
+
+    [JsonPropertyOrder(12)]
     public SemVersion? ReleasedVersion { get; }
+
+    [JsonPropertyOrder(21)]
+    public string Summary { get; }
 
     private SemVersion? GetReleaseTag()
     {
-        if (_refs.Length == 0)
+        if (Refs.Length == 0)
         {
             return null;
         }
 
-        var matches = _tagVersionRegex.Matches(_refs);
+        var matches = _tagVersionRegex.Matches(Refs);
         if (matches.Count == 0)
         {
             return null;
         }
-
 
         var versions = new List<SemVersion>();
         foreach (Match match in matches)
@@ -65,6 +80,7 @@ public class Commit : ICommit
             var version = SemVersion.Parse(match.Groups["version"].Value, SemVersionStyles.Strict);
             versions.Add(version);
         }
+
         return versions.OrderByDescending(x => x, new SemverSortOrderComparer()).FirstOrDefault();
     }
 }

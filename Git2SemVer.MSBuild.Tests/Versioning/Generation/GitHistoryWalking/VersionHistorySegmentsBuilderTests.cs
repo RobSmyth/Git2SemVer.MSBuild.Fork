@@ -5,23 +5,22 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 
 //#pragma warning disable NUnit2045
 
-
 namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.GitHistoryWalking;
 
 [TestFixture]
 internal class VersionHistorySegmentsBuilderTests : GitHistoryWalkingTestsBase
 {
-    private VersionHistorySegmentsBuilder _target;
     private Mock<IGitTool> _gitTool;
+    private VersionHistorySegmentsBuilder _target;
 
     [SetUp]
     public void Setup()
     {
-        base.SetupBase();
+        SetupBase();
 
         _gitTool = new Mock<IGitTool>();
 
-        _target = new VersionHistorySegmentsBuilder(_repository.Object, _logger);
+        _target = new VersionHistorySegmentsBuilder(Repository.Object, Logger);
 
         _gitTool.Setup(x => x.BranchName).Returns("BranchName");
     }
@@ -29,7 +28,7 @@ internal class VersionHistorySegmentsBuilderTests : GitHistoryWalkingTestsBase
     [TearDown]
     public void TearDown()
     {
-        _logger.Dispose();
+        Logger.Dispose();
     }
 
     [TestCaseSource(typeof(ScenariosFromBuildLogsTestSource))]
@@ -80,4 +79,3 @@ internal class VersionHistorySegmentsBuilderTests : GitHistoryWalkingTestsBase
         Assert.That(segments[7].Commits, Has.Count.EqualTo(1));
     }
 }
-
