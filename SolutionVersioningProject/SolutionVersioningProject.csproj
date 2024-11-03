@@ -5,6 +5,11 @@
     <Git2SemVer_UpdateHostBuildLabel>true</Git2SemVer_UpdateHostBuildLabel>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Git2SemVer.csx" />
   </ItemGroup>
@@ -14,11 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NoeticTools.Git2SemVer.MSBuild" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="NoeticTools.Git2SemVer.MSBuild" Version="0.18.1-InitialDev.198" />
+    <PackageReference Include="NoeticTools.Git2SemVer.MSBuild" Version="0.18.1-InitialDev.198" />
   </ItemGroup>
 
 </Project>
