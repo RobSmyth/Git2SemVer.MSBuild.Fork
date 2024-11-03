@@ -228,6 +228,16 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
                               *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
                               """);
 
+    /// <summary>
+    ///     Tests tag takes precedence over conventional commits flags on a commit.
+    /// </summary>
+    public LoggedScenario Scenario09 { get; } =
+        new("4.0.1", "0002", $"""
+                              *               {US}.|0002|0001|{STX}fix: fix bug{ETX}|{STX}{ETX}| (HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH)|
+                              *               {US}.|0001|0003|{STX}feat: add great feature{ETX}|{STX}{ETX}| (tag: v4.0.0)|
+                              *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
+                              """);
+
     public IEnumerator GetEnumerator()
     {
         yield return new object[] { "Scenario 01", Scenario01 };
@@ -238,5 +248,6 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
         yield return new object[] { "Scenario 06 - feature", Scenario06 };
         yield return new object[] { "Scenario 07 - !", Scenario07 };
         yield return new object[] { "Scenario 08 - breaking change", Scenario08 };
+        yield return new object[] { "Scenario 09 - tag trumps bump on same commit", Scenario09 };
     }
 }

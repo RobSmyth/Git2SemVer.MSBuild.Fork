@@ -55,6 +55,9 @@ public class Commit : ICommit
     [JsonPropertyOrder(25)]
     public string Refs { get; }
 
+    [JsonIgnore]
+    public bool HasReleaseTag => ReleasedVersion != null;
+
     [JsonPropertyOrder(12)]
     public SemVersion? ReleasedVersion { get; }
 
