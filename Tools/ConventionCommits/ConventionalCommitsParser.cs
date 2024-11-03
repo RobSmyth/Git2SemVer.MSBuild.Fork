@@ -36,7 +36,7 @@ public sealed class ConventionalCommitsParser
                                             )
                                             \Z 
                                             """,
-                                            RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline);
+                                            RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.CultureInvariant);
 
     private readonly Regex _summaryRegex = new("""
                                                \A

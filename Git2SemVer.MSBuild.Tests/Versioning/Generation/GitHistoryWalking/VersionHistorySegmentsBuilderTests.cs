@@ -36,7 +36,7 @@ internal class VersionHistorySegmentsBuilderTests : GitHistoryWalkingTestsBase
     {
         var commits = SetupGitRepository(scenario);
 
-        var segments = _target.BuildTo(commits["0001"]);
+        var segments = _target.BuildTo(commits[scenario.HeadCommitId]);
 
         Assert.That(segments, Is.Not.Null);
     }

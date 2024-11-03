@@ -25,11 +25,15 @@ public static class CommitObfuscator
 
         var redactedRefs = new Regex(@"HEAD -> \S+?(?=[,\)])").Replace(commit.Refs, "HEAD -> REDACTED_BRANCH");
         var redactedRefs2 = new Regex(@"origin\/\S+?(?=[,\)])").Replace(redactedRefs, "origin/REDACTED_BRANCH");
+        if (redactedRefs2.Length > 0)
+        {
+            redactedRefs2 = $" ({redactedRefs2})";
+        }
         var parentShas = commit.Parents.Length > 0 ? string.Join(" ", commit.Parents.Select(x => x.ObfuscatedSha)) : string.Empty;
         var sha = commit.CommitId.ObfuscatedSha;
         var summary = commit.Metadata.ChangeType == CommitChangeTypeId.Unknown ? "REDACTED" : commit.Summary;
         var footer = string.Join("\n", commit.Metadata.FooterKeyValues.SelectMany((kv, key) => kv.Select(value => kv.Key + ": " + value)));
-        return $"{graph,-15} \u001f.|{sha}|{parentShas}|\u0002{summary}\u0003|\u0002{footer}\u0003|{redactedRefs2}|\u001e";
+        return $"{graph,-15} \u001f.|{sha}|{parentShas}|\u0002{summary}\u0003|\u0002{footer}\u0003|{redactedRefs2}|";
     }
 
     public static string GetObfuscatedSha(string sha)
