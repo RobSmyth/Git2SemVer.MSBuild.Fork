@@ -6,149 +6,116 @@ uid: example-scripts
   <img src="https://noetictools.github.io/Git2SemVer/Images/Git2SemVer_banner_840x70.png"/>
 </div>
 
-# Example C# Script
+# Example C# Scripts
 
-Example script with schema and example versions.
+## Demo - Happy New Year
 
-## Script
+_A nonsense example to demonstrate capability.__
 
-> [!NOTE]
-> When building on a GitHub host (using GitHub actions) BuildContext is `<github.run_attempt>`. This number starts as "1".
-> 
-> When building on a build system that provides a build number, BuildContext is "0". 
+On new year's day beta builds (only), add a friendly _HappyNewYear_ message to the informational version.
 
-Two versions of the scripts are given.
-On for building on GitHub, GitHub actions, and the other for a build system that provides a build number such as TeamCity.
-If the project does not build on GitHub the TeamCity version is recommended as it produces shorter and simpler build system labels.
+```csharp
+var now = DateTime.Now;
+if (now.Month != 1 || now.Day != 1 ||
+    !Outputs.PrereleaseLabel.Equals("beta"))
+{
+    return;
+}
 
-The TeamCity version of the script makes the build system label shorter by removing ".0" build context suffix.
-It also simplifies the release information metadata by removing the "0" build context.
+Logger.LogInfo("This is an beta build. HAPPY NEW YEAR!")
 
-Highlighted lines are lines that are different between the two scrips.
+var identifier = new PrereleaseIdentifier("HappyNewYear");
+var priorVersion = Ouputs.InformationalVersion;
+var newVersion = priorVersion.InformationalVersion.WithPrerelease(priorVersion.PrereleaseIdentifiers.Append(identifier));
+Outputs.InformationalVersion = version;
+```
 
-**TODO**
-
-
-# [GitHub](#tab/Github)
-
-[!code-csharp[](GitHubScript.csx?highlight=17,32)]
-
-# [TeamCity](#tab/TeamCity)
-
-[!code-csharp[](TeamCityScript.csx?highlight=17,32)]
-
----
-
-## Schema
-
-### Release versioning
-
-| Use                  | Schema                                                        |
-|:---                  |:---                                                           |
-| Build system vesions | `1.2.3+<build>[.<build-context>]`                             |
-| Package version      | `1.2.3`                                                       |
-| InformationalVerion  | `1.2.3+<build>[.<build-context>].<branch>.<short-sha>`        |
-
-### Pre-release versioning
-
-| Use                  | Schema                                                        |
-|:---                  |:---                                                           |
-| Build system         | `1.2.3-<label>.<build>[.<build-context>]`                     |
-| Package version      | `1.2.3-<label>.<build>.<build-context>`                       |
-| InformationalVerion  | `1.2.3-<label>.<build>.<build-context>+<branch>.<short-sha>`  |
-
-### Pre-release labels
-
-| Major | Label             | Controlled   | Branch  | Major  |
-| :--   |:--                |:--:          |:-:               |:-:     |
-| 0     | ``uncontrolled``  | false        | Any              | >= 0   |
-| 0     | ``experimental``  | true         | Any              | = 0    |
-| >=1   | GitVerion label   | true         | Non-release      | >= 1   |
+This will give an informational version like `1.2.3-alpha.5678.HappyNewYear+d1988132f8cd4abf2ff13658e7e484692e7f6822`.
 
 
-## Resulting version examples
+## Demo - Change version to optional (custom) commit message value.
 
-### Releases
+If the key `FORCE-VERSION: <version>` appears in the commit body, force all generated versions to the given `<major>.<minor>.<patch` version.
 
-> [!NOTE]
-> Release builds can only be made on the build system.
+```csharp
+var regex = new Regex(@"FORCE-VERSION: (?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)")
+var match = regex.Match(Outputs.Git.HeadCommit.MessageBody);
+if (!match.Success)
+{
+    return;
+}
 
-| Use                  |                                    |
-|:---                  |:---                                |
-| Build system         | `1.2.3+7658.1`                     |
-| Package version      | `1.2.3`                            |
-| InformationalVerion  | `1.2.3+7658.1.release-v1.34e6a01`  |
+var major = int.Parse(match.Groups["major"].Value);
+var minor = int.Parse(match.Groups["minor"].Value);
+var patch = int.Parse(match.Groups["patch"].Value);
 
-### Prereleases
+Logger.LogInfo($"Setting version {major}.{minor}.{patch}.")
 
-# [TeamCity builds](#tab/controlled-build-teamcity)
+var priorVersion = Ouputs.InformationalVersion;
+var newVersion = new SemVersion(major, minor, patch,
+                                priorVersion.PrereleaseIdentifiers,
+                                priorVersion.MetadataIdentifiers);
 
-Controlled build using TeamCity.
+Outputs.SetAllVersionPropertiesFrom(newVersion);
+```
 
-The versions below assume this is `beta`.
+This script will update the `Outputs` properties:
 
-| Use                  | Example version                                          |
-|:---                  |:---                                                      |
-| Build system         | `1.2.3-beta.7658`                                        |
-| Package version      | `1.2.3-beta.7658`                                        |
-| InformationalVerion  | `1.2.3-beta.7658+feature-mybranch.6ab397d5`              |
+* InformationalVersion
+* Version
+* AssemblyVersion
+* FileVersion
+* PackageVersion
+* BuildSystemVersion
+* PrereleaseLabel
+* IsInInitialDevelopment
 
-# [GitHub builds](#tab/controlled-build-github)
+Prerelease identifiers, metadata identifiers, and build number are not changed.
 
-Controlled build using GitHub actions.
 
-The versions below assume this is `beta`.
+## Demo - Change version to value from optional (custom) file.
 
-| Use                  | Example version                                           |
-|:---                  |:---                                                       |
-| Build system         | `1.2.3-beta.7658.1`                                       |
-| Package version      | `1.2.3-beta.7658.1`                                       |
-| InformationalVerion  | `1.2.3-beta.7658.1+feature-mybranch.6ab397d5`             |
+If the key `FORCE-VERSION: <major>.<minor>.<patch` appears in the commit body, force all generated versions to the given version.
 
-# [Uncontrolled builds](#tab/uncontrolled-build)
+```csharp
+const string filename = "version.txt";
+if (!File.Exists(filename))
+{
+    return;
+}
 
-Uncontrolled build (dev environment). Uses host's Git2SemVer managed build number and the machine name as the build context.
+var content = File.ReadAllText(filename);
+var elements = content.Split('.');
+if (elements.Length != 3)
+{
+  Logger.LogError($"Invalid version in file {filename}. Expected single line <major>.<minor>.<patch>.")
+}
 
-The versions below assume a host machine name of `Dev01`.
+var major = int.Parse(elements[0]);
+var minor = int.Parse(elements[1]);
+var patch = int.Parse(elements[2]);
 
-| Use                  | Example version                                           |
-|:---                  |:---                                                       |
-| Build system         | not applicable                                            |
-| Package version      | `1.2.3-uncontrolled.212.Dev01`                            |
-| InformationalVerion  | `1.2.3-uncontrolled.212.Dev01+feature-mybranch.6ab397d5`  |
+Logger.LogInfo($"Setting version {version}.")
 
----
+var priorVersion = Ouputs.InformationalVersion;
+var newVersion = new SemVersion(major, minor, patch,
+                                priorVersion.PrereleaseIdentifiers,
+                                priorVersion.MetadataIdentifiers);
 
-Depending host selected above. Initial development build version examples:
+Outputs.SetAllVersionPropertiesFrom(newVersion);
+```
 
-# [Initial development](#tab/initial-dev/controlled-build-github)
+This script will update the `Outputs` properties:
 
-GitHub (a controlled host) build ...
+* InformationalVersion
+* Version
+* AssemblyVersion
+* FileVersion
+* PackageVersion
+* BuildSystemVersion
+* PrereleaseLabel
+* IsInInitialDevelopment
 
-| Use                  | Example version                                           |
-|:---                  |:---                                                       |
-| Build system         | `0.2.3-experimental.7658.1`                               |
-| Package version      | `0.2.3-experimental.7658.1`                               |
-| InformationalVerion  | `0.2.3-experimental.7658.1+feature-mybranch.6ab397d5`     |
+Prerelease identifiers, metadata identifiers, and build number are not changed.
 
-# [Initial development](#tab/initial-dev/controlled-build-teamcity)
 
-TeamCity (a controlled host) build ...
-
-| Use                  | Example version                                           |
-|:---                  |:---                                                       |
-| Build system         | `0.2.3-experimental.7658`                                 |
-| Package version      | `0.2.3-experimental.7658`                                 |
-| InformationalVerion  | `0.2.3-experimental.7658+feature-mybranch.6ab397d5`       |
-
-# [Initial development](#tab/initial-dev/uncontrolled-build)
-
-A dev environmemnt (an uncontrolled host) build ...
-
-| Use                  | Example version                                           |
-|:---                  |:---                                                       |
-| Build system         | not applicable                                            |
-| Package version      | `0.2.3-experimental.212.Dev01`                            |
-| InformationalVerion  | `0.2.3-experimental.212.Dev01+feature-mybranch.6ab397d5`  |
-
----

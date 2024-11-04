@@ -39,6 +39,28 @@ internal class SemverTests
         Assert.That(result, Is.EqualTo(1));
     }
 
+    [Test]
+    public void AppendPrereleaseIdentifierTest()
+    {
+        var version = SemVersion.ParsedFrom(1, 2, 3, "alpha");
+
+        var prereleaseIdentifier = new PrereleaseIdentifier("HappyBirthday");
+        var result = version.WithPrerelease(version.PrereleaseIdentifiers.Append(prereleaseIdentifier));
+
+        Assert.That(result.ToString(), Is.EqualTo("1.2.3-alpha.HappyBirthday"));
+    }
+
+    [Test]
+    public void ChangeVersionKeepingIdentifiersTest()
+    {
+        var version = SemVersion.ParsedFrom(1, 2, 3, "alpha");
+
+        var prereleaseIdentifier = new PrereleaseIdentifier("HappyBirthday");
+        var result = version.WithPrerelease(version.PrereleaseIdentifiers.Append(prereleaseIdentifier));
+
+        Assert.That(result.ToString(), Is.EqualTo("1.2.3-alpha.HappyBirthday"));
+    }
+
     [TestCase("InitialDev", "Alpha", 1)]
     [TestCase("InitialDev", "Beta", 1)]
     [TestCase("Beta", "Alpha", 1)]

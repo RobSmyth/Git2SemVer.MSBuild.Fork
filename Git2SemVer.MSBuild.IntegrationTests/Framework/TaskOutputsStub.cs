@@ -37,4 +37,9 @@ internal class TaskOutputsStub : IVersionOutputs
     {
         throw new NotImplementedException();
     }
+
+    public void SetAllVersionPropertiesFrom(SemVersion informationalVersion)
+    {
+        throw new NotImplementedException();
+    }
 }

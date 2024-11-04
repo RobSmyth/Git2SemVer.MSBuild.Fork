@@ -8,7 +8,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.Tests;
 internal class RegexPatternTests
 {
     [Test]
-    public void CanObtainGroupNames()
+    public void CanObtainGroupNamesTest()
     {
         const string input = "main";
         var regex = new Regex("^((?<release>main|release)|(?<beta>feat(ure)?)|(?<alpha>.*))[\\/_]?");
@@ -25,5 +25,19 @@ internal class RegexPatternTests
 
             TestContext.Out.WriteLine($"  {groupName} - {match.Groups[groupName].Success}");
         }
+    }
+
+    [TestCase("FORCE-VERSION: 1.2.3")]
+    [TestCase("aaa FORCE-VERSION: 1.2.3 bbb")]
+    [TestCase("aaa \nFORCE-VERSION: 1.2.3\n dd")]
+    public void DemoScriptTest(string body)
+    {
+        var regex = new Regex(@"FORCE-VERSION: (?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)");
+
+        var match = regex.Match(body);
+
+        Assert.That(match.Groups["major"].Value, Is.EqualTo("1"));
+        Assert.That(match.Groups["minor"].Value, Is.EqualTo("2"));
+        Assert.That(match.Groups["patch"].Value, Is.EqualTo("3"));
     }
 }

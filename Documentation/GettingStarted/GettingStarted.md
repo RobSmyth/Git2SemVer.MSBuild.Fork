@@ -49,7 +49,8 @@ Try building the solution, all projects will be automatically versioned using [G
 
 ### First build
 
-If you have not installed Git2SemVer and configured your test solution for solution versioning, do it now. Instructions [here]((#installing)).
+If you have not installed Git2SemVer and configured your test solution for solution versioning, do it now. Instructions are [here](#installing).
+
 Your test solution must be under Git revision control.
 
 Rebuild and you will see the generated version in compiler's output. It will be something like:

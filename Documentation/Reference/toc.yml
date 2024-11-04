@@ -1,5 +1,3 @@
-- name: Concepts
-  href: Concepts.md
 - name: MSBuild properties
   href: MSBuildProperties.md
 - name: Glossary

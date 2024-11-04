@@ -51,6 +51,13 @@ internal sealed class VersionOutputs : IVersionOutputs
                                             string buildNumber,
                                             string buildContext)
     {
+        SetAllVersionPropertiesFrom(informationalVersion);
+        BuildNumber = buildNumber;
+        BuildContext = buildContext;
+    }
+
+    public void SetAllVersionPropertiesFrom(SemVersion informationalVersion)
+    {
         var version = informationalVersion.WithoutMetadata();
         var versionPrefix = informationalVersion.WithoutMetadata()
                                                 .WithoutPrerelease();
@@ -64,7 +71,5 @@ internal sealed class VersionOutputs : IVersionOutputs
             ? ""
             : informationalVersion.PrereleaseIdentifiers[0];
         IsInInitialDevelopment = informationalVersion.Major == 0;
-        BuildNumber = buildNumber;
-        BuildContext = buildContext;
     }
 }

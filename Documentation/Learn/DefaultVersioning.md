@@ -35,7 +35,7 @@ This is to ensure Semmmantic Versioning compliance and compatibility with common
 
 The full commit SHA is used rather than a short version to maintain consistency and compatibility with [SourceLink related changes in .NET SDK 8](https://learn.microsoft.com/en-us/dotnet/core/compatibility/sdk/8.0/source-link).
 
-## Maturity label
+## Maturity identifier
 
 The first identifier in a version's prelease identifiers is always the maturity label like `alpha` or `beta`.
 The maturity is derived from the branch name (see [Git2SemVer_BranchMaturityPattern](xref:msbuild-properties)).

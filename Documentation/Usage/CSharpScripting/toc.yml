@@ -1,7 +1,5 @@
 - name: C# Script
   uid: csharp-script
-- name: Example scripts
-  uid: example-scripts
 - name: SemVersion
   uid: semversion
 - name: Script logging

@@ -27,6 +27,9 @@ It is intended to make the server public in 2025.
 Each commit to the `main` branch triggers GitHub workflows that builds and tests the code
 and also build and deploy the documentation which is hosted on GitHub.
 
+> [!IMPORTANT]
+> GitHub builds are not released to NuGet.
+
 ## Versioning
 
 Git2SemVer uses a previously release Git2SemVer.MSBuild package to version itself.

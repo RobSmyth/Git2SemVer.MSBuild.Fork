@@ -163,6 +163,9 @@ public interface IVersionOutputs
     ///         the informational version holds all required elements.
     ///     </para>
     ///     <para>
+    ///         <seealso cref="BuildNumber"/> and <seealso cref="BuildContext"/> properties are updated.
+    ///     </para>
+    ///     <para>
     ///         This method will:
     ///         <list type="bullet">
     ///             <item>0.x.x versions are 'InitialDev' prereleases</item>
@@ -174,4 +177,28 @@ public interface IVersionOutputs
     ///     </para>
     /// </remarks>
     void SetAllVersionPropertiesFrom(SemVersion informationalVersion, string buildNumber, string buildContext);
+
+    /// <summary>
+    ///     Set all version properties from provided informational version.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         When there is a consistent version formating used across all version properties,
+    ///         the informational version holds all required elements.
+    ///     </para>
+    ///     <para>
+    ///         Does not update <seealso cref="BuildNumber"/> and <seealso cref="BuildContext"/> properties.
+    ///     </para>
+    ///     <para>
+    ///         This method will:
+    ///         <list type="bullet">
+    ///             <item>0.x.x versions are 'InitialDev' prereleases</item>
+    ///             <item>
+    ///                 Set <seealso cref="BuildSystemVersion" /> to <seealso cref="Version" />. Consider modifying
+    ///                 BuildSystemLabel after this method is called.
+    ///             </item>
+    ///         </list>
+    ///     </para>
+    /// </remarks>
+    void SetAllVersionPropertiesFrom(SemVersion informationalVersion);
 }

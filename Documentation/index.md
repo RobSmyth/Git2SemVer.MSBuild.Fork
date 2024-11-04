@@ -53,15 +53,17 @@ No limits .NET solution versioning.</div>
 >
 > Early testing and feedback would be great!
 
-Git2SemVer is a <a href="https://semver.org">Semantic Versioning</a> framework for .NET solution and project versioning.
-It works the same in both dotnet CLI and Visual Studio builds and for both developers and build system builds.
-It just happens using <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> message elements and Git tagging of each release.
+Git2SemVer is a Visual Studio and developer friendly <a href="https://semver.org">Semantic Versioning</a> framework for .NET solution and project versioning.
+It works the same with Visual Studio builds and dotnet CLI builds. 
+Every build, both developer boxes and the build system, get traceable build numbering (no commit counting).
 
-For solution versioning (were all projects in a .NET solution to share a common versioning) use the dotnet CLI tool `Git2SemVer.Tool` is used to setup the solution.
-For project versioning, adding the nuget package `Git2SemVer.MSBuild` to the .NET project.
-With the versioning being done within MSBuild, no build system version generation steps are needed and it works the same for both dotnet CLI and Visual Studio.
+Version determined by Git release tags and <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> compliant message elements.
+Use the same commit message elements you also use for changelog generation.
 
-For no limits customisation, Git2SemVer has an in-built C# script API that can change any part of the versioning.
+For no limits customisation, Git2SemVer detects and executes an optional [C# script](xref:csharp-script) that can change any part of the versioning.
+
+It can be configured for any mix of solution versioning and individual project versioning without external build-time tools.
+No build system version generation steps are needed, keeps developer and build environments simple and aligned.
 
 # Features
 
@@ -69,8 +71,8 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 <table>
 
  <tr>
-    <td style="width:33%">
-      <img src="https://noetictools.github.io/Git2SemVer/Images/OpenSource_128x128.png" height=128 />
+     <td style="width:33%">
+      <img src="https://noetictools.github.io/Git2SemVer/Images/VisualStudio_128x128.png" height=128 />
     </td>
     <td style="width:33%">
       <a href="https://semver.org/">
@@ -86,8 +88,8 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 
 <tr>
   <td>
-    <div class="featureTitle" >
-        Open Source
+    <div class="featureTitle">
+        Visual Studio Friendly
     </div>
   </td>
   <td>
@@ -105,24 +107,25 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 <tr>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
-        <p>Free and open source.</p>
+      <p>Versioning, with build numbering, on every Visual Studio or dotnet CLI build.</p>
+      <p>.NET developer friendly. Fast and silent</p>
     </div>
   </td>
 
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
-      <p style="text-align:center">Benefit from comprehensive Semmantic Version compliance with:
-      <a href="https://noetictools.github.io/Git2SemVer/Reference/Glossary.html##initial-development">Initial development</a> versioning, 
-      <a href="https://semver.org/#spec-item-5">Release versioning.</a>, 
-      and automatic <a href="https://noetictools.github.io/Git2SemVer/Reference/Glossary.html##build-number">build numbering</a>.</p>
+      <p style="text-align:center">
+        Benefit from comprehensive industry standard Semmantic Version compliance.
+      </p>
+      <p>
+        Only tool compliant with <a href="https://noetictools.github.io/Git2SemVer/Reference/Glossary.html##initial-development">initial development versioning.</a> 
     </div>
   </td>
 
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
-        <p>Use Conventional Commits commit message elements to bump versions:</p>
         <p style="margin-top: 0em;margin-bottom: 0em;">
-          <i>fix:</i> | <i>feat:</i> | <i>BREAKING CHANGE:</i>
+          Use the same commit message standards for versioning that you also use for automated changelog generation.
         </p>
     </div>
   </td>
@@ -166,27 +169,27 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody" style="vertical-align:top">
       <p>
-      Visual Studio, VS Code, and dotnet CLI are all the same to Git2SemVer.
-      Build system and developer environments all get versioning too.
-      </p>
-      <p>
-      No custom versioning build steps or scripts required.
+        Visual Studio, VS Code, and dotnet CLI are all the same to Git2SemVer.
+        Build system and developer environments all get versioning without custom build steps or scripts.
       </p>
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
       <p>
-        Automatic build numbering on all builds on <b>developer boxes</b> and the build system.
+        Automatic build numbering on all <b>developer boxes</b> and the build system builds.
       <p>
       <p>
-        Full traceability. <a href="https://noetictools.github.io/Git2SemVer/Reference/Glossary.html##build-height">Build height</a> (commit counting) <b>NOT</b> used.
+        Full traceability.
+        <a href="https://noetictools.github.io/Git2SemVer/Reference/Glossary.html##build-height">Build height</a> <b>NOT</b> used.
       </p>
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
-        <p><b>No limits</b> customisable by built-in C# scripting and versioning API.</p>
+        <p>
+          <b>No limits customisable</b> by built-in C# scripting with a versioning API.
+        </p>
     </div>
   </td>
 </tr>
@@ -194,8 +197,8 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 <!-- Row 3 -->
 
 <tr>
-    <td >
-      <img src="https://noetictools.github.io/Git2SemVer/Images/VisualStudio_128x128.png" height=128 />
+    <td style="width:33%">
+      <img src="https://noetictools.github.io/Git2SemVer/Images/OpenSource_128x128.png" height=128 />
     </td>
     <td >
       <img src="https://noetictools.github.io/Git2SemVer/Images/ComputerMonitor.png" height=128 />
@@ -206,8 +209,8 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 </tr>
 <tr>
   <td>
-    <div class="featureTitle">
-        Visual Studio Friendly
+    <div class="featureTitle" >
+        Open Source
     </div>
   </td>
   <td>
@@ -224,8 +227,7 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 <tr>
   <td class="featureBody" style="vertical-align:top">
     <div class="featureBody">
-      <p>Implemented in MSBuild it works the same with dotnet Visual Studio and CLI.</p>
-      <p>.NET developer friendly.</p>
+        <p>Free and open source.</p>
     </div>
   </td>
   <td class="featureBody" style="vertical-align:top">
@@ -312,10 +314,10 @@ For no limits customisation, Git2SemVer has an in-built C# script API that can c
 ## Quick links
 
 * [Getting Started](xref:getting-started)
+* [Default Versioning](xref:default-versioning)
 * Usage
   * [Build Hosts](xref:build-hosts)
   * [C# Script](xref:csharp-script)
-* [Reference](xref:concepts)
 
  
 ## License
