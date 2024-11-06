@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using NoeticTools.Common.Logging;
+using NoeticTools.Common.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Config;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Semver;
@@ -23,7 +24,7 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
         _logger = logger;
     }
 
-    public void Build(IBuildHost host, IVersionGeneratorInputs inputs, IVersionOutputs outputs)
+    public void Build(IBuildHost host, IGitTool gitTool, IVersionGeneratorInputs inputs, IVersionOutputs outputs)
     {
         _logger.LogDebug("Running default version builder.");
         using (_logger.EnterLogScope())

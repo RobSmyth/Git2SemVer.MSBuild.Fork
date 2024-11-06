@@ -1,4 +1,5 @@
-﻿using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
+﻿using NoeticTools.Common.Tools.Git;
+using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 
 
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders;
@@ -8,5 +9,5 @@ namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders;
 /// </summary>
 public interface IVersionBuilder
 {
-    void Build(IBuildHost host, IVersionGeneratorInputs inputs, IVersionOutputs outputs);
+    void Build(IBuildHost host, IGitTool gitTool, IVersionGeneratorInputs inputs, IVersionOutputs outputs);
 }

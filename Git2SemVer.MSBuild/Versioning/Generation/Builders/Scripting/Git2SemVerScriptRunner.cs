@@ -18,9 +18,11 @@ public sealed class Git2SemVerScriptRunner
     private readonly IVersionGeneratorInputs _inputs;
     private readonly ILogger _logger;
     private readonly IVersionOutputs _outputs;
+    private readonly IGitTool _gitTool;
 
     public Git2SemVerScriptRunner(MSBuildScriptRunner innerScriptRunner,
                                   IBuildHost host,
+                                  IGitTool gitTool,
                                   IVersionGeneratorInputs inputs,
                                   IVersionOutputs outputs,
                                   ILogger logger)
@@ -29,6 +31,7 @@ public sealed class Git2SemVerScriptRunner
         _outputs = outputs;
         _innerScriptRunner = innerScriptRunner;
         _host = host;
+        _gitTool = gitTool;
         _logger = logger;
     }
 
@@ -81,7 +84,7 @@ public sealed class Git2SemVerScriptRunner
             typeof(SemVersion)
         ]);
 
-        var context = new VersioningContext(_inputs, _outputs, _host, _logger);
+        var context = new VersioningContext(_inputs, _outputs, _host, _gitTool, _logger);
         await _innerScriptRunner.RunScript(context, _inputs.BuildScriptPath, MetadataReferences, inMemoryTypes).ConfigureAwait(true);
 
         stopwatch.Stop();

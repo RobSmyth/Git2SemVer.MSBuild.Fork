@@ -1,5 +1,6 @@
 ﻿using NoeticTools.Common;
 using NoeticTools.Common.Logging;
+using NoeticTools.Common.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting;
@@ -39,7 +40,7 @@ public class ScriptExecutionIntegrationTests : ScriptingTestsBase
         var context = GetContext("12345", "1");
         var runner = new ScriptVersionBuilder(Logger);
 
-        runner.Build(context.Host, context.Inputs, context.Outputs);
+        runner.Build(context.Host, Git, context.Inputs, context.Outputs);
 
         Assert.That(Logger.HasError, Is.False);
     }
@@ -51,7 +52,7 @@ public class ScriptExecutionIntegrationTests : ScriptingTestsBase
         var context = GetContext("12345", "MACHINE-NAME");
         var runner = new ScriptVersionBuilder(Logger);
 
-        runner.Build(context.Host, context.Inputs, context.Outputs);
+        runner.Build(context.Host, Git, context.Inputs, context.Outputs);
 
         Assert.That(Logger.HasError, Is.False);
     }
@@ -63,7 +64,7 @@ public class ScriptExecutionIntegrationTests : ScriptingTestsBase
         var context = GetContext("12345", "MACHINE-NAME");
         var runner = new ScriptVersionBuilder(Logger);
 
-        runner.Build(context.Host, context.Inputs, context.Outputs);
+        runner.Build(context.Host, Git, context.Inputs, context.Outputs);
 
         Assert.That(Logger.HasError, Is.False);
     }
@@ -78,7 +79,7 @@ public class ScriptExecutionIntegrationTests : ScriptingTestsBase
             BuildContext = hostBuildContext
         };
 
-        return new VersioningContext(taskInputs, new TaskOutputsStub(), buildHost, Logger);
+        return new VersioningContext(taskInputs, new TaskOutputsStub(), buildHost, Git, Logger);
     }
 
     private IVersionGeneratorInputs GetTaskInputs()

@@ -26,6 +26,7 @@ internal class DefaultVersionBuilderTests
     private Mock<IHistoryPaths> _paths;
     private DefaultVersionBuilder _target;
     private SemVersion _version = null!;
+    private Mock<IGitTool> _git;
 
     [SetUp]
     public void SetUp()
@@ -45,6 +46,7 @@ internal class DefaultVersionBuilderTests
         _headCommit = new Mock<ICommit>();
         _gitOutputs = new Mock<IGitOutputs>();
         _outputs = new Mock<IVersionOutputs>();
+        _git = new Mock<IGitTool>();
 
         _host.Setup(x => x.BuildNumber).Returns("BUILD_NUMBER");
         _host.Setup(x => x.BuildContext).Returns("BUILD_CONTEXT");
@@ -80,7 +82,7 @@ internal class DefaultVersionBuilderTests
     {
         SetupInputs(version, branchName);
 
-        _target.Build(_host.Object, _inputs.Object, _outputs.Object);
+        _target.Build(_host.Object, _git.Object, _inputs.Object, _outputs.Object);
 
         var expectedVersion = _version.WithPrerelease(expectedPrereleaseLabel, "77")
                                       .WithMetadata(branchName.ToNormalisedSemVerIdentifier(), "001");
@@ -98,7 +100,7 @@ internal class DefaultVersionBuilderTests
     {
         SetupInputs(version, branchName);
 
-        _target.Build(_host.Object, _inputs.Object, _outputs.Object);
+        _target.Build(_host.Object, _git.Object, _inputs.Object, _outputs.Object);
 
         _outputs.VerifySet(x => x.BuildSystemVersion = _version, Times.Once);
     }

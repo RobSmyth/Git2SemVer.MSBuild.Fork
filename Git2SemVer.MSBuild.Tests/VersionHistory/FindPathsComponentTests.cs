@@ -24,8 +24,6 @@ internal class FindPathsComponentTests
             Level = LoggingLevel.Debug
         };
 
-        //var gitTool = new GitTool(@"C:/Sources/NoeticTools/Git2SemVer.Fork", logger);
-        //var gitTool = new GitTool(@"C:/Sources/NoeticTools/Net2HassMqtt", logger);
         var gitTool = new GitTool(logger);
         TestContext.Out.WriteLine();
         var commitsRepo = new CommitsRepository(gitTool);

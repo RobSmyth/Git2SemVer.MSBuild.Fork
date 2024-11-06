@@ -2,6 +2,7 @@ using System.Diagnostics;
 using NoeticTools.Common.Logging;
 using NoeticTools.Common.Tools;
 using NoeticTools.Common.Tools.DotnetCli;
+using NoeticTools.Common.Tools.Git;
 using NoeticTools.Testing.Common;
 
 
@@ -43,5 +44,8 @@ public abstract class ScriptingTestsBase
     {
         Logger = new NUnitTaskLogger();
         DotNetCli = new DotNetTool(new ProcessCli(Logger));
+        Git = new GitTool(Logger);
     }
+
+    protected GitTool Git { get; private set; }
 }

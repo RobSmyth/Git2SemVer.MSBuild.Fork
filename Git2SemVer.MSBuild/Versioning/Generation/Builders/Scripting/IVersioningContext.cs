@@ -1,4 +1,5 @@
 ﻿using NoeticTools.Common.Logging;
+using NoeticTools.Common.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.MSBuild.Tasking;
 
@@ -14,6 +15,11 @@ public interface IVersioningContext
     ///     The build's host properties. Get build number here.
     /// </summary>
     IBuildHost Host { get; }
+
+    /// <summary>
+    ///     Git tool for running git commands.
+    /// </summary>
+    IGitTool Git { get; }
 
     /// <summary>
     ///     MSBuild input properties.

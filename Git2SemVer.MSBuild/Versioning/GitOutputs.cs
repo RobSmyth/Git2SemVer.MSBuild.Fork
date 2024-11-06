@@ -7,6 +7,9 @@ using Semver;
 
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning;
 
+/// <summary>
+///     Git output properties for JSON serialisation.
+/// </summary>
 public sealed class GitOutputs : IGitOutputs
 {
     [JsonConstructor]

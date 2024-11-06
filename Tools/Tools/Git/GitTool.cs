@@ -1,8 +1,10 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using Injectio.Attributes;
 using NoeticTools.Common.ConventionCommits;
 using NoeticTools.Common.Exceptions;
 using NoeticTools.Common.Logging;
+using Semver;
 
 
 #pragma warning disable SYSLIB1045
@@ -28,9 +30,9 @@ public class GitTool : IGitTool
     private const char RecordSeparator = CharacterConstants.RS;
     private readonly ConventionalCommitsParser _conventionalCommitParser;
     private readonly string _gitLogFormat;
-
     private readonly IGitProcessCli _inner;
     private readonly ILogger _logger;
+    private readonly SemVersion _assumedLowestGitVersion = new(2,0,0); // Tested with 2.41.0. Do not expect compatibility below 2.0.0.
 
     public GitTool(ILogger logger)
     {
@@ -38,6 +40,12 @@ public class GitTool : IGitTool
         _logger = logger;
         _inner = new GitProcessCli(logger);
         _conventionalCommitParser = new ConventionalCommitsParser();
+        var gitVersion = GetVersion();
+        if (gitVersion != null &&
+            gitVersion.ComparePrecedenceTo(_assumedLowestGitVersion) < 0)
+        {
+            _logger.LogError($"Git must be version {_assumedLowestGitVersion} or later.");
+        }
         BranchName = GetBranchName();
         HasLocalChanges = GetHasLocalChanges();
     }
@@ -151,15 +159,42 @@ public class GitTool : IGitTool
         return result.stdOutput.Length > 0;
     }
 
-    private string GetVersion()
+    /// <summary>
+    ///     Get a semantic version representation of the Git version.
+    /// </summary>
+    private SemVersion? GetVersion()
     {
         var process = new ProcessCli(_logger);
         var result = process.Run("git", "--version");
         if (result.returnCode != 0)
         {
-            _logger.LogError($"Unable to read git version. Return code was '{result.returnCode}'.");
+            _logger.LogError($"Unable to read git version. Return code was '{result.returnCode}'. Git may not be executable from current directory.");
         }
 
-        return result.stdOutput;
+        var response = result.stdOutput;
+        try
+        {
+            var regex = new Regex(@"^git version (?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)\.?(?<metadata>.*?)?$");
+            var match = regex.Match(response.Trim());
+            if (!match.Success)
+            {
+                _logger.LogWarning($"Unable to parse git --version response: '{response}'.");
+                return null;
+            }
+
+            var major = int.Parse(match.Groups["major"].Value);
+            var minor = int.Parse(match.Groups["minor"].Value);
+            var patch = int.Parse(match.Groups["patch"].Value);
+            var version = new SemVersion(major, minor, patch);
+            var metadata = match.Groups["metadata"].Value;
+            version = version.WithMetadataParsedFrom(metadata);
+            _logger.LogDebug("Git version (in Semver format) is '{0}'", version.ToString());
+            return version;
+        }
+        catch (Exception exception)
+        {
+            _logger.LogWarning($"Unable to parse git --version response: '{response}'. Exception: {exception.Message}.");
+            return null;
+        }
     }
 }
