@@ -47,7 +47,7 @@ public sealed class MSBuildScriptRunner
             {
                 using (var loader = new InteractiveAssemblyLoader())
                 {
-                    var globalsType = globalContext!.GetType();
+                    var globalsType = globalContext.GetType();
                     foreach (var inMemoryType in inMemoryTypes)
                     {
                         loader.RegisterDependency(inMemoryType.Assembly);
@@ -77,8 +77,8 @@ public sealed class MSBuildScriptRunner
 
     internal static ScriptOptions GetScriptOptions(IReadOnlyList<Type> metadataReferences)
     {
-        var types = new List<Type>(new[]
-        {
+        var types = new List<Type>(
+        [
             typeof(MSBuildScriptRunner),
             typeof(MSBuildGlobalProperties),
             typeof(string),
@@ -95,7 +95,7 @@ public sealed class MSBuildScriptRunner
             typeof(Stopwatch),
             typeof(ICollection),
             typeof(ICollection<>)
-        });
+        ]);
         types.AddRange(metadataReferences);
 
         types = types.Distinct().ToList();

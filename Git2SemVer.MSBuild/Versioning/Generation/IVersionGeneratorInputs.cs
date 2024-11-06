@@ -101,7 +101,7 @@ public interface IVersionGeneratorInputs : IMSBuildTask
 
     string IntermediateOutputDirectory { get; }
 
-    VersioningModeEnum Mode { get; set; }
+    VersioningMode VersioningMode { get; }
 
     /// <summary>
     ///     Optional MSBuild <c>Git2SemVer_RunScript</c> property.
@@ -179,5 +179,7 @@ public interface IVersionGeneratorInputs : IMSBuildTask
     /// </remarks>
     string WorkingDirectory { get; }
 
-    bool Validate(ILogger logger);
+    string BuildIdFormat { get; }
+
+    bool ValidateScriptInputs(ILogger logger);
 }

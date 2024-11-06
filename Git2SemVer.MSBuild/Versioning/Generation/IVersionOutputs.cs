@@ -2,6 +2,7 @@
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Semver;
 using Semver;
+// ReSharper disable UnusedMemberInSuper.Global
 
 
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
@@ -15,6 +16,9 @@ public interface IVersionOutputs
     ///     The Microsoft assembly version.
     /// </summary>
     /// <remarks>
+    ///     <para>
+    ///         This value will be written to the MSBuild AssemblyVersion property.
+    ///     </para>
     ///     <para>
     ///         To conform to common usage Git2SemVer's default approach is to make this appear as a three part Semantic
     ///         Version.
@@ -77,6 +81,9 @@ public interface IVersionOutputs
     /// </summary>
     /// <remarks>
     ///     <para>
+    ///         This value will be written to the MSBuild FileVersion property.
+    ///     </para>
+    ///     <para>
     ///         To conform to common usage Git2SemVer's default approach is to make this appear as a three part Semantic
     ///         Version.
     ///     </para>
@@ -99,6 +106,11 @@ public interface IVersionOutputs
 
     /// <summary>
     ///     The calculated informational version.
+    /// </summary>
+    /// <summary>
+    ///     <para>
+    ///         This value will be written to the MSBuild InformationalVersion property.
+    ///     </para>
     /// </summary>
     [JsonConverter(typeof(SemVersionJsonConverter))]
     SemVersion? InformationalVersion { get; set; }
@@ -123,15 +135,22 @@ public interface IVersionOutputs
     /// <summary>
     ///     Optional script output to MSBuild property <c>Git2SemVer_Output1</c>
     /// </summary>
+    // ReSharper disable once UnusedMember.Global
     string Output1 { get; set; }
 
     /// <summary>
     ///     Optional script output to MSBuild property <c>Git2SemVer_Output2</c>
     /// </summary>
+    // ReSharper disable once UnusedMember.Global
     string Output2 { get; set; }
 
     /// <summary>
     ///     NuGet package version.
+    /// </summary>
+    /// <summary>
+    ///     <para>
+    ///         This value will be written to the MSBuild PackageVersion property.
+    ///     </para>
     /// </summary>
     [JsonConverter(typeof(SemVersionJsonConverter))]
     SemVersion? PackageVersion { get; set; }
@@ -150,6 +169,11 @@ public interface IVersionOutputs
 
     /// <summary>
     ///     The calculated version without metadata identifiers.
+    /// </summary>
+    /// <summary>
+    ///     <para>
+    ///         This value will be written to the MSBuild Version property.
+    ///     </para>
     /// </summary>
     [JsonConverter(typeof(SemVersionJsonConverter))]
     SemVersion? Version { get; set; }

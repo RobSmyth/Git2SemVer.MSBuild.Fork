@@ -19,29 +19,29 @@
 
     <!-- Generate version information -->
 
-    <Git2SemVerGenerateVersionTask Input_BuildNumber="$(Git2SemVer_BuildNumber)"
-                                   Input_BuildContext="$(Git2SemVer_BuildContext)"
-                                   Input_BuildIdFormat="$(Git2SemVer_BuildIDFormat)"
-                                   Input_Version="$(Version)"
-                                   Input_UpdateHostBuildLabel="$(Git2SemVer_UpdateHostBuildLabel)"
-                                   Input_ScriptArgs="$(Git2SemVer_ScriptArgs)"
-                                   Input_HostType="$(Git2SemVer_HostType)"
-                                   Input_BuildScriptPath="$(Git2SemVer_ScriptPath)"
-                                   Input_BranchMaturityPattern="$(Git2SemVer_BranchMaturityPattern)"
-                                   Input_Env_WorkingDirectory="$(MSBuildProjectDirectory)"
-                                   Input_Env_SharedDirectory="$(Git2SemVer_ShareDirectory)"
-                                   Input_Env_SharedVersioningPropsFile="$(Git2SemVer_SharedVersioningJsonFile)"
-                                   Input_Env_IntermediateOutputDirectory="$(Git2SemVer_IntermediateOutputPath)"
-                                   Input_Env_Mode="$(Git2SemVer_Mode)">
+    <Git2SemVerGenerateVersionTask BuildNumber="$(Git2SemVer_BuildNumber)"
+                                   BuildContext="$(Git2SemVer_BuildContext)"
+                                   BuildIdFormat="$(Git2SemVer_BuildIDFormat)"
+                                   Version="$(Version)"
+                                   UpdateHostBuildLabel="$(Git2SemVer_UpdateHostBuildLabel)"
+                                   ScriptArgs="$(Git2SemVer_ScriptArgs)"
+                                   HostType="$(Git2SemVer_HostType)"
+                                   BuildScriptPath="$(Git2SemVer_ScriptPath)"
+                                   BranchMaturityPattern="$(Git2SemVer_BranchMaturityPattern)"
+                                   WorkingDirectory="$(MSBuildProjectDirectory)"
+                                   SolutionSharedDirectory="$(Git2SemVer_ShareDirectory)"
+                                   SolutionSharedVersioningPropsFile="$(Git2SemVer_SharedVersioningJsonFile)"
+                                   IntermediateOutputDirectory="$(Git2SemVer_IntermediateOutputPath)"
+                                   Mode="$(Git2SemVer_Mode)">
 
-      <Output TaskParameter="Output_AssemblyVersion" PropertyName="Git2SemVer_AssemblyVersion" />
-      <Output TaskParameter="Output_CommitsSinceLastRelease" PropertyName="Git2SemVer_CommitsSinceLastRelease" />
-      <Output TaskParameter="Output_FileVersion" PropertyName="Git2SemVer_FileVersion" />
-      <Output TaskParameter="Output_InformationalVersion" PropertyName="Git2SemVer_InformationalVersion" />
-      <Output TaskParameter="Output_PackageVersion" PropertyName="Git2SemVer_PackageVersion" />
-      <Output TaskParameter="Output_Version" PropertyName="Git2SemVer_Version" />
-      <Output TaskParameter="Output_VersionPrefix" PropertyName="Git2SemVer_VersionPrefix" />
-      <Output TaskParameter="Output_VersionSuffix" PropertyName="Git2SemVer_VersionSuffix" />
+      <Output TaskParameter="AssemblyVersion" PropertyName="Git2SemVer_AssemblyVersion" />
+      <Output TaskParameter="CommitsSinceLastRelease" PropertyName="Git2SemVer_CommitsSinceLastRelease" />
+      <Output TaskParameter="FileVersion" PropertyName="Git2SemVer_FileVersion" />
+      <Output TaskParameter="InformationalVersion" PropertyName="Git2SemVer_InformationalVersion" />
+      <Output TaskParameter="PackageVersion" PropertyName="Git2SemVer_PackageVersion" />
+      <Output TaskParameter="Version" PropertyName="Git2SemVer_Version" />
+      <Output TaskParameter="VersionPrefix" PropertyName="Git2SemVer_VersionPrefix" />
+      <Output TaskParameter="VersionSuffix" PropertyName="Git2SemVer_VersionSuffix" />
       <Output TaskParameter="Output1" PropertyName="Git2SemVer_Output1" />
       <Output TaskParameter="Output2" PropertyName="Git2SemVer_Output2" />
 
@@ -72,16 +72,16 @@
           Outputs="$(Git2SemVer_RestoredPropertiesStamp)"
           Condition="'$(Git2SemVer_Disable)' == 'false'">
 
-    <Git2SemVerRestoreVersionPropertiesTask Input_VersionCacheDirectory="$(Git2SemVer_VersionCacheDirectory)">
+    <Git2SemVerRestoreVersionPropertiesTask VersionCacheDirectory="$(Git2SemVer_VersionCacheDirectory)">
 
-      <Output TaskParameter="Output_AssemblyVersion" PropertyName="Git2SemVer_AssemblyVersion" />
-      <Output TaskParameter="Output_CommitsSinceLastRelease" PropertyName="Git2SemVer_CommitsSinceLastRelease" />
-      <Output TaskParameter="Output_FileVersion" PropertyName="Git2SemVer_FileVersion" />
-      <Output TaskParameter="Output_InformationalVersion" PropertyName="Git2SemVer_InformationalVersion" />
-      <Output TaskParameter="Output_PackageVersion" PropertyName="Git2SemVer_PackageVersion" />
-      <Output TaskParameter="Output_Version" PropertyName="Git2SemVer_Version" />
-      <Output TaskParameter="Output_VersionPrefix" PropertyName="Git2SemVer_VersionPrefix" />
-      <Output TaskParameter="Output_VersionSuffix" PropertyName="Git2SemVer_VersionSuffix" />
+      <Output TaskParameter="AssemblyVersion" PropertyName="Git2SemVer_AssemblyVersion" />
+      <Output TaskParameter="CommitsSinceLastRelease" PropertyName="Git2SemVer_CommitsSinceLastRelease" />
+      <Output TaskParameter="FileVersion" PropertyName="Git2SemVer_FileVersion" />
+      <Output TaskParameter="InformationalVersion" PropertyName="Git2SemVer_InformationalVersion" />
+      <Output TaskParameter="PackageVersion" PropertyName="Git2SemVer_PackageVersion" />
+      <Output TaskParameter="Version" PropertyName="Git2SemVer_Version" />
+      <Output TaskParameter="VersionPrefix" PropertyName="Git2SemVer_VersionPrefix" />
+      <Output TaskParameter="VersionSuffix" PropertyName="Git2SemVer_VersionSuffix" />
       <Output TaskParameter="Output1" PropertyName="Git2SemVer_Output1" />
       <Output TaskParameter="Output2" PropertyName="Git2SemVer_Output2" />
 

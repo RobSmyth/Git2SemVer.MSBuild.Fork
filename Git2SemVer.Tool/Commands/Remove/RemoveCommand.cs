@@ -4,7 +4,6 @@ using NoeticTools.Common;
 using NoeticTools.Common.Logging;
 using NoeticTools.Common.Tools;
 using NoeticTools.Common.Tools.DotnetCli;
-using NoeticTools.Git2SemVer.Tool.Commands.Add;
 using NoeticTools.Git2SemVer.Tool.Framework;
 using NoeticTools.Git2SemVer.Tool.MSBuild;
 using NoeticTools.Git2SemVer.Tool.MSBuild.Solutions;
@@ -21,13 +20,10 @@ internal sealed class RemoveCommand : IRemoveCommand
     private readonly ISolutionFinder _solutionFinder;
 
     public RemoveCommand(ISolutionFinder solutionFinder,
-                         IUserOptionsPrompt userOptionsPrompt,
                          IDotNetTool dotNetCli,
                          IConsoleIO console,
-                         IContentEditor contentEditor,
-                         ILogger logger)
+                         IContentEditor contentEditor)
     {
-        UserOptionsPrompt = userOptionsPrompt;
         _solutionFinder = solutionFinder;
         _dotNetCli = dotNetCli;
         _console = console;
@@ -35,8 +31,6 @@ internal sealed class RemoveCommand : IRemoveCommand
     }
 
     public bool HasError => _console.HasError;
-
-    public IUserOptionsPrompt UserOptionsPrompt { get; }
 
     public void Execute(string inputSolutionFile, bool unattended)
     {
@@ -69,7 +63,7 @@ internal sealed class RemoveCommand : IRemoveCommand
 
         // todo - Get name of versioning project
         const string leaderProjectName = SolutionVersioningConstants.DefaultVersioningProjectName;
-        var solutionDirectory = solution!.Directory!;
+        var solutionDirectory = solution.Directory!;
 
         var changeMade = false;
         _console.WriteInfoLine("Running:");

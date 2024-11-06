@@ -10,18 +10,17 @@ namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
 
 internal sealed class GeneratedVersionsJsonFile : IGeneratedOutputsJsonFile
 {
-    public static string GetContent(VersionOutputs outputs)
+    private static readonly JsonSerializerOptions SerialiseOptions = new JsonSerializerOptions
     {
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin),
-            IncludeFields = false
-        };
+        WriteIndented = true,
+        Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin),
+        IncludeFields = false
+    };
 
+    public static string ToJson(VersionOutputs outputs)
+    {
         var versionInfo = new VersioningInfo { Git2SemVerVersionInfo = outputs };
-        var json = JsonSerializer.Serialize(versionInfo, options);
-        return json;
+        return JsonSerializer.Serialize(versionInfo, SerialiseOptions);
     }
 
     public VersionOutputs Load(string directory)
@@ -43,9 +42,9 @@ internal sealed class GeneratedVersionsJsonFile : IGeneratedOutputsJsonFile
             Directory.CreateDirectory(directory);
         }
 
-        var json = GetContent(outputs);
+        var json = ToJson(outputs);
         var existingJson = LoadJson(directory);
-        if (json.Equals(existingJson, StringComparison.InvariantCulture))
+        if (json.Equals(existingJson, StringComparison.Ordinal))
         {
             return;
         }
@@ -58,7 +57,7 @@ internal sealed class GeneratedVersionsJsonFile : IGeneratedOutputsJsonFile
         return Path.Combine(directory, Git2SemverConstants.SharedVersionJsonPropertiesFilename);
     }
 
-    private string LoadJson(string directory)
+    private static string LoadJson(string directory)
     {
         var propertiesFilePath = GetFilePath(directory);
         if (!File.Exists(propertiesFilePath))

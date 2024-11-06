@@ -23,7 +23,8 @@ internal class VersionGenerator
     private readonly ILogger _logger;
     private readonly IVersionBuilder _scriptBuilder;
 
-    public VersionGenerator(IVersionGeneratorInputs inputs, IBuildHost host,
+    public VersionGenerator(IVersionGeneratorInputs inputs, 
+                            IBuildHost host,
                             IGeneratedOutputsJsonFile generatedOutputsJsonFile,
                             IGeneratedOutputsPropFile generatedOutputsPropFile,
                             IGitTool gitTool,
@@ -47,33 +48,39 @@ internal class VersionGenerator
     {
         try
         {
-            if (_inputs.Mode != VersioningModeEnum.SolutionClientProject)
-            {
-                var output = GenerateVersion();
-                if (_inputs.UpdateHostBuildLabel && output.BuildSystemVersion != null)
-                {
-                    _host.SetBuildLabel(output.BuildSystemVersion.ToString());
-                }
-
-                return output;
-            }
-
-            var localCache = _generatedOutputsJsonFile.Load(_inputs.IntermediateOutputDirectory);
-            if (localCache.BuildNumber == _host.BuildNumber)
-            {
-                return GenerateVersion();
-            }
-
-            // Copy solution shared file to local outputs file
-            var generatedOutputs = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
-            WriteOutputsToFile(_inputs.IntermediateOutputDirectory, generatedOutputs);
-            return generatedOutputs;
+            return _inputs.VersioningMode == VersioningMode.SolutionClientProject ? 
+                PerformSolutionClientVersioning() : PerformProjectVersioning();
         }
         catch (Exception exception)
         {
             _logger.LogError(exception);
             throw;
         }
+    }
+
+    private IVersionOutputs PerformProjectVersioning()
+    {
+        var output = GenerateVersion();
+        if (_inputs.UpdateHostBuildLabel && output.BuildSystemVersion != null)
+        {
+            _host.SetBuildLabel(output.BuildSystemVersion.ToString());
+        }
+
+        return output;
+    }
+
+    private IVersionOutputs PerformSolutionClientVersioning()
+    {
+        var localCache = _generatedOutputsJsonFile.Load(_inputs.IntermediateOutputDirectory);
+        if (localCache.BuildNumber == _host.BuildNumber)
+        {
+            return GenerateVersion();
+        }
+
+        // Copy solution shared file to local outputs file
+        var generatedOutputs = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
+        WriteOutputsToFile(_inputs.IntermediateOutputDirectory, generatedOutputs);
+        return generatedOutputs;
     }
 
     private IVersionOutputs GenerateVersion()
@@ -96,14 +103,14 @@ internal class VersionGenerator
 
     private void RunBuilders(VersionOutputs outputs, HistoryPaths historyPaths)
     {
-        _defaultVersionBuilderFactory.Create(historyPaths, _host, _inputs, outputs).Build(_host, _inputs, outputs);
+        _defaultVersionBuilderFactory.Create(historyPaths).Build(_host, _inputs, outputs);
         _scriptBuilder.Build(_host, _inputs, outputs);
     }
 
     private void SaveGeneratedVersions(VersionOutputs outputs)
     {
         WriteOutputsToFile(_inputs.IntermediateOutputDirectory, outputs);
-        if (_inputs.Mode != VersioningModeEnum.StandAloneProject)
+        if (_inputs.VersioningMode != VersioningMode.StandAloneProject)
         {
             WriteOutputsToFile(_inputs.SolutionSharedDirectory, outputs);
         }

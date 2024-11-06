@@ -1,6 +1,9 @@
 ﻿using Microsoft.Build.Framework;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using ILogger = NoeticTools.Common.Logging.ILogger;
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 
 namespace NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
@@ -10,8 +13,6 @@ public class VersionGeneratorInputsStub : IVersionGeneratorInputs
     public string BranchMaturityPattern { get; set; } = "";
 
     public string BuildContext { get; set; } = string.Empty;
-
-    public IBuildEngine BuildEngine { get; set; } = new BuildEngineStub();
 
     public IBuildEngine9 BuildEngine9 { get; set; } = new BuildEngine9Stub(new Dictionary<string, string>());
 
@@ -23,7 +24,7 @@ public class VersionGeneratorInputsStub : IVersionGeneratorInputs
 
     public string IntermediateOutputDirectory { get; } = "";
 
-    public VersioningModeEnum Mode { get; set; }
+    public VersioningMode VersioningMode { get; set; }
 
     public bool? RunScript { get; set; }
 
@@ -41,7 +42,9 @@ public class VersionGeneratorInputsStub : IVersionGeneratorInputs
 
     public string WorkingDirectory { get; set; } = "";
 
-    public bool Validate(ILogger logger)
+    public string BuildIdFormat { get; } = "";
+
+    public bool ValidateScriptInputs(ILogger logger)
     {
         return true;
     }

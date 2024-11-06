@@ -1,4 +1,5 @@
-﻿using NoeticTools.Common.Logging;
+﻿using JetBrains.Annotations;
+using NoeticTools.Common.Logging;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.MSBuild.Tasking;
 
@@ -16,8 +17,14 @@ public sealed class ScriptVersionBuilder : IVersionBuilder
 
     public void Build(IBuildHost host, IVersionGeneratorInputs inputs, IVersionOutputs outputs)
     {
-        if (inputs.RunScript == false)
+        if (inputs == null)
         {
+            throw new ArgumentException("Build requires non-null inputs.", nameof(inputs));
+        }
+
+        if (inputs.RunScript is false)
+        {
+            _logger.LogDebug($"User C# script is disabled. Not run.");
             return;
         }
 
@@ -26,6 +33,7 @@ public sealed class ScriptVersionBuilder : IVersionBuilder
                                                       inputs,
                                                       outputs,
                                                       _logger);
-        var task = scriptRunner!.RunScript();
+        // ReSharper disable once UnusedVariable
+        var task = scriptRunner.RunScript();
     }
 }

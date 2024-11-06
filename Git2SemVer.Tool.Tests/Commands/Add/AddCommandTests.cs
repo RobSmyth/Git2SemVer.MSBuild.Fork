@@ -17,7 +17,7 @@ internal class AddCommandTests
     private Mock<IAddPreconditionValidator> _addPreconditionValidator;
     private Mock<IConsoleIO> _consoleIO;
     private Mock<IDotNetTool> _dotNetTool;
-    private Mock<IEmbeddedResources<Git2SemverEmbeddedResources>> _embeddedResources;
+    private Mock<IEmbeddedResources> _embeddedResources;
     private NUnitTaskLogger _logger;
     private Mock<IProjectDocumentReader> _projectReader;
     private Mock<ISolutionFinder> _solutionFinder;
@@ -31,7 +31,7 @@ internal class AddCommandTests
         _solutionFinder = new Mock<ISolutionFinder>();
         _userOptionsPrompt = new Mock<IUserOptionsPrompt>();
         _dotNetTool = new Mock<IDotNetTool>();
-        _embeddedResources = new Mock<IEmbeddedResources<Git2SemverEmbeddedResources>>();
+        _embeddedResources = new Mock<IEmbeddedResources>();
         _projectReader = new Mock<IProjectDocumentReader>();
         _addPreconditionValidator = new Mock<IAddPreconditionValidator>();
         _consoleIO = new Mock<IConsoleIO>();
@@ -53,7 +53,8 @@ internal class AddCommandTests
     }
 
     [Test]
-    public void Test()
+    public void CanConstructTest()
     {
+        Assert.That(_target, Is.Not.Null);
     }
 }

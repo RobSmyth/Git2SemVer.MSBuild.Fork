@@ -32,8 +32,8 @@ public sealed class Git2SemVerScriptRunner
         _logger = logger;
     }
 
-    internal static IReadOnlyList<Type> MetadataReferences { get; } = new[]
-    {
+    internal static IReadOnlyList<Type> MetadataReferences { get; } =
+    [
         typeof(DotNetTool),
         typeof(UncontrolledHost),
         typeof(IBuildHost),
@@ -42,7 +42,7 @@ public sealed class Git2SemVerScriptRunner
         typeof(NuGetVersion),
         typeof(VersioningContext),
         typeof(ILogger)
-    };
+    ];
 
     internal async Task RunScript()
     {
@@ -52,28 +52,37 @@ public sealed class Git2SemVerScriptRunner
             return;
         }
 
-        if (_inputs.RunScript == null && !File.Exists(_inputs.BuildScriptPath))
+        if (!File.Exists(_inputs.BuildScriptPath))
         {
-            _logger.LogDebug($"Script not found. BuildScriptPath is '{_inputs.BuildScriptPath}'.");
-            return;
+            if (_inputs.RunScript == null)
+            {
+                _logger.LogDebug($"RunScript is null and script '{_inputs.BuildScriptPath}' not found. Ignoring.");
+                return;
+            }
+
+            if (_inputs.RunScript == true)
+            {
+                _logger.LogError($"RunScript is true and C# script '{_inputs.BuildScriptPath}' not found.");
+                return;
+            }
         }
 
-        if (!_inputs.Validate(_logger))
+        if (!_inputs.ValidateScriptInputs(_logger))
         {
             return;
         }
 
         var stopwatch = Stopwatch.StartNew();
 
-        var inMemoryTypes = new List<Type>(new[]
-        {
+        var inMemoryTypes = new List<Type>(
+        [
             typeof(VersioningContext),
             typeof(ILogger),
             typeof(SemVersion)
-        });
+        ]);
 
         var context = new VersioningContext(_inputs, _outputs, _host, _logger);
-        await _innerScriptRunner.RunScript(context, _inputs.BuildScriptPath, MetadataReferences, inMemoryTypes);
+        await _innerScriptRunner.RunScript(context, _inputs.BuildScriptPath, MetadataReferences, inMemoryTypes).ConfigureAwait(true);
 
         stopwatch.Stop();
         _logger.LogInfo($"Script run completed. (in {stopwatch.Elapsed.TotalSeconds:F1} sec)");

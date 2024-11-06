@@ -13,6 +13,12 @@ namespace NoeticTools.Git2SemVer.MSBuild.Framework.Config;
 /// </summary>
 internal sealed class Git2SemVerConfiguration : IConfiguration
 {
+    private static JsonSerializerOptions _serialiseOptions = new()
+    {
+        WriteIndented = true,
+        Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+    };
+
     [JsonIgnore]
     private static int _instanceHash;
 
@@ -97,8 +103,8 @@ internal sealed class Git2SemVerConfiguration : IConfiguration
             _instance = new Git2SemVerConfiguration();
         }
 
-        _instanceHash = _instance!.GetCurrentHashCode();
-        return _instance!;
+        _instanceHash = _instance.GetCurrentHashCode();
+        return _instance;
     }
 
     /// <summary>
@@ -116,13 +122,8 @@ internal sealed class Git2SemVerConfiguration : IConfiguration
             return;
         }
 
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
-        };
 
-        var json = JsonSerializer.Serialize(this, options);
+        var json = JsonSerializer.Serialize(this, _serialiseOptions);
         json = Regex.Unescape(json);
         File.WriteAllText(GetFilePath(), json);
     }

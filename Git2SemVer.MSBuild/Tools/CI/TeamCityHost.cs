@@ -1,4 +1,5 @@
-﻿using JetBrains.TeamCity.ServiceMessages.Write.Special;
+﻿using System.Globalization;
+using JetBrains.TeamCity.ServiceMessages.Write.Special;
 using NoeticTools.Common.Logging;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 
@@ -16,7 +17,7 @@ internal class TeamCityHost : BuildHostBase, IDetectableBuildHost
     {
         _logger = logger;
         _teamCityVersion = Environment.GetEnvironmentVariable(TeamCityVersionEnvVarName) ?? "";
-        BuildNumber = _teamCityVersion.Length > 0 ? GetBuildNumber(logger) : "";
+        BuildNumber = _teamCityVersion.Length > 0 ? GetBuildNumber() : "";
         BuildContext = "0";
         DefaultBuildNumberFunc = () => [BuildNumber];
     }
@@ -47,7 +48,7 @@ internal class TeamCityHost : BuildHostBase, IDetectableBuildHost
     {
         _logger.LogInfo($"Build statistic {key} = {value}");
         using var writer = new TeamCityServiceMessages().CreateWriter(_logger.LogInfo);
-        writer.WriteBuildStatistics(key, value.ToString());
+        writer.WriteBuildStatistics(key, value.ToString(CultureInfo.InvariantCulture));
     }
 
     public void ReportBuildStatistic(string key, double value)
@@ -64,9 +65,9 @@ internal class TeamCityHost : BuildHostBase, IDetectableBuildHost
         writer.WriteBuildNumber(label);
     }
 
-    private static string GetBuildNumber(ILogger logger)
+    private static string GetBuildNumber()
     {
         var buildNumberVariable = Environment.GetEnvironmentVariable(BuildNumberEnvVarName);
-        return int.TryParse(buildNumberVariable!, out var buildNumber) ? buildNumber.ToString() : "";
+        return int.TryParse(buildNumberVariable!, out var buildNumber) ? buildNumber.ToString(CultureInfo.InvariantCulture) : "";
     }
 }
