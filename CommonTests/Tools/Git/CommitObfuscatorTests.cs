@@ -62,7 +62,7 @@ internal class CommitObfuscatorTests
     [Test]
     public void WithConventionalCommitSummaryLogLineTest()
     {
-        const string summary = "feat!: Big red feature";
+        const string summary = "feat!: REDACTED";
         const string expected = $"|\\              \u001f.|0001|0002 0003|\u0002{summary}\u0003|\u0002\u0003||";
         var commit = new Commit("commitSha",
                                 ["parent1", "parent2"],
@@ -85,7 +85,7 @@ internal class CommitObfuscatorTests
             ("refs", "#0002")
         };
         var expected =
-            $"|\\              \u001f.|0001|0002 0003|\u0002{summary}\u0003|\u0002BREAKING CHANGE: Oops my bad\nrefs: #0001\nrefs: #0002\u0003||";
+            $"|\\              \u001f.|0001|0002 0003|\u0002fix: REDACTED\u0003|\u0002BREAKING CHANGE: Oops my bad\nrefs: #0001\nrefs: #0002\u0003||";
         var commit = new Commit("commitSha",
                                 ["parent1", "parent2"],
                                 summary, "", "",
@@ -102,7 +102,7 @@ internal class CommitObfuscatorTests
         const string summary = "fix: Fixed";
         var footerKeyValues = new List<(string key, string value)>();
         var expected =
-            $"|\\              \u001f.|0001|0002 0003|\u0002{summary}\u0003|\u0002\u0003| (HEAD -> REDACTED_BRANCH, origin/main)|";
+            $"|\\              \u001f.|0001|0002 0003|\u0002fix: REDACTED\u0003|\u0002\u0003| (HEAD -> REDACTED_BRANCH, origin/main)|";
         var commit = new Commit("commitSha",
                                 ["parent1", "parent2"],
                                 summary, "", "HEAD -> REDACTED_BRANCH, origin/main",

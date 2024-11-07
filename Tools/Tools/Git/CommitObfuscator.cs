@@ -16,11 +16,32 @@ public static class CommitObfuscator
         ObfuscatedCommitShaLookup.Clear();
     }
 
+    /// <summary>
+    ///     Create a partially obfuscated git log line for the build log.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Creates build log git log line that is more suitable for public viewing to diagnose faults.
+    ///         Obfuscates some information such as commit ID, most git message summary test, and most git message body text.
+    ///     </para>
+    ///     <para>
+    ///         The resulting log can be copy and pasted to build automatic tests.
+    ///     </para>
+    /// </remarks>
     public static string GetObfuscatedLogLine(string graph, Commit? commit)
     {
         if (commit == null)
         {
-            return $"{graph,-12}";
+            return graph;
+        }
+
+        var priorGraphLines = "";
+        var graphLine = graph;
+        if (graph.Contains("\n"))
+        {
+            var lastNewLineIndex = graph.LastIndexOf('\n');
+            priorGraphLines = graph.Substring(0, lastNewLineIndex+1);
+            graphLine = graph.Substring(lastNewLineIndex+1);
         }
 
         var redactedRefs = new Regex(@"HEAD -> \S+?(?=[,\)])").Replace(commit.Refs, "HEAD -> REDACTED_BRANCH");
@@ -32,9 +53,22 @@ public static class CommitObfuscator
 
         var parentShas = commit.Parents.Length > 0 ? string.Join(" ", commit.Parents.Select(x => x.ObfuscatedSha)) : string.Empty;
         var sha = commit.CommitId.ObfuscatedSha;
-        var summary = commit.Metadata.ChangeType == CommitChangeTypeId.Unknown ? "REDACTED" : commit.Summary;
+        var summary = GetRedactedConventionalCommitSummary(commit);
         var footer = string.Join("\n", commit.Metadata.FooterKeyValues.SelectMany((kv, _) => kv.Select(value => kv.Key + ": " + value)));
-        return $"{graph,-15} \u001f.|{sha}|{parentShas}|\u0002{summary}\u0003|\u0002{footer}\u0003|{redactedRefs2}|";
+
+        return $"{priorGraphLines}{graphLine,-15} \u001f.|{sha}|{parentShas}|\u0002{summary}\u0003|\u0002{footer}\u0003|{redactedRefs2}|";
+    }
+
+    private static string GetRedactedConventionalCommitSummary(Commit commit)
+    {
+        if (commit.Metadata.ChangeType == CommitChangeTypeId.Unknown)
+        {
+            return "REDACTED";
+        }
+
+        var colonPrefix = commit.Summary.IndexOf(':');
+        var prefix = commit.Summary.Substring(0, colonPrefix + 1);
+        return prefix + " REDACTED";
     }
 
     public static string GetObfuscatedSha(string sha)
