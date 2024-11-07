@@ -1,9 +1,5 @@
 ﻿# Git2SemVer.Tool
 
-**NOTE**
-> This project is in early development and may have large changes before the first release 1.0.0.
-> Early trial and feedback would be great!
-
 Git2SemVer.Tool is a dotnet tool used to setup [Git2SemVer](https://github.com/NoeticTools/Git2SemVer) solution versioning in a .NET solution.
 
 Go to [documentation](https://noetictools.github.io/Git2SemVer/) for more information.
@@ -17,7 +13,7 @@ dotnet tool install --global NoeticTools.Git2SemVer.Tool
 Then, in the solution's directory, run:
 
 ```
-Git2SemVer setup
+Git2SemVer add
 ```
 
 You will be prompted with a few options and then it is done.
