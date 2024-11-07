@@ -80,6 +80,11 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
     {
         _bumps = AggregateBumps();
 
+        if (HeadCommit.HasReleaseTag)
+        {
+            return HeadCommit.ReleasedVersion!;
+        }
+        
         var version = _segments.First().TaggedReleasedVersion;
         if (version == null)
         {

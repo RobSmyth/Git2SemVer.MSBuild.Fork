@@ -118,7 +118,7 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
                               """);
 
     public LoggedScenario Scenario03 { get; } =
-        new("0.3.4", "0002", $"""
+        new("0.3.3", "0002", $"""
                               *               {US}.|0002|0001|{STX}REDACTED{ETX}|{STX}{ETX}| (HEAD -> REDACTED_BRANCH, tag: tag: v0.3.3, origin/REDACTED_BRANCH, origin/REDACTED_BRANCH)|
                               *               {US}.|0001|0003|{STX}REDACTED{ETX}|{STX}{ETX}| (tag: v0.3.2)|
                               *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
@@ -183,7 +183,7 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
     ///     Tests release tags on head.
     /// </summary>
     public LoggedScenario Scenario04 { get; } =
-        new("0.3.5", "0002", $"""
+        new("0.3.4", "0002", $"""
                               *               {US}.|0002|0001|{STX}REDACTED{ETX}|{STX}{ETX}| (HEAD -> REDACTED_BRANCH, tag: v0.3.4, tag: v0.3.3, origin/REDACTED_BRANCH, origin/REDACTED_BRANCH)|
                               *               {US}.|0001|0003|{STX}REDACTED{ETX}|{STX}{ETX}| (tag: v0.3.2)|
                               *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
@@ -193,7 +193,7 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
     ///     Tests release tags on head.
     /// </summary>
     public LoggedScenario Scenario05 { get; } =
-        new("0.3.5", "0002", $"""
+        new("0.3.4", "0002", $"""
                               *               {US}.|0002|0001|{STX}REDACTED{ETX}|{STX}{ETX}| (HEAD -> REDACTED_BRANCH, tag: v0.3.3, tag: v0.3.4, origin/REDACTED_BRANCH, origin/REDACTED_BRANCH)|
                               *               {US}.|0001|0003|{STX}REDACTED{ETX}|{STX}{ETX}| (tag: v0.4.0)|
                               *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
@@ -251,6 +251,17 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
                               *               .|0006|0007|REDACTED|||
                               """);
 
+
+    /// <summary>
+    ///     Tests release tag and major (!) bump on head.
+    /// </summary>
+    public LoggedScenario Scenario11 { get; } =
+        new("1.0.0", "0002", $"""
+                              *               {US}.|0002|0001|{STX}fix!: REDACTED{ETX}|{STX}{ETX}| (HEAD -> REDACTED_BRANCH, tag: v1.0.0, origin/REDACTED_BRANCH, origin/REDACTED_BRANCH)|
+                              *               {US}.|0001|0003|{STX}REDACTED{ETX}|{STX}{ETX}||
+                              *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
+                              """);
+
     public IEnumerator GetEnumerator()
     {
         yield return new object[] { "Scenario 01", Scenario01 };
@@ -263,5 +274,6 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
         yield return new object[] { "Scenario 08 - breaking change", Scenario08 };
         yield return new object[] { "Scenario 09 - tag trumps bump on same commit", Scenario09 };
         yield return new object[] { "Scenario 10", Scenario10 };
+        yield return new object[] { "Scenario 11", Scenario11 };
     }
 }

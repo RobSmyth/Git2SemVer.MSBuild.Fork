@@ -13,7 +13,6 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
         yield return new object[] { "Scenario 02", Scenario02 };
         yield return new object[] { "Scenario 03", Scenario03 };
         yield return new object[] { "Scenario 04", Scenario04 };
-        yield return new object[] { "Scenario 05", Scenario05 };
         yield return new object[] { "Scenario 06", Scenario06 };
     }
 
@@ -144,21 +143,6 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
             "1.001.0000",
             1,
             "0.1.0");
-
-    private GitTestRepository Scenario05 { get; } =
-        new("""
-            Scenario 05:
-              - Single commit repository
-              - 1.0.0 released
-
-            1.001  | head   v1.0.0
-            """,
-            [
-                new Commit("1.001.0000", [], "First commit in repo", "", "tag: v1.0.0", new CommitMessageMetadata())
-            ],
-            "1.001.0000",
-            1,
-            "1.0.1");
 
     private GitTestRepository Scenario06 { get; } =
         new("""
