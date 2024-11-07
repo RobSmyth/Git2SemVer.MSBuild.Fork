@@ -47,12 +47,6 @@ a
 <div style="margin-left:0px; margin-top:-5px; margin-bottom:35px; font-family:Calibri; font-size:1.3em;">
 No limits .NET solution versioning.</div>
 
-> [!NOTE]  
-> This project is in early development and may undergo large changes
-> before the first stable release 1.0.0. 
->
-> Early testing and feedback would be great!
-
 Git2SemVer is a Visual Studio and developer friendly <a href="https://semver.org">Semantic Versioning</a> framework for .NET solution and project versioning.
 It works the same with Visual Studio builds and dotnet CLI builds. 
 Every build, both developer boxes and the build system, get traceable build numbering (no commit counting).
