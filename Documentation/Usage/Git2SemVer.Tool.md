@@ -29,4 +29,10 @@ Then, in the solution's directory, run:
 Git2SemVer add
 ```
 
+To update the tool to the latest:
+
+```winbatch
+dotnet tool update NoeticTools.Git2SemVer.Tool --global
+```
+
 You will be prompted with a few options and then the setup is done.
