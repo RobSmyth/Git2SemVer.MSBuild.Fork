@@ -17,7 +17,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="4.11.0" />
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" />
     <PackageReference Include="Injectio" Version="3.3.0" />
-    <PackageReference Include="NoeticTools.Git2SemVer.Core" Version="0.1.0-alpha-InitialDev.14" />
+    <PackageReference Include="NoeticTools.Common" Version="0.1.0-alpha-InitialDev.19" />
   </ItemGroup>
 
   <ItemGroup>

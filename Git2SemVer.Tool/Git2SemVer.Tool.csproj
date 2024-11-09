@@ -75,7 +75,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
     <PackageReference Include="Injectio" Version="3.3.0" />
-    <PackageReference Include="NoeticTools.Git2SemVer.Core" Version="0.1.0-alpha-InitialDev.14" />
+    <PackageReference Include="NoeticTools.Common" Version="0.1.0-alpha-InitialDev.19" />
     <PackageReference Include="Spectre.Console" Version="0.49.1" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.49.1" />
   </ItemGroup>
