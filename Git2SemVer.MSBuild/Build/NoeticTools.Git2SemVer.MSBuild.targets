@@ -67,9 +67,9 @@
              AssemblyFile="$(Git2SemVerTasksAssembly)" />
 
   <Target Name="Git2SemVerRestoreVersionPropertiesTask"
-          BeforeTargets="$(Git2SemVerRestorePropertiesBeforeTargets)"
           Inputs="$(Git2SemVer_GeneratedVersionStamp)"
           Outputs="$(Git2SemVer_RestoredPropertiesStamp)"
+          BeforeTargets="$(Git2SemVerRestorePropertiesBeforeTargets)"
           Condition="'$(Git2SemVer_Disable)' == 'false'">
 
     <Git2SemVerRestoreVersionPropertiesTask VersionCacheDirectory="$(Git2SemVer_VersionCacheDirectory)">

@@ -42,9 +42,10 @@ public class Git2SemVerRestoreVersionPropertiesTask : Git2SemVerTaskBase
         var logger = new MSBuildTaskLogger(Log);
         try
         {
-            logger.LogDebug("Restoring version properties.");
+            logger.LogTrace("Restoring version properties.");
             var cache = new GeneratedVersionsJsonFile().Load(VersionCacheDirectory);
             SetOutputs(cache);
+            logger.LogDebug("Restored PackageVersion: {0}", PackageVersion);
             return !Log.HasLoggedErrors;
         }
 #pragma warning disable CA1031
