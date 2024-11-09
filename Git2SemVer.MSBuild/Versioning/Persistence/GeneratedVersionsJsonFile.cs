@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
-using NoeticTools.Git2Semver.Common;
+using NoeticTools.Git2SemVer.Common;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 
 
@@ -54,7 +54,7 @@ internal sealed class GeneratedVersionsJsonFile : IGeneratedOutputsJsonFile
 
     private static string GetFilePath(string directory)
     {
-        return Path.Combine(directory, Git2SemverConstants.SharedVersionJsonPropertiesFilename);
+        return Path.Combine(directory, Git2SemVerConstants.SharedVersionJsonPropertiesFilename);
     }
 
     private static string LoadJson(string directory)

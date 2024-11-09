@@ -50,7 +50,6 @@
     <ProjectReference Include="..\MSBuild.Tasking\MSBuild.Tasking.csproj" />
     <ProjectReference Include="..\MSBuild.Tasking.Logging\MSBuild.Tasking.Logging.csproj" />
     <ProjectReference Include="..\TestingCommon\Testing.Common.csproj" />
-    <ProjectReference Include="..\Tools\Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

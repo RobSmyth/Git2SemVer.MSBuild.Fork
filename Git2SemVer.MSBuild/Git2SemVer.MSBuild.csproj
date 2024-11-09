@@ -71,6 +71,7 @@
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.4" PrivateAssets="all" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="4.11.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" PrivateAssets="all" />
+    <PackageReference Include="NoeticTools.Git2SemVer.Core" Version="0.1.0-alpha-InitialDev.14" />
     <PackageReference Include="NuGet.Versioning" Version="6.11.1" PrivateAssets="all" />
     <PackageReference Include="Semver" Version="[2.3.0]" PrivateAssets="all" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" PrivateAssets="all" />
@@ -86,10 +87,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Git2Semver.Common\Git2Semver.Common.csproj" />
     <ProjectReference Include="..\MSBuild.Tasking\MSBuild.Tasking.csproj" />
     <ProjectReference Include="..\MSBuild.Tasking.Logging\MSBuild.Tasking.Logging.csproj" />
-    <ProjectReference Include="..\Tools\Common.csproj" />
   </ItemGroup>
 
   <!-- Ensure that the Git2SemVer version information JSON file is available. -->

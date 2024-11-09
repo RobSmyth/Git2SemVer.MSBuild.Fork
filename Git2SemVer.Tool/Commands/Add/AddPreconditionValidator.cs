@@ -2,7 +2,7 @@
 using Injectio.Attributes;
 using NoeticTools.Common;
 using NoeticTools.Common.Logging;
-using NoeticTools.Git2Semver.Common;
+using NoeticTools.Git2SemVer.Common;
 using NoeticTools.Git2SemVer.Tool.Framework;
 using NoeticTools.Git2SemVer.Tool.MSBuild;
 using NoeticTools.Git2SemVer.Tool.MSBuild.Projects;
@@ -58,10 +58,10 @@ internal sealed class AddPreconditionValidator : IAddPreconditionValidator
     private bool ValidateNonCritical(DirectoryInfo directory, bool unattended)
     {
         var priorSetupEvidence = new List<string>();
-        var shareDirectory = directory.WithSubDirectory(Git2SemverConstants.ShareFolderName);
+        var shareDirectory = directory.WithSubDirectory(Git2SemVerConstants.ShareFolderName);
         if (shareDirectory.Exists)
         {
-            priorSetupEvidence.Add($"The Git2SemVer share directory `[em]{Git2SemverConstants.ShareFolderName}[/]` already exists.");
+            priorSetupEvidence.Add($"The Git2SemVer share directory `[em]{Git2SemVerConstants.ShareFolderName}[/]` already exists.");
         }
 
         var versioningProjectDirectory = directory.WithSubDirectory(SolutionVersioningConstants.DefaultVersioningProjectName);

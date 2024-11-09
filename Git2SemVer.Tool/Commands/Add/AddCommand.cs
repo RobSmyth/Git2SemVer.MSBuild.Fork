@@ -2,7 +2,7 @@
 using NoeticTools.Common;
 using NoeticTools.Common.Logging;
 using NoeticTools.Common.Tools.DotnetCli;
-using NoeticTools.Git2Semver.Common;
+using NoeticTools.Git2SemVer.Common;
 using NoeticTools.Git2SemVer.Tool.Framework;
 using NoeticTools.Git2SemVer.Tool.MSBuild;
 using NoeticTools.Git2SemVer.Tool.MSBuild.Projects;
@@ -110,7 +110,7 @@ internal sealed class AddCommand : ISetupCommand
 
     private void CreateSharedDirectory(DirectoryInfo parentDirectory)
     {
-        var sharedDirectory = parentDirectory.WithSubDirectory(Git2SemverConstants.ShareFolderName);
+        var sharedDirectory = parentDirectory.WithSubDirectory(Git2SemVerConstants.ShareFolderName);
         if (sharedDirectory.Exists)
         {
             _logger.LogTrace("`{0}` already existed. Overwriting files in directory.", sharedDirectory.Name);
@@ -118,9 +118,9 @@ internal sealed class AddCommand : ISetupCommand
 
         sharedDirectory.Create();
 
-        _embeddedResources.WriteResourceFile(Git2SemverConstants.SharedVersionJsonPropertiesFilename, sharedDirectory);
+        _embeddedResources.WriteResourceFile(Git2SemVerConstants.SharedVersionJsonPropertiesFilename, sharedDirectory);
 
-        _console.WriteInfoLine($"\t- Added '{Git2SemverConstants.ShareFolderName}' shared directory to versioning project directory.");
+        _console.WriteInfoLine($"\t- Added '{Git2SemVerConstants.ShareFolderName}' shared directory to versioning project directory.");
     }
 
     private void CreateVersioningProject(UserOptions userOptions, FileInfo solution)
@@ -128,8 +128,8 @@ internal sealed class AddCommand : ISetupCommand
         var projectName = userOptions.VersioningProjectName;
         _dotNetCli.Projects.New("classlib", $"{projectName}");
         _dotNetCli.Solution.AddProject(solution.Name, $"{projectName}/{projectName}.csproj");
-        var csxFileDestination = solution.Directory!.WithSubDirectory(projectName).WithFile(Git2SemverConstants.DefaultScriptFilename);
-        _embeddedResources.WriteResourceFile(Git2SemverConstants.DefaultScriptFilename, csxFileDestination.FullName);
+        var csxFileDestination = solution.Directory!.WithSubDirectory(projectName).WithFile(Git2SemVerConstants.DefaultScriptFilename);
+        _embeddedResources.WriteResourceFile(Git2SemVerConstants.DefaultScriptFilename, csxFileDestination.FullName);
         _console.WriteInfoLine($"\t- Added '{projectName}' project to solution.");
 
         var versioningProjectDirectory = solution.Directory!.WithSubDirectory(userOptions.VersioningProjectName);
@@ -173,20 +173,20 @@ internal sealed class AddCommand : ISetupCommand
         {
             var fullName = gitIgnoreFile.FullName;
             var content = File.ReadAllText(fullName);
-            if (content.Contains(Git2SemverConstants.ShareFolderName))
+            if (content.Contains(Git2SemVerConstants.ShareFolderName))
             {
-                _console.WriteWarningLine($"The .gitignore file already had an entry for {Git2SemverConstants.ShareFolderName}.");
+                _console.WriteWarningLine($"The .gitignore file already had an entry for {Git2SemVerConstants.ShareFolderName}.");
                 return;
             }
 
             content += $"""
 
                         # Generated version properties file
-                        {Git2SemverConstants.ShareFolderName}/{Git2SemverConstants.SharedVersionJsonPropertiesFilename}
+                        {Git2SemVerConstants.ShareFolderName}/{Git2SemVerConstants.SharedVersionJsonPropertiesFilename}
 
                         """;
             File.WriteAllText(fullName, content);
-            _console.WriteInfoLine($"\t- Added generated version properties file '{Git2SemverConstants.SharedVersionJsonPropertiesFilename}' to .gitignore file.");
+            _console.WriteInfoLine($"\t- Added generated version properties file '{Git2SemVerConstants.SharedVersionJsonPropertiesFilename}' to .gitignore file.");
         }
         else
         {

@@ -1,4 +1,4 @@
-﻿using NoeticTools.Git2Semver.Common;
+﻿using NoeticTools.Git2SemVer.Common;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 
 
@@ -51,6 +51,6 @@ internal sealed class GeneratedVersionsPropsFile : IGeneratedOutputsPropFile
 
     private static string GetFilePath(string directory)
     {
-        return Path.Combine(directory, Git2SemverConstants.SharedVersionPropertiesFilename);
+        return Path.Combine(directory, Git2SemVerConstants.SharedVersionPropertiesFilename);
     }
 }
