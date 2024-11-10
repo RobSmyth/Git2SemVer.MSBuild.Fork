@@ -14,7 +14,7 @@ public abstract class ScriptingTestsBase
 
     protected void SetUpBase()
     {
-        Logger = new NUnitTaskLogger { Level = LoggingLevel.Trace };
+        Logger = new NUnitLogger { Level = LoggingLevel.Trace };
         TestFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                                       "Git2SemVer",
                                       "TestData");
@@ -42,7 +42,7 @@ public abstract class ScriptingTestsBase
 
     protected virtual void OneTimeSetUpBase()
     {
-        Logger = new NUnitTaskLogger();
+        Logger = new NUnitLogger();
         DotNetCli = new DotNetTool(new ProcessCli(Logger));
         Git = new GitTool(Logger);
     }

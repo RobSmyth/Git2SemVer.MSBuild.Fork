@@ -23,7 +23,7 @@ internal abstract class GitHistoryWalkingTestsBase
     }
 
     protected Mock<ICommitsRepository> Repository = null!;
-    protected NUnitTaskLogger Logger = null!;
+    protected NUnitLogger Logger = null!;
 
     protected Dictionary<string, Commit> SetupGitRepository(LoggedScenario scenario)
     {
@@ -38,7 +38,7 @@ internal abstract class GitHistoryWalkingTestsBase
         VersionHistorySegment.Reset();
         CommitObfuscator.Clear();
 
-        Logger = new NUnitTaskLogger(false) { Level = LoggingLevel.Trace };
+        Logger = new NUnitLogger(false) { Level = LoggingLevel.Trace };
         Repository = new Mock<ICommitsRepository>();
         _gitTool = new GitTool(Logger);
     }

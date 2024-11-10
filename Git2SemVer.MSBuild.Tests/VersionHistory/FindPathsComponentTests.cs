@@ -19,7 +19,7 @@ internal class FindPathsComponentTests
     [Test]
     public void Test()
     {
-        var logger = new NUnitTaskLogger(false)
+        var logger = new NUnitLogger(false)
         {
             Level = LoggingLevel.Debug
         };

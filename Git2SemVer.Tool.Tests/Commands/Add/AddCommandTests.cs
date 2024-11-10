@@ -18,7 +18,7 @@ internal class AddCommandTests
     private Mock<IConsoleIO> _consoleIO;
     private Mock<IDotNetTool> _dotNetTool;
     private Mock<IEmbeddedResources> _embeddedResources;
-    private NUnitTaskLogger _logger;
+    private NUnitLogger _logger;
     private Mock<IProjectDocumentReader> _projectReader;
     private Mock<ISolutionFinder> _solutionFinder;
     private AddCommand _target;
@@ -27,7 +27,7 @@ internal class AddCommandTests
     [SetUp]
     public void SetUp()
     {
-        _logger = new NUnitTaskLogger { Level = LoggingLevel.Trace };
+        _logger = new NUnitLogger { Level = LoggingLevel.Trace };
         _solutionFinder = new Mock<ISolutionFinder>();
         _userOptionsPrompt = new Mock<IUserOptionsPrompt>();
         _dotNetTool = new Mock<IDotNetTool>();

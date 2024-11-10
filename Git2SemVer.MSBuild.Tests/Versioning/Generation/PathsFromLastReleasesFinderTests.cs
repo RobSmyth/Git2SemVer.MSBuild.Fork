@@ -15,12 +15,12 @@ internal class PathsFromLastReleasesFinderTests
     private Dictionary<string, Commit> _commitsLookup;
     private Mock<ICommitsRepository> _commitsRepo;
     private Mock<IGitTool> _gitTool;
-    private NUnitTaskLogger _logger;
+    private NUnitLogger _logger;
 
     [SetUp]
     public void SetUp()
     {
-        _logger = new NUnitTaskLogger(false)
+        _logger = new NUnitLogger(false)
         {
             Level = LoggingLevel.Debug
         };

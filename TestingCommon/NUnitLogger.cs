@@ -3,7 +3,7 @@
 
 namespace NoeticTools.Testing.Common;
 
-public class NUnitTaskLogger : ILogger
+public class NUnitLogger : ILogger
 {
     private const string LogScopeIndent = "  ";
     private readonly string _debugPrefix = "DEBUG: ";
@@ -13,7 +13,7 @@ public class NUnitTaskLogger : ILogger
     private readonly string _tracePrefix = "TRACE: ";
     private readonly string _warnPrefix = "WARN: ";
 
-    public NUnitTaskLogger(bool showMessageLevelPrefix = true)
+    public NUnitLogger(bool showMessageLevelPrefix = true)
     {
         if (!showMessageLevelPrefix)
         {

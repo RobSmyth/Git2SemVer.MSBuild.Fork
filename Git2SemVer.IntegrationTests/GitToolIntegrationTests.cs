@@ -12,7 +12,7 @@ internal class GitToolIntegrationTests
     [Test]
     public void RunGetVersionTest()
     {
-        var logger = new NUnitTaskLogger();
+        var logger = new NUnitLogger();
         var tool = new GitTool(logger);
 
         var result = tool.Run("--version");

@@ -37,6 +37,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.props" />
+    <None Remove="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.targets" />
+    <None Remove="Content\Tasks\NoeticTools.Git2SemVer.MSBuild.props" />
+    <None Remove="Content\Tasks\NoeticTools.Git2SemVer.MSBuild.targets" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>NoeticTools.Git2SemVer.MSBuild.Tests</_Parameter1>
     </AssemblyAttribute>
@@ -82,8 +89,12 @@
     <Content Include="Git2SemVer_icon_64x64.ico" Pack="False" />
     <None Include="..\Documentation\Images\Git2SemVer_icon_32x32.png" Link="Git2SemVer_icon_32x32.png" Pack="True" PackagePath="\" />
     <None Include="NuGet_description.md" Pack="True" PackagePath="\" />
-    <Content Include="Build\NoeticTools.Git2SemVer.MSBuild.props" PackagePath="build/" />
-    <Content Include="Build\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="build/" />
+    <Content Include="Content\Tasks\NoeticTools.Git2SemVer.MSBuild.props" PackagePath="tasks/" />
+    <Content Include="Content\Tasks\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="tasks/" />
+    <Content Include="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.props" PackagePath="buildmultitargeting/" />
+    <Content Include="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="buildmultitargeting/" />
+    <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.props" PackagePath="build/" />
+    <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="build/" />
   </ItemGroup>
 
   <ItemGroup>

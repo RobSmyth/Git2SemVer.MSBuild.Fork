@@ -21,7 +21,7 @@ internal class DefaultVersionBuilderTests
     private Mock<ICommit> _headCommit;
     private Mock<IBuildHost> _host;
     private Mock<IVersionGeneratorInputs> _inputs;
-    private NUnitTaskLogger _logger;
+    private NUnitLogger _logger;
     private Mock<IVersionOutputs> _outputs;
     private Mock<IHistoryPaths> _paths;
     private DefaultVersionBuilder _target;
@@ -31,7 +31,7 @@ internal class DefaultVersionBuilderTests
     [SetUp]
     public void SetUp()
     {
-        _logger = new NUnitTaskLogger(false)
+        _logger = new NUnitLogger(false)
         {
             Level = LoggingLevel.Debug
         };

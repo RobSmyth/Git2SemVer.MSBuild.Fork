@@ -15,14 +15,14 @@ internal class RemoveCommandTests
     private Mock<IConsoleIO> _consoleIO;
     private Mock<IContentEditor> _contentEditor;
     private Mock<IDotNetTool> _dotNetTool;
-    private NUnitTaskLogger _logger;
+    private NUnitLogger _logger;
     private Mock<ISolutionFinder> _solutionFinder;
     private RemoveCommand _target;
 
     [SetUp]
     public void SetUp()
     {
-        _logger = new NUnitTaskLogger();
+        _logger = new NUnitLogger();
         _solutionFinder = new Mock<ISolutionFinder>();
         _dotNetTool = new Mock<IDotNetTool>();
         _consoleIO = new Mock<IConsoleIO>();
