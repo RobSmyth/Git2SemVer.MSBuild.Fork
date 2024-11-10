@@ -22,6 +22,6 @@
     <NoWarn>NU5100;NU1803;NU5128</NoWarn>
   </PropertyGroup>
 
-  <Import Project="$(Git2SemVerSolutionDirectory)Git2SemVer.MSBuild/Build/NoeticTools.Git2SemVer.MSBuild.props" />
+  <Import Project="$(Git2SemVerSolutionDirectory)Git2SemVer.MSBuild/Tasks/NoeticTools.Git2SemVer.MSBuild.props" />
 
 </Project>
