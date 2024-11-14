@@ -6,7 +6,7 @@
 namespace NoeticTools.Git2SemVer.IntegrationTests;
 
 [TestFixture]
-internal class SolutionVersioningBuildTests : SolutionTestsBase
+internal class ToolIntegrationTests : SolutionTestsBase
 {
     private string _packageOutputDir;
 
@@ -100,5 +100,5 @@ internal class SolutionVersioningBuildTests : SolutionTestsBase
 
     protected override string SolutionFolderName => "SolutionVersioning";
 
-    protected override string SolutionName => "Git2SemVerTestSolutionVersioning.sln";
+    protected override string SolutionName => "StandAloneVersioning.sln";
 }

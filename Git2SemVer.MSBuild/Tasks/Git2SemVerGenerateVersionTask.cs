@@ -265,7 +265,7 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
 
         try
         {
-            logger.LogDebug("Executing Git2SemVer.MSBuild task to generate version.");
+            logger.LogDebug("Executing Git2SemVer.MSBuild task to generate version. ({0})", DateTime.Now.ToString("r"));
 
             try
             {

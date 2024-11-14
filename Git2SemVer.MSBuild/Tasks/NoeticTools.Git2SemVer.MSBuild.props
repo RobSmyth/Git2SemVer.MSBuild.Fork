@@ -6,25 +6,8 @@
     <Git2SemVer_ScriptPath Condition="'$(Git2SemVer_ScriptPath)' == '' ">$(MSBuildProjectDirectory)/Git2SemVer.csx</Git2SemVer_ScriptPath>
     <Git2SemVer_Disable Condition="'$(Git2SemVer_Disable)' == '' ">false</Git2SemVer_Disable>
     <Git2SemVer_UpdateHostBuildLabel Condition="'$(Git2SemVer_UpdateHostBuildLabel)' == '' ">false</Git2SemVer_UpdateHostBuildLabel>
-    <Git2SemVer_GeneratedVersionStamp Condition="'$(Git2SemVer_GeneratedVersionStamp)' == '' ">$(BaseIntermediateOutputPath)Git2SemVer_GeneratedVersionStamp.stamp</Git2SemVer_GeneratedVersionStamp>
-    <Git2SemVer_RestoredPropertiesStamp Condition="'$(Git2SemVer_RestoredPropertiesStamp)' == '' ">$(BaseIntermediateOutputPath)Git2SemVer_RestoredProperties.stamp</Git2SemVer_RestoredPropertiesStamp>
     <Git2SemVer_Mode Condition="'$(Git2SemVer_Mode)' == ''">StandAloneProject</Git2SemVer_Mode>
 
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <Git2SemVerBeforeTargets Condition=" '$(Git2SemVerBeforeTargets)' == '' ">
-      Build;
-      CoreCompile;
-      GetAssemblyVersion;
-    </Git2SemVerBeforeTargets>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <Git2SemVerRestorePropertiesBeforeTargets Condition=" '$(Git2SemVerRestorePropertiesBeforeTargets)' == '' ">
-      GetPackageVersion;
-      GenerateNuspec;
-    </Git2SemVerRestorePropertiesBeforeTargets>
   </PropertyGroup>
 
   <PropertyGroup>

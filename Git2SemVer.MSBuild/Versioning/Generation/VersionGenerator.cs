@@ -23,7 +23,7 @@ internal class VersionGenerator
     private readonly ILogger _logger;
     private readonly IVersionBuilder _scriptBuilder;
 
-    public VersionGenerator(IVersionGeneratorInputs inputs, 
+    public VersionGenerator(IVersionGeneratorInputs inputs,
                             IBuildHost host,
                             IGeneratedOutputsJsonFile generatedOutputsJsonFile,
                             IGeneratedOutputsPropFile generatedOutputsPropFile,
@@ -48,8 +48,14 @@ internal class VersionGenerator
     {
         try
         {
-            return _inputs.VersioningMode == VersioningMode.SolutionClientProject ? 
-                PerformSolutionClientVersioning() : PerformProjectVersioning();
+            var handlers = new Dictionary<VersioningMode, Func<IVersionOutputs>>
+            {
+                { VersioningMode.SolutionVersioningProject, PerformSolutionVersioningProjectVersioning },
+                { VersioningMode.SolutionClientProject, PerformSolutionClientVersioning },
+                { VersioningMode.StandAloneProject, PerformStandAloneProjectVersioning }
+            };
+
+            return handlers[_inputs.VersioningMode]();
         }
         catch (Exception exception)
         {
@@ -58,33 +64,9 @@ internal class VersionGenerator
         }
     }
 
-    private IVersionOutputs PerformProjectVersioning()
-    {
-        var output = GenerateVersion();
-        if (_inputs.UpdateHostBuildLabel && output.BuildSystemVersion != null)
-        {
-            _host.SetBuildLabel(output.BuildSystemVersion.ToString());
-        }
-
-        return output;
-    }
-
-    private IVersionOutputs PerformSolutionClientVersioning()
-    {
-        var localCache = _generatedOutputsJsonFile.Load(_inputs.IntermediateOutputDirectory);
-        if (localCache.BuildNumber == _host.BuildNumber)
-        {
-            return GenerateVersion();
-        }
-
-        // Copy solution shared file to local outputs file
-        var generatedOutputs = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
-        WriteOutputsToFile(_inputs.IntermediateOutputDirectory, generatedOutputs);
-        return generatedOutputs;
-    }
-
     private IVersionOutputs GenerateVersion()
     {
+        _logger.LogTrace("Generating new versioning.");
         var stopwatch = Stopwatch.StartNew();
 
         _host.BumpBuildNumber();
@@ -96,9 +78,41 @@ internal class VersionGenerator
 
         stopwatch.Stop();
         _host.ReportBuildStatistic("Git2SemVerRunTime_sec", stopwatch.Elapsed.TotalSeconds);
-        _logger.LogInfo($"Git2SemVer calculated version: {outputs.InformationalVersion}  ({stopwatch.Elapsed.TotalSeconds:F1} sec))");
+        _logger.LogInfo($"Git2SemVer generated version: {outputs.InformationalVersion}  ({stopwatch.Elapsed.TotalSeconds:F1} sec))");
 
         return outputs;
+    }
+
+    private VersionOutputs LoadSharedOutputsAndUpdateLocalCache()
+    {
+        _logger.LogTrace("Loading generated solution version information.");
+        var generatedOutputs = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
+        WriteOutputsToFile(_inputs.IntermediateOutputDirectory, generatedOutputs);
+        return generatedOutputs;
+    }
+
+    private IVersionOutputs PerformSolutionClientVersioning()
+    {
+        var localCache = _generatedOutputsJsonFile.Load(_inputs.IntermediateOutputDirectory);
+        if (localCache.BuildNumber == _host.BuildNumber)
+        {
+            return GenerateVersion();
+        }
+
+        return LoadSharedOutputsAndUpdateLocalCache();
+    }
+
+    private IVersionOutputs PerformSolutionVersioningProjectVersioning()
+    {
+        // do nothing - solution versioning project depreciated
+        return _generatedOutputsJsonFile.Load(_inputs.IntermediateOutputDirectory);
+    }
+
+    private IVersionOutputs PerformStandAloneProjectVersioning()
+    {
+        var output = GenerateVersion();
+        UpdateHostBuildLabel(output);
+        return output;
     }
 
     private void RunBuilders(VersionOutputs outputs, HistoryPaths historyPaths)
@@ -113,6 +127,14 @@ internal class VersionGenerator
         if (_inputs.VersioningMode != VersioningMode.StandAloneProject)
         {
             WriteOutputsToFile(_inputs.SolutionSharedDirectory, outputs);
+        }
+    }
+
+    private void UpdateHostBuildLabel(IVersionOutputs output)
+    {
+        if (_inputs.UpdateHostBuildLabel && output.BuildSystemVersion != null)
+        {
+            _host.SetBuildLabel(output.BuildSystemVersion.ToString());
         }
     }
 

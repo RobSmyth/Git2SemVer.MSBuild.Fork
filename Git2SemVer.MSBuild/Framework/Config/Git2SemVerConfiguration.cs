@@ -87,11 +87,6 @@ internal sealed class Git2SemVerConfiguration : IConfiguration
     /// </remarks>
     public static Git2SemVerConfiguration Load()
     {
-        if (_instance != null)
-        {
-            return _instance;
-        }
-
         var filePath = GetFilePath();
         if (File.Exists(filePath))
         {
@@ -121,7 +116,7 @@ internal sealed class Git2SemVerConfiguration : IConfiguration
         {
             return;
         }
-
+        _instanceHash = _instance.GetCurrentHashCode();
 
         var json = JsonSerializer.Serialize(this, _serialiseOptions);
         json = Regex.Unescape(json);

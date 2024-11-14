@@ -100,7 +100,7 @@
     <ProjectReference Include="..\MSBuild.Tasking.Logging\MSBuild.Tasking.Logging.csproj" />
   </ItemGroup>
 
-  <!-- Ensure that the Git2SemVer version information JSON file is available. -->
+  <!-- Ensure that the Git2SemVer version information JSON file is available.  -->
   <Target Name="Git2SemVerEnsureVersionInfoBuilt" Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
 
     <PropertyGroup>

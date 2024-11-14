@@ -21,7 +21,10 @@ public abstract class ScriptingTestsBase
         if (Directory.Exists(TestFolderPath))
         {
             Directory.Delete(TestFolderPath, true);
-            WaitUntil(() => !Directory.Exists(TestFolderPath));
+            if (!WaitUntil(() => !Directory.Exists(TestFolderPath)))
+            {
+                Assert.Fail($"Unable to deleted folder '{TestFolderPath}'.");
+            }
         }
 
         Directory.CreateDirectory(TestFolderPath);
@@ -31,13 +34,19 @@ public abstract class ScriptingTestsBase
 
     protected ILogger Logger { get; private set; } = null!;
 
-    private static void WaitUntil(Func<bool> predicate)
+    private static bool WaitUntil(Func<bool> predicate)
     {
         var stopwatch = Stopwatch.StartNew();
-        while (!predicate() && stopwatch.Elapsed < TimeSpan.FromSeconds(30))
+        while (!predicate())
         {
+            if (stopwatch.Elapsed > TimeSpan.FromSeconds(30))
+            {
+                return false;
+            }
             Thread.Sleep(5);
         }
+
+        return true;
     }
 
     protected virtual void OneTimeSetUpBase()

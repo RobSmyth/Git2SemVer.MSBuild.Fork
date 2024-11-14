@@ -11,31 +11,9 @@ internal class GitHubHost : BuildHostBase, IBuildHost
     public GitHubHost(ILogger logger) : base(logger)
     {
         _logger = logger;
+        Name = "GitHub";
         DefaultBuildNumberFunc = () => [BuildNumber, BuildContext];
     }
 
     public HostTypeIds HostTypeId => HostTypeIds.GitHub;
-
-    public string Name => "GitHub";
-
-    public string BumpBuildNumber()
-    {
-        // Not supported
-        return BuildNumber;
-    }
-
-    public void ReportBuildStatistic(string key, int value)
-    {
-        _logger.LogTrace("GitHub host does not support build statistics.");
-    }
-
-    public void ReportBuildStatistic(string key, double value)
-    {
-        _logger.LogTrace("GitHub host does not support build statistics.");
-    }
-
-    public void SetBuildLabel(string label)
-    {
-        _logger.LogTrace("GitHub host does not support setting a build label.");
-    }
 }
