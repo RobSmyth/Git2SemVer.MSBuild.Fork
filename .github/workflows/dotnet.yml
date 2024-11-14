@@ -9,12 +9,14 @@ on:
   push:
     branches:
       - 'main'
-      - 'releases/**'
+      - 'release(s?)/**'
+      - 'feature(s?)/**'
   pull_request:
     types:
       - opened
     branches:
-      - 'releases/**'
+      - 'release(s?)/**'
+      - 'feature(s?)/**'
 
 jobs:
   build:
