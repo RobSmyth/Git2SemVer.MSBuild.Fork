@@ -110,7 +110,7 @@ internal class VersionGenerator
         }
 
         var output = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
-        WriteOutputsToFile(_inputs.IntermediateOutputDirectory, output);
+        _generatedOutputsJsonFile.Write(_inputs.IntermediateOutputDirectory, output);
         return output;
     }
 
@@ -135,10 +135,10 @@ internal class VersionGenerator
 
     private void SaveGeneratedVersions(VersionOutputs outputs)
     {
-        WriteOutputsToFile(_inputs.IntermediateOutputDirectory, outputs);
+        _generatedOutputsJsonFile.Write(_inputs.IntermediateOutputDirectory, outputs);
         if (_inputs.VersioningMode != VersioningMode.StandAloneProject)
         {
-            WriteOutputsToFile(_inputs.SolutionSharedDirectory, outputs);
+            _generatedOutputsJsonFile.Write(_inputs.SolutionSharedDirectory, outputs);
         }
     }
 
@@ -148,10 +148,5 @@ internal class VersionGenerator
         {
             _host.SetBuildLabel(output.BuildSystemVersion.ToString());
         }
-    }
-
-    private void WriteOutputsToFile(string outputDirectory, VersionOutputs generatedOutputs)
-    {
-        _generatedOutputsJsonFile.Write(outputDirectory, generatedOutputs);
     }
 }
