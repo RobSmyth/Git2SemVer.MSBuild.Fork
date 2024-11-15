@@ -60,46 +60,79 @@ namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning
         [Test]
         public void SolutionVersioningProject_DoesNotGenerate_WhenCachedOutputsAvailable()
         {
+            ModeIs(VersioningMode.SolutionVersioningProject);
             _sharedCachedOutputs.Setup(x => x.BuildNumber).Returns("42");
-            _inputs.Setup(x => x.VersioningMode).Returns(VersioningMode.SolutionVersioningProject);
 
             var result = _target.Run();
 
             _versionGenerator.Verify(x => x.Run(), Times.Never);
-            _generatedOutputsJsonFile.Verify(x => x.Load("IntermediateOutputDirectory"), Times.Never);
             _host.Verify(x => x.SetBuildLabel(It.IsAny<string>()), Times.Never);
             Assert.That(result, Is.SameAs(_sharedCachedOutputs.Object));
+            _generatedOutputsJsonFile.Verify(x => x.Load("IntermediateOutputDirectory"), Times.Never);
         }
 
         [Test]
-        public void SolutionVersioningProject_DoesNotGenerate_WhenCachedOutputsNotAvailable()
+        public void SolutionVersioningProject_DoesGenerate_WhenCachedOutputsNotAvailable()
         {
+            ModeIs(VersioningMode.SolutionVersioningProject);
             _sharedCachedOutputs.Setup(x => x.BuildNumber).Returns("");
-            _inputs.Setup(x => x.VersioningMode).Returns(VersioningMode.SolutionVersioningProject);
 
             var result = _target.Run();
 
             _versionGenerator.Verify(x => x.Run(), Times.Once);
-            _generatedOutputsJsonFile.Verify(x => x.Load("IntermediateOutputDirectory"), Times.Never);
             _host.Verify(x => x.SetBuildLabel(It.IsAny<string>()), Times.Never);
             Assert.That(result, Is.SameAs(_generatedOutputs.Object));
+            _generatedOutputsJsonFile.Verify(x => x.Load("IntermediateOutputDirectory"), Times.Never);
         }
 
         [Test]
         public void SolutionVersioningProject_UpdatesBuildLabel_WhenEnabledAndBuildNumberAvailable()
         {
+            ModeIs(VersioningMode.SolutionVersioningProject);
             _sharedCachedOutputs.Setup(x => x.BuildNumber).Returns("42");
             var buildSystemVersion = SemVersion.ParsedFrom(1, 2, 3);
             _sharedCachedOutputs.Setup(x => x.BuildSystemVersion).Returns(buildSystemVersion);
-            _inputs.Setup(x => x.VersioningMode).Returns(VersioningMode.SolutionVersioningProject);
             _inputs.Setup(x => x.UpdateHostBuildLabel).Returns(true);
 
             var result = _target.Run();
 
             _host.Verify(x => x.SetBuildLabel(buildSystemVersion.ToString()), Times.Once);
             _versionGenerator.Verify(x => x.Run(), Times.Never);
-            _generatedOutputsJsonFile.Verify(x => x.Load("IntermediateOutputDirectory"), Times.Never);
             Assert.That(result, Is.SameAs(_sharedCachedOutputs.Object));
+            _generatedOutputsJsonFile.Verify(x => x.Load("IntermediateOutputDirectory"), Times.Never);
+        }
+
+        [Test]
+        public void SolutionVersioningProject_DoesNotUpdatesBuildLabel_WhenEnabledButBuildSystemVersion()
+        {
+            ModeIs(VersioningMode.SolutionVersioningProject);
+            _sharedCachedOutputs.Setup(x => x.BuildNumber).Returns("42");
+            _inputs.Setup(x => x.UpdateHostBuildLabel).Returns(true);
+
+            var result = _target.Run();
+
+            _host.Verify(x => x.SetBuildLabel(It.IsAny<string>()), Times.Never);
+            Assert.That(result, Is.SameAs(_sharedCachedOutputs.Object));
+        }
+
+        [Test]
+        public void SolutionVersioningProject_DoesNotUpdatesBuildLabel_WhenNotEnabledButHasBuildSystemVersion()
+        {
+            ModeIs(VersioningMode.SolutionVersioningProject);
+            _sharedCachedOutputs.Setup(x => x.BuildNumber).Returns("42");
+            var buildSystemVersion = SemVersion.ParsedFrom(1, 2, 3);
+            _sharedCachedOutputs.Setup(x => x.BuildSystemVersion).Returns(buildSystemVersion);
+            _inputs.Setup(x => x.UpdateHostBuildLabel).Returns(false);
+
+            var result = _target.Run();
+
+            _host.Verify(x => x.SetBuildLabel(It.IsAny<string>()), Times.Never);
+            Assert.That(result, Is.SameAs(_sharedCachedOutputs.Object));
+        }
+
+        private void ModeIs(VersioningMode mode)
+        {
+            _inputs.Setup(x => x.VersioningMode).Returns(mode);
         }
     }
 }
