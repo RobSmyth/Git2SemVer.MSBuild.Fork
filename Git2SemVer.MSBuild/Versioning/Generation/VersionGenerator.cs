@@ -118,7 +118,7 @@ internal class VersionGenerator
     {
         _logger.LogTrace("Solution versioning project.");
         IVersionOutputs output = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
-        return output.BuildNumber.Length != 0 ? GenerateVersion() : output;
+        return output.BuildNumber.Length == 0 ? GenerateVersion() : output;
     }
 
     private IVersionOutputs PerformStandAloneProjectVersioning()
