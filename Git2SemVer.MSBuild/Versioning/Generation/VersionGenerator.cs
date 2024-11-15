@@ -15,7 +15,6 @@ internal class VersionGenerator
 {
     private readonly IDefaultVersionBuilderFactory _defaultVersionBuilderFactory;
     private readonly IGeneratedOutputsJsonFile _generatedOutputsJsonFile;
-    private readonly IGeneratedOutputsPropFile _generatedOutputsPropFile;
     private readonly IGitHistoryPathsFinder _gitPathsFinder;
     private readonly IGitTool _gitTool;
     private readonly IBuildHost _host;
@@ -26,7 +25,6 @@ internal class VersionGenerator
     public VersionGenerator(IVersionGeneratorInputs inputs,
                             IBuildHost host,
                             IGeneratedOutputsJsonFile generatedOutputsJsonFile,
-                            IGeneratedOutputsPropFile generatedOutputsPropFile,
                             IGitTool gitTool,
                             IGitHistoryPathsFinder gitPathsFinder,
                             IDefaultVersionBuilderFactory defaultVersionBuilderFactory,
@@ -36,7 +34,6 @@ internal class VersionGenerator
         _inputs = inputs;
         _host = host;
         _generatedOutputsJsonFile = generatedOutputsJsonFile;
-        _generatedOutputsPropFile = generatedOutputsPropFile;
         _gitTool = gitTool;
         _gitPathsFinder = gitPathsFinder;
         _defaultVersionBuilderFactory = defaultVersionBuilderFactory;
@@ -83,30 +80,44 @@ internal class VersionGenerator
         return outputs;
     }
 
-    private VersionOutputs LoadSharedOutputsAndUpdateLocalCache()
-    {
-        _logger.LogTrace("Loading generated solution version information.");
-        var generatedOutputs = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
-        WriteOutputsToFile(_inputs.IntermediateOutputDirectory, generatedOutputs);
-        return generatedOutputs;
-    }
-
     private IVersionOutputs PerformSolutionClientVersioning()
     {
-        var localCache = _generatedOutputsJsonFile.Load(_inputs.IntermediateOutputDirectory);
-        if (localCache.BuildNumber == _host.BuildNumber)
+        _logger.LogTrace("Solution client versioning.");
+
+        var lastBuildNumber = GetClientLastBuildNumber();
+        if (lastBuildNumber == _host.BuildNumber)
         {
             return GenerateVersion();
         }
 
-        var output = LoadSharedOutputsAndUpdateLocalCache();
+        var output = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
+        WriteOutputsToFile(_inputs.IntermediateOutputDirectory, output);
         UpdateHostBuildLabel(output);
         return output;
     }
 
+    private string GetClientLastBuildNumber()
+    {
+        var lastBuildNumber = _generatedOutputsJsonFile.Load(_inputs.IntermediateOutputDirectory).BuildNumber;
+        if (lastBuildNumber.Length != 0)
+        {
+            return lastBuildNumber;
+        }
+
+        var shared = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
+        lastBuildNumber = shared.BuildNumber;
+        if (lastBuildNumber.Length == 0)
+        {
+            lastBuildNumber = _host.BuildNumber;
+        }
+        return lastBuildNumber;
+    }
+
     private IVersionOutputs PerformSolutionVersioningProjectVersioning()
     {
-        // do nothing - solution versioning project depreciated
+        _logger.LogTrace("Solution versioning project.");
+
+        // do nothing but update build label - solution versioning project depreciated
         var output = _generatedOutputsJsonFile.Load(_inputs.IntermediateOutputDirectory);
         UpdateHostBuildLabel(output);
         return output;
@@ -114,6 +125,8 @@ internal class VersionGenerator
 
     private IVersionOutputs PerformStandAloneProjectVersioning()
     {
+        _logger.LogTrace("Stand alone project versioning.");
+
         var output = GenerateVersion();
         UpdateHostBuildLabel(output);
         return output;
@@ -145,6 +158,5 @@ internal class VersionGenerator
     private void WriteOutputsToFile(string outputDirectory, VersionOutputs generatedOutputs)
     {
         _generatedOutputsJsonFile.Write(outputDirectory, generatedOutputs);
-        //_generatedOutputsPropFile.Write(outputDirectory, generatedOutputs);
     }
 }

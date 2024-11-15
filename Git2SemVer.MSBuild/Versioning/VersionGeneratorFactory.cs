@@ -43,7 +43,6 @@ internal sealed class VersionGeneratorFactory
         var scriptBuilder = new ScriptVersionBuilder(_logger);
         var versionGenerator = new VersionGenerator(inputs, host,
                                                     new GeneratedVersionsJsonFile(),
-                                                    new GeneratedVersionsPropsFile(),
                                                     gitTool, gitPathsFinder, defaultBuilderFactory,
                                                     scriptBuilder, _logger);
         return versionGenerator;
