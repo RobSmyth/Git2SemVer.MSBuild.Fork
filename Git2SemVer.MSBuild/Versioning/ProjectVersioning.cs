@@ -10,27 +10,13 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
 
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning;
 
-internal sealed class ProjectVersioning
+internal sealed class ProjectVersioning(
+    IVersionGeneratorInputs inputs,
+    IBuildHost host,
+    IGeneratedOutputsJsonFile outputsCacheJsonFile,
+    IVersionGenerator versionGenerator,
+    ILogger logger)
 {
-    private readonly IGeneratedOutputsJsonFile _generatedOutputsJsonFile;
-    private readonly IBuildHost _host;
-    private readonly IVersionGeneratorInputs _inputs;
-    private readonly ILogger _logger;
-    private readonly IVersionGenerator _versionGenerator;
-
-    public ProjectVersioning(IVersionGeneratorInputs inputs,
-                             IBuildHost host,
-                             IGeneratedOutputsJsonFile generatedOutputsJsonFile,
-                             IVersionGenerator versionGenerator,
-                             ILogger logger)
-    {
-        _inputs = inputs;
-        _host = host;
-        _generatedOutputsJsonFile = generatedOutputsJsonFile;
-        _versionGenerator = versionGenerator;
-        _logger = logger;
-    }
-
     public IVersionOutputs Run()
     {
         try
@@ -42,30 +28,30 @@ internal sealed class ProjectVersioning
                 { VersioningMode.StandAloneProject, PerformStandAloneProjectVersioning }
             };
 
-            var outputs = handlers[_inputs.VersioningMode]();
+            var outputs = handlers[inputs.VersioningMode]();
             UpdateHostBuildLabel(outputs);
             return outputs;
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception);
+            logger.LogError(exception);
             throw;
         }
     }
 
     private string GetClientLastBuildNumber()
     {
-        var lastBuildNumber = _generatedOutputsJsonFile.Load(_inputs.IntermediateOutputDirectory).BuildNumber;
+        var lastBuildNumber = outputsCacheJsonFile.Load(inputs.IntermediateOutputDirectory).BuildNumber;
         if (lastBuildNumber.Length != 0)
         {
             return lastBuildNumber;
         }
 
-        var shared = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
+        var shared = outputsCacheJsonFile.Load(inputs.SolutionSharedDirectory);
         lastBuildNumber = shared.BuildNumber;
         if (lastBuildNumber.Length == 0)
         {
-            lastBuildNumber = _host.BuildNumber;
+            lastBuildNumber = host.BuildNumber;
         }
 
         return lastBuildNumber;
@@ -73,37 +59,37 @@ internal sealed class ProjectVersioning
 
     private IVersionOutputs PerformSolutionClientVersioning()
     {
-        _logger.LogTrace("Solution versioning client project.");
+        logger.LogTrace("Solution versioning client project.");
 
         var lastBuildNumber = GetClientLastBuildNumber();
-        if (lastBuildNumber == _host.BuildNumber)
+        if (lastBuildNumber == host.BuildNumber)
         {
-            return _versionGenerator.Run();
+            return versionGenerator.Run();
         }
 
-        var output = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
-        _generatedOutputsJsonFile.Write(_inputs.IntermediateOutputDirectory, output);
+        var output = outputsCacheJsonFile.Load(inputs.SolutionSharedDirectory);
+        outputsCacheJsonFile.Write(inputs.IntermediateOutputDirectory, output);
         return output;
     }
 
     private IVersionOutputs PerformSolutionVersioningProjectVersioning()
     {
-        _logger.LogTrace("Solution versioning project.");
-        var output = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
-        return output.BuildNumber.Length == 0 ? _versionGenerator.Run() : output;
+        logger.LogTrace("Solution versioning project.");
+        var output = outputsCacheJsonFile.Load(inputs.SolutionSharedDirectory);
+        return output.BuildNumber.Length == 0 ? versionGenerator.Run() : output;
     }
 
     private IVersionOutputs PerformStandAloneProjectVersioning()
     {
-        _logger.LogTrace("Stand alone project versioning.");
-        return _versionGenerator.Run();
+        logger.LogTrace("Stand alone project versioning.");
+        return versionGenerator.Run();
     }
 
     private void UpdateHostBuildLabel(IVersionOutputs output)
     {
-        if (_inputs.UpdateHostBuildLabel && output.BuildSystemVersion != null)
+        if (inputs.UpdateHostBuildLabel && output.BuildSystemVersion != null)
         {
-            _host.SetBuildLabel(output.BuildSystemVersion.ToString());
+            host.SetBuildLabel(output.BuildSystemVersion.ToString());
         }
     }
 }

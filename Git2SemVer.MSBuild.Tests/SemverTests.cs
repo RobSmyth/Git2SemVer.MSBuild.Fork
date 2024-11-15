@@ -29,17 +29,6 @@ internal class SemverTests
     }
 
     [Test]
-    public void ComparePrecedenceToReturnsPositiveIfHigherPrecedenceTest()
-    {
-        var versionA = SemVersion.ParsedFrom(1, 2, 3);
-        var versionB = SemVersion.ParsedFrom(1, 2, 2);
-
-        var result = versionA.ComparePrecedenceTo(versionB);
-
-        Assert.That(result, Is.EqualTo(1));
-    }
-
-    [Test]
     public void AppendPrereleaseIdentifierTest()
     {
         var version = SemVersion.ParsedFrom(1, 2, 3, "alpha");
@@ -59,6 +48,17 @@ internal class SemverTests
         var result = version.WithPrerelease(version.PrereleaseIdentifiers.Append(prereleaseIdentifier));
 
         Assert.That(result.ToString(), Is.EqualTo("1.2.3-alpha.HappyBirthday"));
+    }
+
+    [Test]
+    public void ComparePrecedenceToReturnsPositiveIfHigherPrecedenceTest()
+    {
+        var versionA = SemVersion.ParsedFrom(1, 2, 3);
+        var versionB = SemVersion.ParsedFrom(1, 2, 2);
+
+        var result = versionA.ComparePrecedenceTo(versionB);
+
+        Assert.That(result, Is.EqualTo(1));
     }
 
     [TestCase("InitialDev", "Alpha", 1)]

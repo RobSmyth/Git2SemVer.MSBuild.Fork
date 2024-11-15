@@ -17,6 +17,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.Builders;
 internal class DefaultVersionBuilderTests
 {
     private Mock<IVersionHistoryPath> _bestPath;
+    private Mock<IGitTool> _git;
     private Mock<IGitOutputs> _gitOutputs;
     private Mock<ICommit> _headCommit;
     private Mock<IBuildHost> _host;
@@ -26,7 +27,6 @@ internal class DefaultVersionBuilderTests
     private Mock<IHistoryPaths> _paths;
     private DefaultVersionBuilder _target;
     private SemVersion _version = null!;
-    private Mock<IGitTool> _git;
 
     [SetUp]
     public void SetUp()
