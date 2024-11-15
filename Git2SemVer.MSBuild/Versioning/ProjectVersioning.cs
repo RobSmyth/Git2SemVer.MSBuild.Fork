@@ -1,13 +1,14 @@
 ﻿using NoeticTools.Common.Logging;
 using NoeticTools.Common.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
+using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
 
 
 #pragma warning disable CA1859
 
-namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
+namespace NoeticTools.Git2SemVer.MSBuild.Versioning;
 
 internal sealed class ProjectVersioning
 {
