@@ -52,7 +52,9 @@ internal class VersionGenerator
                 { VersioningMode.StandAloneProject, PerformStandAloneProjectVersioning }
             };
 
-            return handlers[_inputs.VersioningMode]();
+            var outputs = handlers[_inputs.VersioningMode]();
+            UpdateHostBuildLabel(outputs);
+            return outputs;
         }
         catch (Exception exception)
         {
@@ -76,24 +78,7 @@ internal class VersionGenerator
         stopwatch.Stop();
         _host.ReportBuildStatistic("Git2SemVerRunTime_sec", stopwatch.Elapsed.TotalSeconds);
         _logger.LogInfo($"Git2SemVer generated version: {outputs.InformationalVersion}  ({stopwatch.Elapsed.TotalSeconds:F1} sec))");
-
         return outputs;
-    }
-
-    private IVersionOutputs PerformSolutionClientVersioning()
-    {
-        _logger.LogTrace("Solution client versioning.");
-
-        var lastBuildNumber = GetClientLastBuildNumber();
-        if (lastBuildNumber == _host.BuildNumber)
-        {
-            return GenerateVersion();
-        }
-
-        var output = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
-        WriteOutputsToFile(_inputs.IntermediateOutputDirectory, output);
-        UpdateHostBuildLabel(output);
-        return output;
     }
 
     private string GetClientLastBuildNumber()
@@ -110,26 +95,36 @@ internal class VersionGenerator
         {
             lastBuildNumber = _host.BuildNumber;
         }
+
         return lastBuildNumber;
+    }
+
+    private IVersionOutputs PerformSolutionClientVersioning()
+    {
+        _logger.LogTrace("Solution client versioning.");
+
+        var lastBuildNumber = GetClientLastBuildNumber();
+        if (lastBuildNumber == _host.BuildNumber)
+        {
+            return GenerateVersion();
+        }
+
+        var output = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
+        WriteOutputsToFile(_inputs.IntermediateOutputDirectory, output);
+        return output;
     }
 
     private IVersionOutputs PerformSolutionVersioningProjectVersioning()
     {
         _logger.LogTrace("Solution versioning project.");
-
-        // do nothing but update build label - solution versioning project depreciated
-        var output = _generatedOutputsJsonFile.Load(_inputs.IntermediateOutputDirectory);
-        UpdateHostBuildLabel(output);
-        return output;
+        IVersionOutputs output = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
+        return output.BuildNumber.Length != 0 ? GenerateVersion() : output;
     }
 
     private IVersionOutputs PerformStandAloneProjectVersioning()
     {
         _logger.LogTrace("Stand alone project versioning.");
-
-        var output = GenerateVersion();
-        UpdateHostBuildLabel(output);
-        return output;
+        return GenerateVersion();
     }
 
     private void RunBuilders(VersionOutputs outputs, HistoryPaths historyPaths)

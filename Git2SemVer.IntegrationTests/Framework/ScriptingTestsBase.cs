@@ -73,5 +73,5 @@ internal abstract class ScriptingTestsBase
         Git = new GitTool(Logger);
     }
 
-    protected GitTool Git { get; private set; }
+    protected GitTool Git { get; private set; } = null!;
 }
