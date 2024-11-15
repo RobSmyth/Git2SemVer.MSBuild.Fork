@@ -7,11 +7,9 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
 
 
-#pragma warning disable CA1859
-
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 
-internal class VersionGenerator
+internal sealed class VersionGenerator : IVersionGenerator
 {
     private readonly IDefaultVersionBuilderFactory _defaultVersionBuilderFactory;
     private readonly IGeneratedOutputsJsonFile _generatedOutputsJsonFile;
@@ -43,28 +41,6 @@ internal class VersionGenerator
 
     public IVersionOutputs Run()
     {
-        try
-        {
-            var handlers = new Dictionary<VersioningMode, Func<IVersionOutputs>>
-            {
-                { VersioningMode.SolutionVersioningProject, PerformSolutionVersioningProjectVersioning },
-                { VersioningMode.SolutionClientProject, PerformSolutionClientVersioning },
-                { VersioningMode.StandAloneProject, PerformStandAloneProjectVersioning }
-            };
-
-            var outputs = handlers[_inputs.VersioningMode]();
-            UpdateHostBuildLabel(outputs);
-            return outputs;
-        }
-        catch (Exception exception)
-        {
-            _logger.LogError(exception);
-            throw;
-        }
-    }
-
-    private IVersionOutputs GenerateVersion()
-    {
         _logger.LogTrace("Generating new versioning.");
         var stopwatch = Stopwatch.StartNew();
 
@@ -73,58 +49,14 @@ internal class VersionGenerator
         var outputs = new VersionOutputs(new GitOutputs(_gitTool, historyPaths));
 
         RunBuilders(outputs, historyPaths);
+
+
         SaveGeneratedVersions(outputs);
 
         stopwatch.Stop();
         _host.ReportBuildStatistic("Git2SemVerRunTime_sec", stopwatch.Elapsed.TotalSeconds);
         _logger.LogInfo($"Git2SemVer generated version: {outputs.InformationalVersion}  ({stopwatch.Elapsed.TotalSeconds:F1} sec))");
         return outputs;
-    }
-
-    private string GetClientLastBuildNumber()
-    {
-        var lastBuildNumber = _generatedOutputsJsonFile.Load(_inputs.IntermediateOutputDirectory).BuildNumber;
-        if (lastBuildNumber.Length != 0)
-        {
-            return lastBuildNumber;
-        }
-
-        var shared = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
-        lastBuildNumber = shared.BuildNumber;
-        if (lastBuildNumber.Length == 0)
-        {
-            lastBuildNumber = _host.BuildNumber;
-        }
-
-        return lastBuildNumber;
-    }
-
-    private IVersionOutputs PerformSolutionClientVersioning()
-    {
-        _logger.LogTrace("Solution client versioning.");
-
-        var lastBuildNumber = GetClientLastBuildNumber();
-        if (lastBuildNumber == _host.BuildNumber)
-        {
-            return GenerateVersion();
-        }
-
-        var output = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
-        _generatedOutputsJsonFile.Write(_inputs.IntermediateOutputDirectory, output);
-        return output;
-    }
-
-    private IVersionOutputs PerformSolutionVersioningProjectVersioning()
-    {
-        _logger.LogTrace("Solution versioning project.");
-        IVersionOutputs output = _generatedOutputsJsonFile.Load(_inputs.SolutionSharedDirectory);
-        return output.BuildNumber.Length == 0 ? GenerateVersion() : output;
-    }
-
-    private IVersionOutputs PerformStandAloneProjectVersioning()
-    {
-        _logger.LogTrace("Stand alone project versioning.");
-        return GenerateVersion();
     }
 
     private void RunBuilders(VersionOutputs outputs, HistoryPaths historyPaths)
@@ -139,14 +71,6 @@ internal class VersionGenerator
         if (_inputs.VersioningMode != VersioningMode.StandAloneProject)
         {
             _generatedOutputsJsonFile.Write(_inputs.SolutionSharedDirectory, outputs);
-        }
-    }
-
-    private void UpdateHostBuildLabel(IVersionOutputs output)
-    {
-        if (_inputs.UpdateHostBuildLabel && output.BuildSystemVersion != null)
-        {
-            _host.SetBuildLabel(output.BuildSystemVersion.ToString());
         }
     }
 }

@@ -276,7 +276,7 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
                 throw new Git2SemVerConfigurationException($"Invalid Git2SemVer_Mode value '{Mode}'.", exception);
             }
 
-            var versionGenerator = new VersionGeneratorFactory(logger).Create(this);
+            var versionGenerator = new ProjectVersioningFactory(logger).Create(this);
             SetOutputs(versionGenerator.Run());
             return !Log.HasLoggedErrors;
         }
