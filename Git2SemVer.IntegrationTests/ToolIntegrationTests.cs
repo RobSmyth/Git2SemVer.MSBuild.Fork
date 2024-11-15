@@ -6,6 +6,7 @@
 namespace NoeticTools.Git2SemVer.IntegrationTests;
 
 [TestFixture]
+[NonParallelizable]
 internal class ToolIntegrationTests : SolutionTestsBase
 {
     private string _packageOutputDir;

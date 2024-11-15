@@ -5,7 +5,7 @@ using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
 
 namespace NoeticTools.Git2SemVer.MSBuild.IntegrationTests;
 
-public class BasicScriptingTests : ScriptingTestsBase
+public class BasicScriptingTests
 {
     private StringWriter _errorWriter = null!;
     private StringWriter _outputWriter = null!;

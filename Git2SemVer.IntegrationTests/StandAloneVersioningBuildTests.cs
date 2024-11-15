@@ -1,5 +1,4 @@
-﻿using NoeticTools.Git2SemVer.IntegrationTests.Framework;
-using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
+﻿using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
 
 
 #pragma warning disable NUnit2045
@@ -9,7 +8,6 @@ namespace NoeticTools.Git2SemVer.IntegrationTests;
 [TestFixture]
 internal class StandAloneVersioningBuildTests : VersioningBuildTestsBase
 {
-
     [Test]
     public void BuildAndPackWithForcingProperties2ScriptTest()
     {

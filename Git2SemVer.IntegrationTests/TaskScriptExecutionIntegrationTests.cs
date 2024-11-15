@@ -1,6 +1,6 @@
 ﻿using NoeticTools.Common;
 using NoeticTools.Common.Logging;
-using NoeticTools.Common.Tools.Git;
+using NoeticTools.Git2SemVer.IntegrationTests.Framework;
 using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting;
@@ -9,14 +9,25 @@ using Task = System.Threading.Tasks.Task;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-namespace NoeticTools.Git2SemVer.MSBuild.IntegrationTests;
+namespace NoeticTools.Git2SemVer.IntegrationTests;
 
-[TestFixture]
-public class ScriptExecutionIntegrationTests : ScriptingTestsBase
+internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
 {
     private const string TestScriptFilename = "TestScript.csx";
     private BuildEngine9Stub _buildEngine;
     private Dictionary<string, string> _globalProperties;
+
+    [Test]
+    [MaxTime(10000)]
+    public void ControlledPrereleaseBuildScenario01()
+    {
+        var context = GetContext("12345", "1");
+        var runner = new ScriptVersionBuilder(Logger);
+
+        runner.Build(context.Host, Git, context.Inputs, context.Outputs);
+
+        Assert.That(Logger.HasError, Is.False);
+    }
 
     [OneTimeSetUp]
     public void OneTimeSetup()
@@ -31,18 +42,6 @@ public class ScriptExecutionIntegrationTests : ScriptingTestsBase
 
         _globalProperties = new Dictionary<string, string>();
         _buildEngine = new BuildEngine9Stub(_globalProperties);
-    }
-
-    [Test]
-    [MaxTime(10000)]
-    public void ControlledPrereleaseBuildScenario01()
-    {
-        var context = GetContext("12345", "1");
-        var runner = new ScriptVersionBuilder(Logger);
-
-        runner.Build(context.Host, Git, context.Inputs, context.Outputs);
-
-        Assert.That(Logger.HasError, Is.False);
     }
 
     [Test]
@@ -69,6 +68,16 @@ public class ScriptExecutionIntegrationTests : ScriptingTestsBase
         Assert.That(Logger.HasError, Is.False);
     }
 
+    // ReSharper disable once UnusedMember.Local
+    private static async Task DumpLoggedErrors(ILogger logger)
+    {
+        if (!string.IsNullOrWhiteSpace(logger.Errors))
+        {
+            await TestContext.Out.WriteLineAsync("Errors recorded:");
+            await TestContext.Out.WriteLineAsync(logger.Errors);
+        }
+    }
+
     private VersioningContext GetContext(string hostBuildNumber,
                                          string hostBuildContext)
     {
@@ -91,15 +100,5 @@ public class ScriptExecutionIntegrationTests : ScriptingTestsBase
         };
         GetType().Assembly.WriteResourceFile("Git2SemVer.csx", inputs.BuildScriptPath);
         return inputs;
-    }
-
-    // ReSharper disable once UnusedMember.Local
-    private static async Task DumpLoggedErrors(ILogger logger)
-    {
-        if (!string.IsNullOrWhiteSpace(logger.Errors))
-        {
-            await TestContext.Out.WriteLineAsync("Errors recorded:");
-            await TestContext.Out.WriteLineAsync(logger.Errors);
-        }
     }
 }

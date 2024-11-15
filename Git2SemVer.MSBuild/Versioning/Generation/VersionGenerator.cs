@@ -99,13 +99,17 @@ internal class VersionGenerator
             return GenerateVersion();
         }
 
-        return LoadSharedOutputsAndUpdateLocalCache();
+        var output = LoadSharedOutputsAndUpdateLocalCache();
+        UpdateHostBuildLabel(output);
+        return output;
     }
 
     private IVersionOutputs PerformSolutionVersioningProjectVersioning()
     {
         // do nothing - solution versioning project depreciated
-        return _generatedOutputsJsonFile.Load(_inputs.IntermediateOutputDirectory);
+        var output = _generatedOutputsJsonFile.Load(_inputs.IntermediateOutputDirectory);
+        UpdateHostBuildLabel(output);
+        return output;
     }
 
     private IVersionOutputs PerformStandAloneProjectVersioning()
@@ -141,6 +145,6 @@ internal class VersionGenerator
     private void WriteOutputsToFile(string outputDirectory, VersionOutputs generatedOutputs)
     {
         _generatedOutputsJsonFile.Write(outputDirectory, generatedOutputs);
-        _generatedOutputsPropFile.Write(outputDirectory, generatedOutputs);
+        //_generatedOutputsPropFile.Write(outputDirectory, generatedOutputs);
     }
 }

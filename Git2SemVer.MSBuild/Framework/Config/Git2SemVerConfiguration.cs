@@ -13,6 +13,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.Framework.Config;
 /// </summary>
 internal sealed class Git2SemVerConfiguration : IConfiguration
 {
+    [JsonIgnore]
     private static JsonSerializerOptions _serialiseOptions = new()
     {
         WriteIndented = true,
@@ -20,10 +21,7 @@ internal sealed class Git2SemVerConfiguration : IConfiguration
     };
 
     [JsonIgnore]
-    private static int _instanceHash;
-
-    [JsonIgnore]
-    private static Git2SemVerConfiguration? _instance;
+    private int _onLoadHash;
 
     [JsonPropertyOrder(100)]
     public List<Git2SemVerBuildLogEntry> BuildLog { get; set; } = [];
@@ -87,19 +85,21 @@ internal sealed class Git2SemVerConfiguration : IConfiguration
     /// </remarks>
     public static Git2SemVerConfiguration Load()
     {
+        Git2SemVerConfiguration instance;
+
         var filePath = GetFilePath();
         if (File.Exists(filePath))
         {
             var json = File.ReadAllText(filePath);
-            _instance = Load(json);
+            instance = Load(json);
         }
         else
         {
-            _instance = new Git2SemVerConfiguration();
+            instance = new Git2SemVerConfiguration();
         }
 
-        _instanceHash = _instance.GetCurrentHashCode();
-        return _instance;
+        instance._onLoadHash = instance.GetCurrentHashCode();
+        return instance;
     }
 
     /// <summary>
@@ -112,11 +112,12 @@ internal sealed class Git2SemVerConfiguration : IConfiguration
     /// </remarks>
     public void Save()
     {
-        if (_instanceHash == _instance!.GetCurrentHashCode())
+        var currentHashCode = GetCurrentHashCode();
+        if (_onLoadHash == currentHashCode)
         {
             return;
         }
-        _instanceHash = _instance.GetCurrentHashCode();
+        _onLoadHash = currentHashCode;
 
         var json = JsonSerializer.Serialize(this, _serialiseOptions);
         json = Regex.Unescape(json);
