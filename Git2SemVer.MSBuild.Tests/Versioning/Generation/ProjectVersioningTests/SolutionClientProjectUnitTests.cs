@@ -18,7 +18,7 @@ internal class SolutionClientProjectUnitTests : ProjectVersioningUnitTestsBase
     }
 
     [Test]
-    public void DoesGenerate_WhenCachedOutputsNotAvailable()
+    public void DoesGenerate_WhenCachedOutputsNotAvailableTest()
     {
         LocalCachedOutputs.Setup(x => x.IsValid).Returns(false);
         SharedCachedOutputs.Setup(x => x.IsValid).Returns(false);
@@ -30,7 +30,7 @@ internal class SolutionClientProjectUnitTests : ProjectVersioningUnitTestsBase
     }
 
     [Test]
-    public void DoesGenerate_WhenLocalCacheHasSameBuildNumber()
+    public void DoesGenerate_WhenLocalCacheHasSameBuildNumberTest()
     {
         LocalCachedOutputs.Setup(x => x.IsValid).Returns(true);
         LocalCachedOutputs.Setup(x => x.BuildNumber).Returns("42");
@@ -43,7 +43,7 @@ internal class SolutionClientProjectUnitTests : ProjectVersioningUnitTestsBase
     }
 
     [Test]
-    public void DoesGenerate_WhenNoLocalCacheButSharedCacheHasSameBuildNumber()
+    public void DoesGenerate_WhenNoLocalCacheButSharedCacheHasSameBuildNumberTest()
     {
         LocalCachedOutputs.Setup(x => x.IsValid).Returns(false);
         SharedCachedOutputs.Setup(x => x.IsValid).Returns(true);
@@ -56,7 +56,7 @@ internal class SolutionClientProjectUnitTests : ProjectVersioningUnitTestsBase
     }
 
     [Test]
-    public void DoesNotGenerate_WhenLocalCacheHasDifferentBuildNumber()
+    public void DoesNotGenerate_WhenLocalCacheHasDifferentBuildNumberTest()
     {
         LocalCachedOutputs.Setup(x => x.IsValid).Returns(true);
         LocalCachedOutputs.Setup(x => x.BuildNumber).Returns("41");
@@ -69,7 +69,7 @@ internal class SolutionClientProjectUnitTests : ProjectVersioningUnitTestsBase
     }
 
     [Test]
-    public void DoesNotGenerate_WhenNoLocalCacheAndSharedCacheHasDifferentBuildNumber()
+    public void DoesNotGenerate_WhenNoLocalCacheAndSharedCacheHasDifferentBuildNumberTest()
     {
         LocalCachedOutputs.Setup(x => x.IsValid).Returns(false);
         SharedCachedOutputs.Setup(x => x.IsValid).Returns(true);

@@ -18,7 +18,7 @@ internal class SolutionVersionProjectUnitTests : ProjectVersioningUnitTestsBase
     }
 
     [Test]
-    public void DoesGenerate_WhenCachedOutputsNotAvailable()
+    public void DoesGenerate_WhenCachedOutputsNotAvailableTest()
     {
         SharedCachedOutputs.Setup(x => x.IsValid).Returns(false);
 
@@ -30,7 +30,7 @@ internal class SolutionVersionProjectUnitTests : ProjectVersioningUnitTestsBase
     }
 
     [Test]
-    public void DoesNotGenerate_WhenCachedOutputsAvailable()
+    public void DoesNotGenerate_WhenCachedOutputsAvailableTest()
     {
         SharedCachedOutputs.Setup(x => x.IsValid).Returns(true);
 
