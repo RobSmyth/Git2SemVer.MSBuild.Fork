@@ -9,26 +9,15 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 
-internal sealed class PathsFromLastReleasesFinder : IGitHistoryPathsFinder
+internal sealed class PathsFromLastReleasesFinder(ICommitsRepository commitsRepo, IGitTool gitTool, ILogger logger) : IGitHistoryPathsFinder
 {
-    private readonly ICommitsRepository _commitsRepo;
-    private readonly IGitTool _gitTool;
-    private readonly ILogger _logger;
-
-    public PathsFromLastReleasesFinder(ICommitsRepository commitsRepo, IGitTool gitTool, ILogger logger)
-    {
-        _commitsRepo = commitsRepo;
-        _gitTool = gitTool;
-        _logger = logger;
-    }
-
     public HistoryPaths FindPathsToHead()
     {
         VersionHistorySegment.Reset();
         CommitObfuscator.Clear();
 
-        _logger.LogDebug($"Current branch: {_gitTool.BranchName}");
-        var segments = new VersionHistorySegmentsBuilder(_commitsRepo, _logger).BuildTo(_commitsRepo.Head);
-        return new VersionHistoryPathsBuilder(segments, _logger).Build();
+        logger.LogDebug($"Current branch: {gitTool.BranchName}");
+        var segments = new VersionHistorySegmentsBuilder(commitsRepo, logger).BuildTo(commitsRepo.Head);
+        return new VersionHistoryPathsBuilder(segments, logger).Build();
     }
 }
