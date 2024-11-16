@@ -17,7 +17,7 @@ internal class GitToolIntegrationTests
 
         var result = tool.Run("--version");
 
-        TestContext.Progress.WriteLine(result.stdOutput);
+        logger.LogInfo(result.stdOutput);
         Assert.That(result.returnCode, Is.EqualTo(0));
         Assert.That(logger.HasError, Is.False);
     }

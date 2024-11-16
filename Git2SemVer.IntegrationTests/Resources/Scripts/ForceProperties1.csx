@@ -20,7 +20,7 @@ context.Outputs.Version = new SemVersion(11, 12, 13).WithPrerelease("a-prereleas
 context.Outputs.InformationalVersion = context.Outputs.Version.WithMetadata("metadata");
 context.Outputs.AssemblyVersion = new Version(1, 2, 3);
 context.Outputs.FileVersion = new Version(4, 5, 6);
-context.Outputs.PackageVersion = new SemVersion(4, 6, 7);
+context.Outputs.PackageVersion = new SemVersion(5, 6, 7);
 
 context.Logger.LogInfo($"Forced informational version to: {context.Outputs.InformationalVersion}");
 context.Logger.LogInfo($"Forced assembly version to:      {context.Outputs.AssemblyVersion}");

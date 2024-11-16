@@ -9,15 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Documentation", "Documentat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Git2SemVer.MSBuild.Tests", "Git2SemVer.MSBuild.Tests\Git2SemVer.MSBuild.Tests.csproj", "{22AA2ABF-7A45-48CA-A5D9-536332232D62}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{D4D4960E-5CE2-4058-8E3D-5A00A84EFFF9}"
-	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
-		Directory.Build.props = Directory.Build.props
-		Directory.Versioning.Build.props = Directory.Versioning.Build.props
-		LICENSE = LICENSE
-		README.md = README.md
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild.Tasking", "MSBuild.Tasking\MSBuild.Tasking.csproj", "{383C7FE9-848E-4F82-B6C0-4230C997552F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EditingTestAssembly", "EditingTestAssembly\EditingTestAssembly.csproj", "{AC111B59-B47C-4F59-9D38-F97D0FF02BA5}"
@@ -47,6 +38,16 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolutionVersioningProject", "SolutionVersioningProject\SolutionVersioningProject.csproj", "{BB578AE5-A50C-46F3-8F03-D7DD92E696FF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild.Tasking.Tests", "MSBuild.Tasking.Tests\MSBuild.Tasking.Tests.csproj", "{778666FA-AE37-4F5F-B0E0-F0DF2D6CF2D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4F5F4537-80BA-4561-A29C-DF6AD9921C08}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		ChangeLog.md = ChangeLog.md
+		Directory.Versioning.Build.props = Directory.Versioning.Build.props
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

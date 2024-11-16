@@ -59,7 +59,7 @@ public sealed class Git2SemVerScriptRunner
         {
             if (_inputs.RunScript == null)
             {
-                _logger.LogDebug($"RunScript is null and script '{_inputs.BuildScriptPath}' not found. Ignoring.");
+                _logger.LogWarning($"RunScript is null and script '{_inputs.BuildScriptPath}' not found. Ignoring.");
                 return;
             }
 

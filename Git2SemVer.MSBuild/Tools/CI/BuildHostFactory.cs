@@ -18,7 +18,7 @@ internal sealed class BuildHostFactory
 
     public IBuildHost Create(string hostType, string buildNumber, string buildContext, string inputsBuildIdFormat)
     {
-        var host = new BuildHost(new BuildHostFinder(_config, _logger).Find(hostType));
+        var host = new BuildHost(new BuildHostFinder(_config, _logger).Find(hostType), _logger);
 
         if (!string.IsNullOrWhiteSpace(buildNumber))
         {

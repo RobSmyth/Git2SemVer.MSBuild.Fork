@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using NoeticTools.Common.Exceptions;
 using NoeticTools.Common.Logging;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Config;
@@ -17,25 +16,19 @@ internal class UncontrolledHost : BuildHostBase, IDetectableBuildHost
     {
         _config = config;
         _logger = logger;
+        Name = "Uncontrolled";
         BuildContext = Environment.MachineName.ToNormalisedSemVerIdentifier();
         BuildNumber = _config.BuildNumber.ToString(CultureInfo.InvariantCulture);
         DefaultBuildNumberFunc = () => [BuildContext, BuildNumber];
-
-        if (string.IsNullOrWhiteSpace(BuildContext))
-        {
-            throw new Git2SemVerConfigurationException("UncontrolledHost: Host.BuildContext is required.");
-        }
     }
 
     public HostTypeIds HostTypeId => HostTypeIds.Uncontrolled;
 
-    public string Name => "Uncontrolled";
-
-    public string BumpBuildNumber()
+    public override string BumpBuildNumber()
     {
         _config.BuildNumber++;
         _config.Save();
-        _logger.LogTrace("Bumped build number to {0}.", _config.BuildNumber);
+        _logger.LogDebug("Bumping build number to {0}.", _config.BuildNumber);
         BuildNumber = _config.BuildNumber.ToString(CultureInfo.InvariantCulture);
         return BuildNumber;
     }
@@ -43,20 +36,5 @@ internal class UncontrolledHost : BuildHostBase, IDetectableBuildHost
     public bool MatchesHostSignature()
     {
         return true;
-    }
-
-    public void ReportBuildStatistic(string key, int value)
-    {
-        _logger.LogTrace($"Build statistic {key} = {value}");
-    }
-
-    public void ReportBuildStatistic(string key, double value)
-    {
-        _logger.LogTrace($"Build statistic {key} = {value:G13}");
-    }
-
-    public void SetBuildLabel(string label)
-    {
-        _logger.LogDebug($"Build label: '{label}'");
     }
 }

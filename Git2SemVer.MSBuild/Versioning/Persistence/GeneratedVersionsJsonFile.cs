@@ -17,13 +17,13 @@ internal sealed class GeneratedVersionsJsonFile : IGeneratedOutputsJsonFile
         IncludeFields = false
     };
 
-    public static string ToJson(VersionOutputs outputs)
+    public static string ToJson(IVersionOutputs outputs)
     {
-        var versionInfo = new VersioningInfo { Git2SemVerVersionInfo = outputs };
+        var versionInfo = new VersioningInfo { Git2SemVerVersionInfo = (VersionOutputs)outputs };
         return JsonSerializer.Serialize(versionInfo, SerialiseOptions);
     }
 
-    public VersionOutputs Load(string directory)
+    public IVersionOutputs Load(string directory)
     {
         var propertiesFilePath = GetFilePath(directory);
         if (!File.Exists(propertiesFilePath))
@@ -35,7 +35,7 @@ internal sealed class GeneratedVersionsJsonFile : IGeneratedOutputsJsonFile
         return JsonSerializer.Deserialize<VersioningInfo>(json)!.Git2SemVerVersionInfo!;
     }
 
-    public void Write(string directory, VersionOutputs outputs)
+    public void Write(string directory, IVersionOutputs outputs)
     {
         if (!Directory.Exists(directory))
         {
@@ -60,12 +60,7 @@ internal sealed class GeneratedVersionsJsonFile : IGeneratedOutputsJsonFile
     private static string LoadJson(string directory)
     {
         var propertiesFilePath = GetFilePath(directory);
-        if (!File.Exists(propertiesFilePath))
-        {
-            return "";
-        }
-
-        return File.ReadAllText(propertiesFilePath);
+        return !File.Exists(propertiesFilePath) ? "" : File.ReadAllText(propertiesFilePath);
     }
 
     private sealed class VersioningInfo

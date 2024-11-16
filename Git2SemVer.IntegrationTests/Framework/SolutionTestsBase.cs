@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using NoeticTools.Common;
 using NoeticTools.Common.Tools;
 using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
@@ -7,7 +8,7 @@ using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
 
 namespace NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
-public abstract class SolutionTestsBase : ScriptingTestsBase
+internal abstract class SolutionTestsBase : ScriptingTestsBase
 {
     private string _currentDirectory = "";
     private string _git2SemVerToolPath = "";

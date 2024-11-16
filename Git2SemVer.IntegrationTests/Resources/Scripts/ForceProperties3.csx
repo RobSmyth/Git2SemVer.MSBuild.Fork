@@ -7,7 +7,7 @@ using Semver;
 
 var context = VersioningContext.Instance!;
 
-context.Logger.LogInfo("\nRunning script ForceProperties2.csx.\n");
+context.Logger.LogInfo("\nRunning script ForceProperties3.csx.\n");
 
 // force base version outputs & clear derived.
 // Version will be dominant.

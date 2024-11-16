@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <Git2SemVerRuntTimeFramework>netstandard2.0</Git2SemVerRuntTimeFramework>
+    <_Git2SemVer_TaskFolder>../../Git2SemVer.MSBuild/bin/$(Configuration)/$(Git2SemVerRuntTimeFramework)</_Git2SemVer_TaskFolder>
+    <Git2SemVerTasksAssembly>$(_Git2SemVer_TaskFolder)/NoeticTools.Git2SemVer.MSBuild.dll</Git2SemVerTasksAssembly>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;NU1803</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;NU1803</NoWarn>
+  </PropertyGroup>
+
+</Project>

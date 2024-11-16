@@ -11,16 +11,16 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
 
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning;
 
-internal sealed class VersionGeneratorFactory
+internal sealed class ProjectVersioningFactory
 {
     private readonly ILogger _logger;
 
-    public VersionGeneratorFactory(ILogger logger)
+    public ProjectVersioningFactory(ILogger logger)
     {
         _logger = logger;
     }
 
-    public VersionGenerator Create(IVersionGeneratorInputs inputs)
+    public ProjectVersioning Create(IVersionGeneratorInputs inputs)
     {
         if (inputs == null)
         {
@@ -41,11 +41,13 @@ internal sealed class VersionGeneratorFactory
 
         var defaultBuilderFactory = new DefaultVersionBuilderFactory(_logger);
         var scriptBuilder = new ScriptVersionBuilder(_logger);
-        var versionGenerator = new VersionGenerator(inputs, host,
-                                                    new GeneratedVersionsJsonFile(),
-                                                    new GeneratedVersionsPropsFile(),
-                                                    gitTool, gitPathsFinder, defaultBuilderFactory,
+        var generatedOutputsJsonFile = new GeneratedVersionsJsonFile();
+        var versionGenerator = new VersionGenerator(inputs, host, generatedOutputsJsonFile, gitTool, gitPathsFinder, defaultBuilderFactory,
                                                     scriptBuilder, _logger);
-        return versionGenerator;
+        var projectVersioning = new ProjectVersioning(inputs, host,
+                                                      generatedOutputsJsonFile, 
+                                                      versionGenerator,
+                                                      _logger);
+        return projectVersioning;
     }
 }

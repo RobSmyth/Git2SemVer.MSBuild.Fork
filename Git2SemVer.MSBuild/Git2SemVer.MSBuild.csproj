@@ -49,6 +49,9 @@
       <_Parameter1>NoeticTools.Git2SemVer.MSBuild.IntegrationTests</_Parameter1>
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>NoeticTools.Git2SemVer.IntegrationTests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>NoeticTools.MSBuild.Tasking.Tests</_Parameter1>
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
@@ -76,7 +79,7 @@
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.4" PrivateAssets="all" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="4.11.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" PrivateAssets="all" />
-    <PackageReference Include="NoeticTools.Common" Version="0.1.0-InitialDev.20" />
+    <PackageReference Include="NoeticTools.Common" Version="0.1.1-beta-InitialDev.68" />
     <PackageReference Include="NuGet.Versioning" Version="6.11.1" PrivateAssets="all" />
     <PackageReference Include="Semver" Version="[2.3.0]" PrivateAssets="all" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" PrivateAssets="all" />
@@ -100,7 +103,7 @@
     <ProjectReference Include="..\MSBuild.Tasking.Logging\MSBuild.Tasking.Logging.csproj" />
   </ItemGroup>
 
-  <!-- Ensure that the Git2SemVer version information JSON file is available. -->
+  <!-- Ensure that the Git2SemVer version information JSON file is available.  -->
   <Target Name="Git2SemVerEnsureVersionInfoBuilt" Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
 
     <PropertyGroup>

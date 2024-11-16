@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using NoeticTools.Common;
-// ReSharper disable MemberCanBePrivate.Global
 
+
+// ReSharper disable MemberCanBePrivate.Global
 
 // ReSharper disable InconsistentNaming
 
@@ -250,7 +251,6 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
                               *               .|0005|0006|REDACTED|| (tag: v0.18.2)|
                               *               .|0006|0007|REDACTED|||
                               """);
-
 
     /// <summary>
     ///     Tests release tag and major (!) bump on head.

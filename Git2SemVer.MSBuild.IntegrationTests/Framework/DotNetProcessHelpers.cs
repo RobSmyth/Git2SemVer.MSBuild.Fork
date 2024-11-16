@@ -17,17 +17,16 @@ public static class DotNetProcessHelpers
 
     public static void Publish(string projectPath, string buildConfiguration)
     {
-        TestContext.Progress.WriteLine($"\nPublishing {projectPath}\n");
+        TestContext.Out.WriteLine($"\nPublishing {projectPath}\n");
         const string profileFile = "FolderProfile.pubxml";
         var dotNetCommandLine = $"publish {projectPath} /p:PublishProfile={profileFile} --configuration {buildConfiguration} --no-build --no-restore";
-        var result = new DotNetTool().Run(dotNetCommandLine, TestContext.Progress, TestContext.Error);
+        var result = new DotNetTool().Run(dotNetCommandLine, TestContext.Out, TestContext.Error);
         Assert.That(result, Is.EqualTo(0), $"Command failed: dotnet {dotNetCommandLine}");
     }
 
     public static string RunDotnetApp(string appDllPath, ILogger logger)
     {
-        TestContext.Progress.WriteLine();
-        TestContext.Progress.WriteLine($"Running '{appDllPath}'");
+        logger.LogInfo($"Running '{appDllPath}'");
         var process = new ProcessCli(logger)
         {
             WorkingDirectory = Path.GetDirectoryName(appDllPath)!
@@ -37,7 +36,7 @@ public static class DotNetProcessHelpers
         var returnCode = process.Run("dotnet", appDllPath, outputWriter, TestContext.Error);
         var output = outputStringBuilder.ToString();
         Assert.That(returnCode, Is.EqualTo(0));
-        TestContext.Progress.WriteLine();
+        TestContext.Out.WriteLine();
         return output;
     }
 }

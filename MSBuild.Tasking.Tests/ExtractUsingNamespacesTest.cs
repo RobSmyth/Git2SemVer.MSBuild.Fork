@@ -18,17 +18,17 @@ public class ExtractUsingNamespacesTest
         Assert.That(MSBuildScriptRunner.ReferencedAssemblies.Count, Is.GreaterThan(5));
 
         // Provide a list to copy and paste to documentation
-        TestContext.Progress.WriteLine("\nNamespaces:\n");
+        TestContext.Out.WriteLine("\nNamespaces:\n");
         foreach (var @namespace in options.Imports)
         {
-            TestContext.Progress.WriteLine(@namespace);
+            TestContext.Out.WriteLine(@namespace);
         }
 
         // Provide a list to copy and paste to documentation
-        TestContext.Progress.WriteLine("\nReferenced assemblies:\n");
+        TestContext.Out.WriteLine("\nReferenced assemblies:\n");
         foreach (var assemblyName in MSBuildScriptRunner.ReferencedAssemblies)
         {
-            TestContext.Progress.WriteLine(assemblyName);
+            TestContext.Out.WriteLine(assemblyName);
         }
     }
 }

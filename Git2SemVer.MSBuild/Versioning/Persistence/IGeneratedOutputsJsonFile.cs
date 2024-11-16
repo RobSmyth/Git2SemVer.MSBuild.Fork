@@ -5,6 +5,6 @@ namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
 
 internal interface IGeneratedOutputsJsonFile
 {
-    VersionOutputs Load(string directory);
-    void Write(string directory, VersionOutputs outputs);
+    IVersionOutputs Load(string directory);
+    void Write(string directory, IVersionOutputs outputs);
 }
