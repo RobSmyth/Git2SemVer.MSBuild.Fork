@@ -3,7 +3,7 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using Semver;
 
 
-namespace NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
+namespace NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
 internal class TaskOutputsStub : IVersionOutputs
 {
@@ -32,6 +32,8 @@ internal class TaskOutputsStub : IVersionOutputs
     public string PrereleaseLabel { get; set; } = "";
 
     public SemVersion? Version { get; set; }
+
+    public bool IsValid => BuildNumber.Length > 0;
 
     public void SetAllVersionPropertiesFrom(SemVersion informationalVersion, string buildNumber, string buildContext)
     {

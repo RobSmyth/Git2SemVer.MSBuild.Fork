@@ -179,6 +179,15 @@ public interface IVersionOutputs
     SemVersion? Version { get; set; }
 
     /// <summary>
+    ///     True if outputs are valid.
+    /// </summary>
+    /// <remarks>
+    ///     For internal use to detect default output settings.
+    /// </remarks>
+    [JsonIgnore]
+    bool IsValid { get; }
+
+    /// <summary>
     ///     Set all version properties from provided informational version.
     /// </summary>
     /// <remarks>

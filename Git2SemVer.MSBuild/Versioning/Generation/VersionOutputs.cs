@@ -47,6 +47,9 @@ internal sealed class VersionOutputs : IVersionOutputs
     [JsonConverter(typeof(SemVersionJsonConverter))]
     public SemVersion? Version { get; set; }
 
+    [JsonIgnore]
+    public bool IsValid => BuildNumber.Length > 0;
+
     public void SetAllVersionPropertiesFrom(SemVersion informationalVersion,
                                             string buildNumber,
                                             string buildContext)

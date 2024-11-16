@@ -1,14 +1,13 @@
 ﻿using Moq;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
-using NoeticTools.Git2SemVer.MSBuild.Versioning;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
 using NoeticTools.Testing.Common;
 
 
-namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning;
+namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.ProjectVersioningTests;
 
-internal abstract class ProjectVersioningTestsBase
+internal abstract class ProjectVersioningUnitTestsBase
 {
     private NUnitLogger _logger;
 
@@ -21,7 +20,7 @@ internal abstract class ProjectVersioningTestsBase
         VersionGenerator = new Mock<IVersionGenerator>();
         _logger = new NUnitLogger();
 
-        Target = new ProjectVersioning(Inputs.Object, Host.Object, OutputsCacheJsonFile.Object, VersionGenerator.Object, _logger);
+        Target = new MSBuild.Versioning.ProjectVersioning(Inputs.Object, Host.Object, OutputsCacheJsonFile.Object, VersionGenerator.Object, _logger);
 
         Inputs.Setup(x => x.SolutionSharedDirectory).Returns("SolutionSharedDirectory");
         Inputs.Setup(x => x.IntermediateOutputDirectory).Returns("IntermediateOutputDirectory");
@@ -43,14 +42,14 @@ internal abstract class ProjectVersioningTestsBase
         _logger.Dispose();
     }
 
-    protected Mock<IVersionGeneratorInputs> Inputs;
-    protected Mock<IBuildHost> Host;
-    protected Mock<IGeneratedOutputsJsonFile> OutputsCacheJsonFile;
-    protected Mock<IVersionGenerator> VersionGenerator;
-    protected ProjectVersioning Target;
-    protected Mock<IVersionOutputs> LocalCachedOutputs;
-    protected Mock<IVersionOutputs> SharedCachedOutputs;
-    protected Mock<IVersionOutputs> GeneratedOutputs;
+    protected Mock<IVersionGeneratorInputs> Inputs { get; private set; }
+    protected Mock<IBuildHost> Host { get; private set; }
+    protected Mock<IGeneratedOutputsJsonFile> OutputsCacheJsonFile { get; private set; }
+    protected Mock<IVersionGenerator> VersionGenerator { get; private set; }
+    protected MSBuild.Versioning.ProjectVersioning Target { get; private set; }
+    protected Mock<IVersionOutputs> LocalCachedOutputs { get; private set; }
+    protected Mock<IVersionOutputs> SharedCachedOutputs { get; private set; }
+    protected Mock<IVersionOutputs> GeneratedOutputs { get; private set; }
 
     protected void ModeIs(VersioningMode mode)
     {

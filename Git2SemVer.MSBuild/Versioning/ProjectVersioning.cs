@@ -41,20 +41,14 @@ internal sealed class ProjectVersioning(
 
     private string GetClientLastBuildNumber()
     {
-        var lastBuildNumber = outputsCacheJsonFile.Load(inputs.IntermediateOutputDirectory).BuildNumber;
-        if (lastBuildNumber.Length != 0)
+        var localCache = outputsCacheJsonFile.Load(inputs.IntermediateOutputDirectory);
+        if (localCache.IsValid)
         {
-            return lastBuildNumber;
+            return localCache.BuildNumber;
         }
 
         var shared = outputsCacheJsonFile.Load(inputs.SolutionSharedDirectory);
-        lastBuildNumber = shared.BuildNumber;
-        if (lastBuildNumber.Length == 0)
-        {
-            lastBuildNumber = host.BuildNumber;
-        }
-
-        return lastBuildNumber;
+        return !shared.IsValid ? host.BuildNumber : shared.BuildNumber;
     }
 
     private IVersionOutputs PerformSolutionClientVersioning()
@@ -76,7 +70,7 @@ internal sealed class ProjectVersioning(
     {
         logger.LogTrace("Solution versioning project.");
         var output = outputsCacheJsonFile.Load(inputs.SolutionSharedDirectory);
-        return output.BuildNumber.Length == 0 ? versionGenerator.Run() : output;
+        return !output.IsValid ? versionGenerator.Run() : output;
     }
 
     private IVersionOutputs PerformStandAloneProjectVersioning()
