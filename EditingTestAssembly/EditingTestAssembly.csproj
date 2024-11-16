@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NoeticTools.Common" Version="0.1.1-beta-InitialDev.68" />
+    <PackageReference Include="NoeticTools.Common" Version="0.1.1-alpha-InitialDev.70" />
   </ItemGroup>
 
   <ItemGroup>
