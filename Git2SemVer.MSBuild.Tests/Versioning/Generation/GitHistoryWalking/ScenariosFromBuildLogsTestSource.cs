@@ -262,6 +262,57 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
                               *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
                               """);
 
+    /// <summary>
+    ///     Actual failure scenario from logs. Was returning 1.0.1 instead of 1.1.0.
+    /// </summary>
+    public LoggedScenario Scenario12 { get; } =
+        new("1.1.0", "0002", """
+                              *               .|0002|0003|REDACTED|| (HEAD -> REDACTED_BRANCH, origin/Investigating)|
+                              *               .|0003|0004 0005|REDACTED|| (origin/REDACTED_BRANCH, main)|
+                              | *             .|0005|0006|REDACTED|| (origin/REDACTED_BRANCH, feature/cross-targeting)|
+                              | *             .|0006|0007|refactor: REDACTED|||
+                              | *             .|0007|0008|test: REDACTED|||
+                              | *             .|0008|0009|test: REDACTED|||
+                              | *             .|0009|0010|test: REDACTED|||
+                              | *             .|0010|0011|refactor: REDACTED|||
+                              | *             .|0011|0012|test: REDACTED|||
+                              | *             .|0012|0013|build: REDACTED|||
+                              | *             .|0013|0014|test: REDACTED|||
+                              | *             .|0014|0015|test: REDACTED|||
+                              | *             .|0015|0016|fix: REDACTED|||
+                              | *             .|0016|0017|REDACTED|||
+                              | *             .|0017|0018|REDACTED|||
+                              | *             .|0018|0019|test: REDACTED|||
+                              | *             .|0019|0020|build: REDACTED|||
+                              | *             .|0020|0021|build: REDACTED|||
+                              | *             .|0021|0022|REDACTED|||
+                              | *             .|0022|0023|build: REDACTED|||
+                              | *             .|0023|0004|build: REDACTED|||
+                              |/  
+                              *               .|0004|0024|REDACTED|||
+                              *               .|0024|0025|REDACTED|||
+                              *               .|0025|0026|feat: REDACTED|||
+                              *               .|0026|0027|refactor: REDACTED|||
+                              *               .|0027|0028|refactor: REDACTED|||
+                              *               .|0028|0029|build: REDACTED|||
+                              *               .|0029|0030|feat: REDACTED|||
+                              *               .|0030|0031|build: REDACTED|||
+                              *               .|0031|0032 0033|REDACTED|||
+                              |\  
+                              | *             .|0033|0034|build(tool): REDACTED|||
+                              | *             .|0034|0035|build: REDACTED|||
+                              | *             .|0035|0036|REDACTED|||
+                              | *             .|0036|0037|REDACTED|||
+                              * |             .|0032|0037|REDACTED|||
+                              |/  
+                              *               .|0037|0038|build: REDACTED|| (tag: v1.0.0)|
+                              *               .|0038|0039|build: REDACTED|||
+                              *               .|0039|0040|fix: REDACTED|||
+                              *               .|0040|0041|docs!: REDACTED|||
+                              *               .|0041|0042|fix: REDACTED|||
+                              *               .|0042|0043|build: REDACTED|||
+                              """);
+
     public IEnumerator GetEnumerator()
     {
         yield return new object[] { "Scenario 01", Scenario01 };
@@ -275,5 +326,6 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
         yield return new object[] { "Scenario 09 - tag trumps bump on same commit", Scenario09 };
         yield return new object[] { "Scenario 10", Scenario10 };
         yield return new object[] { "Scenario 11", Scenario11 };
+        //yield return new object[] { "Scenario 12", Scenario12 };
     }
 }
