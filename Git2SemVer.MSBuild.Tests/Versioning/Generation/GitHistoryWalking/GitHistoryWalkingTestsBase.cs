@@ -33,6 +33,7 @@ internal abstract class GitHistoryWalkingTestsBase
         return commits;
     }
 
+    [SetUp]
     protected void SetupBase()
     {
         VersionHistorySegment.Reset();
@@ -41,5 +42,11 @@ internal abstract class GitHistoryWalkingTestsBase
         Logger = new NUnitLogger(false) { Level = LoggingLevel.Trace };
         Repository = new Mock<ICommitsRepository>();
         _gitTool = new GitTool(Logger);
+    }
+
+    [TearDown]
+    protected void TearDownBase()
+    {
+        Logger.Dispose();
     }
 }

@@ -43,7 +43,7 @@ internal sealed class VersionHistorySegmentsBuilder
 
         using (_logger.EnterLogScope())
         {
-            _logger.LogDebug("Segment #   Commits (count)      Bumps  To segments       From segments    Release");
+            _logger.LogDebug("Segment #   Commits (count)      Bumps   Release");
             foreach (var segment in _segments)
             {
                 _logger.LogDebug(segment.Value.ToString());
@@ -102,7 +102,7 @@ internal sealed class VersionHistorySegmentsBuilder
 
     }
 
-    private void NextCommitBeforeMerge(CommitId parent)
+    private void NextCommitBeforeMerge(CommitId parent, Commit mergeCommit)
     {
         var parentCommit = _commits.Get(parent);
 
@@ -112,7 +112,7 @@ internal sealed class VersionHistorySegmentsBuilder
         }
         else
         {
-            var newSegmentVisitor = new VersionHistorySegmentsBuilder(_segment.CreateMergedSegment(), this);
+            var newSegmentVisitor = new VersionHistorySegmentsBuilder(_segment.CreateMergedSegment(mergeCommit), this);
             newSegmentVisitor.BuildSegmentsTo(parentCommit);
         }
     }
@@ -120,7 +120,7 @@ internal sealed class VersionHistorySegmentsBuilder
     private void OnBranchFromExistingSegment(Commit commit)
     {
         var intersectingSegment = _commitsCache[commit.CommitId];
-        var branchedFromSegment = intersectingSegment.BranchedFrom(_segment, commit);
+        var branchedFromSegment = intersectingSegment.BranchesFrom(_segment, commit);
         if (branchedFromSegment == null)
         {
             return;
@@ -133,22 +133,22 @@ internal sealed class VersionHistorySegmentsBuilder
         }
     }
 
-    private void OnMergeCommit(Commit commit)
+    private void OnMergeCommit(Commit mergeCommit)
     {
-        var mergedBranchCommit = commit.Parents[0];
-        var continuingBranchCommit = commit.Parents[1];
+        var mergedBranchCommit = mergeCommit.Parents[0];
+        var continuingBranchCommit = mergeCommit.Parents[1];
         using (_logger.EnterLogScope())
         {
-            _logger.LogDebug($"Commit {commit.CommitId.ObfuscatedSha} is a merge commit.");
+            _logger.LogDebug($"Commit {mergeCommit.CommitId.ObfuscatedSha} is a merge commit.");
         }
 
         _logger.LogTrace("Continuing branch:");
-        NextCommitBeforeMerge(continuingBranchCommit);
+        NextCommitBeforeMerge(continuingBranchCommit, mergeCommit);
 
-        _logger.LogDebug($"Commit {commit.CommitId.ObfuscatedSha} is a merge commit from branch commit {mergedBranchCommit.ObfuscatedSha}:");
+        _logger.LogDebug($"Commit {mergeCommit.CommitId.ObfuscatedSha} is a merge commit from branch commit {mergedBranchCommit.ObfuscatedSha}:");
         using (_logger.EnterLogScope())
         {
-            NextCommitBeforeMerge(mergedBranchCommit);
+            NextCommitBeforeMerge(mergedBranchCommit, mergeCommit);
         }
     }
 

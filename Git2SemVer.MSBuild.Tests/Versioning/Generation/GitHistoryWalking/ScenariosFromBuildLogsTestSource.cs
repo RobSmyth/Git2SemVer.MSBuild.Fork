@@ -263,8 +263,11 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
                               """);
 
     /// <summary>
-    ///     Actual failure scenario from logs. Was returning 1.0.1 instead of 1.1.0.
+    ///     Tests conventional commits a path algorithm.
     /// </summary>
+    /// <remarks>
+    ///     Actual failure scenario from logs. Was returning 1.0.1 instead of 1.1.0.
+    /// </remarks>
     public LoggedScenario Scenario12 { get; } =
         new("1.1.0", "0002", """
                               *               .|0002|0003|REDACTED|| (HEAD -> REDACTED_BRANCH, origin/Investigating)|
@@ -326,6 +329,6 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
         yield return new object[] { "Scenario 09 - tag trumps bump on same commit", Scenario09 };
         yield return new object[] { "Scenario 10", Scenario10 };
         yield return new object[] { "Scenario 11", Scenario11 };
-        //yield return new object[] { "Scenario 12", Scenario12 };
+        yield return new object[] { "Scenario 12", Scenario12 };
     }
 }
