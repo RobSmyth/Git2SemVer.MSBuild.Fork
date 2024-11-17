@@ -25,12 +25,6 @@ internal class PathsFromLastReleasesFinderTests : GitHistoryWalkingTestsBase
         _gitTool.Setup(x => x.BranchName).Returns("BranchName");
     }
 
-    [TearDown]
-    public void TearDown()
-    {
-        Logger.Dispose();
-    }
-
     [TestCaseSource(typeof(ScenariosFromBuildLogsTestSource))]
     public void BasicScenariosTest(string name, LoggedScenario scenario)
     {

@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Added [Cross targeted projects](https://learn.microsoft.com/en-us/nuget/create-packages/multiple-target-frameworks-project-file) support ([#26](https://github.com/NoeticTools/Git2SemVer/issues/26)).
 * Added versioning log file ([#26](https://github.com/NoeticTools/Git2SemVer/issues/2)).
+* Added [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0-beta.2/) support for versioning.
 
 ### Fixed
 

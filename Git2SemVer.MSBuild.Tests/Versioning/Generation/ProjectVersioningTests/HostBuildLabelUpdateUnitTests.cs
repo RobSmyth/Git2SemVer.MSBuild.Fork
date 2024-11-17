@@ -20,7 +20,7 @@ internal class HostBuildLabelUpdateUnitTests : ProjectVersioningUnitTestsBase
     [TestCase(VersioningMode.SolutionVersioningProject)]
     [TestCase(VersioningMode.SolutionClientProject)]
     [TestCase(VersioningMode.StandAloneProject)]
-    public void DoesNotUpdatesBuildLabel_WhenEnabledButNoBuildSystemVersion(VersioningMode mode)
+    public void DoesNotUpdatesBuildLabel_WhenNoBuildSystemVersion(VersioningMode mode)
     {
         ModeIs(mode);
         Inputs.Setup(x => x.UpdateHostBuildLabel).Returns(true);
@@ -33,7 +33,7 @@ internal class HostBuildLabelUpdateUnitTests : ProjectVersioningUnitTestsBase
     [TestCase(VersioningMode.SolutionVersioningProject)]
     [TestCase(VersioningMode.SolutionClientProject)]
     [TestCase(VersioningMode.StandAloneProject)]
-    public void DoesNotUpdatesBuildLabel_WhenNotEnabledButHasBuildSystemVersion(VersioningMode mode)
+    public void DoesNotUpdatesBuildLabel_WhenNotEnabled(VersioningMode mode)
     {
         ModeIs(mode);
         Inputs.Setup(x => x.UpdateHostBuildLabel).Returns(false);

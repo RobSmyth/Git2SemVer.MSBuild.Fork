@@ -39,6 +39,4 @@ internal interface IVersionHistoryPath
     SemVersion Version { get; }
 
     string ToString();
-
-    IReadOnlyList<VersionHistoryPath> With(IReadOnlyList<VersionHistorySegment> toSegments);
 }

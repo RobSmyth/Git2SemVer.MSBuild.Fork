@@ -29,9 +29,9 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
         }
     }
 
-    public Commit FirstCommit => _segments.First().FirstCommit;
+    public Commit FirstCommit => _segments.First().OldestCommit;
 
-    public Commit HeadCommit => _segments.Last().LastCommit;
+    public Commit HeadCommit => _segments.Last().YoungestCommit;
 
     public int Id { get; internal set; }
 
@@ -47,21 +47,21 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
             $"Path {Id,-3} {segmentIdsString,-20} {commitsCount,5}   {_bumps}   {LastReleasedVersion?.ToString() ?? " none"} -> {GetNextReleaseVersion()}";
     }
 
-    public IReadOnlyList<VersionHistoryPath> With(IReadOnlyList<VersionHistorySegment> toSegments)
-    {
-        if (!toSegments.Any())
-        {
-            return new List<VersionHistoryPath> { this };
-        }
+    //public IReadOnlyList<VersionHistoryPath> With(IReadOnlyList<VersionHistorySegment> toSegments)
+    //{
+    //    if (!toSegments.Any())
+    //    {
+    //        return new List<VersionHistoryPath> { this };
+    //    }
 
-        var paths = new List<VersionHistoryPath>();
-        foreach (var segment in toSegments)
-        {
-            paths.AddRange(With(segment).With(segment.To));
-        }
+    //    var paths = new List<VersionHistoryPath>();
+    //    foreach (var segment in toSegments)
+    //    {
+    //        paths.AddRange(With(segment).With(segment.ChildCommits)); // >>> this is obsolete ... build lookup in paths builder
+    //    }
 
-        return paths;
-    }
+    //    return paths;
+    //}
 
     private ApiChanges AggregateBumps()
     {
@@ -108,7 +108,7 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
         return version;
     }
 
-    private VersionHistoryPath With(VersionHistorySegment segment)
+    public VersionHistoryPath With(VersionHistorySegment segment)
     {
         var segmentIds = new List<VersionHistorySegment>(_segments) { segment };
         return new VersionHistoryPath(segmentIds.ToArray());
