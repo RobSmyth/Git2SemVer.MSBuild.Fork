@@ -44,7 +44,7 @@ Or, in the `csproj` file like:
   </PropertyGroup>
 ```
 
-## Properties & services
+## Properties
 
 The build host object's properties:
 
@@ -56,7 +56,7 @@ The build host object's properties:
 | IsControlled          | true          |
 | Name                  | 'TeamCity'    |
 
-Services:
+## Services
 
 | Service | Description  |
 |:-- |:-- |
