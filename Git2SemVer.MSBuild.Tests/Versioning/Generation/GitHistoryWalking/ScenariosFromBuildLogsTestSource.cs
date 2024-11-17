@@ -263,7 +263,7 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
                               """);
 
     /// <summary>
-    ///     Tests conventional commits a path algorithm. 
+    ///     Tests conventional commits a path algorithm.
     /// </summary>
     /// <remarks>
     ///     Actual failure scenario from logs. Was returning 1.0.1 instead of 1.1.0.
