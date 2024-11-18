@@ -3,6 +3,9 @@
 
 namespace NoeticTools.Testing.Common;
 
+/// <summary>
+///     Logger to log to NUnit's TestContext.
+/// </summary>
 public class NUnitLogger : ILogger
 {
     private const string LogScopeIndent = "  ";
