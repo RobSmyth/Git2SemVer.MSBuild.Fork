@@ -2,7 +2,7 @@
 
 Git2SemVer.Tool is a dotnet tool used to setup [Git2SemVer](https://github.com/NoeticTools/Git2SemVer) solution versioning in a .NET solution.
 
-Go to [documentation](https://noetictools.github.io/Git2SemVer/) for more information.
+Go to [documentation](https://noetictools.github.io/Git2SemVer.MSBuild/) for more information.
 
 To run, first install:
 
