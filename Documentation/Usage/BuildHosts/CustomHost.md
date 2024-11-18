@@ -6,16 +6,16 @@ uid: custom-host
   <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/Git2SemVer_banner_840x70.png"/>
 </div>
 
-## Custom host
+# Custom host
 
 > [!NOTE]
 > If youre using a build system not listed here (like Jenkins) and you would like in-built support, please raise a feature request.
 
-### Detection
+## Detection
 
 A custom host is only used when [Git2SemVer_Env_HostType](xref:msbuild-properties##inputs) property is set to to `Custom`.
 
-### Build number
+## Build number
 
 Set by MSBuild properties:
 
@@ -23,7 +23,7 @@ Set by MSBuild properties:
 * [Git2SemVer_BuildContext](xref:msbuild-properties##inputs)
 * [Git2SemVer_BuildIDFormat](xref:msbuild-properties##inputs)
 
-### Properties & services
+## Properties
 
 The build host object's properties:
 
@@ -35,7 +35,7 @@ The build host object's properties:
 | IsControlled          | true          |
 | Name                  | 'GitHub'    |
 
-Services:
+## Services
 
 | Service | Description  |
 |:-- |:-- |

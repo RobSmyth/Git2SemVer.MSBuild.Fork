@@ -21,14 +21,20 @@ Git2SemVer does not automatically detect when it is running within a GitHub work
 
 ### Build number
 
-Github workflows do not provide a [build number](xref:glossary#build-number) but Git2SemVer can construct composite build number ([Build ID](xref:glossary#build-id)) is constructed from the run number and the run attempt count.
+Github workflows do not provide a [build number](xref:glossary#build-number).
 
 > [!IMPORTANT]  
 > `github.run_number` does not uniquely identify every build. It increments on each new run but does not change if a "run" is rebuilt.
 >
 > Using run_number alone as a defacto build number will result in some builds being untraceable.
 
-In a github workflow yml pass these two numbers to Git2SemVer like this:
+There are two workarounds:
+
+1. Git2SemVer can construct composite build number ([Build ID](xref:glossary#build-id)) is constructed from the run number and the run attempt count.
+2. Use a custom GitHub action like [build-tag-number](https://github.com/onyxmueller/build-tag-number). Using a Custom action is not discussed here.
+
+To construct a composite build number, in the github workflow yml pass the run number and the run attempt count
+to Git2SemVer like this:
 
 ```yaml
     - name: Build Project
@@ -68,7 +74,7 @@ Example versions with the build ID identifiers highlighted:
 
 The build context identifier (run attempt) comes second to ensure correct [Semmantic Versioning pecedence](https://semver.org/#spec-item-11) of rebuilds.
 
-### Properties & services
+### Properties
 
 The GitHub build host object's properties:
 
@@ -79,7 +85,7 @@ The GitHub build host object's properties:
 | Build ID      | `<build context>.<build number>` |
 | Name          | 'GitHub'    |
 
-Services:
+### Services
 
 | Service | Description  |
 |:-- |:-- |

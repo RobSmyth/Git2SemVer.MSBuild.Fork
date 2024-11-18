@@ -37,7 +37,7 @@ precedence for comparing versions from multiple hosts as the build numbers for d
 > [Semmantic Versioning pecedence](https://semver.org/#spec-item-11) will not work when comparing versions from different hosts.
 > So NuGet pre-release builds must be published from one host only (typically the build system) so that the highest precedence build is shown.
 
-### Host properties & services
+### Properties
 
 The build host object's properties are:
 
@@ -49,7 +49,7 @@ The build host object's properties are:
 | IsControlled          | false          |
 | Name                  | 'Uncontrolled' |
 
-Services:
+## Services
 
 | services | Description  |
 |:-- |:-- |
