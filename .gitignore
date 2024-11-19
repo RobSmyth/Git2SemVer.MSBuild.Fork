@@ -17,3 +17,4 @@ nupkg
 /SolutionVersioningProject/.git2semver/Git2SemVer.VersionInfo.g.props
 /TestSolutions/CrossTargetingVersioning/TestApplication/Git2SemVer_GeneratedVersionStamp.stamp
 /TestSolutions/CrossTargetingVersioning/TestApplication/Git2SemVer_RestoredProperties.stamp
+*.user
