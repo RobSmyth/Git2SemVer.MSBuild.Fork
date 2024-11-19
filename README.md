@@ -1,6 +1,6 @@
 ![](Documentation/Images/Git2SemVer_banner_840x70.png)
 
-# GitSemVer
+# NoeticTools.GitSemVer
 
 Automatic true [Semmantic Versioning](https://semver.org/) for both **Visual Studio** and donet CLI builds of .NET solutions and projects.
 Provides versioning _out of box_. It is fully customisable by by built-in C# scripting and versioning API.
