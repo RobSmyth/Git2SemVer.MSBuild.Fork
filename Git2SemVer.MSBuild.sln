@@ -21,10 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Git2SemVer.Tool", "Git2SemV
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Git2SemVer.Tool.Tests", "Git2SemVer.Tool.Tests\Git2SemVer.Tool.Tests.csproj", "{9F7D093A-213B-4F21-95F6-1DD62FF3285E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing.Common", "TestingCommon\Testing.Common.csproj", "{94BE20A7-2746-4A31-8D14-D530E37D32F7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonProjects", "CommonProjects", "{2CBD5F54-15F6-41C2-A55D-D6301A52B4E8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Git2SemVer.IntegrationTests", "Git2SemVer.IntegrationTests\Git2SemVer.IntegrationTests.csproj", "{772E9B23-85D4-4FBC-A832-A89EC2FB4EAE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{25FC97D8-62B8-4C47-9AA3-C6A893117175}"
@@ -42,8 +38,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4F5F4537-80BA-4561-A29C-DF6AD9921C08}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		Directory.Build.props = Directory.Build.props
 		ChangeLog.md = ChangeLog.md
+		Directory.Build.props = Directory.Build.props
 		Directory.Versioning.Build.props = Directory.Versioning.Build.props
 		LICENSE = LICENSE
 		README.md = README.md
@@ -106,12 +102,6 @@ Global
 		{9F7D093A-213B-4F21-95F6-1DD62FF3285E}.DebugPack|Any CPU.Build.0 = Debug|Any CPU
 		{9F7D093A-213B-4F21-95F6-1DD62FF3285E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F7D093A-213B-4F21-95F6-1DD62FF3285E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{94BE20A7-2746-4A31-8D14-D530E37D32F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{94BE20A7-2746-4A31-8D14-D530E37D32F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{94BE20A7-2746-4A31-8D14-D530E37D32F7}.DebugPack|Any CPU.ActiveCfg = Debug|Any CPU
-		{94BE20A7-2746-4A31-8D14-D530E37D32F7}.DebugPack|Any CPU.Build.0 = Debug|Any CPU
-		{94BE20A7-2746-4A31-8D14-D530E37D32F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{94BE20A7-2746-4A31-8D14-D530E37D32F7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{772E9B23-85D4-4FBC-A832-A89EC2FB4EAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{772E9B23-85D4-4FBC-A832-A89EC2FB4EAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{772E9B23-85D4-4FBC-A832-A89EC2FB4EAE}.DebugPack|Any CPU.ActiveCfg = Debug|Any CPU
@@ -133,9 +123,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{94BE20A7-2746-4A31-8D14-D530E37D32F7} = {2CBD5F54-15F6-41C2-A55D-D6301A52B4E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7C89AA72-27F1-4410-8A4F-6F87F721B719}
