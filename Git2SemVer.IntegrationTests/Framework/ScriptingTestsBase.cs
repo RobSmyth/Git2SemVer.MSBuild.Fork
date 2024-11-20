@@ -68,7 +68,7 @@ internal abstract class ScriptingTestsBase
 
     protected virtual void OneTimeSetUpBase()
     {
-        Logger = new NUnitLogger();
+        Logger = new NUnitLogger(); // todo - Logger is set here and in the SetUpBase method
         DotNetCli = new DotNetTool(new ProcessCli(Logger));
         Git = new GitTool(Logger);
     }

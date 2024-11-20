@@ -6,6 +6,7 @@ using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
 
 namespace NoeticTools.Git2SemVer.IntegrationTests;
 
+[NonParallelizable]
 internal abstract class VersioningBuildTestsBase : SolutionTestsBase
 {
     [Test]

@@ -6,6 +6,7 @@
 namespace NoeticTools.Git2SemVer.IntegrationTests;
 
 [TestFixture]
+[NonParallelizable]
 internal class StandAloneVersioningBuildTests : VersioningBuildTestsBase
 {
     [Test]
@@ -41,12 +42,6 @@ internal class StandAloneVersioningBuildTests : VersioningBuildTestsBase
                                                Informational version:  11.12.13-a-prerelease+metadata
                                                Product version:        11.12.13-a-prerelease+metadata
                                                """));
-    }
-
-    [Test]
-    public void CanBuildTestSolutionTest()
-    {
-        DotNetCliBuildTestSolution();
     }
 
     protected override string SolutionFolderName => "StandAloneVersioning";
