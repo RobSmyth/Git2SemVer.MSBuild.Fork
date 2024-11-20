@@ -4,7 +4,7 @@ using NoeticTools.Common.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Framework;
 using NoeticTools.Git2SemVer.MSBuild.Tests.TestScenarios;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
-using NoeticTools.Testing.Common;
+using NoeticTools.Git2SemVer.Testing.Core;
 
 
 namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation;

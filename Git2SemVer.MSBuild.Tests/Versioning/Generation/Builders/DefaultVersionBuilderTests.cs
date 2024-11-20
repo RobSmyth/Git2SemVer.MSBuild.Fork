@@ -7,7 +7,7 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
-using NoeticTools.Testing.Common;
+using NoeticTools.Git2SemVer.Testing.Core;
 using Semver;
 
 
