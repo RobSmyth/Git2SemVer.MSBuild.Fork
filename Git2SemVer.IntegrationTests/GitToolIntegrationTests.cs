@@ -1,5 +1,5 @@
 ﻿using NoeticTools.Common.Tools.Git;
-using NoeticTools.Testing.Common;
+using NoeticTools.Git2SemVer.Testing.Core;
 
 
 #pragma warning disable NUnit2045

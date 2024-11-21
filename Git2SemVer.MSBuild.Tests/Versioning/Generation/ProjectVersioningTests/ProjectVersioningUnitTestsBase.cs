@@ -2,7 +2,7 @@
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
-using NoeticTools.Testing.Common;
+using NoeticTools.Git2SemVer.Testing.Core;
 
 
 namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.ProjectVersioningTests;

@@ -25,7 +25,7 @@
     </PackageReference>
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
     <PackageReference Include="Semver" Version="[2.3.0]" />
-    <PackageReference Include="NoeticTools.Testing.Core" Version="0.1.0-InitialDev.93" />
+    <PackageReference Include="NoeticTools.Git2SemVer.Testing.Core" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
