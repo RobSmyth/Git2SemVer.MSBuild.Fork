@@ -55,12 +55,4 @@ jobs:
         compression-level: 0
         if-no-files-found: error
 
-    - name: Archive Git2SemVer.Tool NuGet package
-      uses: actions/upload-artifact@v4
-      with:
-        name: Git2SemVer.Toolnupkg (github run ${{ github.run_number }}.${{ github.run_attempt }})
-        path: Git2SemVer.Tool/nupkg/*.nupkg
-        compression-level: 0
-        if-no-files-found: error
-
 
