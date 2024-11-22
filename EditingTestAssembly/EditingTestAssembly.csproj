@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NoeticTools.Git2SemVer.Core" Version="1.0.0" />
+    <PackageReference Include="NoeticTools.Git2SemVer.Core" Version="1.1.0-alpha.100" />
   </ItemGroup>
 
   <ItemGroup>

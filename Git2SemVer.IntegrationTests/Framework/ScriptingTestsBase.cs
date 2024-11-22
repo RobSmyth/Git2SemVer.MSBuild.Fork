@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using NoeticTools.Common;
 using NoeticTools.Common.Logging;
 using NoeticTools.Common.Tools;
 using NoeticTools.Common.Tools.DotnetCli;
@@ -14,6 +15,7 @@ internal abstract class ScriptingTestsBase
 {
     private const int MaximumTestDataFolders = 20;
     private static int _testDataFolderId; // avoid locks on folders not release quickly between tests
+    private static readonly object SyncToken = new();
 
     private static bool WaitUntil(Func<bool> predicate)
     {
@@ -74,4 +76,14 @@ internal abstract class ScriptingTestsBase
     }
 
     protected GitTool Git { get; private set; } = null!;
+
+    protected string DeployScript(string destinationDirectory, string scriptFilename)
+    {
+        lock (SyncToken)
+        {
+            var scriptPath = Path.Combine(destinationDirectory, scriptFilename);
+            GetType().Assembly.WriteResourceFile(scriptFilename, scriptPath);
+            return scriptPath;
+        }
+    }
 }

@@ -60,13 +60,6 @@ internal abstract class SolutionTestsBase : ScriptingTestsBase
         Assert.That(Logger.HasError, Is.False);
     }
 
-    protected string DeployScript(string scriptFilename)
-    {
-        var scriptPath = Path.Combine(TestFolderPath, scriptFilename);
-        GetType().Assembly.WriteResourceFile(scriptFilename, scriptPath);
-        return scriptPath;
-    }
-
     protected (int returnCode, string stdOutput) ExecuteGit2SemVerTool(string commandLineArguments)
     {
         var process = new ProcessCli(Logger)

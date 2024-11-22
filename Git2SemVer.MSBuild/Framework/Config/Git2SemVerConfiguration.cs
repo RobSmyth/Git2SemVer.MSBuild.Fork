@@ -13,6 +13,8 @@ namespace NoeticTools.Git2SemVer.MSBuild.Framework.Config;
 /// </summary>
 internal sealed class Git2SemVerConfiguration : IConfiguration
 {
+    private static Mutex _fileMutex = new Mutex(false, "G2SemVerConfigFileMutex");
+
     [JsonIgnore]
     private static JsonSerializerOptions _serialiseOptions = new()
     {
@@ -88,14 +90,23 @@ internal sealed class Git2SemVerConfiguration : IConfiguration
         Git2SemVerConfiguration instance;
 
         var filePath = GetFilePath();
-        if (File.Exists(filePath))
+
+        _fileMutex.WaitOne(TimeSpan.FromSeconds(10));
+        try
         {
-            var json = File.ReadAllText(filePath);
-            instance = Load(json);
+            if (File.Exists(filePath))
+            {
+                var json = File.ReadAllText(filePath);
+                instance = Load(json);
+            }
+            else
+            {
+                instance = new Git2SemVerConfiguration();
+            }
         }
-        else
+        finally
         {
-            instance = new Git2SemVerConfiguration();
+            _fileMutex.ReleaseMutex();
         }
 
         instance._onLoadHash = instance.GetCurrentHashCode();
@@ -121,7 +132,16 @@ internal sealed class Git2SemVerConfiguration : IConfiguration
 
         var json = JsonSerializer.Serialize(this, _serialiseOptions);
         json = Regex.Unescape(json);
-        File.WriteAllText(GetFilePath(), json);
+
+        _fileMutex.WaitOne(TimeSpan.FromSeconds(10));
+        try
+        {
+            File.WriteAllText(GetFilePath(), json);
+        }
+        finally
+        {
+            _fileMutex.ReleaseMutex();
+        }
     }
 
     private int GetCurrentHashCode()
