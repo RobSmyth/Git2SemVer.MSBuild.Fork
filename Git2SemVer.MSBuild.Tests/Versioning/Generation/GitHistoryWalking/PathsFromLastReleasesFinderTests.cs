@@ -10,25 +10,22 @@ namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.GitHistoryW
 [TestFixture]
 internal class PathsFromLastReleasesFinderTests : GitHistoryWalkingTestsBase
 {
-    private Mock<IGitTool> _gitTool;
-    private PathsFromLastReleasesFinder _target;
-
     [SetUp]
     public void Setup()
     {
         SetupBase();
-
-        _gitTool = new Mock<IGitTool>();
-        _target = new PathsFromLastReleasesFinder(Repository.Object, _gitTool.Object, Logger);
-        _gitTool.Setup(x => x.BranchName).Returns("BranchName");
     }
 
     [TestCaseSource(typeof(ScenariosFromBuildLogsTestSource))]
     public void BasicScenariosTest(string name, LoggedScenario scenario)
     {
+        var gitTool = new Mock<IGitTool>();
+        var target = new PathsFromLastReleasesFinder(Repository.Object, gitTool.Object, Logger);
+        gitTool.Setup(x => x.BranchName).Returns("BranchName");
+
         var commits = SetupGitRepository(scenario);
 
-        var paths = _target.FindPathsToHead();
+        var paths = target.FindPathsToHead();
 
         var bestPath = paths.BestPath;
         Assert.That(bestPath.Version.ToString(), Is.EqualTo(scenario.ExpectedVersion));

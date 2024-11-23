@@ -1,4 +1,5 @@
-﻿using NoeticTools.Git2SemVer.Core.ConventionCommits;
+﻿using System.Dynamic;
+using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
@@ -11,20 +12,19 @@ namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking
 
 internal sealed class VersionHistorySegment
 {
-    private static int _nextId = 1;
     private readonly List<Commit> _commits = [];
     private readonly ILogger _logger;
     private ApiChanges? _bumps;
 
-    private VersionHistorySegment(List<Commit> commits, ILogger logger) : this(logger)
+    internal VersionHistorySegment(int id, List<Commit> commits, ILogger logger) : this(id, logger)
     {
         _commits.AddRange(commits);
     }
 
-    private VersionHistorySegment(ILogger logger)
+    internal VersionHistorySegment(int id, ILogger logger)
     {
         _logger = logger;
-        Id = _nextId++;
+        Id = id;
     }
 
     public ApiChanges ApiChangeFlags => GetApiChanges();
@@ -73,7 +73,7 @@ internal sealed class VersionHistorySegment
     /// <summary>
     ///     A branch has been found from the given commit to the given segment.
     /// </summary>
-    public VersionHistorySegment? BranchesFrom(VersionHistorySegment branchSegment, Commit commit)
+    public VersionHistorySegment? BranchesFrom(VersionHistorySegment branchSegment, Commit commit, IVersionHistorySegmentFactory segmentFactory)
     {
         _logger.LogDebug("Commit {0} in segment {1} branches to segment {2}:", commit.CommitId.ObfuscatedSha, Id, branchSegment.Id);
         using (_logger.EnterLogScope())
@@ -85,23 +85,9 @@ internal sealed class VersionHistorySegment
             }
 
             _bumps = null;
-            var fromSegment = SplitSegmentAt(commit);
+            var fromSegment = SplitSegmentAt(commit, segmentFactory);
             return fromSegment;
         }
-    }
-
-    public static VersionHistorySegment CreateHeadSegment(ILogger logger)
-    {
-        return new VersionHistorySegment(logger);
-    }
-
-    /// <summary>
-    ///     Create a (younger) branch segment that merges to the given commit.
-    /// </summary>
-    public VersionHistorySegment CreateMergedSegment(Commit mergeCommit)
-    {
-        var mergedSegment = new VersionHistorySegment([], _logger);
-        return mergedSegment;
     }
 
     public override string ToString()
@@ -135,7 +121,7 @@ internal sealed class VersionHistorySegment
         return bumps;
     }
 
-    private VersionHistorySegment SplitSegmentAt(Commit commit)
+    private VersionHistorySegment SplitSegmentAt(Commit commit, IVersionHistorySegmentFactory segmentFactory)
     {
         var index = _commits.IndexOf(commit);
         if (index < 0)
@@ -150,17 +136,12 @@ internal sealed class VersionHistorySegment
             _commits.Clear();
             _commits.AddRange(keepCommits);
 
-            var olderSegment = new VersionHistorySegment(olderSegmentCommits, _logger);
+            var olderSegment = segmentFactory.Create(olderSegmentCommits);
             _logger.LogTrace("Split out new segment {2} from segment {0} at commit {1}.",
                              Id, commit.CommitId.ObfuscatedSha,
                              olderSegment.Id);
 
             return olderSegment;
         }
-    }
-
-    internal static void Reset()
-    {
-        _nextId = 1;
     }
 }

@@ -12,11 +12,13 @@ internal sealed class VersionHistorySegmentsBuilder
     private readonly ILogger _logger;
     private readonly VersionHistorySegment _segment;
     private readonly Dictionary<int, VersionHistorySegment> _segments = [];
+    private readonly VersionHistorySegmentFactory _segmentFactory;
 
     private VersionHistorySegmentsBuilder(VersionHistorySegment segment, VersionHistorySegmentsBuilder parent)
     {
         _logger = parent._logger;
         _segments = parent._segments;
+        _segmentFactory = parent._segmentFactory;
         _commits = parent._commits;
         _commitsCache = parent._commitsCache;
         _segment = segment;
@@ -27,7 +29,8 @@ internal sealed class VersionHistorySegmentsBuilder
     {
         _commits = commits;
         _logger = logger;
-        _segment = VersionHistorySegment.CreateHeadSegment(logger);
+        _segmentFactory = new VersionHistorySegmentFactory(logger);
+        _segment = _segmentFactory.Create();
         _segments.Add(_segment.Id, _segment);
     }
 
@@ -112,7 +115,7 @@ internal sealed class VersionHistorySegmentsBuilder
         }
         else
         {
-            var newSegmentVisitor = new VersionHistorySegmentsBuilder(_segment.CreateMergedSegment(mergeCommit), this);
+            var newSegmentVisitor = new VersionHistorySegmentsBuilder(_segmentFactory.Create([]), this);
             newSegmentVisitor.BuildSegmentsTo(parentCommit);
         }
     }
@@ -120,7 +123,7 @@ internal sealed class VersionHistorySegmentsBuilder
     private void OnBranchFromExistingSegment(Commit commit)
     {
         var intersectingSegment = _commitsCache[commit.CommitId];
-        var branchedFromSegment = intersectingSegment.BranchesFrom(_segment, commit);
+        var branchedFromSegment = intersectingSegment.BranchesFrom(_segment, commit, _segmentFactory);
         if (branchedFromSegment == null)
         {
             return;

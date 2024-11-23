@@ -13,7 +13,7 @@ internal sealed class PathsFromLastReleasesFinder(ICommitsRepository commitsRepo
 {
     public HistoryPaths FindPathsToHead()
     {
-        VersionHistorySegment.Reset();
+        //VersionHistorySegment.Reset();
         //CommitObfuscator.Clear();
 
         logger.LogDebug($"Current branch: {gitTool.BranchName}");
