@@ -8,23 +8,19 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.GitHistoryWalking;
 
 [TestFixture]
-[Parallelizable(ParallelScope.Fixtures)]
-internal class PathsFromLastReleasesFinderTests : GitHistoryWalkingTestsBase
+[Parallelizable(ParallelScope.All)]
+internal class PathsFromLastReleasesFinderTests
 {
-    [SetUp]
-    public void Setup()
-    {
-        SetupBase();
-    }
-
     [TestCaseSource(typeof(ScenariosFromBuildLogsTestSource))]
     public void BasicScenariosTest(string name, LoggedScenario scenario)
     {
         var gitTool = new Mock<IGitTool>();
-        var target = new PathsFromLastReleasesFinder(Repository.Object, gitTool.Object, Logger);
+        using var context = new GitHistoryWalkingTestsContext();
+
+        var target = new PathsFromLastReleasesFinder(context.Repository.Object, gitTool.Object, context.Logger);
         gitTool.Setup(x => x.BranchName).Returns("BranchName");
 
-        var commits = SetupGitRepository(scenario);
+        var commits = context.SetupGitRepository(scenario);
 
         var paths = target.FindPathsToHead();
 
