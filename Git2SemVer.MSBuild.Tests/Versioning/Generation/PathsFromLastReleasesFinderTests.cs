@@ -1,6 +1,6 @@
 ﻿using Moq;
-using NoeticTools.Common.Logging;
-using NoeticTools.Common.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Logging;
+using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Framework;
 using NoeticTools.Git2SemVer.MSBuild.Tests.TestScenarios;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;

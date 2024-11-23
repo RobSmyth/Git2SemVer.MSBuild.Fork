@@ -1,6 +1,6 @@
 ﻿using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
-using NoeticTools.Common.Logging;
+using NoeticTools.Git2SemVer.Core.Logging;
 
 
 namespace NoeticTools.MSBuild.Tasking.Logging;

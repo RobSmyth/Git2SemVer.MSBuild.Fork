@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
-using NoeticTools.Common.Logging;
-using NoeticTools.Common.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Logging;
+using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.MSBuild.Tasking;
 

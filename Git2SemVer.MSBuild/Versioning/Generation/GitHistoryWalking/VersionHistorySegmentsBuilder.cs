@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
-using NoeticTools.Common.Logging;
-using NoeticTools.Common.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Logging;
+using NoeticTools.Git2SemVer.Core.Tools.Git;
 
 
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;

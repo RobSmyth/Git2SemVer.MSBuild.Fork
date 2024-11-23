@@ -1,10 +1,10 @@
-using NoeticTools.Common;
-using NoeticTools.Common.Tools;
-using NoeticTools.Common.Tools.DotnetCli;
+using NoeticTools.Git2SemVer.Core;
+using NoeticTools.Git2SemVer.Core.Tools;
+using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
 using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
 using NoeticTools.Git2SemVer.Testing.Core;
 using System.IO.Compression;
-using NoeticTools.Common.Logging;
+using NoeticTools.Git2SemVer.Core.Logging;
 
 
 namespace NoeticTools.Git2SemVer.IntegrationTests.VersioningBuilds;

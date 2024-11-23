@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
-using NoeticTools.Common.Logging;
-using NoeticTools.Common.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Logging;
+using NoeticTools.Git2SemVer.Core.Tools.Git;
 using Spectre.Console.Rendering;
 
 

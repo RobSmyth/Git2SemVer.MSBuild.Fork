@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using NoeticTools.Common;
+using NoeticTools.Git2SemVer.Core;
 
 
 // ReSharper disable MemberCanBePrivate.Global

@@ -1,5 +1,5 @@
-﻿using NoeticTools.Common;
-using NoeticTools.Common.Logging;
+﻿using NoeticTools.Git2SemVer.Core;
+using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.IntegrationTests.Framework;
 using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;

@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using NoeticTools.Common.Logging;
-using NoeticTools.Common.Tools;
-using NoeticTools.Common.Tools.DotnetCli;
+using NoeticTools.Git2SemVer.Core.Logging;
+using NoeticTools.Git2SemVer.Core.Tools;
+using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
 
 
 namespace NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;

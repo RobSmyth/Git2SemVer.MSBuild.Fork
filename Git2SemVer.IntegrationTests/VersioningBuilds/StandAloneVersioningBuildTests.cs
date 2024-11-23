@@ -1,10 +1,5 @@
 ﻿using System.Diagnostics;
-using System.IO.Compression;
-using System.Reflection;
-using NoeticTools.Common;
-using NoeticTools.Git2SemVer.IntegrationTests.Framework;
 using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
-using NoeticTools.Git2SemVer.Testing.Core;
 
 
 #pragma warning disable NUnit2045

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
-using NoeticTools.Common.Logging;
-using NoeticTools.Common.Tools.DotnetCli;
-using NoeticTools.Common.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Logging;
+using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
+using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Tools.CI;
 using NoeticTools.MSBuild.Tasking;

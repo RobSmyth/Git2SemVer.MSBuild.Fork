@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
-using NoeticTools.Git2SemVer.Common;
+using NoeticTools.Git2SemVer.Core.Git2SemVer;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 
 

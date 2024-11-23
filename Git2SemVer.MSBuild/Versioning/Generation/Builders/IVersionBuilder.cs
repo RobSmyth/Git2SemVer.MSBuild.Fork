@@ -1,4 +1,4 @@
-﻿using NoeticTools.Common.Tools.Git;
+﻿using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 
 

@@ -1,5 +1,5 @@
-﻿using NoeticTools.Common.Logging;
-using NoeticTools.Common.Tools.Git;
+﻿using NoeticTools.Git2SemVer.Core.Logging;
+using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 
 
@@ -14,7 +14,7 @@ internal sealed class PathsFromLastReleasesFinder(ICommitsRepository commitsRepo
     public HistoryPaths FindPathsToHead()
     {
         VersionHistorySegment.Reset();
-        CommitObfuscator.Clear();
+        //CommitObfuscator.Clear();
 
         logger.LogDebug($"Current branch: {gitTool.BranchName}");
         var segments = new VersionHistorySegmentsBuilder(commitsRepo, logger).BuildTo(commitsRepo.Head);

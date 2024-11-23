@@ -1,5 +1,5 @@
 ﻿using Moq;
-using NoeticTools.Common.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 
 
@@ -19,9 +19,7 @@ internal class PathsFromLastReleasesFinderTests : GitHistoryWalkingTestsBase
         SetupBase();
 
         _gitTool = new Mock<IGitTool>();
-
         _target = new PathsFromLastReleasesFinder(Repository.Object, _gitTool.Object, Logger);
-
         _gitTool.Setup(x => x.BranchName).Returns("BranchName");
     }
 

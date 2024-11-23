@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using NoeticTools.Common.Logging;
+using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Config;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Semver;

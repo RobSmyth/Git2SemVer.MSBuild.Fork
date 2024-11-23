@@ -1,7 +1,7 @@
-﻿using NoeticTools.Common.ConventionCommits;
-using NoeticTools.Common.Exceptions;
-using NoeticTools.Common.Logging;
-using NoeticTools.Common.Tools.Git;
+﻿using NoeticTools.Git2SemVer.Core.ConventionCommits;
+using NoeticTools.Git2SemVer.Core.Exceptions;
+using NoeticTools.Git2SemVer.Core.Logging;
+using NoeticTools.Git2SemVer.Core.Tools.Git;
 using Semver;
 
 
