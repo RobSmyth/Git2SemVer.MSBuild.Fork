@@ -17,18 +17,6 @@ internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
     private BuildEngine9Stub _buildEngine;
     private Dictionary<string, string> _globalProperties;
 
-    [Test]
-    [MaxTime(10000)]
-    public void ControlledPrereleaseBuildScenario01()
-    {
-        var context = GetContext("12345", "1");
-        var runner = new ScriptVersionBuilder(Logger);
-
-        runner.Build(context.Host, Git, context.Inputs, context.Outputs);
-
-        Assert.That(Logger.HasError, Is.False);
-    }
-
     [OneTimeSetUp]
     public void OneTimeSetup()
     {
@@ -42,6 +30,18 @@ internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
 
         _globalProperties = new Dictionary<string, string>();
         _buildEngine = new BuildEngine9Stub(_globalProperties);
+    }
+
+    [Test]
+    [MaxTime(10000)]
+    public void ControlledPrereleaseBuildScenario01()
+    {
+        var context = GetContext("12345", "1");
+        var runner = new ScriptVersionBuilder(Logger);
+
+        runner.Build(context.Host, Git, context.Inputs, context.Outputs);
+
+        Assert.That(Logger.HasError, Is.False);
     }
 
     [Test]

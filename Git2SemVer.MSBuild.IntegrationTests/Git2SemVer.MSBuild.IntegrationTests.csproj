@@ -23,10 +23,23 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\ExceptionScript.csx" />
     <EmbeddedResource Include="Resources\Script01.csx" />
+    <EmbeddedResource Include="Resources\Scripts\Git2SemVer.csx" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="$(Git2SemVer_TestSolutionsDirectory)StandAloneVersioning\TestApplication\Git2SemVer.csx" Link="Resources\Scripts\Git2SemVer.csx" />
+    <EmbeddedResource Remove="C:\Sources\NoeticTools\Git2SemVer.MSBuild\TestSolutions/StandAloneVersioning\TestApplication\Git2SemVer.csx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="C:\Sources\NoeticTools\Git2SemVer.MSBuild\TestSolutions/StandAloneVersioning\TestApplication\Git2SemVer.csx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="C:\Sources\NoeticTools\Git2SemVer.MSBuild\TestSolutions/StandAloneVersioning\TestApplication\Git2SemVer.csx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="C:\Sources\NoeticTools\Git2SemVer.MSBuild\TestSolutions/StandAloneVersioning\TestApplication\Git2SemVer.csx" />
   </ItemGroup>
 
   <ItemGroup>
