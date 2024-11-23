@@ -7,7 +7,7 @@ using System.IO.Compression;
 using NoeticTools.Common.Logging;
 
 
-namespace NoeticTools.Git2SemVer.IntegrationTests;
+namespace NoeticTools.Git2SemVer.IntegrationTests.VersioningBuilds;
 
 internal sealed class VersioningBuildTestContext : IDisposable
 {
@@ -24,7 +24,7 @@ internal sealed class VersioningBuildTestContext : IDisposable
         _activeContexts++;
         _testDirectoryResource = new TestDirectoryResource(groupName);
 
-        Logger = new NUnitLogger(false) {Level = LoggingLevel.Trace};
+        Logger = new NUnitLogger(false) { Level = LoggingLevel.Trace };
 
         TestDirectory = _testDirectoryResource.Create();
         TestFolderName = TestDirectory.Name;
