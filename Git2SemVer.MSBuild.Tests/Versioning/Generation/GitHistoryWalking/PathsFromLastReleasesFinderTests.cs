@@ -8,6 +8,7 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.GitHistoryWalking;
 
 [TestFixture]
+[Parallelizable(ParallelScope.Fixtures)]
 internal class PathsFromLastReleasesFinderTests : GitHistoryWalkingTestsBase
 {
     [SetUp]
