@@ -1,11 +1,13 @@
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using NoeticTools.Git2SemVer.Core;
+
+
 #pragma warning disable NUnit2045
 
 
-namespace NoeticTools.Git2SemVer.MSBuild.IntegrationTests;
+namespace NoeticTools.Git2SemVer.IntegrationTests;
 
-[Parallelizable(ParallelScope.All)]
+[Parallelizable(ParallelScope.Fixtures)]
 public class BasicScriptingTests
 {
     [Test]

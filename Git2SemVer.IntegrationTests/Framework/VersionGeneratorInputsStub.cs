@@ -7,7 +7,7 @@ using ILogger = NoeticTools.Git2SemVer.Core.Logging.ILogger;
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
+namespace NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
 public class VersionGeneratorInputsStub : IVersionGeneratorInputs
 {

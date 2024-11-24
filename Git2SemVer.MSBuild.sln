@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EditingTestAssembly", "Edit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild.Tasking.Logging", "MSBuild.Tasking.Logging\MSBuild.Tasking.Logging.csproj", "{3BBABC50-09B7-48D3-A349-0A9A3A9C0B0A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Git2SemVer.MSBuild.IntegrationTests", "Git2SemVer.MSBuild.IntegrationTests\Git2SemVer.MSBuild.IntegrationTests.csproj", "{668105FF-A1BB-47A1-9290-162FCB982A35}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Git2SemVer.IntegrationTests", "Git2SemVer.IntegrationTests\Git2SemVer.IntegrationTests.csproj", "{772E9B23-85D4-4FBC-A832-A89EC2FB4EAE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{25FC97D8-62B8-4C47-9AA3-C6A893117175}"
@@ -80,12 +78,6 @@ Global
 		{3BBABC50-09B7-48D3-A349-0A9A3A9C0B0A}.DebugPack|Any CPU.Build.0 = Debug|Any CPU
 		{3BBABC50-09B7-48D3-A349-0A9A3A9C0B0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BBABC50-09B7-48D3-A349-0A9A3A9C0B0A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{668105FF-A1BB-47A1-9290-162FCB982A35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{668105FF-A1BB-47A1-9290-162FCB982A35}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{668105FF-A1BB-47A1-9290-162FCB982A35}.DebugPack|Any CPU.ActiveCfg = Debug|Any CPU
-		{668105FF-A1BB-47A1-9290-162FCB982A35}.DebugPack|Any CPU.Build.0 = Debug|Any CPU
-		{668105FF-A1BB-47A1-9290-162FCB982A35}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{668105FF-A1BB-47A1-9290-162FCB982A35}.Release|Any CPU.Build.0 = Release|Any CPU
 		{772E9B23-85D4-4FBC-A832-A89EC2FB4EAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{772E9B23-85D4-4FBC-A832-A89EC2FB4EAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{772E9B23-85D4-4FBC-A832-A89EC2FB4EAE}.DebugPack|Any CPU.ActiveCfg = Debug|Any CPU
