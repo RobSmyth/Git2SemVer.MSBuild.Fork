@@ -5,6 +5,7 @@ using NoeticTools.Git2SemVer.MSBuild.Framework;
 using NoeticTools.Git2SemVer.MSBuild.Tests.TestScenarios;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.Git2SemVer.Testing.Core;
+#pragma warning disable NUnit2045
 
 
 namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation;

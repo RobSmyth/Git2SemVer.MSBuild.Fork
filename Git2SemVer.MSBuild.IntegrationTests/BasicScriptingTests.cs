@@ -1,15 +1,13 @@
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using NoeticTools.Git2SemVer.Core;
-using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
+#pragma warning disable NUnit2045
 
 
 namespace NoeticTools.Git2SemVer.MSBuild.IntegrationTests;
 
+[Parallelizable(ParallelScope.All)]
 public class BasicScriptingTests
 {
-    private StringWriter _errorWriter = null!;
-    private StringWriter _outputWriter = null!;
-
     [Test]
     public async Task EvaluateTest1()
     {
@@ -20,11 +18,13 @@ public class BasicScriptingTests
     [Test]
     public async Task RunEmptyScriptReturnsNullTest()
     {
+        using var context = new BasicScriptingTestsContext();
+
         var state = await CSharpScript.RunAsync("");
 
         Assert.That(state.ReturnValue, Is.Null);
-        Assert.That(_outputWriter.ToString(), Is.EqualTo(""));
-        Assert.That(_errorWriter.ToString(), Is.EqualTo(""));
+        Assert.That(context.OutputWriter.ToString(), Is.EqualTo(""));
+        Assert.That(context.ErrorWriter.ToString(), Is.EqualTo(""));
     }
 
     [Test]
@@ -38,28 +38,34 @@ public class BasicScriptingTests
     [Test]
     public async Task RunScriptWritesToStandardOutAndReturnsValueTest()
     {
+        using var context = new BasicScriptingTestsContext();
         var script = GetType().Assembly.GetResourceFileContent("Script01.csx");
 
         var state = await CSharpScript.RunAsync(script);
 
         Assert.That(state.ReturnValue, Is.EqualTo(42));
-        Assert.That($"Hello World{Environment.NewLine}", Is.EqualTo(_outputWriter.ToString()));
-        Assert.That(_errorWriter.ToString(), Is.EqualTo(""));
+        Assert.That($"Hello World{Environment.NewLine}", Is.EqualTo(context.OutputWriter.ToString()));
+        Assert.That(context.ErrorWriter.ToString(), Is.EqualTo(""));
     }
 
-    [SetUp]
-    public void SetUp()
+    private sealed class BasicScriptingTestsContext : IDisposable
     {
-        _outputWriter = new StringWriter();
-        Console.SetOut(_outputWriter);
-        _errorWriter = new StringWriter();
-        Console.SetError(_errorWriter);
-    }
+        public StringWriter ErrorWriter { get; }
 
-    [TearDown]
-    public void TearDown()
-    {
-        _outputWriter.Dispose();
-        _errorWriter.Dispose();
+        public StringWriter OutputWriter { get; }
+
+        public BasicScriptingTestsContext()
+        {
+            OutputWriter = new StringWriter();
+            Console.SetOut(OutputWriter);
+            ErrorWriter = new StringWriter();
+            Console.SetError(ErrorWriter);
+        }
+
+        public void Dispose()
+        {
+            ErrorWriter.Dispose();
+            OutputWriter.Dispose();
+        }
     }
 }
