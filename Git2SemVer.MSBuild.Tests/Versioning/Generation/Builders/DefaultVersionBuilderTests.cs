@@ -1,6 +1,6 @@
 ﻿using Moq;
-using NoeticTools.Common.Logging;
-using NoeticTools.Common.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Logging;
+using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Semver;
 using NoeticTools.Git2SemVer.MSBuild.Versioning;
@@ -27,6 +27,7 @@ internal class DefaultVersionBuilderTests
     private Mock<IHistoryPaths> _paths;
     private DefaultVersionBuilder _target;
     private SemVersion _version = null!;
+    private CommitObfuscator _obfuscator;
 
     [SetUp]
     public void SetUp()
@@ -47,12 +48,13 @@ internal class DefaultVersionBuilderTests
         _gitOutputs = new Mock<IGitOutputs>();
         _outputs = new Mock<IVersionOutputs>();
         _git = new Mock<IGitTool>();
+        _obfuscator = new CommitObfuscator();
 
         _host.Setup(x => x.BuildNumber).Returns("BUILD_NUMBER");
         _host.Setup(x => x.BuildContext).Returns("BUILD_CONTEXT");
         _host.Setup(x => x.BuildId).Returns(["77"]);
         _inputs.Setup(x => x.WorkingDirectory).Returns("WorkingDirectory");
-        _headCommit.Setup(x => x.CommitId).Returns(new CommitId("001"));
+        _headCommit.Setup(x => x.CommitId).Returns(new CommitId("001", _obfuscator));
         _gitOutputs.Setup(x => x.HeadCommit).Returns(_headCommit.Object);
         _outputs.Setup(x => x.Git).Returns(_gitOutputs.Object);
     }

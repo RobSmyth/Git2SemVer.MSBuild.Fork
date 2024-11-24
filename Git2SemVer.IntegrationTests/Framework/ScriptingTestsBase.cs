@@ -1,9 +1,9 @@
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using NoeticTools.Common.Logging;
-using NoeticTools.Common.Tools;
-using NoeticTools.Common.Tools.DotnetCli;
-using NoeticTools.Common.Tools.Git;
+using NoeticTools.Git2SemVer.Core;
+using NoeticTools.Git2SemVer.Core.Logging;
+using NoeticTools.Git2SemVer.Core.Tools;
+using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
+using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Testing.Core;
 
 
@@ -14,6 +14,7 @@ internal abstract class ScriptingTestsBase
 {
     private const int MaximumTestDataFolders = 20;
     private static int _testDataFolderId; // avoid locks on folders not release quickly between tests
+    private static readonly object SyncToken = new();
 
     private static bool WaitUntil(Func<bool> predicate)
     {
@@ -68,10 +69,20 @@ internal abstract class ScriptingTestsBase
 
     protected virtual void OneTimeSetUpBase()
     {
-        Logger = new NUnitLogger();
+        Logger = new NUnitLogger(); // todo - Logger is set here and in the SetUpBase method
         DotNetCli = new DotNetTool(new ProcessCli(Logger));
         Git = new GitTool(Logger);
     }
 
     protected GitTool Git { get; private set; } = null!;
+
+    protected string DeployScript(string destinationDirectory, string scriptFilename)
+    {
+        lock (SyncToken)
+        {
+            var scriptPath = Path.Combine(destinationDirectory, scriptFilename);
+            GetType().Assembly.WriteResourceFile(scriptFilename, scriptPath);
+            return scriptPath;
+        }
+    }
 }

@@ -13,16 +13,21 @@
     <None Remove="Resources\Scripts\ForceProperties1.csx" />
     <None Remove="Resources\Scripts\ForceProperties2.csx" />
     <None Remove="Resources\Scripts\ForceProperties3.csx" />
+    <None Remove="Resources\Scripts\Git2SemVer.csx" />
+    <None Remove="VersioningBuilds\VersioningBuildTestsBase.csx" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="VersioningBuilds\VersioningBuildTestsBase.csx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\CrossTargetingTestSolution.zip" />
+    <EmbeddedResource Include="Resources\Scripts\Git2SemVer.csx" />
+    <EmbeddedResource Include="Resources\StandAloneTestSolution.zip" />
     <EmbeddedResource Include="Resources\Scripts\ForceProperties1.csx" />
     <EmbeddedResource Include="Resources\Scripts\ForceProperties3.csx" />
     <EmbeddedResource Include="Resources\Scripts\ForceProperties2.csx" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="..\TestSolutions\StandAloneVersioning\TestApplication\Git2SemVer.csx" Link="Resources\Scripts\Git2SemVer.csx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,11 +35,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Build.Framework" Version="17.11.4" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageReference Include="NoeticTools.Git2SemVer.Core" Version="1.0.0" />
-    <PackageReference Include="NoeticTools.Git2SemVer.Testing.Core" Version="1.0.0" />
+    <PackageReference Include="NoeticTools.Git2SemVer.Core" Version="2.0.0-alpha.102" />
+    <PackageReference Include="NoeticTools.Git2SemVer.Testing.Core" Version="2.0.0-alpha.15" />
     <PackageReference Include="NUnit" Version="4.2.2" />
-    <PackageReference Include="NUnit.Analyzers" Version="4.3.0">
+    <PackageReference Include="NUnit.Analyzers" Version="4.4.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

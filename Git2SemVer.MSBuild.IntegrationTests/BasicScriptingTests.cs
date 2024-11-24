@@ -1,5 +1,5 @@
 using Microsoft.CodeAnalysis.CSharp.Scripting;
-using NoeticTools.Common;
+using NoeticTools.Git2SemVer.Core;
 using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
 
 

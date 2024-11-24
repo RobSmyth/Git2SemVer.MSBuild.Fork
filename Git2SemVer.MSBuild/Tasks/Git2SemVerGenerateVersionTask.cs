@@ -1,11 +1,11 @@
 ﻿using Microsoft.Build.Framework;
-using NoeticTools.Common.Exceptions;
-using NoeticTools.Common.Logging;
+using NoeticTools.Git2SemVer.Core.Exceptions;
+using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Versioning;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.MSBuild.Tasking.Logging;
-using ILogger = NoeticTools.Common.Logging.ILogger;
+using ILogger = NoeticTools.Git2SemVer.Core.Logging.ILogger;
 
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global

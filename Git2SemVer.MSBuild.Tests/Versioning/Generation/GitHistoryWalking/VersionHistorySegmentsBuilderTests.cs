@@ -1,5 +1,5 @@
 ﻿using Moq;
-using NoeticTools.Common.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 
 
@@ -8,35 +8,21 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.GitHistoryWalking;
 
 [TestFixture]
-internal class VersionHistorySegmentsBuilderTests : GitHistoryWalkingTestsBase
+[Parallelizable(ParallelScope.Fixtures)]
+internal class VersionHistorySegmentsBuilderTests
 {
-    private Mock<IGitTool> _gitTool;
-    private VersionHistorySegmentsBuilder _target;
-
-    [SetUp]
-    public void Setup()
-    {
-        SetupBase();
-
-        _gitTool = new Mock<IGitTool>();
-
-        _target = new VersionHistorySegmentsBuilder(Repository.Object, Logger);
-
-        _gitTool.Setup(x => x.BranchName).Returns("BranchName");
-    }
-
-    [TearDown]
-    public void TearDown()
-    {
-        Logger.Dispose();
-    }
-
     [TestCaseSource(typeof(ScenariosFromBuildLogsTestSource))]
     public void BasicScenariosTest(string name, LoggedScenario scenario)
     {
-        var commits = SetupGitRepository(scenario);
+        var gitTool = new Mock<IGitTool>();
+        using var context = new GitHistoryWalkingTestsContext();
 
-        var segments = _target.BuildTo(commits[scenario.HeadCommitId]);
+        var target = new VersionHistorySegmentsBuilder(context.Repository.Object, context.Logger);
+        gitTool.Setup(x => x.BranchName).Returns("BranchName");
+
+        var commits = context.SetupGitRepository(scenario);
+
+        var segments = target.BuildTo(commits[scenario.HeadCommitId]);
 
         Assert.That(segments, Is.Not.Null);
     }
@@ -44,10 +30,14 @@ internal class VersionHistorySegmentsBuilderTests : GitHistoryWalkingTestsBase
     [TestCase]
     public void DetailedScenario01SegmentsTest()
     {
-        var scenario = new ScenariosFromBuildLogsTestSource().Scenario01;
-        var commits = SetupGitRepository(scenario);
+        using var context = new GitHistoryWalkingTestsContext();
 
-        var segments = _target.BuildTo(commits[scenario.HeadCommitId]);
+        var target = new VersionHistorySegmentsBuilder(context.Repository.Object, context.Logger);
+
+        var scenario = new ScenariosFromBuildLogsTestSource().Scenario01;
+        var commits = context.SetupGitRepository(scenario);
+
+        var segments = target.BuildTo(commits[scenario.HeadCommitId]);
 
         Assert.That(segments, Is.Not.Null);
         Assert.That(segments, Has.Count.EqualTo(8));

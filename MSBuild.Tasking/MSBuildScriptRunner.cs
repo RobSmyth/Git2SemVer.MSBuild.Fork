@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.CodeAnalysis.Scripting.Hosting;
 using Microsoft.Extensions.Primitives;
-using NoeticTools.Common.Logging;
+using NoeticTools.Git2SemVer.Core.Logging;
 using Task = System.Threading.Tasks.Task;
 
 

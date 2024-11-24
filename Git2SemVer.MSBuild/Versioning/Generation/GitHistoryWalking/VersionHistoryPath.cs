@@ -1,5 +1,5 @@
-﻿using NoeticTools.Common.ConventionCommits;
-using NoeticTools.Common.Tools.Git;
+﻿using NoeticTools.Git2SemVer.Core.ConventionCommits;
+using NoeticTools.Git2SemVer.Core.Tools.Git;
 using Semver;
 
 

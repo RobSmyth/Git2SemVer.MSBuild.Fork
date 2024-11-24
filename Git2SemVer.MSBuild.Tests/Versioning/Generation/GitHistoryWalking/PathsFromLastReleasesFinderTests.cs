@@ -1,5 +1,5 @@
 ﻿using Moq;
-using NoeticTools.Common.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 
 
@@ -8,29 +8,21 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.GitHistoryWalking;
 
 [TestFixture]
-internal class PathsFromLastReleasesFinderTests : GitHistoryWalkingTestsBase
+[Parallelizable(ParallelScope.All)]
+internal class PathsFromLastReleasesFinderTests
 {
-    private Mock<IGitTool> _gitTool;
-    private PathsFromLastReleasesFinder _target;
-
-    [SetUp]
-    public void Setup()
-    {
-        SetupBase();
-
-        _gitTool = new Mock<IGitTool>();
-
-        _target = new PathsFromLastReleasesFinder(Repository.Object, _gitTool.Object, Logger);
-
-        _gitTool.Setup(x => x.BranchName).Returns("BranchName");
-    }
-
     [TestCaseSource(typeof(ScenariosFromBuildLogsTestSource))]
     public void BasicScenariosTest(string name, LoggedScenario scenario)
     {
-        var commits = SetupGitRepository(scenario);
+        var gitTool = new Mock<IGitTool>();
+        using var context = new GitHistoryWalkingTestsContext();
 
-        var paths = _target.FindPathsToHead();
+        var target = new PathsFromLastReleasesFinder(context.Repository.Object, gitTool.Object, context.Logger);
+        gitTool.Setup(x => x.BranchName).Returns("BranchName");
+
+        var commits = context.SetupGitRepository(scenario);
+
+        var paths = target.FindPathsToHead();
 
         var bestPath = paths.BestPath;
         Assert.That(bestPath.Version.ToString(), Is.EqualTo(scenario.ExpectedVersion));
