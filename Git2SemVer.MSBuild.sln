@@ -27,8 +27,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{25FC97
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolutionVersioningProject", "SolutionVersioningProject\SolutionVersioningProject.csproj", "{BB578AE5-A50C-46F3-8F03-D7DD92E696FF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuild.Tasking.Tests", "MSBuild.Tasking.Tests\MSBuild.Tasking.Tests.csproj", "{778666FA-AE37-4F5F-B0E0-F0DF2D6CF2D7}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4F5F4537-80BA-4561-A29C-DF6AD9921C08}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
@@ -90,12 +88,6 @@ Global
 		{BB578AE5-A50C-46F3-8F03-D7DD92E696FF}.DebugPack|Any CPU.Build.0 = Debug|Any CPU
 		{BB578AE5-A50C-46F3-8F03-D7DD92E696FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB578AE5-A50C-46F3-8F03-D7DD92E696FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{778666FA-AE37-4F5F-B0E0-F0DF2D6CF2D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{778666FA-AE37-4F5F-B0E0-F0DF2D6CF2D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{778666FA-AE37-4F5F-B0E0-F0DF2D6CF2D7}.DebugPack|Any CPU.ActiveCfg = Debug|Any CPU
-		{778666FA-AE37-4F5F-B0E0-F0DF2D6CF2D7}.DebugPack|Any CPU.Build.0 = Debug|Any CPU
-		{778666FA-AE37-4F5F-B0E0-F0DF2D6CF2D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{778666FA-AE37-4F5F-B0E0-F0DF2D6CF2D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

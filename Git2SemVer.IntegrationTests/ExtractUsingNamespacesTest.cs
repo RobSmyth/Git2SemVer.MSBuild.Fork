@@ -1,4 +1,5 @@
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting;
+#pragma warning disable NUnit2046
 
 
 #pragma warning disable NUnit2045
