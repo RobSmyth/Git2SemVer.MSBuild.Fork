@@ -8,7 +8,7 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.GitHistoryWalking;
 
 [TestFixture]
-[Parallelizable(ParallelScope.Fixtures)]
+[Parallelizable(ParallelScope.All)]
 internal class VersionHistorySegmentsBuilderTests
 {
     [TestCaseSource(typeof(ScenariosFromBuildLogsTestSource))]

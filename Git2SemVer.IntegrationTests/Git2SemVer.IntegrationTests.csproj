@@ -14,11 +14,6 @@
     <None Remove="Resources\Scripts\ForceProperties2.csx" />
     <None Remove="Resources\Scripts\ForceProperties3.csx" />
     <None Remove="Resources\Scripts\Git2SemVer.csx" />
-    <None Remove="VersioningBuilds\VersioningBuildTestsBase.csx" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="VersioningBuilds\VersioningBuildTestsBase.csx" />
   </ItemGroup>
 
   <ItemGroup>
