@@ -41,7 +41,6 @@ internal class StandAloneVersioningBuildTests : VersioningBuildTestsBase
     public void BuildOnlyWithForcingProperties1ScriptTest()
     {
         using var context = CreateTestContext();
-        Console.WriteLine($"== {context.TestDirectory}");
 
         var scriptPath = context.DeployScript("ForceProperties1.csx");
 
