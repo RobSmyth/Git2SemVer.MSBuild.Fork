@@ -9,25 +9,14 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
 {
     public IEnumerator GetEnumerator()
     {
-        yield return new object[] { "Scenario 01", Scenario01 };
-        yield return new object[] { "Scenario 02", Scenario02 };
-        yield return new object[] { "Scenario 03", Scenario03 };
-        yield return new object[] { "Scenario 04", Scenario04 };
-        yield return new object[] { "Scenario 06", Scenario06 };
+        yield return new object[] { "Scenario 01", BuildScenario01() };
+        yield return new object[] { "Scenario 02", BuildScenario02() };
+        yield return new object[] { "Scenario 03", BuildScenario03() };
+        yield return new object[] { "Scenario 04", BuildScenario04() };
+        yield return new object[] { "Scenario 06", BuildScenario06() };
     }
 
-    public ManufacturedGitRepositoriesTestSource()
-    {
-        Scenario01 = BuildScenario01();
-        Scenario02 = BuildScenario02();
-        Scenario03 = BuildScenario03();
-        Scenario04 = BuildScenario04();
-        Scenario06 = BuildScenario06();
-    }
-
-    private GitTestRepository Scenario01 { get; }
-
-    private GitTestRepository BuildScenario01()
+    private static GitTestRepository BuildScenario01()
     {
         var obfuscator = new CommitObfuscator();
 
@@ -82,9 +71,7 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
         "1.2.5");
     }
 
-    private GitTestRepository Scenario02 { get; }
-
-    private GitTestRepository BuildScenario02()
+    private static GitTestRepository BuildScenario02()
     {
         var obfuscator = new CommitObfuscator();
 
@@ -123,9 +110,7 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                    "1.2.3");
     }
 
-    private GitTestRepository Scenario03 { get; }
-
-    private GitTestRepository BuildScenario03()
+    private static GitTestRepository BuildScenario03()
     {
         var obfuscator = new CommitObfuscator();
 
@@ -157,9 +142,7 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                    "1.5.10");
     }
 
-    private GitTestRepository Scenario04 { get; }
-
-    private GitTestRepository BuildScenario04()
+    private static GitTestRepository BuildScenario04()
     {
         var obfuscator = new CommitObfuscator();
 
@@ -178,9 +161,7 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                    "0.1.0");
     }
 
-    private GitTestRepository Scenario06 { get; }
-
-    private GitTestRepository BuildScenario06()
+    private static GitTestRepository BuildScenario06()
     {
         var obfuscator = new CommitObfuscator();
 
