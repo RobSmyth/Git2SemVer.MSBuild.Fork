@@ -106,6 +106,7 @@ internal class DefaultVersionBuilderTests
         _target.Build(_host.Object, _git.Object, _inputs.Object, _outputs.Object);
 
         _outputs.VerifySet(x => x.BuildSystemVersion = _version.WithMetadata(BuildNumber), Times.Once);
+        _outputs.VerifySet(x => x.BuildSystemVersion = _version.WithoutMetadata(), Times.Never);
     }
 
     private void SetupInputs(string version, string branchName)

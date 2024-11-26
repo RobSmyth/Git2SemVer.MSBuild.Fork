@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Semver;
 using Semver;
 
