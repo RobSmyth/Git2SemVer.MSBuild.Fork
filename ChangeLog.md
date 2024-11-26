@@ -6,8 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## 1.1.0 - _November 16, 2024_
+## 1.2.0 - _November 26, 2024_
 
+### Changed
+
+* Changed the build system label, as used by TeamCity, to include build number on release builds (#33).
+* Moved Git2SemVer.Tool (dotnet tool) code to its own repository.
+
+### Known Issues
+
+* Versioning fails build when TeamCity build configuration's VCS Root uses the option "Use tags as branches" is set ([#32](https://github.com/NoeticTools/Git2SemVer/issues/32)). A compile time exception is thrown.
+
+ 
+## 1.1.0 - _November 16, 2024_
 
 ### Added
 
