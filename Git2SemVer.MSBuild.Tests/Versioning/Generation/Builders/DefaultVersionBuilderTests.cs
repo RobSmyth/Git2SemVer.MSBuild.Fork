@@ -28,6 +28,7 @@ internal class DefaultVersionBuilderTests
     private DefaultVersionBuilder _target;
     private SemVersion _version = null!;
     private CommitObfuscator _obfuscator;
+    private const string BuildNumber = "23456";
 
     [SetUp]
     public void SetUp()
@@ -50,7 +51,7 @@ internal class DefaultVersionBuilderTests
         _git = new Mock<IGitTool>();
         _obfuscator = new CommitObfuscator();
 
-        _host.Setup(x => x.BuildNumber).Returns("BUILD_NUMBER");
+        _host.Setup(x => x.BuildNumber).Returns(BuildNumber);
         _host.Setup(x => x.BuildContext).Returns("BUILD_CONTEXT");
         _host.Setup(x => x.BuildId).Returns(["77"]);
         _inputs.Setup(x => x.WorkingDirectory).Returns("WorkingDirectory");
@@ -90,7 +91,7 @@ internal class DefaultVersionBuilderTests
                                       .WithMetadata(branchName.ToNormalisedSemVerIdentifier(), "001");
         _outputs.VerifySet(x => x.BuildSystemVersion = expectedVersion.WithoutMetadata(), Times.Once);
         _outputs.Verify(x => x.SetAllVersionPropertiesFrom(expectedVersion,
-                                                           "BUILD_NUMBER",
+                                                           BuildNumber,
                                                            "BUILD_CONTEXT"));
     }
 
@@ -104,7 +105,7 @@ internal class DefaultVersionBuilderTests
 
         _target.Build(_host.Object, _git.Object, _inputs.Object, _outputs.Object);
 
-        _outputs.VerifySet(x => x.BuildSystemVersion = _version, Times.Once);
+        _outputs.VerifySet(x => x.BuildSystemVersion = _version.WithMetadata(BuildNumber), Times.Once);
     }
 
     private void SetupInputs(string version, string branchName)

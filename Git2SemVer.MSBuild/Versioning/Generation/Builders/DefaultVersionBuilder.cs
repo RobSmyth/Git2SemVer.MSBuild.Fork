@@ -39,10 +39,7 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
                                                 host.BuildNumber,
                                                 host.BuildContext);
 
-            var buildSystemLabel = string.IsNullOrWhiteSpace(prereleaseLabel)
-                ? version
-                : version.WithPrerelease(prereleaseLabel, host.BuildId.ToArray());
-            outputs.BuildSystemVersion = buildSystemLabel;
+            outputs.BuildSystemVersion = GetBuildSystemLabel(host, prereleaseLabel, version);
 
             var gitOutputs = outputs.Git;
             var config = Git2SemVerConfiguration.Load();
@@ -53,6 +50,14 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
                                inputs.WorkingDirectory);
             config.Save();
         }
+    }
+
+    private static SemVersion GetBuildSystemLabel(IBuildHost host, string prereleaseLabel, SemVersion version)
+    {
+        var buildSystemLabel = string.IsNullOrWhiteSpace(prereleaseLabel)
+            ? version.WithMetadata(host.BuildNumber)
+            : version.WithPrerelease(prereleaseLabel, host.BuildId.ToArray());
+        return buildSystemLabel;
     }
 
     private static SemVersion GetInformationalVersion(SemVersion version, IBuildHost host, IVersionOutputs outputs)
