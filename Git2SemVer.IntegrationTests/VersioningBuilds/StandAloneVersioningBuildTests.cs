@@ -12,7 +12,8 @@ internal class StandAloneVersioningBuildTests : VersioningBuildTestsBase
 {
     protected override VersioningBuildTestContext CreateTestContext()
     {
-        return new VersioningBuildTestContext("StandAlone", "StandAloneTestSolution", "StandAloneVersioning.sln", "TestApplication");
+        return new VersioningBuildTestContext("StandAlone", "StandAloneTestSolution", 
+                                              "StandAloneVersioning.sln", "TestApplication");
     }
 
     [Test]
