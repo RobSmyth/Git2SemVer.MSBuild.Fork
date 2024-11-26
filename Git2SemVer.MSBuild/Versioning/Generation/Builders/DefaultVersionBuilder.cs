@@ -40,6 +40,7 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
                                                 host.BuildContext);
 
             outputs.BuildSystemVersion = GetBuildSystemLabel(host, prereleaseLabel, version);
+            _logger.LogTrace($"BuildSystemVersion = {outputs.BuildSystemVersion}");
 
             var gitOutputs = outputs.Git;
             var config = Git2SemVerConfiguration.Load();
@@ -57,7 +58,6 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
         var buildSystemLabel = version.IsRelease
             ? version.WithMetadata(host.BuildNumber)
             : version.WithPrerelease(prereleaseLabel, host.BuildId.ToArray());
-        _logger.LogInfo($"==== BuildSystemVersion = {buildSystemLabel} | {version}"); //>>>
         return buildSystemLabel;
     }
 
