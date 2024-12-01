@@ -47,8 +47,7 @@ internal class PathsFromLastReleasesFinderTests
     {
         _logger.LogInfo(scenario.Description + "\n");
         LoadRepository(scenario.Commits, scenario.HeadCommitId);
-        var target = new PathsFromLastReleasesFinder(_repository.Object,
-                                                     _gitTool.Object,
+        var target = new PathsFromLastReleasesFinder(_gitTool.Object,
                                                      _logger);
 
         var historyPaths = target.FindPathsToHead();

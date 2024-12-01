@@ -37,7 +37,7 @@ internal sealed class ProjectVersioningFactory
         {
             WorkingDirectory = inputs.WorkingDirectory
         };
-        var gitPathsFinder = new PathsFromLastReleasesFinder(commitsRepo, gitTool, _logger);
+        var gitPathsFinder = new PathsFromLastReleasesFinder(gitTool, _logger);
 
         var defaultBuilderFactory = new DefaultVersionBuilderFactory(_logger);
         var scriptBuilder = new ScriptVersionBuilder(_logger);

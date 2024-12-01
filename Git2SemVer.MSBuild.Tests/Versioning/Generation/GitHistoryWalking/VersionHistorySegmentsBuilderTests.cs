@@ -15,12 +15,11 @@ internal class VersionHistorySegmentsBuilderTests
     public void BasicScenariosTest(string name, LoggedScenario scenario)
     {
         using var context = new GitHistoryWalkingTestsContext();
+        context.SetupGitRepository(scenario);
 
-        var target = new VersionHistorySegmentsBuilder(context.Repository.Object, context.Logger);
+        var target = new VersionHistorySegmentsBuilder(context.GitTool.Object, context.Logger);
 
-        var commits = context.SetupGitRepository(scenario);
-
-        var segments = target.BuildTo(commits[scenario.HeadCommitId]);
+        var segments = target.BuildTo(context.GitTool.Object.Head);
 
         Assert.That(segments, Is.Not.Null);
     }
@@ -29,13 +28,12 @@ internal class VersionHistorySegmentsBuilderTests
     public void DetailedScenario01SegmentsTest()
     {
         using var context = new GitHistoryWalkingTestsContext();
-
-        var target = new VersionHistorySegmentsBuilder(context.Repository.Object, context.Logger);
-
         var scenario = new ScenariosFromBuildLogsTestSource().Scenario01;
-        var commits = context.SetupGitRepository(scenario);
+        context.SetupGitRepository(scenario);
 
-        var segments = target.BuildTo(commits[scenario.HeadCommitId]);
+        var target = new VersionHistorySegmentsBuilder(context.GitTool.Object, context.Logger);
+
+        var segments = target.BuildTo(context.GitTool.Object.Head);
 
         Assert.That(segments, Is.Not.Null);
         Assert.That(segments, Has.Count.EqualTo(8));

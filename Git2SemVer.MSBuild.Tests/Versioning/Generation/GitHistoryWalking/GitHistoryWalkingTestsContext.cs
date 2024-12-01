@@ -13,7 +13,6 @@ internal class GitHistoryWalkingTestsContext : IDisposable
     public GitHistoryWalkingTestsContext()
     {
         Logger = new NUnitLogger(false) { Level = LoggingLevel.Trace };
-        Repository = new Mock<ICommitsRepository>();
         _realGitTool = new GitTool(Logger);
         GitTool = new Mock<IGitTool>();
         GitTool.Setup(x => x.BranchName).Returns("BranchName");
@@ -32,16 +31,13 @@ internal class GitHistoryWalkingTestsContext : IDisposable
         return commits;
     }
 
-    public Mock<ICommitsRepository> Repository { get; }
-
     public NUnitLogger Logger { get; }
 
-    public Dictionary<string, Commit> SetupGitRepository(LoggedScenario scenario)
+    public void SetupGitRepository(LoggedScenario scenario)
     {
         var commits = GetCommits(scenario.ActualGitLog).ToDictionary(k => k.CommitId.Id, v => v);
-        Repository.Setup(x => x.Get(It.IsAny<CommitId>())).Returns<CommitId>(id => commits[id.Id]);
+        GitTool.Setup(x => x.Get(It.IsAny<CommitId>())).Returns<CommitId>(id => commits[id.Id]);
         GitTool.Setup(x => x.Head).Returns(commits[scenario.HeadCommitId]);
-        return commits;
     }
 
     public void Dispose()

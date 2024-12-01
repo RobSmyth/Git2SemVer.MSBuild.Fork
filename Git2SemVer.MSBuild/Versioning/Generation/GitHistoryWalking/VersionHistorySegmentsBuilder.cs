@@ -7,7 +7,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking
 
 internal sealed class VersionHistorySegmentsBuilder
 {
-    private readonly ICommitsRepository _commits;
+    private readonly IGitTool _gitTool;
     private readonly Dictionary<CommitId, VersionHistorySegment> _commitsCache = new();
     private readonly ILogger _logger;
     private readonly VersionHistorySegment _segment;
@@ -19,15 +19,15 @@ internal sealed class VersionHistorySegmentsBuilder
         _logger = parent._logger;
         _segments = parent._segments;
         _segmentFactory = parent._segmentFactory;
-        _commits = parent._commits;
+        _gitTool = parent._gitTool;
         _commitsCache = parent._commitsCache;
         _segment = segment;
         _segments.Add(segment.Id, segment);
     }
 
-    public VersionHistorySegmentsBuilder(ICommitsRepository commits, ILogger logger)
+    public VersionHistorySegmentsBuilder(IGitTool gitTool, ILogger logger)
     {
-        _commits = commits;
+        _gitTool = gitTool;
         _logger = logger;
         _segmentFactory = new VersionHistorySegmentFactory(logger);
         _segment = _segmentFactory.Create();
@@ -62,7 +62,7 @@ internal sealed class VersionHistorySegmentsBuilder
         {
             while (NextCommit(commit) == SegmentWalkResult.Continue)
             {
-                commit = _commits.Get(commit.Parents.First());
+                commit = _gitTool.Get(commit.Parents.First());
             }
         }
     }
@@ -107,7 +107,7 @@ internal sealed class VersionHistorySegmentsBuilder
 
     private void NextCommitBeforeMerge(CommitId parent, Commit mergeCommit)
     {
-        var parentCommit = _commits.Get(parent);
+        var parentCommit = _gitTool.Get(parent);
 
         if (_commitsCache.ContainsKey(parentCommit.CommitId))
         {

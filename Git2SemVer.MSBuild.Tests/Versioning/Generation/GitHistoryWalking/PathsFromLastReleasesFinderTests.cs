@@ -15,10 +15,8 @@ internal class PathsFromLastReleasesFinderTests
     public void BasicScenariosTest(string name, LoggedScenario scenario)
     {
         using var context = new GitHistoryWalkingTestsContext();
-
-        var target = new PathsFromLastReleasesFinder(context.Repository.Object, context.GitTool.Object, context.Logger);
-
-        var commits = context.SetupGitRepository(scenario);
+        context.SetupGitRepository(scenario);
+        var target = new PathsFromLastReleasesFinder(context.GitTool.Object, context.Logger);
 
         var paths = target.FindPathsToHead();
 

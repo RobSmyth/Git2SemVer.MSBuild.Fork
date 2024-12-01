@@ -27,7 +27,7 @@ internal class FindPathsComponentTests
         var commitsRepo = new CommitsRepository();
         var gitTool = new GitTool(commitsRepo, logger);
         TestContext.Out.WriteLine();
-        var paths = new PathsFromLastReleasesFinder(commitsRepo, gitTool, logger).FindPathsToHead();
+        var paths = new PathsFromLastReleasesFinder(gitTool, logger).FindPathsToHead();
         TestContext.Out.WriteLine(paths.GetReport());
     }
 }
