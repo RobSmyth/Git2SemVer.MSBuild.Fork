@@ -18,8 +18,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\CrossTargetingTestSolution.zip" />
-    <EmbeddedResource Include="Resources\ExceptionScript.csx" />
-    <EmbeddedResource Include="Resources\Script01.csx" />
     <EmbeddedResource Include="Resources\Scripts\Git2SemVer.csx" />
     <EmbeddedResource Include="Resources\StandAloneTestSolution.zip" />
     <EmbeddedResource Include="Resources\Scripts\ForceProperties1.csx" />
@@ -48,7 +46,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Git2SemVer.MSBuild\Git2SemVer.MSBuild.csproj" />
-    <ProjectReference Include="..\Git2SemVer.Versioning\Git2SemVer.Versioning.csproj" />
   </ItemGroup>
 
   <ItemGroup>
