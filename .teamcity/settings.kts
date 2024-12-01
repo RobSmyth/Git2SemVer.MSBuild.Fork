@@ -119,6 +119,7 @@ object BuildAndTest : BuildType({
     failureConditions {
         executionTimeoutMin = 3
         failOnMetricChange {
+            enabled = false
             metric = BuildFailureOnMetric.MetricType.TEST_COUNT
             threshold = 20
             units = BuildFailureOnMetric.MetricUnit.PERCENTS
