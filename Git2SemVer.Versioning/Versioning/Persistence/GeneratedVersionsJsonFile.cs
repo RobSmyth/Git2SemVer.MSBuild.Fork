@@ -8,7 +8,7 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
 
-internal sealed class GeneratedVersionsJsonFile : IGeneratedOutputsJsonFile
+public sealed class GeneratedVersionsJsonFile : IGeneratedOutputsJsonFile
 {
     private static readonly JsonSerializerOptions SerialiseOptions = new()
     {

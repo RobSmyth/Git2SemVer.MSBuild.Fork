@@ -10,7 +10,7 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
 
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning;
 
-internal sealed class ProjectVersioningFactory
+public sealed class ProjectVersioningFactory
 {
     private readonly ILogger _logger;
 

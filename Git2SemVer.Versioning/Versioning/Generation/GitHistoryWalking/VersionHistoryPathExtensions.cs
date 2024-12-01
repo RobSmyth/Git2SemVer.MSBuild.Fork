@@ -7,14 +7,14 @@ namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking
 
 internal static class VersionHistoryPathExtensions
 {
-    internal static ImmutableSortedSet<VersionHistoryPath> ToSortedSet(this IReadOnlyList<VersionHistoryPath> paths)
+    internal static ImmutableSortedSet<IVersionHistoryPath> ToSortedSet(this IReadOnlyList<IVersionHistoryPath> paths)
     {
         return paths.ToImmutableSortedSet(new PathComparer());
     }
 
-    private sealed class PathComparer : IComparer<VersionHistoryPath>
+    private sealed class PathComparer : IComparer<IVersionHistoryPath>
     {
-        public int Compare(VersionHistoryPath? left, VersionHistoryPath? right)
+        public int Compare(IVersionHistoryPath? left, IVersionHistoryPath? right)
         {
             var versionPrecedence = right!.Version.ComparePrecedenceTo(left!.Version);
             if (versionPrecedence == 0)

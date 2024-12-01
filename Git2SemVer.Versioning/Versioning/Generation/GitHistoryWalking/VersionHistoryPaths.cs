@@ -21,7 +21,7 @@ internal sealed class HistoryPaths : IHistoryPaths
 
     public Commit HeadCommit { get; }
 
-    public ImmutableSortedSet<VersionHistoryPath> Paths { get; }
+    public ImmutableSortedSet<IVersionHistoryPath> Paths { get; }
 
     public string GetReport()
     {

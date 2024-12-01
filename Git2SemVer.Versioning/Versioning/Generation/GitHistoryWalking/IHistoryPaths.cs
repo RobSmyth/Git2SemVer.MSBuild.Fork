@@ -4,13 +4,13 @@ using NoeticTools.Git2SemVer.Core.Tools.Git;
 
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 
-internal interface IHistoryPaths
+public interface IHistoryPaths
 {
     IVersionHistoryPath BestPath { get; }
 
     Commit HeadCommit { get; }
 
-    ImmutableSortedSet<VersionHistoryPath> Paths { get; }
+    ImmutableSortedSet<IVersionHistoryPath> Paths { get; }
 
     string GetReport();
 }

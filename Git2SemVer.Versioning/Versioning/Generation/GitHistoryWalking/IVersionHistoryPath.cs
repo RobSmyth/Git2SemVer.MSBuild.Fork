@@ -5,7 +5,7 @@ using Semver;
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 
 #pragma warning disable CS1591
-internal interface IVersionHistoryPath
+public interface IVersionHistoryPath
 {
     /// <summary>
     ///     The number of commits to last release (commit depth).

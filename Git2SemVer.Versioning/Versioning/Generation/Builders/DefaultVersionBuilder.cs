@@ -2,7 +2,6 @@
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
-using NoeticTools.Git2SemVer.MSBuild.Framework.Config;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Semver;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 using Semver;
@@ -43,13 +42,13 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
             _logger.LogTrace($"BuildSystemVersion = {outputs.BuildSystemVersion}");
 
             var gitOutputs = outputs.Git;
-            var config = Git2SemVerConfiguration.Load();
-            config.AddLogEntry(host.BuildNumber,
-                               gitOutputs.HasLocalChanges,
-                               gitOutputs.BranchName,
-                               gitOutputs.HeadCommit.CommitId.ShortSha,
-                               inputs.WorkingDirectory);
-            config.Save();
+            //var config = Git2SemVerConfiguration.Load();
+            //config.AddLogEntry(host.BuildNumber,
+            //                   gitOutputs.HasLocalChanges,
+            //                   gitOutputs.BranchName,
+            //                   gitOutputs.HeadCommit.CommitId.ShortSha,
+            //                   inputs.WorkingDirectory);
+            //config.Save();
         }
     }
 

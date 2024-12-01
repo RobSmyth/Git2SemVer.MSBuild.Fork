@@ -1,7 +1,6 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
-using NoeticTools.MSBuild.Tasking;
 
 
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting;
@@ -31,10 +30,10 @@ public interface IVersioningContext
     /// </summary>
     ILogger Logger { get; }
 
-    /// <summary>
-    ///     Harvested MSBuild global properties for script use.
-    /// </summary>
-    MSBuildGlobalProperties MsBuildGlobalProperties { get; }
+    ///// <summary>
+    /////     Harvested MSBuild global properties for script use.
+    ///// </summary>
+    //MSBuildGlobalProperties MsBuildGlobalProperties { get; }
 
     /// <summary>
     ///     Outputs that the C# script may use. Available to other MSBuild tasks as MSBuild properties.

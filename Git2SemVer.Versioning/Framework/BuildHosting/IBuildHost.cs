@@ -1,5 +1,4 @@
-﻿using NoeticTools.Git2SemVer.MSBuild.Tasks;
-
+﻿
 
 namespace NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 

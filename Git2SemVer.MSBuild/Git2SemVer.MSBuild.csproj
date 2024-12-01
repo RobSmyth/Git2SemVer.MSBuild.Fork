@@ -28,15 +28,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Tools\CliExecution\**" />
-    <Compile Remove="Tools\Git\**" />
-    <EmbeddedResource Remove="Tools\CliExecution\**" />
-    <EmbeddedResource Remove="Tools\Git\**" />
-    <None Remove="Tools\CliExecution\**" />
-    <None Remove="Tools\Git\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.props" />
     <None Remove="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.targets" />
   </ItemGroup>
@@ -50,9 +41,6 @@
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>NoeticTools.Git2SemVer.IntegrationTests</_Parameter1>
-    </AssemblyAttribute>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>NoeticTools.MSBuild.Tasking.Tests</_Parameter1>
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
@@ -98,6 +86,11 @@
     <Content Include="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="buildmultitargeting/" />
     <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.props" PackagePath="build/" />
     <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="build/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Git2SemVer.Versioning\Git2SemVer.Versioning.csproj" />
   </ItemGroup>
 
   <!-- Ensure that the Git2SemVer version information JSON file is available.  -->

@@ -1,7 +1,5 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
-using NoeticTools.Git2SemVer.MSBuild.Tasks;
-using NoeticTools.MSBuild.Tasking;
 
 
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
@@ -9,7 +7,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 /// <summary>
 ///     Inputs into the MSBuild task read from MSBuild properties.
 /// </summary>
-public interface IVersionGeneratorInputs : IMSBuildTask
+public interface IVersionGeneratorInputs //: IMSBuildTask
 {
     /// <summary>
     ///     Optional input  MSBuild <c>Git2SemVer_BranchMaturityPattern</c> property.
