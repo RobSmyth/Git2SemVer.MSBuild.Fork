@@ -35,6 +35,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="4.11.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="NoeticTools.Git2SemVer.Core" Version="3.0.0-alpha.131" />
+    <PackageReference Include="NoeticTools.Git2SemVer.Framework" Version="1.0.0" />
     <PackageReference Include="NoeticTools.Git2SemVer.Testing.Core" Version="2.0.0" />
     <PackageReference Include="NUnit" Version="4.2.2" />
     <PackageReference Include="NUnit.Analyzers" Version="4.4.0">

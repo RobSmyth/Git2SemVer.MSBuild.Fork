@@ -1,5 +1,5 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
-using NoeticTools.Git2SemVer.Versioning.Framework.BuildHosting;
+using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global

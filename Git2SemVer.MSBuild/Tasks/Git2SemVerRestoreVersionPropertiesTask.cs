@@ -1,5 +1,5 @@
 ﻿using Microsoft.Build.Framework;
-using NoeticTools.Git2SemVer.Versioning.Persistence;
+using NoeticTools.Git2SemVer.Framework.Persistence;
 
 
 // ReSharper disable InconsistentNaming

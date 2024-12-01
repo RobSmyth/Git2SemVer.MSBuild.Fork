@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.Build.Utilities;
-using NoeticTools.Git2SemVer.Versioning;
-using NoeticTools.Git2SemVer.Versioning.Framework.Semver;
-using NoeticTools.Git2SemVer.Versioning.Generation.Builders.Scripting;
+using NoeticTools.Git2SemVer.Framework;
+using NoeticTools.Git2SemVer.Framework.Framework.Semver;
+using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
 using Semver;
 
 var context = VersioningContext.Instance!;
