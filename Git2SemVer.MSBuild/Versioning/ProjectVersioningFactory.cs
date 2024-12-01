@@ -33,10 +33,8 @@ internal sealed class ProjectVersioningFactory
                                                                 inputs.BuildContext,
                                                                 inputs.BuildIdFormat);
         var commitsRepo = new CommitsRepository();
-        var gitTool = new GitTool(commitsRepo, _logger)
-        {
-            WorkingDirectory = inputs.WorkingDirectory
-        };
+        var gitProcessCli = new GitProcessCli(_logger) {WorkingDirectory = inputs.WorkingDirectory};
+        var gitTool = new GitTool(commitsRepo, gitProcessCli, _logger);
         var gitPathsFinder = new PathsFromLastReleasesFinder(gitTool, _logger);
 
         var defaultBuilderFactory = new DefaultVersionBuilderFactory(_logger);

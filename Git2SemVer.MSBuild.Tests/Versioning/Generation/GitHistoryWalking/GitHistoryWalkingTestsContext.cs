@@ -1,4 +1,5 @@
 ﻿using Moq;
+using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Testing.Core;
@@ -8,12 +9,12 @@ namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.GitHistoryW
 
 internal class GitHistoryWalkingTestsContext : IDisposable
 {
-    private readonly GitTool _realGitTool;
+    private readonly GitLogCommitParser _logParser;
 
     public GitHistoryWalkingTestsContext()
     {
         Logger = new NUnitLogger(false) { Level = LoggingLevel.Trace };
-        _realGitTool = new GitTool(Logger);
+        _logParser = new GitLogCommitParser(new CommitsRepository(), new ConventionalCommitsParser());
         GitTool = new Mock<IGitTool>();
         GitTool.Setup(x => x.BranchName).Returns("BranchName");
     }
@@ -22,13 +23,8 @@ internal class GitHistoryWalkingTestsContext : IDisposable
 
     private List<Commit> GetCommits(string gitLog)
     {
-        var commits = new List<Commit>();
-        foreach (var logLine in gitLog.Split('\n'))
-        {
-            _realGitTool.ParseGitLogLine(logLine.Trim(), commits);
-        }
-
-        return commits;
+        var lines = gitLog.Split('\n');
+        return lines.Select(line => _logParser.Parse(line)).OfType<Commit>().ToList();
     }
 
     public NUnitLogger Logger { get; }

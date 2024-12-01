@@ -32,8 +32,6 @@ internal class PathsFromLastReleasesFinderTests
                 .Returns((CommitId commitId) => _commitsLookup[commitId.Id]);
         _gitTool.Setup(x => x.BranchName)
                 .Returns("master");
-        _gitTool.Setup(x => x.GetNextSetOfCommits())
-                .Returns(_commitsLookup.Values.ToReadOnlyList());
     }
 
     [TearDown]

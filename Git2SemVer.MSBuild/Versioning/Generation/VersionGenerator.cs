@@ -29,6 +29,9 @@ internal sealed class VersionGenerator(
         var historyPaths = gitPathsFinder.FindPathsToHead();
         var outputs = new VersionOutputs(new GitOutputs(gitTool, historyPaths));
 
+        //xxx; // todo - log obfuscated log from the oldest commit in paths to head - so we can copy and paste scenario
+        // or ... all contributing commits since all found last releases to head.
+
         RunBuilders(outputs, historyPaths);
         SaveGeneratedVersions(outputs);
 
