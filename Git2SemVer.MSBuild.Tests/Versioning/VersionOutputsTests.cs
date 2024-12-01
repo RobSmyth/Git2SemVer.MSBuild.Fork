@@ -32,7 +32,7 @@ internal class VersionOutputsTests
 
         const string expected = """
                                 {
-                                  "Rev": 1,
+                                  "Rev": 2,
                                   "Git2SemVerVersionInfo": {
                                     "AssemblyVersion": "10.11.12",
                                     "BuildContext": "CONTEXT",
@@ -47,7 +47,7 @@ internal class VersionOutputsTests
                                       "HeadCommit": {
                                         "$type": "Commit",
                                         "CommitId": {
-                                          "Id": "00000000",
+                                          "Sha": "00000000",
                                           "ShortSha": "0000000"
                                         },
                                         "ReleasedVersion": null,
@@ -63,7 +63,7 @@ internal class VersionOutputsTests
                                           },
                                           "Body": "",
                                           "ChangeDescription": "",
-                                          "ChangeType": 0,
+                                          "ChangeType": 1,
                                           "FooterKeyValues": []
                                         }
                                       },

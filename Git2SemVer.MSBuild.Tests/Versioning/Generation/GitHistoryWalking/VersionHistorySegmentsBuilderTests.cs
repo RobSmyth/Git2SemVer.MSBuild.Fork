@@ -40,8 +40,8 @@ internal class VersionHistorySegmentsBuilderTests
             var segment = segments[0];
             Assert.That(segment.Id, Is.EqualTo(1));
             Assert.That(segment.Commits, Has.Count.EqualTo(1));
-            Assert.That(segment.OldestCommit.CommitId.Id, Is.EqualTo("0001"));
-            Assert.That(segment.YoungestCommit.CommitId.Id, Is.EqualTo("0001"));
+            Assert.That(segment.OldestCommit.CommitId.Sha, Is.EqualTo("0001"));
+            Assert.That(segment.YoungestCommit.CommitId.Sha, Is.EqualTo("0001"));
             //Assert.That(segment.ChildCommits, Has.Count.EqualTo(0));
             Assert.That(segment.ParentCommits, Has.Count.EqualTo(2));
             Assert.That(segment.TaggedReleasedVersion, Is.Null);

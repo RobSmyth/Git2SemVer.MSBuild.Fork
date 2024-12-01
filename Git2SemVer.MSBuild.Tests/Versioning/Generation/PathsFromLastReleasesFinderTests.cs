@@ -16,7 +16,7 @@ internal class PathsFromLastReleasesFinderTests
     private Dictionary<string, Commit> _commitsLookup;
     private Mock<IGitTool> _gitTool;
     private NUnitLogger _logger;
-    private Mock<ICommitsRepository> _repository;
+    private Mock<ICommitsCache> _repository;
 
     [SetUp]
     public void SetUp()
@@ -26,10 +26,10 @@ internal class PathsFromLastReleasesFinderTests
             Level = LoggingLevel.Debug
         };
         _commitsLookup = new Dictionary<string, Commit>();
-        _repository = new Mock<ICommitsRepository>();
+        _repository = new Mock<ICommitsCache>();
         _gitTool = new Mock<IGitTool>();
         _gitTool.Setup(x => x.Get(It.IsAny<CommitId>()))
-                .Returns((CommitId commitId) => _commitsLookup[commitId.Id]);
+                .Returns((CommitId commitId) => _commitsLookup[commitId.Sha]);
         _gitTool.Setup(x => x.BranchName)
                 .Returns("master");
     }
@@ -58,10 +58,10 @@ internal class PathsFromLastReleasesFinderTests
     {
         foreach (var commit in commits)
         {
-            _commitsLookup.Add(commit.CommitId.Id, commit);
+            _commitsLookup.Add(commit.CommitId.Sha, commit);
         }
 
-        _repository.Setup(x => x.Get(It.IsAny<CommitId>())).Returns<CommitId>((commitId) => _commitsLookup[commitId.Id]);
+        _repository.Setup(x => x.Get(It.IsAny<CommitId>())).Returns<CommitId>((commitId) => _commitsLookup[commitId.Sha]);
         _gitTool.Setup(x => x.Head).Returns(_commitsLookup[headCommitId]);
     }
 }

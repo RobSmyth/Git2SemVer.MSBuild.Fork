@@ -82,7 +82,7 @@ internal sealed class VersionHistorySegmentsBuilder
         {
             using (_logger.EnterLogScope())
             {
-                _logger.LogTrace("Commit {0} has release tag '{1}'.", commit.CommitId.Id, commit.ReleasedVersion.ToString());
+                _logger.LogTrace("Commit {0} has release tag '{1}'.", commit.CommitId.Sha, commit.ReleasedVersion.ToString());
             }
 
             return SegmentWalkResult.FoundStart;

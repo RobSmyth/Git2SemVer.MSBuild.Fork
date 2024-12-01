@@ -63,7 +63,7 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
 
     private static SemVersion GetInformationalVersion(SemVersion version, IBuildHost host, IVersionOutputs outputs)
     {
-        var commitId = outputs.Git.HeadCommit.CommitId.Id;
+        var commitId = outputs.Git.HeadCommit.CommitId.Sha;
         var branchName = outputs.Git.BranchName.ToNormalisedSemVerIdentifier();
         var metadata = new List<string>();
         if (version.IsRelease)

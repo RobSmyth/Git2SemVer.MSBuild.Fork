@@ -24,7 +24,7 @@ internal class FindPathsComponentTests
             Level = LoggingLevel.Debug
         };
 
-        var commitsRepo = new CommitsRepository();
+        var commitsRepo = new CommitsCache();
         var gitTool = new GitTool(commitsRepo, logger);
         TestContext.Out.WriteLine();
         var paths = new PathsFromLastReleasesFinder(gitTool, logger).FindPathsToHead();

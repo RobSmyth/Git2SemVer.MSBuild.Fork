@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
+using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
@@ -29,9 +31,6 @@ internal sealed class VersionGenerator(
         var historyPaths = gitPathsFinder.FindPathsToHead();
         var outputs = new VersionOutputs(new GitOutputs(gitTool, historyPaths));
 
-        //xxx; // todo - log obfuscated log from the oldest commit in paths to head - so we can copy and paste scenario
-        // or ... all contributing commits since all found last releases to head.
-
         RunBuilders(outputs, historyPaths);
         SaveGeneratedVersions(outputs);
 
@@ -55,4 +54,16 @@ internal sealed class VersionGenerator(
             generatedOutputsJsonFile.Write(inputs.SolutionSharedDirectory, outputs);
         }
     }
+
+    //private void LogFoundPaths(HistoryPaths paths)
+    //{
+    //    if (logger.Level )
+    //    var startingCommits = paths.Paths.Select(x => x.FirstCommit.CommitId).ToArray();
+    //    var loggingParser = new LoggingGitLogCommitParser(gitTool);
+    //    gitTool.GetCommits(x => x.ReachableFrom(paths.HeadCommit.CommitId)
+    //                             .NotReachableFrom(startingCommits, inclusive: true)
+    //                             .With(loggingParser));
+
+    //    logger.LogInfo(loggingParser.GetLog());
+    //}
 }

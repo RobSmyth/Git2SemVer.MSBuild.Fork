@@ -59,15 +59,15 @@ internal sealed class VersionHistorySegment
     /// </summary>
     public void Append(Commit youngerCommit)
     {
-        if (_commits.Count > 0 && OldestCommit.Parents.All(x => x.Id != youngerCommit.CommitId.Id))
+        if (_commits.Count > 0 && OldestCommit.Parents.All(x => x.Sha != youngerCommit.CommitId.Sha))
         {
             throw new
-                InvalidOperationException($"Cannot append {youngerCommit.CommitId.Id} as it is not connected to segment's first (oldest) commit.");
+                InvalidOperationException($"Cannot append {youngerCommit.CommitId.Sha} as it is not connected to segment's first (oldest) commit.");
         }
 
         _bumps = null;
         _commits.Add(youngerCommit);
-        _logger.LogTrace("Commit {0} added to segment {1}.", youngerCommit.CommitId.Id, Id);
+        _logger.LogTrace("Commit {0} added to segment {1}.", youngerCommit.CommitId.Sha, Id);
     }
 
     /// <summary>
@@ -75,12 +75,12 @@ internal sealed class VersionHistorySegment
     /// </summary>
     public VersionHistorySegment? BranchesFrom(VersionHistorySegment branchSegment, Commit commit, IVersionHistorySegmentFactory segmentFactory)
     {
-        _logger.LogDebug("Commit {0} in segment {1} branches to segment {2}:", commit.CommitId.Id, Id, branchSegment.Id);
+        _logger.LogDebug("Commit {0} in segment {1} branches to segment {2}:", commit.CommitId.Sha, Id, branchSegment.Id);
         using (_logger.EnterLogScope())
         {
             if (commit.CommitId.Equals(YoungestCommit.CommitId))
             {
-                _logger.LogTrace("Commit {0} is last (youngest) commit in segment {1}. Link segments.", commit.CommitId.Id, Id);
+                _logger.LogTrace("Commit {0} is last (youngest) commit in segment {1}. Link segments.", commit.CommitId.Sha, Id);
                 return null;
             }
 
@@ -98,7 +98,7 @@ internal sealed class VersionHistorySegment
             (ParentCommits.Any() ? "" : "0.1.0");
 
         return
-            $"Segment {Id,-3} {YoungestCommit.CommitId.Id} -> {OldestCommit.CommitId.Id}  {commitsCount,5}   {ApiChangeFlags}    {release}";
+            $"Segment {Id,-3} {YoungestCommit.CommitId.Sha} -> {OldestCommit.CommitId.Sha}  {commitsCount,5}   {ApiChangeFlags}    {release}";
     }
 
     private ApiChanges GetApiChanges()
@@ -138,7 +138,7 @@ internal sealed class VersionHistorySegment
 
             var olderSegment = segmentFactory.Create(olderSegmentCommits);
             _logger.LogTrace("Split out new segment {2} from segment {0} at commit {1}.",
-                             Id, commit.CommitId.Id,
+                             Id, commit.CommitId.Sha,
                              olderSegment.Id);
 
             return olderSegment;

@@ -71,7 +71,16 @@ internal sealed class GeneratedVersionsJsonFile : IGeneratedOutputsJsonFile
         /// <summary>
         ///     This version info's schema version.
         /// </summary>
+        /// <remarks>
+        ///     <para>
+        ///         <strong>Rev 2</strong>
+        ///         <list type="bullet">
+        ///             <item>Generated JSON - CommitId `Id` property renamed to `Sha`</item>
+        ///             <item>Generated JSON - CommitChangeTypeId.None added, type numbers bumped.</item>
+        ///         </list>
+        ///     </para>
+        /// </remarks>
         [JsonPropertyOrder(1)]
-        public int Rev { get; set; } = 1;
+        public int Rev { get; set; } = 2;
     }
 }

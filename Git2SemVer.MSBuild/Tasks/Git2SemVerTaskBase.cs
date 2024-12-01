@@ -202,7 +202,7 @@ public abstract class Git2SemVerTaskBase : Task
         CommitsSinceLastRelease = outputs.Git.CommitsSinceLastRelease;
         IsRelease = outputs.Version?.IsRelease ?? false;
 
-        LastReleaseCommitId = outputs.Git.LastReleaseCommit?.CommitId.Id ?? "";
+        LastReleaseCommitId = outputs.Git.LastReleaseCommit?.CommitId.Sha ?? "";
         LastReleaseVersion = outputs.Git.LastReleaseVersion?.ToString() ?? "";
     }
 }

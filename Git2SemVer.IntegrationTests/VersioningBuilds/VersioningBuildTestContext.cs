@@ -5,6 +5,7 @@ using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
 using NoeticTools.Git2SemVer.Testing.Core;
 using System.IO.Compression;
 using NoeticTools.Git2SemVer.Core.Logging;
+#pragma warning disable NUnit2045
 
 
 namespace NoeticTools.Git2SemVer.IntegrationTests.VersioningBuilds;
@@ -51,15 +52,13 @@ internal sealed class VersioningBuildTestContext : IDisposable
     public void PackTestSolution()
     {
         var result = DotNetCli.Pack(TestSolutionPath, BuildConfiguration, "--no-restore --no-build");
-        TestContext.Out.WriteLine(result.stdOutput);
-        Assert.That(result.returnCode, Is.EqualTo(0));
+        Assert.That(result.returnCode, Is.EqualTo(0), result.stdOutput);
         Assert.That(Logger.HasError, Is.False);
     }
 
     public void DotNetCliBuildTestSolution(params string[] arguments)
     {
         var result = DotNetCli.Build(TestSolutionPath, BuildConfiguration, arguments);
-        TestContext.Out.WriteLine(result.stdOutput);
         Assert.That(result.returnCode, Is.EqualTo(0), result.stdOutput);
         Assert.That(Logger.HasError, Is.False);
     }

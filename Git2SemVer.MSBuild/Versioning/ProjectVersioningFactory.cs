@@ -32,7 +32,7 @@ internal sealed class ProjectVersioningFactory
                                                                 inputs.BuildNumber,
                                                                 inputs.BuildContext,
                                                                 inputs.BuildIdFormat);
-        var commitsRepo = new CommitsRepository();
+        var commitsRepo = new CommitsCache();
         var gitProcessCli = new GitProcessCli(_logger) {WorkingDirectory = inputs.WorkingDirectory};
         var gitTool = new GitTool(commitsRepo, gitProcessCli, _logger);
         var gitPathsFinder = new PathsFromLastReleasesFinder(gitTool, _logger);
@@ -40,8 +40,14 @@ internal sealed class ProjectVersioningFactory
         var defaultBuilderFactory = new DefaultVersionBuilderFactory(_logger);
         var scriptBuilder = new ScriptVersionBuilder(_logger);
         var generatedOutputsJsonFile = new GeneratedVersionsJsonFile();
-        var versionGenerator = new VersionGenerator(inputs, host, generatedOutputsJsonFile, gitTool, gitPathsFinder, defaultBuilderFactory,
-                                                    scriptBuilder, _logger);
+        var versionGenerator = new VersionGenerator(inputs, 
+                                                    host, 
+                                                    generatedOutputsJsonFile,
+                                                    gitTool, 
+                                                    gitPathsFinder, 
+                                                    defaultBuilderFactory,
+                                                    scriptBuilder, 
+                                                    _logger);
         var projectVersioning = new ProjectVersioning(inputs, host,
                                                       generatedOutputsJsonFile, 
                                                       versionGenerator,
