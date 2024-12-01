@@ -2,8 +2,9 @@
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Semver;
 using Semver;
-// ReSharper disable UnusedMemberInSuper.Global
 
+
+// ReSharper disable UnusedMemberInSuper.Global
 
 namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 
@@ -133,6 +134,15 @@ public interface IVersionOutputs
     bool IsInInitialDevelopment { get; set; }
 
     /// <summary>
+    ///     True if outputs are valid.
+    /// </summary>
+    /// <remarks>
+    ///     For internal use to detect default output settings.
+    /// </remarks>
+    [JsonIgnore]
+    bool IsValid { get; }
+
+    /// <summary>
     ///     Optional script output to MSBuild property <c>Git2SemVer_Output1</c>
     /// </summary>
     // ReSharper disable once UnusedMember.Global
@@ -179,15 +189,6 @@ public interface IVersionOutputs
     SemVersion? Version { get; set; }
 
     /// <summary>
-    ///     True if outputs are valid.
-    /// </summary>
-    /// <remarks>
-    ///     For internal use to detect default output settings.
-    /// </remarks>
-    [JsonIgnore]
-    bool IsValid { get; }
-
-    /// <summary>
     ///     Set all version properties from provided informational version.
     /// </summary>
     /// <remarks>
@@ -196,7 +197,7 @@ public interface IVersionOutputs
     ///         the informational version holds all required elements.
     ///     </para>
     ///     <para>
-    ///         <seealso cref="BuildNumber"/> and <seealso cref="BuildContext"/> properties are updated.
+    ///         <seealso cref="BuildNumber" /> and <seealso cref="BuildContext" /> properties are updated.
     ///     </para>
     ///     <para>
     ///         This method will:
@@ -220,7 +221,7 @@ public interface IVersionOutputs
     ///         the informational version holds all required elements.
     ///     </para>
     ///     <para>
-    ///         Does not update <seealso cref="BuildNumber"/> and <seealso cref="BuildContext"/> properties.
+    ///         Does not update <seealso cref="BuildNumber" /> and <seealso cref="BuildContext" /> properties.
     ///     </para>
     ///     <para>
     ///         This method will:

@@ -12,14 +12,14 @@ namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scriptin
 public interface IVersioningContext
 {
     /// <summary>
-    ///     The build's host properties. Get build number here.
-    /// </summary>
-    IBuildHost Host { get; }
-
-    /// <summary>
     ///     Git tool for running git commands.
     /// </summary>
     IGitTool Git { get; }
+
+    /// <summary>
+    ///     The build's host properties. Get build number here.
+    /// </summary>
+    IBuildHost Host { get; }
 
     /// <summary>
     ///     MSBuild input properties.

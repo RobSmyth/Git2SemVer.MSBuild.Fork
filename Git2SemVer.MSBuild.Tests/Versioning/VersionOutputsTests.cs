@@ -1,5 +1,4 @@
-﻿using NoeticTools.Git2SemVer.Core.Tools.Git;
-using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
+﻿using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Persistence;
 using Semver;
 

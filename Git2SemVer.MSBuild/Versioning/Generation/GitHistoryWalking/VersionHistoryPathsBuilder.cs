@@ -50,23 +50,6 @@ internal sealed class VersionHistoryPathsBuilder
         return paths;
     }
 
-    private void LogFoundPaths(List<VersionHistoryPath> paths)
-    {
-        var stringBuilder = new StringBuilder();
-
-        stringBuilder.Append($"Found {paths.Count} paths.");
-        using (_logger.EnterLogScope())
-        {
-            stringBuilder.Append("Path #   Segments (count)            Bumps    Ver from/to");
-            foreach (var path in paths)
-            {
-                stringBuilder.Append(path);
-            }
-        }
-
-        _logger.LogDebug(stringBuilder.ToString());
-    }
-
     private List<VersionHistoryPath> GetChildPaths(VersionHistorySegment parentSegment, VersionHistoryPath path)
     {
         var childSegments = _childSegmentsLookup[parentSegment].ToList();
@@ -102,5 +85,22 @@ internal sealed class VersionHistoryPathsBuilder
 
         var childSegmentsLookup = childLinks.ToLookup(k => k.parent, v => v.child);
         return childSegmentsLookup;
+    }
+
+    private void LogFoundPaths(List<VersionHistoryPath> paths)
+    {
+        var stringBuilder = new StringBuilder();
+
+        stringBuilder.Append($"Found {paths.Count} paths.");
+        using (_logger.EnterLogScope())
+        {
+            stringBuilder.Append("Path #   Segments (count)            Bumps    Ver from/to");
+            foreach (var path in paths)
+            {
+                stringBuilder.Append(path);
+            }
+        }
+
+        _logger.LogDebug(stringBuilder.ToString());
     }
 }

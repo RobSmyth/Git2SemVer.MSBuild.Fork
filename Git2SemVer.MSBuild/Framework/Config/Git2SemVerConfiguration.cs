@@ -13,7 +13,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.Framework.Config;
 /// </summary>
 internal sealed class Git2SemVerConfiguration : IConfiguration
 {
-    private static Mutex _fileMutex = new Mutex(false, "G2SemVerConfigFileMutex");
+    private static Mutex _fileMutex = new(false, "G2SemVerConfigFileMutex");
 
     [JsonIgnore]
     private static JsonSerializerOptions _serialiseOptions = new()
@@ -128,6 +128,7 @@ internal sealed class Git2SemVerConfiguration : IConfiguration
         {
             return;
         }
+
         _onLoadHash = currentHashCode;
 
         var json = JsonSerializer.Serialize(this, _serialiseOptions);

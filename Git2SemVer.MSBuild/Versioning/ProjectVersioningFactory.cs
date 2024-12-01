@@ -1,5 +1,4 @@
-﻿using Microsoft.Build.Utilities;
-using NoeticTools.Git2SemVer.Core.Logging;
+﻿using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Config;
 using NoeticTools.Git2SemVer.MSBuild.Tools.CI;
@@ -33,23 +32,23 @@ internal sealed class ProjectVersioningFactory
                                                                 inputs.BuildContext,
                                                                 inputs.BuildIdFormat);
         var commitsRepo = new CommitsCache();
-        var gitProcessCli = new GitProcessCli(_logger) {WorkingDirectory = inputs.WorkingDirectory};
+        var gitProcessCli = new GitProcessCli(_logger) { WorkingDirectory = inputs.WorkingDirectory };
         var gitTool = new GitTool(commitsRepo, gitProcessCli, _logger);
         var gitPathsFinder = new PathsFromLastReleasesFinder(gitTool, _logger);
 
         var defaultBuilderFactory = new DefaultVersionBuilderFactory(_logger);
         var scriptBuilder = new ScriptVersionBuilder(_logger);
         var generatedOutputsJsonFile = new GeneratedVersionsJsonFile();
-        var versionGenerator = new VersionGenerator(inputs, 
-                                                    host, 
+        var versionGenerator = new VersionGenerator(inputs,
+                                                    host,
                                                     generatedOutputsJsonFile,
-                                                    gitTool, 
-                                                    gitPathsFinder, 
+                                                    gitTool,
+                                                    gitPathsFinder,
                                                     defaultBuilderFactory,
-                                                    scriptBuilder, 
+                                                    scriptBuilder,
                                                     _logger);
         var projectVersioning = new ProjectVersioning(inputs, host,
-                                                      generatedOutputsJsonFile, 
+                                                      generatedOutputsJsonFile,
                                                       versionGenerator,
                                                       _logger);
         return projectVersioning;

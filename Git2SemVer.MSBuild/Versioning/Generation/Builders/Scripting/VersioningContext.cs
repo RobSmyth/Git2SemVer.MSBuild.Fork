@@ -23,9 +23,9 @@ public sealed class VersioningContext : IVersioningContext
         Git = gitTool;
     }
 
-    public IBuildHost Host { get; }
-
     public IGitTool Git { get; }
+
+    public IBuildHost Host { get; }
 
     public IVersionGeneratorInputs Inputs { get; }
 

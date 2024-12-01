@@ -1,20 +1,20 @@
+using System.IO.Compression;
 using NoeticTools.Git2SemVer.Core;
+using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools;
 using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
-using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
 using NoeticTools.Git2SemVer.Testing.Core;
-using System.IO.Compression;
-using NoeticTools.Git2SemVer.Core.Logging;
-#pragma warning disable NUnit2045
 
+
+#pragma warning disable NUnit2045
 
 namespace NoeticTools.Git2SemVer.IntegrationTests.VersioningBuilds;
 
 internal sealed class VersioningBuildTestContext : IDisposable
 {
-    private readonly TestDirectoryResource _testDirectoryResource;
     private const int ConcurrentContextsLimit = 100;
     private static int _activeContexts;
+    private readonly TestDirectoryResource _testDirectoryResource;
 
     public VersioningBuildTestContext(string groupName, string solutionFolderName, string solutionFileName, string projectName)
     {
@@ -22,6 +22,7 @@ internal sealed class VersioningBuildTestContext : IDisposable
         {
             Assert.Fail($"Exceeded number of active contexts limit of {ConcurrentContextsLimit}.");
         }
+
         _activeContexts++;
         _testDirectoryResource = new TestDirectoryResource(groupName);
 
@@ -49,11 +50,41 @@ internal sealed class VersioningBuildTestContext : IDisposable
         ExtractResourceToDirectory(solutionFolderName + ".zip", TestDirectory.FullName);
     }
 
-    public void PackTestSolution()
+    public string BuildConfiguration { get; }
+
+    public string CompiledAppPath { get; }
+
+    public DotNetTool DotNetCli { get; }
+
+    public NUnitLogger Logger { get; }
+
+    public string PackageOutputDir { get; }
+
+    public DirectoryInfo TestDirectory { get; }
+
+    public string TestFolderName { get; }
+
+    public string TestSolutionPath { get; }
+
+    public static void AssertFileExists(string packageDirectory, string expectedFilename)
     {
-        var result = DotNetCli.Pack(TestSolutionPath, BuildConfiguration, "--no-restore --no-build");
-        Assert.That(result.returnCode, Is.EqualTo(0), result.stdOutput);
-        Assert.That(Logger.HasError, Is.False);
+        var directory = new DirectoryInfo(packageDirectory);
+        var foundFiles = directory.GetFiles(expectedFilename);
+        Assert.That(foundFiles.Length, Is.EqualTo(1), $"File '{expectedFilename}' does not exist.");
+    }
+
+    public string DeployScript(string scriptFilename)
+    {
+        var scriptPath = Path.Combine(TestDirectory.FullName, scriptFilename);
+        GetType().Assembly.WriteResourceFile(scriptFilename, scriptPath);
+        return scriptPath;
+    }
+
+    public void Dispose()
+    {
+        _activeContexts--;
+        //System.Threading.Thread.Sleep(100);//>>>
+        _testDirectoryResource.Dispose();
     }
 
     public void DotNetCliBuildTestSolution(params string[] arguments)
@@ -63,27 +94,12 @@ internal sealed class VersioningBuildTestContext : IDisposable
         Assert.That(Logger.HasError, Is.False);
     }
 
-    public static void AssertFileExists(string packageDirectory, string expectedFilename)
+    public void PackTestSolution()
     {
-        var directory = new DirectoryInfo(packageDirectory);
-        var foundFiles = directory.GetFiles(expectedFilename);
-        Assert.That(foundFiles.Length, Is.EqualTo(1), $"File '{expectedFilename}' does not exist.");
+        var result = DotNetCli.Pack(TestSolutionPath, BuildConfiguration, "--no-restore --no-build");
+        Assert.That(result.returnCode, Is.EqualTo(0), result.stdOutput);
+        Assert.That(Logger.HasError, Is.False);
     }
-
-    public string BuildConfiguration { get; }
-
-    public string DeployScript(string scriptFilename)
-    {
-        var scriptPath = Path.Combine(TestDirectory.FullName, scriptFilename);
-        GetType().Assembly.WriteResourceFile(scriptFilename, scriptPath);
-        return scriptPath;
-    }
-
-    public string PackageOutputDir { get; }
-
-    public string CompiledAppPath { get; }
-
-    public string TestSolutionPath { get; }
 
     private void ExtractResourceToDirectory(string filename, string extractPath)
     {
@@ -95,20 +111,5 @@ internal sealed class VersioningBuildTestContext : IDisposable
 
         using var stream = GetType().Assembly.GetResourceStream(filename);
         ZipFile.ExtractToDirectory(stream, extractPath);
-    }
-
-    public DotNetTool DotNetCli { get; }
-
-    public NUnitLogger Logger { get; }
-
-    public DirectoryInfo TestDirectory { get; }
-
-    public string TestFolderName { get; }
-
-    public void Dispose()
-    {
-        _activeContexts--;
-        //System.Threading.Thread.Sleep(100);//>>>
-        _testDirectoryResource.Dispose();
     }
 }

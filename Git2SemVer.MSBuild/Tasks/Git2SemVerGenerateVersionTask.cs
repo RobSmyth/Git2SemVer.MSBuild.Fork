@@ -13,7 +13,6 @@ using ILogger = NoeticTools.Git2SemVer.Core.Logging.ILogger;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-
 namespace NoeticTools.Git2SemVer.MSBuild.Tasks;
 
 /// <summary>
@@ -114,6 +113,20 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     public string BuildScriptPath { get; set; } = "";
 
     /// <summary>
+    ///     Optional input MSBuild <c>Git2SemVer_HostType</c> property.
+    ///     If set overrides automatic host type detection.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         MSBuild task input.
+    ///     </para>
+    ///     <para>
+    ///         See <see cref="IBuildHost.HostTypeId" />.
+    ///     </para>
+    /// </remarks>
+    public string HostType { get; set; } = "";
+
+    /// <summary>
     ///     Path to directory to write versioning report to.
     ///     Defaults to the MSBuild
     ///     <see
@@ -153,60 +166,6 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     public string Mode { get; set; } = "";
 
     /// <summary>
-    ///     When using solution versioning the shared directory that holds generated version properties.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         MSBuild task input.
-    ///     </para>
-    /// <para>
-    ///     Not used if the <see cref="Mode" /> is <c>"StandAloneProject"</c>. Otherwise, required.
-    /// </para>
-    /// </remarks>
-    public string SolutionSharedDirectory { get; set; } = "";
-
-    /// <summary>
-    ///     When using solution versioning the path to the shared generated version properties file.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         MSBuild task input.
-    ///     </para>
-    /// <para>
-    ///     Not used if the <see cref="Mode" /> is <c>"StandAloneProject"</c>. Otherwise, required.
-    /// </para>
-    /// </remarks>
-    public string SolutionSharedVersioningPropsFile { get; set; } = "";
-
-    /// <summary>
-    ///     The working directory.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         MSBuild task input.
-    ///     </para>
-    ///     <para>
-    ///         Default is the project's directory.
-    ///     </para>
-    /// </remarks>
-    [Required]
-    public string WorkingDirectory { get; set; } = "";
-
-    /// <summary>
-    ///     Optional input MSBuild <c>Git2SemVer_HostType</c> property.
-    ///     If set overrides automatic host type detection.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         MSBuild task input.
-    ///     </para>
-    ///     <para>
-    ///         See <see cref="IBuildHost.HostTypeId" />.
-    ///     </para>
-    /// </remarks>
-    public string HostType { get; set; } = "";
-
-    /// <summary>
     ///     Optional MSBuild <c>Git2SemVer_RunScript</c> property.
     /// </summary>
     /// <remarks>
@@ -238,6 +197,32 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     public string ScriptArgs { get; set; } = "";
 
     /// <summary>
+    ///     When using solution versioning the shared directory that holds generated version properties.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         MSBuild task input.
+    ///     </para>
+    ///     <para>
+    ///         Not used if the <see cref="Mode" /> is <c>"StandAloneProject"</c>. Otherwise, required.
+    ///     </para>
+    /// </remarks>
+    public string SolutionSharedDirectory { get; set; } = "";
+
+    /// <summary>
+    ///     When using solution versioning the path to the shared generated version properties file.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         MSBuild task input.
+    ///     </para>
+    ///     <para>
+    ///         Not used if the <see cref="Mode" /> is <c>"StandAloneProject"</c>. Otherwise, required.
+    ///     </para>
+    /// </remarks>
+    public string SolutionSharedVersioningPropsFile { get; set; } = "";
+
+    /// <summary>
     ///     The optional MSBuild <c>Git2SemVer_UpdateHostBuildLabel</c> property.
     /// </summary>
     /// <remarks>
@@ -250,6 +235,22 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     ///     </para>
     /// </remarks>
     public bool UpdateHostBuildLabel { get; set; }
+
+    public VersioningMode VersioningMode { get; private set; }
+
+    /// <summary>
+    ///     The working directory.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         MSBuild task input.
+    ///     </para>
+    ///     <para>
+    ///         Default is the project's directory.
+    ///     </para>
+    /// </remarks>
+    [Required]
+    public string WorkingDirectory { get; set; } = "";
 
     /// <summary>
     ///     Called by MSBuild to execute the task.
@@ -292,8 +293,6 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
             logger.Dispose();
         }
     }
-
-    public VersioningMode VersioningMode { get; private set; }
 
     public bool ValidateScriptInputs(ILogger logger)
     {

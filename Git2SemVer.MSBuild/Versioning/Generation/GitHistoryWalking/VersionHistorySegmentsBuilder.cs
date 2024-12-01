@@ -7,12 +7,12 @@ namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking
 
 internal sealed class VersionHistorySegmentsBuilder
 {
-    private readonly IGitTool _gitTool;
     private readonly Dictionary<CommitId, VersionHistorySegment> _commitsCache = new();
+    private readonly IGitTool _gitTool;
     private readonly ILogger _logger;
     private readonly VersionHistorySegment _segment;
-    private readonly Dictionary<int, VersionHistorySegment> _segments = [];
     private readonly VersionHistorySegmentFactory _segmentFactory;
+    private readonly Dictionary<int, VersionHistorySegment> _segments = [];
 
     private VersionHistorySegmentsBuilder(VersionHistorySegment segment, VersionHistorySegmentsBuilder parent)
     {
@@ -102,7 +102,6 @@ internal sealed class VersionHistorySegmentsBuilder
 
         OnMergeCommit(commit);
         return SegmentWalkResult.FoundStart;
-
     }
 
     private void NextCommitBeforeMerge(CommitId parent, Commit mergeCommit)

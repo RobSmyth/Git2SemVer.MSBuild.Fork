@@ -1,10 +1,8 @@
 ﻿using Moq;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
-using Semver;
 
 
 // ReSharper disable InconsistentNaming
-
 
 namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.ProjectVersioningTests;
 

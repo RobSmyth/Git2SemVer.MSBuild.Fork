@@ -43,6 +43,8 @@ public interface IVersionGeneratorInputs : IMSBuildTask
     /// </remarks>
     string BuildContext { get; }
 
+    string BuildIdFormat { get; }
+
     /// <summary>
     ///     Optional input MSBuild <c>Git2SemVer_BuildContext</c> property.
     /// </summary>
@@ -101,8 +103,6 @@ public interface IVersionGeneratorInputs : IMSBuildTask
 
     string IntermediateOutputDirectory { get; }
 
-    VersioningMode VersioningMode { get; }
-
     /// <summary>
     ///     Optional MSBuild <c>Git2SemVer_RunScript</c> property.
     /// </summary>
@@ -151,6 +151,8 @@ public interface IVersionGeneratorInputs : IMSBuildTask
     /// </remarks>
     string Version { get; }
 
+    VersioningMode VersioningMode { get; }
+
     /// <summary>
     ///     Optional input from MSBuild
     ///     <see href="https://gist.github.com/jonlabelle/34993ee032c26420a0943b1c9d106cdc#versionsuffix">VersionSuffix</see>
@@ -178,8 +180,6 @@ public interface IVersionGeneratorInputs : IMSBuildTask
     ///     </para>
     /// </remarks>
     string WorkingDirectory { get; }
-
-    string BuildIdFormat { get; }
 
     bool ValidateScriptInputs(ILogger logger);
 }

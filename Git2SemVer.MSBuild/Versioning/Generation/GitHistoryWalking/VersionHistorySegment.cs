@@ -1,5 +1,4 @@
-﻿using System.Dynamic;
-using NoeticTools.Git2SemVer.Core.ConventionCommits;
+﻿using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
@@ -32,6 +31,11 @@ internal sealed class VersionHistorySegment
     public IReadOnlyList<Commit> Commits => _commits.ToList();
 
     /// <summary>
+    ///     An arbitrary but unique segment ID.
+    /// </summary>
+    public int Id { get; }
+
+    /// <summary>
     ///     First (oldest) commit in the segment.
     /// </summary>
     public Commit OldestCommit => _commits.Last();
@@ -42,17 +46,12 @@ internal sealed class VersionHistorySegment
     /// </summary>
     public IReadOnlyList<CommitId> ParentCommits => OldestCommit.Parents.ToList(); // todo - >>> remove this ... want to list commits
 
-    /// <summary>
-    ///     An arbitrary but unique segment ID.
-    /// </summary>
-    public int Id { get; }
+    public SemVersion? TaggedReleasedVersion => _commits.Count != 0 ? OldestCommit.ReleasedVersion : null;
 
     /// <summary>
     ///     Last (youngest) commit in the segment.
     /// </summary>
     public Commit YoungestCommit => _commits[0];
-
-    public SemVersion? TaggedReleasedVersion => _commits.Count != 0 ? OldestCommit.ReleasedVersion : null;
 
     /// <summary>
     ///     Append prior (younger) commit to the segment.
@@ -94,8 +93,8 @@ internal sealed class VersionHistorySegment
     {
         var commitsCount = $"({_commits.Count})";
 
-        var release = TaggedReleasedVersion != null ? TaggedReleasedVersion.ToString() : 
-            (ParentCommits.Any() ? "" : "0.1.0");
+        var release = TaggedReleasedVersion != null ? TaggedReleasedVersion.ToString() :
+            ParentCommits.Any() ? "" : "0.1.0";
 
         return
             $"Segment {Id,-3} {YoungestCommit.CommitId.Sha} -> {OldestCommit.CommitId.Sha}  {commitsCount,5}   {ApiChangeFlags}    {release}";

@@ -17,6 +17,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.Builders;
 [TestFixture]
 internal class DefaultVersionBuilderTests
 {
+    private const string BuildNumber = "23456";
     private Mock<IVersionHistoryPath> _bestPath;
     private Mock<IGitTool> _git;
     private Mock<IGitOutputs> _gitOutputs;
@@ -24,12 +25,11 @@ internal class DefaultVersionBuilderTests
     private Mock<IBuildHost> _host;
     private Mock<IVersionGeneratorInputs> _inputs;
     private NUnitLogger _logger;
+    private CommitObfuscator _obfuscator;
     private Mock<IVersionOutputs> _outputs;
     private Mock<IHistoryPaths> _paths;
     private DefaultVersionBuilder _target;
     private SemVersion _version = null!;
-    private CommitObfuscator _obfuscator;
-    private const string BuildNumber = "23456";
 
     [SetUp]
     public void SetUp()

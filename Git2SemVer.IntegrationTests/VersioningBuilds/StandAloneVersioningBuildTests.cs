@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
+﻿using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
 
 
 #pragma warning disable NUnit2045
@@ -10,12 +9,6 @@ namespace NoeticTools.Git2SemVer.IntegrationTests.VersioningBuilds;
 [Parallelizable(ParallelScope.All)]
 internal class StandAloneVersioningBuildTests : VersioningBuildTestsBase
 {
-    protected override VersioningBuildTestContext CreateTestContext()
-    {
-        return new VersioningBuildTestContext("StandAlone", "StandAloneTestSolution", 
-                                              "StandAloneVersioning.sln", "TestApplication");
-    }
-
     [Test]
     public void BuildAndPackWithForcingProperties2ScriptTest()
     {
@@ -35,7 +28,6 @@ internal class StandAloneVersioningBuildTests : VersioningBuildTestsBase
                                          Product version:        21.22.23-beta
                                          """));
         VersioningBuildTestContext.AssertFileExists(context.PackageOutputDir, "NoeticTools.TestApplication.1.0.0.nupkg");
-
     }
 
     [Test]
@@ -54,5 +46,11 @@ internal class StandAloneVersioningBuildTests : VersioningBuildTestsBase
                                                Informational version:  11.12.13-a-prerelease+metadata
                                                Product version:        11.12.13-a-prerelease+metadata
                                                """));
+    }
+
+    protected override VersioningBuildTestContext CreateTestContext()
+    {
+        return new VersioningBuildTestContext("StandAlone", "StandAloneTestSolution",
+                                              "StandAloneVersioning.sln", "TestApplication");
     }
 }

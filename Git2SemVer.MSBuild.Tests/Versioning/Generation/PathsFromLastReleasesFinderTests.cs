@@ -1,12 +1,12 @@
 ﻿using Moq;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
-using NoeticTools.Git2SemVer.MSBuild.Framework;
 using NoeticTools.Git2SemVer.MSBuild.Tests.TestScenarios;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.Git2SemVer.Testing.Core;
-#pragma warning disable NUnit2045
 
+
+#pragma warning disable NUnit2045
 
 namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation;
 
@@ -61,7 +61,7 @@ internal class PathsFromLastReleasesFinderTests
             _commitsLookup.Add(commit.CommitId.Sha, commit);
         }
 
-        _repository.Setup(x => x.Get(It.IsAny<CommitId>())).Returns<CommitId>((commitId) => _commitsLookup[commitId.Sha]);
+        _repository.Setup(x => x.Get(It.IsAny<CommitId>())).Returns<CommitId>(commitId => _commitsLookup[commitId.Sha]);
         _gitTool.Setup(x => x.Head).Returns(_commitsLookup[headCommitId]);
     }
 }

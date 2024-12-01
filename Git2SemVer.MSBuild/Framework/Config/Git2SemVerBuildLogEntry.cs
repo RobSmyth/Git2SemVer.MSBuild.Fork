@@ -1,6 +1,6 @@
 ﻿namespace NoeticTools.Git2SemVer.MSBuild.Framework.Config;
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 internal sealed class Git2SemVerBuildLogEntry
 {
     public Git2SemVerBuildLogEntry(string buildNumber, bool hasLocalChanges, string branch, string lastCommitId, string path)

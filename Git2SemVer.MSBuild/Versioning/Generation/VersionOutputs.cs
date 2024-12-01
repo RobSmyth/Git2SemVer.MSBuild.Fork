@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Framework.Semver;
 using Semver;
 
@@ -36,6 +35,9 @@ internal sealed class VersionOutputs : IVersionOutputs
 
     public bool IsInInitialDevelopment { get; set; }
 
+    [JsonIgnore]
+    public bool IsValid => BuildNumber.Length > 0;
+
     public string Output1 { get; set; } = "";
 
     public string Output2 { get; set; } = "";
@@ -47,9 +49,6 @@ internal sealed class VersionOutputs : IVersionOutputs
 
     [JsonConverter(typeof(SemVersionJsonConverter))]
     public SemVersion? Version { get; set; }
-
-    [JsonIgnore]
-    public bool IsValid => BuildNumber.Length > 0;
 
     public void SetAllVersionPropertiesFrom(SemVersion informationalVersion,
                                             string buildNumber,

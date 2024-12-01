@@ -23,7 +23,6 @@ internal interface IVersionHistoryPath
     /// </summary>
     Commit FirstCommit { get; }
 
-
     /// <summary>
     ///     The youngest commit in the path.
     /// </summary>

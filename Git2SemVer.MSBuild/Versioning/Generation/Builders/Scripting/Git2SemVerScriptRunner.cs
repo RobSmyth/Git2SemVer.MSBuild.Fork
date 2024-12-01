@@ -13,12 +13,12 @@ namespace NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scriptin
 
 public sealed class Git2SemVerScriptRunner
 {
+    private readonly IGitTool _gitTool;
     private readonly IBuildHost _host;
     private readonly MSBuildScriptRunner _innerScriptRunner;
     private readonly IVersionGeneratorInputs _inputs;
     private readonly ILogger _logger;
     private readonly IVersionOutputs _outputs;
-    private readonly IGitTool _gitTool;
 
     public Git2SemVerScriptRunner(MSBuildScriptRunner innerScriptRunner,
                                   IBuildHost host,

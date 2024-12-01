@@ -23,6 +23,8 @@ internal class TaskOutputsStub : IVersionOutputs
 
     public bool IsInInitialDevelopment { get; set; }
 
+    public bool IsValid => BuildNumber.Length > 0;
+
     public string Output1 { get; set; } = "";
 
     public string Output2 { get; set; } = "";
@@ -32,8 +34,6 @@ internal class TaskOutputsStub : IVersionOutputs
     public string PrereleaseLabel { get; set; } = "";
 
     public SemVersion? Version { get; set; }
-
-    public bool IsValid => BuildNumber.Length > 0;
 
     public void SetAllVersionPropertiesFrom(SemVersion informationalVersion, string buildNumber, string buildContext)
     {

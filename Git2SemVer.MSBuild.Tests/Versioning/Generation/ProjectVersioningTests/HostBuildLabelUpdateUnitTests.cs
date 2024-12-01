@@ -1,8 +1,6 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Moq;
+﻿using Moq;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using Semver;
-
 
 
 namespace NoeticTools.Git2SemVer.MSBuild.Tests.Versioning.Generation.ProjectVersioningTests;

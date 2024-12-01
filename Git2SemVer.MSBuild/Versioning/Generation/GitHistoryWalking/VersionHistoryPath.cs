@@ -47,21 +47,11 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
             $"Path {Id,-3} {segmentIdsString,-20} {commitsCount,5}   {_bumps}   {LastReleasedVersion?.ToString() ?? " none"} -> {GetNextReleaseVersion()}";
     }
 
-    //public IReadOnlyList<VersionHistoryPath> With(IReadOnlyList<VersionHistorySegment> toSegments)
-    //{
-    //    if (!toSegments.Any())
-    //    {
-    //        return new List<VersionHistoryPath> { this };
-    //    }
-
-    //    var paths = new List<VersionHistoryPath>();
-    //    foreach (var segment in toSegments)
-    //    {
-    //        paths.AddRange(With(segment).With(segment.ChildCommits)); // >>> this is obsolete ... build lookup in paths builder
-    //    }
-
-    //    return paths;
-    //}
+    public VersionHistoryPath With(VersionHistorySegment segment)
+    {
+        var segmentIds = new List<VersionHistorySegment>(_segments) { segment };
+        return new VersionHistoryPath(segmentIds.ToArray());
+    }
 
     private ApiChanges AggregateBumps()
     {
@@ -84,7 +74,7 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
         {
             return HeadCommit.ReleasedVersion!;
         }
-        
+
         var version = _segments.First().TaggedReleasedVersion;
         if (version == null)
         {
@@ -108,9 +98,19 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
         return version;
     }
 
-    public VersionHistoryPath With(VersionHistorySegment segment)
-    {
-        var segmentIds = new List<VersionHistorySegment>(_segments) { segment };
-        return new VersionHistoryPath(segmentIds.ToArray());
-    }
+    //public IReadOnlyList<VersionHistoryPath> With(IReadOnlyList<VersionHistorySegment> toSegments)
+    //{
+    //    if (!toSegments.Any())
+    //    {
+    //        return new List<VersionHistoryPath> { this };
+    //    }
+
+    //    var paths = new List<VersionHistoryPath>();
+    //    foreach (var segment in toSegments)
+    //    {
+    //        paths.AddRange(With(segment).With(segment.ChildCommits)); // >>> this is obsolete ... build lookup in paths builder
+    //    }
+
+    //    return paths;
+    //}
 }

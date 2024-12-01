@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using NoeticTools.Git2SemVer.Core.Logging;
+﻿using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.MSBuild.Tasking;
@@ -25,12 +24,12 @@ public sealed class ScriptVersionBuilder : IVersionBuilder
 
         if (inputs.RunScript is false)
         {
-            _logger.LogDebug($"User C# script is disabled. Not run.");
+            _logger.LogDebug("User C# script is disabled. Not run.");
             return;
         }
 
         var scriptRunner = new Git2SemVerScriptRunner(new MSBuildScriptRunner(_logger),
-                                                      host, 
+                                                      host,
                                                       gitTool,
                                                       inputs,
                                                       outputs,
