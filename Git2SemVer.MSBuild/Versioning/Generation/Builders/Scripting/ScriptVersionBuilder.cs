@@ -1,5 +1,6 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.MSBuild.Framework;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.MSBuild.Tasking;
 
@@ -28,7 +29,7 @@ public sealed class ScriptVersionBuilder : IVersionBuilder
             return;
         }
 
-        var scriptRunner = new Git2SemVerScriptRunner(new MSBuildScriptRunner(_logger),
+        var scriptRunner = new Git2SemVerScriptRunner(new CSharpScriptRunner(_logger),
                                                       host,
                                                       gitTool,
                                                       inputs,

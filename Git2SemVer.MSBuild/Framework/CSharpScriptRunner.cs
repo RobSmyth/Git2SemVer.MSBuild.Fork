@@ -17,13 +17,13 @@ using Task = System.Threading.Tasks.Task;
 
 // ReSharper disable MethodHasAsyncOverload
 
-namespace NoeticTools.MSBuild.Tasking;
+namespace NoeticTools.Git2SemVer.MSBuild.Framework;
 
-public sealed class MSBuildScriptRunner
+public sealed class CSharpScriptRunner
 {
     private readonly ILogger _logger;
 
-    public MSBuildScriptRunner(ILogger logger)
+    public CSharpScriptRunner(ILogger logger)
     {
         _logger = logger;
     }
@@ -79,8 +79,7 @@ public sealed class MSBuildScriptRunner
     {
         var types = new List<Type>(
         [
-            typeof(MSBuildScriptRunner),
-            typeof(MSBuildGlobalProperties),
+            typeof(CSharpScriptRunner),
             typeof(string),
             typeof(File),
             typeof(Regex),

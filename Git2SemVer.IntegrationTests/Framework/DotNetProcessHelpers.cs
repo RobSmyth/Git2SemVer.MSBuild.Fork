@@ -4,7 +4,7 @@ using NoeticTools.Git2SemVer.Core.Tools;
 using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
 
 
-namespace NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
+namespace NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
 public static class DotNetProcessHelpers
 {

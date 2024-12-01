@@ -2,6 +2,7 @@
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.MSBuild.Framework;
 using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.MSBuild.Tools.CI;
 using NoeticTools.MSBuild.Tasking;
@@ -15,12 +16,12 @@ public sealed class Git2SemVerScriptRunner
 {
     private readonly IGitTool _gitTool;
     private readonly IBuildHost _host;
-    private readonly MSBuildScriptRunner _innerScriptRunner;
+    private readonly CSharpScriptRunner _innerScriptRunner;
     private readonly IVersionGeneratorInputs _inputs;
     private readonly ILogger _logger;
     private readonly IVersionOutputs _outputs;
 
-    public Git2SemVerScriptRunner(MSBuildScriptRunner innerScriptRunner,
+    public Git2SemVerScriptRunner(CSharpScriptRunner innerScriptRunner,
                                   IBuildHost host,
                                   IGitTool gitTool,
                                   IVersionGeneratorInputs inputs,
@@ -37,6 +38,7 @@ public sealed class Git2SemVerScriptRunner
 
     internal static IReadOnlyList<Type> MetadataReferences { get; } =
     [
+        typeof(MSBuildGlobalProperties),
         typeof(DotNetTool),
         typeof(UncontrolledHost),
         typeof(IBuildHost),

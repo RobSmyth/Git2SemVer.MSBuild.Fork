@@ -1,4 +1,4 @@
-﻿using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
+﻿using NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
 
 namespace NoeticTools.Git2SemVer.IntegrationTests.VersioningBuilds;

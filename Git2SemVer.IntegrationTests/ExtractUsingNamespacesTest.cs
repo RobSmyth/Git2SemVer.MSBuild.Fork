@@ -1,3 +1,4 @@
+using NoeticTools.Git2SemVer.MSBuild.Framework;
 using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting;
 
 
@@ -5,7 +6,7 @@ using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting;
 
 #pragma warning disable NUnit2045
 
-namespace NoeticTools.MSBuild.Tasking.Tests;
+namespace NoeticTools.Git2SemVer.IntegrationTests;
 
 [TestFixture]
 public class ExtractUsingNamespacesTest
@@ -13,11 +14,11 @@ public class ExtractUsingNamespacesTest
     [Test]
     public void ExtractCsxRunnerOptions()
     {
-        var options = MSBuildScriptRunner.GetScriptOptions(Git2SemVerScriptRunner.MetadataReferences);
+        var options = CSharpScriptRunner.GetScriptOptions(Git2SemVerScriptRunner.MetadataReferences);
 
         Assert.That(options, Is.Not.Null);
         Assert.That(options.Imports.Length, Is.GreaterThan(10));
-        Assert.That(MSBuildScriptRunner.ReferencedAssemblies.Count, Is.GreaterThan(5));
+        Assert.That(CSharpScriptRunner.ReferencedAssemblies.Count, Is.GreaterThan(5));
 
         // Provide a list to copy and paste to documentation
         TestContext.Out.WriteLine("\nNamespaces:\n");
@@ -28,7 +29,7 @@ public class ExtractUsingNamespacesTest
 
         // Provide a list to copy and paste to documentation
         TestContext.Out.WriteLine("\nReferenced assemblies:\n");
-        foreach (var assemblyName in MSBuildScriptRunner.ReferencedAssemblies)
+        foreach (var assemblyName in CSharpScriptRunner.ReferencedAssemblies)
         {
             TestContext.Out.WriteLine(assemblyName);
         }

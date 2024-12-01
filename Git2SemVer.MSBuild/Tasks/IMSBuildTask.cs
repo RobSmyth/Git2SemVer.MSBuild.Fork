@@ -1,7 +1,7 @@
 ﻿using Microsoft.Build.Framework;
 
 
-namespace NoeticTools.MSBuild.Tasking;
+namespace NoeticTools.Git2SemVer.MSBuild.Tasks;
 
 public interface IMSBuildTask
 {

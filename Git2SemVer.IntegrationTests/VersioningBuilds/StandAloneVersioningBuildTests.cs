@@ -1,4 +1,4 @@
-﻿using NoeticTools.Git2SemVer.MSBuild.IntegrationTests.Framework;
+﻿using NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
 
 #pragma warning disable NUnit2045
