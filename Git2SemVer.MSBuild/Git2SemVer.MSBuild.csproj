@@ -89,8 +89,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Git2SemVer.Versioning\Git2SemVer.Versioning.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="nupkg\" />
   </ItemGroup>
 
   <!-- Ensure that the Git2SemVer version information JSON file is available.  -->

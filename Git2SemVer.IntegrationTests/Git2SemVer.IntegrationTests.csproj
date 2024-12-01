@@ -47,7 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Git2SemVer.MSBuild\Git2SemVer.MSBuild.csproj" />
     <ProjectReference Include="..\Git2SemVer.Versioning\Git2SemVer.Versioning.csproj" />
   </ItemGroup>

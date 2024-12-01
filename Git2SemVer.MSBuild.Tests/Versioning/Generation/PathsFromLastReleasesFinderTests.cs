@@ -2,8 +2,8 @@
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.MSBuild.Tests.TestScenarios;
-using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
 using NoeticTools.Git2SemVer.Testing.Core;
+using NoeticTools.Git2SemVer.Versioning.Generation;
 
 
 #pragma warning disable NUnit2045

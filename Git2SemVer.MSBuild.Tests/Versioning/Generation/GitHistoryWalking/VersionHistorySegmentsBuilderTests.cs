@@ -1,4 +1,4 @@
-﻿using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
+﻿using NoeticTools.Git2SemVer.Versioning.Generation.GitHistoryWalking;
 
 
 //#pragma warning disable NUnit2045

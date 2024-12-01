@@ -1,7 +1,7 @@
-﻿using NoeticTools.Git2SemVer.MSBuild.Tools.CI;
+﻿using NoeticTools.Git2SemVer.Versioning.Tools.CI;
 
 
-namespace NoeticTools.Git2SemVer.MSBuild.Framework.Config;
+namespace NoeticTools.Git2SemVer.Versioning.Framework.Config;
 
 internal interface IConfiguration
 {

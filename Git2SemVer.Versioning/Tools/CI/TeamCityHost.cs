@@ -1,10 +1,10 @@
 ﻿using System.Globalization;
 using JetBrains.TeamCity.ServiceMessages.Write.Special;
 using NoeticTools.Git2SemVer.Core.Logging;
-using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
+using NoeticTools.Git2SemVer.Versioning.Framework.BuildHosting;
 
 
-namespace NoeticTools.Git2SemVer.MSBuild.Tools.CI;
+namespace NoeticTools.Git2SemVer.Versioning.Tools.CI;
 
 internal class TeamCityHost : BuildHostBase, IDetectableBuildHost
 {

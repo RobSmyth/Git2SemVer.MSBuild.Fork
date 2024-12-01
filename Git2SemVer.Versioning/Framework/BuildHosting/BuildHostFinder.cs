@@ -1,10 +1,10 @@
 ﻿using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
-using NoeticTools.Git2SemVer.MSBuild.Framework.Config;
-using NoeticTools.Git2SemVer.MSBuild.Tools.CI;
+using NoeticTools.Git2SemVer.Versioning.Framework.Config;
+using NoeticTools.Git2SemVer.Versioning.Tools.CI;
 
 
-namespace NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
+namespace NoeticTools.Git2SemVer.Versioning.Framework.BuildHosting;
 
 internal class BuildHostFinder
 {

@@ -6,7 +6,7 @@ using Microsoft.Build.Framework;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-namespace NoeticTools.MSBuild.Tasking;
+namespace NoeticTools.Git2SemVer.MSBuild.Tasks;
 
 /// <summary>
 ///     [MSBuild current project global

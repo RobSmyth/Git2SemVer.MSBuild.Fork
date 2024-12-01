@@ -1,10 +1,9 @@
 ﻿using Microsoft.Build.Framework;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
-using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
-using NoeticTools.Git2SemVer.MSBuild.Versioning;
-using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
-using NoeticTools.MSBuild.Tasking.Logging;
+using NoeticTools.Git2SemVer.Versioning;
+using NoeticTools.Git2SemVer.Versioning.Framework.BuildHosting;
+using NoeticTools.Git2SemVer.Versioning.Generation;
 using ILogger = NoeticTools.Git2SemVer.Core.Logging.ILogger;
 
 

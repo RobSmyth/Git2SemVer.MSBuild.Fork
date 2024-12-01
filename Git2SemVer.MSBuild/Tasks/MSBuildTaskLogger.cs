@@ -3,7 +3,7 @@ using Microsoft.Build.Utilities;
 using NoeticTools.Git2SemVer.Core.Logging;
 
 
-namespace NoeticTools.MSBuild.Tasking.Logging;
+namespace NoeticTools.Git2SemVer.MSBuild.Tasks;
 
 public class MSBuildTaskLogger : TaskLoggerBase
 {

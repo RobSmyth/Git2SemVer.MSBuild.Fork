@@ -2,13 +2,13 @@
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
-using NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting;
-using NoeticTools.Git2SemVer.MSBuild.Framework.Semver;
-using NoeticTools.Git2SemVer.MSBuild.Versioning;
-using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
-using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders;
-using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.GitHistoryWalking;
 using NoeticTools.Git2SemVer.Testing.Core;
+using NoeticTools.Git2SemVer.Versioning;
+using NoeticTools.Git2SemVer.Versioning.Framework.BuildHosting;
+using NoeticTools.Git2SemVer.Versioning.Framework.Semver;
+using NoeticTools.Git2SemVer.Versioning.Generation;
+using NoeticTools.Git2SemVer.Versioning.Generation.Builders;
+using NoeticTools.Git2SemVer.Versioning.Generation.GitHistoryWalking;
 using Semver;
 
 

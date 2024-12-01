@@ -1,5 +1,5 @@
 ﻿using Moq;
-using NoeticTools.Git2SemVer.MSBuild.Versioning.Generation;
+using NoeticTools.Git2SemVer.Versioning.Generation;
 using Semver;
 
 

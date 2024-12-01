@@ -3,7 +3,7 @@
 using System.Runtime.CompilerServices;
 
 
-namespace NoeticTools.Git2SemVer.MSBuild.Framework;
+namespace NoeticTools.Git2SemVer.Versioning.Framework;
 
 internal static class EnumerableExtensions
 {

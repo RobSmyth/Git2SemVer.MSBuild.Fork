@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using NoeticTools.Git2SemVer.MSBuild.Framework;
+using NoeticTools.Git2SemVer.Versioning.Framework;
 
 
 #pragma warning disable NUnit2045
