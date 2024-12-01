@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.0.0 [NEXT]
+
+## 2.0.0 - _December 1, 2024_
 
 This release has breaking changes that will impact users that are either:
 * Using the generated JSON `Git2SemVer.VersionInfo.g.json` file in custom code.
@@ -23,19 +24,25 @@ This release has breaking changes that will impact users that are either:
     * CommitId `Id` property renamed to `Sha`.
     * `CommitChangeTypeId` enumb `None` value (1) added. All higher numbers bumped.
     * `Rev` bumped to `2`.
+    * Others
 * **Breaking change** `IGitTool` method signatures changed. Introduced Fluent API.
 * TeamCity automatic build label updating now adds build number metadata to release build label, e.g: 1.2.3+34567 ([#33](https://github.com/NoeticTools/Git2SemVer/issues/33)). 
+
+### Fixed
+
+* On a new repo without any release tags, conventional commit version bumps are ignored ([#34](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/34)).
+
 
 ## 1.2.0 - _November 26, 2024_
 
 ### Changed
 
-* Changed the build system label, as used by TeamCity, to include build number on release builds (#33).
+* Changed the build system label, as used by TeamCity, to include build number on release builds ([#33](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/33)).
 * Moved Git2SemVer.Tool (dotnet tool) code to its own repository.
 
 ### Known Issues
 
-* Versioning fails build when TeamCity build configuration's VCS Root uses the option "Use tags as branches" is set ([#32](https://github.com/NoeticTools/Git2SemVer/issues/32)). A compile time exception is thrown.
+* Versioning fails build when TeamCity build configuration's VCS Root uses the option "Use tags as branches" is set ([#32](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/32)). A compile time exception is thrown.
 
  
 ## 1.1.0 - _November 16, 2024_
