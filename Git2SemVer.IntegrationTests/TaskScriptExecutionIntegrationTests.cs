@@ -67,16 +67,6 @@ internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
         Assert.That(Logger.HasError, Is.False);
     }
 
-    // ReSharper disable once UnusedMember.Local
-    private static async Task DumpLoggedErrors(ILogger logger)
-    {
-        if (!string.IsNullOrWhiteSpace(logger.Errors))
-        {
-            await TestContext.Out.WriteLineAsync("Errors recorded:");
-            await TestContext.Out.WriteLineAsync(logger.Errors);
-        }
-    }
-
     private VersioningContext GetContext(string hostBuildNumber,
                                          string hostBuildContext)
     {
