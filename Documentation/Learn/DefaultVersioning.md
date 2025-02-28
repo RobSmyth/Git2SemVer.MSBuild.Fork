@@ -13,10 +13,15 @@ These versions are then made available to the optional [C# script](xref:csharp-s
 
 ![](../Images/MSBuild_tasks_01.png)
 
+## Marking releases
+
+Semantic versioning talks about releases. Versions are bumped after a release.
+A release is identified by placing a [Git release version tag](xref:git2semver-release-version-tag) (like `v1.2.3`) on the commit used by the build being released.
+
 ## Build ID
 
-The [build ID](xref:glossary#build-id) is determined by the [build host](xref:build-hosts) object.
-This allows for handling build systems that may not provide a [build number](xref:glossary#build-number) and or where there are multiple build number contexts (such as dev boxes).
+A [build ID](xref:glossary#build-id) is determined for each [build host](xref:build-hosts).
+This allows for handling build hosts/systems that may not provide a [build number](xref:glossary#build-number) and or where there are multiple build number contexts (such as dev boxes).
 
 Example build ID shemas (using [build host](xref:build-hosts) build number and build context properties):
 

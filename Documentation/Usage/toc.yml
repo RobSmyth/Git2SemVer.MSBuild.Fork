@@ -4,5 +4,7 @@
   uid: git2semver-tool
 - name: Build hosts
   href: BuildHosts/
+- name: Release version tagging
+  href: git2semver-release-version-tag
 - name: C# Script
   href: CSharpScripting/

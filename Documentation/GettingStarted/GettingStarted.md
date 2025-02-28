@@ -49,9 +49,10 @@ Try building the solution, all projects will be automatically versioned using [G
 
 ### First build
 
-If you have not installed Git2SemVer and configured your test solution for solution versioning, do it now. Instructions are [here](#installing).
+If you have not installed Git2SemVer and configured your solution for solution versioning, do it now. Instructions are [here](#installing).
 
-Your test solution must be under Git revision control.
+Your solution must be under Git revision control and the commit of your last released build (if any) tagged with a [release version tag](xref:git2semver-release-version-tag) like `v0.18.2`.
+If no release version tag is found the build version will be `0.1.0`.
 
 Rebuild and you will see the generated version in compiler's output. It will be something like:
 

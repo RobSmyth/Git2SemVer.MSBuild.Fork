@@ -47,11 +47,12 @@ a
 <div style="margin-left:0px; margin-top:-5px; margin-bottom:35px; font-family:Calibri; font-size:1.3em;">
 No limits .NET solution versioning.</div>
 
-Git2SemVer is a Visual Studio and developer friendly <a href="https://semver.org">Semantic Versioning</a> framework for .NET solution and project versioning.
+Git2SemVer is a Visual Studio and developer friendly <a href="https://semver.org">Semantic Versioning</a> framework for .NET solution and project build versioning.
 It works the same with Visual Studio builds and dotnet CLI builds. 
 Every build, both developer boxes and the build system, get traceable build numbering (no commit counting).
 
-Version determined by Git release tags and <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> compliant message elements.
+[Git release version tags](xref:git2semver-release-version-tag) identify released builds. 
+<a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> compliant message elements identify the type of changes made.
 Use the same commit message elements you also use for changelog generation.
 
 For no limits customisation, Git2SemVer detects and executes an optional [C# script](xref:csharp-script) that can change any part of the versioning.
