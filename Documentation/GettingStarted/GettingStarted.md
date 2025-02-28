@@ -1,7 +1,15 @@
 ﻿---
 uid: getting-started
 ---
-![](../Images/Git2SemVer_banner_840x70.png)
+
+<div style="background-color:#944248;padding:0px;margin-bottom:0.5em">
+  <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/Git2SemVer_banner_840x70.png"/>
+</div>
+
+[![Current Version](https://img.shields.io/nuget/v/NoeticTools.Git2SemVer.Tool?label=Git2SemVer.Tool)](https://www.nuget.org/packages/NoeticTools.Git2SemVer.Tool)
+<a href="https://github.com/NoeticTools/Git2SemVer">
+  ![Static Badge](https://img.shields.io/badge/GitHub%20project-944248?logo=github)
+</a>
 
 # Getting Started
 
@@ -25,7 +33,7 @@ Known compatibility:
 To setup a solution to use Git2SemVer solution versioning, first install the dotnet tool `Git2SemVer.Tool`:
 
 ```winbatch
-dotnet tool install --global NoeticTools.Git2SemVer.Tool
+  dotnet tool install --global NoeticTools.Git2SemVer.Tool
 ```
 
 > [!NOTE]
@@ -34,7 +42,7 @@ dotnet tool install --global NoeticTools.Git2SemVer.Tool
 Then, in the solution's directory, run:
 
 ```winbatch
-Git2SemVer add
+  Git2SemVer add
 ```
 
 You will be prompted with a few options and then setup is done.
@@ -57,7 +65,7 @@ If no release version tag is found the build version will be `0.1.0`.
 Rebuild and you will see the generated version in compiler's output. It will be something like:
 
 ```winbatch
-Git2SemVer calculated version: 0.18.2-Alpha-InitialDev.MyPC.1422+Documentation-updates.3bda6f4fbedf2fe469da35b9f1a58146d4a36927
+  Git2SemVer calculated version: 0.18.2-Alpha-InitialDev.MyPC.1422+Documentation-updates.3bda6f4fbedf2fe469da35b9f1a58146d4a36927
 ```
 
 > [!IMPORTANT]
@@ -73,7 +81,7 @@ Git2SemVer calculated version: 0.18.2-Alpha-InitialDev.MyPC.1422+Documentation-u
 Customise the versioning open the file `Git2SemVer.csx` in the `SolutionVersioning` (or the name given during setup) project and add:
 
 ```csharp
-Log.LogInfo("Hello world - my first Git2SemVer C# script is born.");
+  Log.LogInfo("Hello world - my first Git2SemVer C# script is born.");
 ```
 
 Rebuild and you will the message `Hello world - my first After Burner C# script is born.` in the compiler's output.
