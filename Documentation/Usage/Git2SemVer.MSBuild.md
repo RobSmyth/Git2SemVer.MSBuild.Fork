@@ -6,9 +6,12 @@ uid: git2semver-msbuild
   <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/Git2SemVer_banner_840x70.png"/>
 </div>
 
-# Git2SemVer.MSBuild
-
 [![`Current Version`](https://img.shields.io/nuget/v/NoeticTools.Git2SemVer.MSBuild?label=Git2SemVer.Msbuild)](https://www.nuget.org/packages/NoeticTools.Git2SemVer.MSBuild)
+<a href="https://github.com/NoeticTools/Git2SemVer">
+  ![Static Badge](https://img.shields.io/badge/GitHub%20project-944248?logo=github)
+</a>
+
+# Git2SemVer.MSBuild
 
 Git2SemVer.MSBuild is a nuget package that adds MSBuild tasks to .NET C# projects that version the project on every build.
 

@@ -6,6 +6,11 @@ uid: github-workflows
   <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/Git2SemVer_banner_840x70.png"/>
 </div>
 
+[![Current Version](https://img.shields.io/nuget/v/NoeticTools.Git2SemVer.Tool?label=Git2SemVer.Tool)](https://www.nuget.org/packages/NoeticTools.Git2SemVer.Tool)
+<a href="https://github.com/NoeticTools/Git2SemVer">
+  ![Static Badge](https://img.shields.io/badge/GitHub%20project-944248?logo=github)
+</a>
+
 ## GitHub workflows
 
 It is common to use GitHub Workflows to achieve a build host.
