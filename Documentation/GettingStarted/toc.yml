@@ -1,2 +1,4 @@
 - name: Getting started
   href: GettingStarted.md
+- name: Prerequisites
+  href: Prerequisites.md
