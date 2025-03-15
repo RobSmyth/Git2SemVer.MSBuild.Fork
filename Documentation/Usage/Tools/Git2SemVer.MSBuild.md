@@ -18,7 +18,7 @@ Git2SemVer.MSBuild is a nuget package that adds MSBuild tasks to .NET C# project
 
 First check [prerequisites](xref:prerequisites) and then:
 
-* For project versioning - Add the nuget package [NoeticTools.Git2SemVer.MSBuild](https://www.nuget.org/packages/NoeticTools.Git2SemVer.MSBuild) to a project. 
+* For [project versioning](xref:project-versioning) - Add the nuget package [NoeticTools.Git2SemVer.MSBuild](https://www.nuget.org/packages/NoeticTools.Git2SemVer.MSBuild) to the project. 
 
-* For solution versioning - Use [Git2SemVer.Tool](xref:git2semver-tool). It will configure projects to use the NoeticTools.Git2SemVer.MSBuild package.
+* For [solution versioning](xref:solution-versioning) - Use [Git2SemVer.Tool](xref:git2semver-tool). It will configure projects to use the NoeticTools.Git2SemVer.MSBuild package.
 

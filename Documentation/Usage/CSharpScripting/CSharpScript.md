@@ -26,7 +26,7 @@ Examples setting script path:
 
 # [dotnet command line](#tab/dotnet)
 
-```winbatch
+```console
   dotnet build -p:Git2SemVer_ScriptPath=Build/MyVersioning.csx
 ```
 

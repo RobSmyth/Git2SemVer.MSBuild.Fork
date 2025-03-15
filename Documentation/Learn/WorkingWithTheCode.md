@@ -45,7 +45,7 @@ The documentation is hosted on GitHub and built using [docfx](https://dotnet.git
 
 Build a local preview from project's root folder with the command line:
 
-```winbatch
+```console
 docfx Documentation/docfx.json --serve
 ```
 
@@ -53,7 +53,7 @@ When completed a link will be shown (usually http://localhost:8080).
 
 The documentation website can, optionally, be built locally using the command:
 
-```winbatch
+```console
 docfx Documentation/docfx.json
 ```
 

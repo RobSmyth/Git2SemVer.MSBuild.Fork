@@ -9,7 +9,7 @@ uid: getting-started
 
 First check [prerequisites](xref:prerequisites) and then install the dotnet tool `Git2SemVer.Tool`:
 
-```winbatch
+```console
 dotnet tool install --global NoeticTools.Git2SemVer.Tool
 ```
 
@@ -19,7 +19,7 @@ dotnet tool install --global NoeticTools.Git2SemVer.Tool
 
 Then, in the solution's directory, run:
 
-```winbatch
+```console
 Git2SemVer add
 ```
 
@@ -41,13 +41,13 @@ Your test solution must be under Git revision control.
 
 Rebuild and you will see the generated version in compiler's output. It will be something like:
 
-```winbatch
+```console
 Git2SemVer calculated version: 0.18.2-Alpha-InitialDev.MyPC.1422+Documentation-updates.3bda6f4fbedf2fe469da35b9f1a58146d4a36927
 ```
 
 > [!IMPORTANT]
-> If the message does not appear check that build output verbosity is at least `Normal` in Visual Studio `Tools | Options | Projects and Solutions`.
-> The message will not appear if set to `Minimal` or `Quiet`.
+> If the message does not appear check that build output verbosity is at least `Normal` in Visual Studio `Tools | Options | Projects and Solutions` or
+> `detailed` if using dotnet CLI.
 
 > [!TIP]
 > A versioning log `Git2SemVer.MSBuild.log` is written to the project's intermediate file folder (obj).
