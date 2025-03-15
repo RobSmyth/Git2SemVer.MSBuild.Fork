@@ -1,43 +1,17 @@
 ﻿---
-uid: default-versioning
+uid: versioning
 ---
 
 <div style="background-color:#944248;padding:0px;margin-bottom:0.5em">
   <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/Git2SemVer_banner_840x70.png"/>
 </div>
 
-# Default versioning
+# Versioning
 
-Git2SemVer generates [versioning information](xref:NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.IVersionOutputs) using its in-built default versioning builder.
-These versions are then made available to the optional [C# script](xref:csharp-script) for modification before being passed back to the build.
+Git2SemVer generates versioning information and passes this to the optional [C# script](xref:csharp-script) for modification before being passed back to the build.
 
 ![](../Images/MSBuild_tasks_01.png)
 
-## Build ID
-
-The [build ID](xref:glossary#build-id) is determined by the [build host](xref:build-hosts) object.
-This allows for handling build systems that may not provide a [build number](xref:glossary#build-number) and or where there are multiple build number contexts (such as dev boxes).
-
-Example build ID shemas (using [build host](xref:build-hosts) build number and build context properties):
-
-* `<build number>`  - Used on the project's production build system host (e.g: [TeamCity](xref:teamcity)) when the build system provides a [build number](xref:glossary#build-number).
-* `<build context>.<build number>` - Useful for [uncontrolled hosts](xref:uncontrolled-host) where the build context is the host machine's name.
-* `<build number>.<build context>` - Useful when a host provides a psuedo build number ([build ID](xref:glossary#build-id)) and context is required to achive traceability. See [GitHub worfklow](xref:github-workflows) host.
-
-See the [build host](xref:build-hosts) type for details.
-
-## Branch name
-
-If a branch name is used in version metadata, [invalid Semmmantic Versioning characters](https://semver.org/#spec-item-10) are replaced with the "-" characters.
-This is to ensure Semmmantic Versioning compliance and compatibility with common tools.
-
-A pre-release build maturity identifier (e.g: `alpha` or `beta`) is determined from the branch name. See [Build maturity identifier](xref:maturity-identifier).
-
-## Commit SHA
-
-The full commit SHA is used rather than a short version to maintain consistency and compatibility with [SourceLink related changes in .NET SDK 8](https://learn.microsoft.com/en-us/dotnet/core/compatibility/sdk/8.0/source-link).
-
-# Schema
 
 ## Release versioning
 
@@ -46,6 +20,14 @@ Format:
 ```
   <major>.<minor>.<patch>[+<build-id>.<branch>.<commit-sha>]
 ```
+
+Where:
+
+* `<build-id>` is the [build ID or build number](xref:build-id).
+* `<branch>` is the [branch name](xref:branch-name).
+* `<commit-sha>` is the [git commit SHA](xref:commit-sha).
+
+Examples:
 
 | Use                   | Schema                                           |
 |:---                   |:---                                              |
@@ -64,19 +46,29 @@ Format:
   <major>.<minor>.<patch>-<maturity-label>.<build-id>[+<branch>.<commit-sha>]
 ```
 
+Where:
+
+* `<maturity-label>` is the [pre-release maturity label](xref:maturity-identifier).
+* `<build-id>` is the [build ID or build number](xref:build-id).
+* `<branch>` is the [branch name](xref:branch-name).
+* `<commit-sha>` is the [git commit SHA](xref:commit-sha).
+
+Examples:
+
 | Use                   | Schema                                           |
 |:---                   |:---                                              |
 | Build system          | `1.2.3-<label>.<build-id>`                       |
 | NuGet - filename      | `1.2.3-<label>.<build-id>`                       |
 | Informational verion  | `1.2.3-<label>.<build-id>+<branch>.<commit-sha>` |
 
-## Pre-release maturity label
 
-The pre-release maturity label (`<maturity-label>`) is the first pre-release identifier.
+## Initial development versioning (0.x.x)
 
-## Initial development versions (0.x.x)
+All versions with a 0 major number (0.x.x) are [initial development](https://semver.org/#spec-item-4) build versions.
+Git2SemVer makes all initial development build pre-release build with "InidialDev added to the maturity ID as shown in
+the table below.
 
-All [initial development](https://semver.org/#spec-item-4) versions (0.x.x) are pre-releases.
+### [Initial development builds](#tab/initial-dev-builds)
 
 | Branch type      | Maturity Label     |
 |:---              |:--                 |
@@ -85,7 +77,7 @@ All [initial development](https://semver.org/#spec-item-4) versions (0.x.x) are 
 | Feature          | `beta-InitialDev`  |
 | Development      | `alpha-InitialDev` |
 
-## Post-Initial development versions (Major >= 1)
+### [Builds with Major >= 1](#tab/post-initial-dev-builds)
 
 | Branch type      | Maturity Label     |
 |:---              |:--                 |
@@ -94,8 +86,10 @@ All [initial development](https://semver.org/#spec-item-4) versions (0.x.x) are 
 | Feature          | `beta`             |
 | Development      | `alpha`            |
 
+---
+
 > [!NOTE]
-> Pre-release maturity labels are configurable by setting the MSBuild property [Git2SemVer_BranchMaturityPattern](xref:glossary).
+> Pre-release maturity labels are configurable by setting the MSBuild property [Git2SemVer_BranchMaturityPattern](xref:msbuild-properties).
 > Values shown here are defaults.
 
 ## Examples

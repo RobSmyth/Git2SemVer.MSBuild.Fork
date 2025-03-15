@@ -331,7 +331,7 @@ No build system version generation steps are needed, keeps developer and build e
 ## Quick links
 
 * [Getting Started](xref:getting-started)
-* [Default Versioning](xref:default-versioning)
+* [Default Versioning](xref:versioning)
 * Usage
   * [Build Hosts](xref:build-hosts)
   * [C# Script](xref:csharp-script)

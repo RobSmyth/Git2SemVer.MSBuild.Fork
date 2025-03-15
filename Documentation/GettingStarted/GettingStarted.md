@@ -25,7 +25,7 @@ Git2SemVer add
 
 You will be prompted with a few options and then setup is done.
 
-Try building the solution, all projects will be automatically versioned using [Git2SemVer's default versioning](xref:default-versioning).
+Try building the solution, all projects will be automatically versioned using [Git2SemVer's default versioning](xref:versioning).
 
 > [!TIP]
 > Git2SemVer outputs the generated informational version to the compiler's output.
