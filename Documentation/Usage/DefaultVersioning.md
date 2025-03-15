@@ -28,26 +28,14 @@ See the [build host](xref:build-hosts) type for details.
 
 ## Branch name
 
-The branch name included in version metadata has any [invalid Semmmantic Versioning characters](https://semver.org/#spec-item-10) replaced with "-".
+If a branch name is used in version metadata, [invalid Semmmantic Versioning characters](https://semver.org/#spec-item-10) are replaced with the "-" characters.
 This is to ensure Semmmantic Versioning compliance and compatibility with common tools.
+
+A pre-release build maturity identifier (e.g: `alpha` or `beta`) is determined from the branch name. See [Build maturity identifier](xref:maturity-identifier).
 
 ## Commit SHA
 
 The full commit SHA is used rather than a short version to maintain consistency and compatibility with [SourceLink related changes in .NET SDK 8](https://learn.microsoft.com/en-us/dotnet/core/compatibility/sdk/8.0/source-link).
-
-## Maturity identifier
-
-The first identifier in a version's prelease identifiers is always the maturity label like `alpha` or `beta`.
-The maturity is derived from the branch name (see [Git2SemVer_BranchMaturityPattern](xref:msbuild-properties)).
-
-The default settings are (first match from top is used):
-
-| Maturity | Regex                                     | Matching examples  |
-| :---:    |:---                                       |:---                |
-| Release  | `^(main|release)[\\/_]?`                  | `main`, `release`, `release/release_name` |
-| RC       | `^(?<rc>(main|release)[\\/_]rc.*)[\\/_]?` | `main/rc`, `release/rc5`  |
-| Beta     | `^(feature)[\\/_]?`                       | `feature`, `feature/feature_name`  |
-| Alpha    | `^((.+))[\\/_]?`                          | `dev/MyBranch`, `tom` |
 
 # Schema
 

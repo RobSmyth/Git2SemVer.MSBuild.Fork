@@ -1,3 +1,5 @@
+- name: Default versioning
+  uid: default-versioning
 - name: Git2SemVer.MSBuild
   uid: git2semver-msbuild
 - name: Git2SemVer.Tool
@@ -6,3 +8,5 @@
   href: BuildHosts/
 - name: C# Script
   href: CSharpScripting/
+- name: Build maturity identifier
+  uid: maturity-identifier
