@@ -8,6 +8,8 @@
   uid: maturity-identifier
 - name: Commit SHA
   uid: commit-sha
+- name: Version examples
+  uid: examples
 - name: Logging
   uid: logging
 - name: Build hosts
