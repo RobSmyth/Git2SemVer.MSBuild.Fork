@@ -51,13 +51,18 @@ Git2SemVer is a Visual Studio and developer friendly <a href="https://semver.org
 It works the same with Visual Studio builds and dotnet CLI builds. 
 Every build, both developer boxes and the build system, get traceable build numbering (no commit counting).
 
-Version determined by Git release tags and <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> compliant message elements.
-Use the same commit message elements you also use for changelog generation.
+This tool is best for teams that:
 
-For no limits customisation, Git2SemVer detects and executes an optional [C# script](xref:csharp-script) that can change any part of the versioning.
+* Want true <a href="https://semver.org">Semantic Versioning</a>.
+* Use <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> to automatically generate change logs.
+* Use branches to separate releasable code for feature or under development code. 
+* Only releases builds from a build system (or controlled host).
+* Want to avoid custom build scripts, or tools, on a build system.
+* Use Visual Studio as well as dotnet CLI.
+* Value full traceability for every build regardless if on a build system or an uncontrolled developer box (commit counts/depth will not do).
+* Need unique versioning customisation that internal C# scripting may provide.
 
-It can be configured for any mix of solution versioning and individual project versioning without external build-time tools.
-No build system version generation steps are needed, keeps developer and build environments simple and aligned.
+Although it does have C# scripting for allow anything to be overriden, it is not intended to fit all team work flows.
 
 # Features
 
@@ -304,6 +309,31 @@ No build system version generation steps are needed, keeps developer and build e
 </div>
 
 <br/>
+
+Releases are identified by git tags like "`v1.2.3`". Tags are added to a release's commit.
+Then, Git2SemVer identifies breaking changes, new features, or bug fixes from from your <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> 
+compliant git commit messages to work out the version. You already use Conventional Commits generate your changelog so it is getting two for the price of one.
+
+Versioning includes:
+
+* .NET file version
+* .NET assembly version
+* NuGet package version (including version in filename)
+
+Git2SemVer is [build host](xref:build-hosts) aware. On a build system (or controlled host):
+
+* Release branch builds are built with release versioning. 
+* RC branch builds are build with `rc` pre-release versioning.
+* All other branch builds are build with `beta` pre-release versioning.
+
+On dev boxes (or an [uncontrolled host](xref:uncontrolled-host)):
+
+* All builds are built with `alpha` pre-release versions (with dev box name and dev box build number).
+
+For no limits customisation, Git2SemVer detects and executes an optional [C# script](xref:csharp-script) that can change any part of the versioning.
+
+It can be configured for any mix of solution versioning and individual project versioning without external build-time tools.
+No build system version generation steps are needed, keeps developer and build environments simple and aligned.
 
 ## Quick links
 
