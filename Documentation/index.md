@@ -320,17 +320,8 @@ Versioning includes:
 * .NET file and assembly versions
 * NuGet package version (including version in filename)
 
-Git2SemVer provide [build host](xref:build-hosts) adaptive versioning. On a build system (or controlled host):
-
-* Release branch builds are built with release versioning. 
-* RC branch builds are build with `rc` pre-release versioning.
-* All other branch builds are build with `beta` pre-release versioning.
-
-On dev boxes (or an [uncontrolled host](xref:uncontrolled-host)):
-
-* All builds are built with `alpha` pre-release versions (with dev box name and dev box build number).
-
-See [Build maturity identifier](xref:maturity-identifier) for more information on `alpha`, `beta`, `rc` identifiers.
+The branch name determines if the build is a release build or a `alpha`/`beta`/`rc` pre-release build.
+See [Build maturity identifier](xref:maturity-identifier) for more information.
 
 For no limits customisation, Git2SemVer detects and executes an optional [C# script](xref:csharp-script) that can change any part of the versioning.
 
