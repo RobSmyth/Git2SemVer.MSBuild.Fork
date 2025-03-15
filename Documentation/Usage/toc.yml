@@ -8,6 +8,8 @@
   uid: maturity-identifier
 - name: Commit SHA
   uid: commit-sha
+- name: Logging
+  uid: logging
 - name: Build hosts
   href: BuildHosts/
 - name: C# Script

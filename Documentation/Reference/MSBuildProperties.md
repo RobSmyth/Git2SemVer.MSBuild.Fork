@@ -1,6 +1,7 @@
 ﻿---
 uid: msbuild-properties
 ---
+
 <style>
 .propertyCol {
   font-size:1.0em;
@@ -241,11 +242,11 @@ The MSBuild input poperties are:
 
 ## Outputs
 
-The MSBuild sets (outputs) version information to standard MSBuild properties and custom properties.
-The standard MSBuild properties are used by the compiler.
-The custom properties are provided for third party MSBuild tasks. 
+Git2SemVer's MSBuild task outputs version information to MSBuild properties.
+Some of these properties are standard MSBuild properties used by the compiler.
+The custom properties are provided for third party MSBuild task use.
 
-### MSBuild standard versioning properties
+### Standard versioning properties
 
 MSBuild standard versioning properties set are:
 
@@ -257,7 +258,7 @@ MSBuild standard versioning properties set are:
  * VersionPrefix
  * VersionSuffix
 
-More information <a href="https://gist.github.com/jonlabelle/34993ee032c26420a0943b1c9d106cdc">here</a>.
+More information can be found <a href="https://gist.github.com/jonlabelle/34993ee032c26420a0943b1c9d106cdc">here</a>.
 
 ### Custom properties
 

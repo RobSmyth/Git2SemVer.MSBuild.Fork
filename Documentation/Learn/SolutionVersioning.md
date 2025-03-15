@@ -24,25 +24,25 @@ bump the build number and result in all assemblies having the same version.
 * On a project build bump the build number if that project has already been built using the current build number.
 * A project nuget pack always uses the same version as the project's build.
 
-### Scenario - Rebuild multiple solutions on dev box
+### Scenario - Multiple clones of a repository on a dev box
 
 Preconditions: 
 
-* The developer has two repository clones. Solution 1 and Solution 2.
+* The developer has two clones of a repository. Clone 1 and Clone 2.
 * The last build number on the dev box was 1000.
-* Last Solution 1 build, on this dev box, was 10.0.0-DevBox.900.
-* Last Solution 2 build, on this dev box, was 20.0.0-DevBox.950.
+* Last Clone 1 build, on this dev box, was 10.0.0-DevBox.900.
+* Last Clone 2 build, on this dev box, was 20.0.0-DevBox.950.
 
 Scenario:
 
-| Action                                                       | Solution 1         | Solution 2 |
-|:--                                                           | :---:              | :---:     |
-| Solution 1 is rebuilt.                                       | **10.0.0-DevBox.1001** | 20.0.0-DevBox.950  |
-| Solution 1 is rebuilt (again).                               | **10.0.0-DevBox.1002** | 20.0.0-DevBox.950  |
-| Solution 2 is rebuilt.                                       | 10.0.0-DevBox.1002 | **20.0.0-DevBox.1003** |
+| Action                              | Clone 1                | Clone 2 |
+|:--                                  | :---:                  | :---:     |
+| Clone 1 is rebuilt.                 | **10.0.0-DevBox.1001** | 20.0.0-DevBox.950  |
+| Clone 1 is rebuilt (again).         | **10.0.0-DevBox.1002** | 20.0.0-DevBox.950  |
+| Clone 2 is rebuilt.                 | 10.0.0-DevBox.1002     | **20.0.0-DevBox.1003** |
 
 
-### Scenario - Project builds on dev box
+### Scenario - Solution with multiple projects on dev box
 
 Preconditions: 
 

@@ -24,7 +24,7 @@ Format:
 Where:
 
 * `<build-id>` is the [build ID or build number](xref:build-id).
-* `<branch>` is the [branch name](xref:branch-name).
+* `<branch>` is the [branch name](xref:branch-naming).
 * `<commit-sha>` is the [git commit SHA](xref:commit-sha).
 
 Examples:
@@ -50,7 +50,7 @@ Where:
 
 * `<maturity-label>` is the [pre-release maturity label](xref:maturity-identifier).
 * `<build-id>` is the [build ID or build number](xref:build-id).
-* `<branch>` is the [branch name](xref:branch-name).
+* `<branch>` is the [branch name](xref:branch-naming).
 * `<commit-sha>` is the [git commit SHA](xref:commit-sha).
 
 Examples:
