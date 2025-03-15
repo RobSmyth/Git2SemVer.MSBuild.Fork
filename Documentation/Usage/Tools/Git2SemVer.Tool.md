@@ -10,7 +10,10 @@ uid: git2semver-tool
 
 [![Current Version](https://img.shields.io/nuget/v/NoeticTools.Git2SemVer.Tool?label=Git2SemVer.Tool)](https://www.nuget.org/packages/NoeticTools.Git2SemVer.Tool)
 
-Git2SemVer.Tool is a dotnet tool used to setup a .NET solution for [solution versioning](xref:solution-versioning).
+Git2SemVer.Tool is a dotnet tool used to:
+
+* Setup a .NET solution for [solution versioning](xref:solution-versioning).
+* Generate version information for diagnostics purposes. No project required.
 
 ## Installing
 
