@@ -9,7 +9,8 @@ uid: branch-naming
 # Branch naming
 
 The branch name determines if the build will have release or pre-release versioning.
-If a pre-release then the branch name is also used to determine the build maturity identifier (e.g: `alpha` or `beta`). See [Build maturity identifier](xref:maturity-identifier).
+If a pre-release then the branch name is also used to determine the build maturity identifier (e.g: `alpha` or `beta`). 
+See [Build maturity identifier](xref:maturity-identifier).
 
 > [!NOTE]
 > If a branch name is used in version metadata, [invalid Semmmantic Versioning characters](https://semver.org/#spec-item-10) are replaced with the "-" characters.

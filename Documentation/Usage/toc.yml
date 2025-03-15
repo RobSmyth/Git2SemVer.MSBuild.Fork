@@ -3,7 +3,7 @@
 - name: Build ID/number
   uid: build-id
 - name: Branch naming
-  uid: build-naming
+  uid: branch-naming
 - name: Build maturity identifier
   uid: maturity-identifier
 - name: Commit SHA
@@ -18,4 +18,3 @@
   uid: git2semver-msbuild
 - name: Git2SemVer.Tool
   uid: git2semver-tool
-    

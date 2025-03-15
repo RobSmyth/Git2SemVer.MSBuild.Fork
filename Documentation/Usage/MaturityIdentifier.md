@@ -6,9 +6,10 @@ uid: maturity-identifier
   <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/Git2SemVer_banner_840x70.png"/>
 </div>
 
-# Build pre-release maturity identifier
+# Build maturity identifier
 
 By default, the first identifier in a version's prelease identifiers is always the build maturity label like `alpha` or `beta`.
+Not used for release versioning.
 
 For example:
 
