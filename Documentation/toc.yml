@@ -15,8 +15,8 @@
 - name: Resources
   items:
     - name: GitHub project
-      href: https://github.com/NoeticTools/GitVersionAfterBurner
-    - name: Nuget package
-      href: https://www.nuget.org/packages/NoeticTools.GitVersionAfterBurner/
-    - name: GitVersion docs
-      href: https://gitversion.net/docs/
+      href: https://github.com/NoeticTools/Git2SemVer.MSBuild
+    - name: MSBuild Nuget package
+      href: https://www.nuget.org/packages/NoeticTools.Git2SemVer.MSBuild/
+    - name: dotnet Tool Nuget package
+      href: https://www.nuget.org/packages/NoeticTools.Git2SemVer.Tool/
