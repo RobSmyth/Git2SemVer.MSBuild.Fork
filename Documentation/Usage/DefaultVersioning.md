@@ -74,7 +74,7 @@ Format:
 
 The pre-release maturity label (`<maturity-label>`) is the first pre-release identifier.
 
-### Initial development versions (0.x.x)
+## Initial development versions (0.x.x)
 
 All [initial development](https://semver.org/#spec-item-4) versions (0.x.x) are pre-releases.
 
@@ -85,7 +85,7 @@ All [initial development](https://semver.org/#spec-item-4) versions (0.x.x) are 
 | Feature          | `beta-InitialDev`  |
 | Development      | `alpha-InitialDev` |
 
-### Post-Initial development versions (Major >= 1)
+## Post-Initial development versions (Major >= 1)
 
 | Branch type      | Maturity Label     |
 |:---              |:--                 |
