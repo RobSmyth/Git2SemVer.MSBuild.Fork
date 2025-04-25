@@ -33,7 +33,7 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 'Debug' option is available in the context menu for the task.
 */
 
-version = "2024.03"
+version = "2025.03"
 
 project {
     description = "MSBuild task to version projects"
@@ -82,7 +82,6 @@ object BuildAndTest : BuildType({
         script {
             name = "Clear NuGet caches"
             id = "Clear_NuGet_caches"
-            enabled = false
             scriptContent = "dotnet nuget locals all --clear"
         }
         dotnetRestore {
