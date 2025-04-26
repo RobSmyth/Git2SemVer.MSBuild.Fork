@@ -7,7 +7,9 @@ import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetRestore
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetTest
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.failureConditions.BuildFailureOnMetric
+import jetbrains.buildServer.configs.kotlin.failureConditions.BuildFailureOnText
 import jetbrains.buildServer.configs.kotlin.failureConditions.failOnMetricChange
+import jetbrains.buildServer.configs.kotlin.failureConditions.failOnText
 import jetbrains.buildServer.configs.kotlin.projectFeatures.githubIssues
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
@@ -135,6 +137,13 @@ object BuildAndTest : BuildType({
             compareTo = build {
                 buildRule = lastSuccessful()
             }
+        }
+        failOnText {
+            conditionType = BuildFailureOnText.ConditionType.CONTAINS
+            pattern = "The service message is invalid because it does not end with ] character"
+            failureMessage = "Service message corruption detected"
+            reverse = false
+            stopBuildOnFailure = true
         }
     }
 
