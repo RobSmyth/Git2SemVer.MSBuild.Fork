@@ -84,6 +84,7 @@ object BuildAndTest : BuildType({
         script {
             name = "Clear NuGet caches"
             id = "Clear_NuGet_caches"
+            enabled = false
             scriptContent = "dotnet nuget locals all --clear"
         }
         dotnetRestore {
