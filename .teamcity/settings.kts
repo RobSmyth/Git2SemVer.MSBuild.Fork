@@ -1,5 +1,6 @@
 import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildFeatures.approval
+import jetbrains.buildServer.configs.kotlin.buildFeatures.nuGetFeedCredentials
 import jetbrains.buildServer.configs.kotlin.buildFeatures.perfmon
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetBuild
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetNugetPush
@@ -10,8 +11,8 @@ import jetbrains.buildServer.configs.kotlin.failureConditions.BuildFailureOnMetr
 import jetbrains.buildServer.configs.kotlin.failureConditions.BuildFailureOnText
 import jetbrains.buildServer.configs.kotlin.failureConditions.failOnMetricChange
 import jetbrains.buildServer.configs.kotlin.failureConditions.failOnText
-import jetbrains.buildServer.configs.kotlin.projectFeatures.githubIssues
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
+import jetbrains.buildServer.configs.kotlin.vcs.GitVcsRoot
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -38,36 +39,20 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2025.03"
 
 project {
-    description = "MSBuild task to version projects"
+
+    vcsRoot(HttpsGithubComNoetictoolsGit2semverMsbuildRefsHeadsMain)
 
     buildType(DeployLocalTeamCityPackage)
     buildType(BuildAndTest)
-
-    features {
-        githubIssues {
-            id = "PROJECT_EXT_11"
-            displayName = "NoeticTools/Git2SemVer.MSBuild"
-            repositoryURL = "https://github.com/NoeticTools/Git2SemVer.MSBuild"
-            authType = storedToken {
-                tokenId = "tc_token_id:CID_3de2c2727993edab40e4371046ac9db7:-1:9e7b82f7-5941-476b-ba54-211a20bbb5ca"
-            }
-        }
-    }
-
-    cleanup {
-        baseRule {
-            artifacts(builds = 20, days = 5)
-        }
-    }
 }
 
 object BuildAndTest : BuildType({
     name = "Build and test"
 
     artifactRules = """
-        +:Git2SemVer.MSBuild/nupkg/NoeticTools.*.nupkg
-        +:SolutionVersioningProject/obj/Git2SemVer.MSBuild.log
-        +:SolutionVersioningProject/.git2semver/Git2SemVer.VersionInfo.g.json
+        +:artifacts/NoeticTools.*.nupkg
+        +:src/SolutionVersioningProject/obj/Git2SemVer.MSBuild.log
+        +:src/SolutionVersioningProject/.git2semver/Git2SemVer.VersionInfo.g.json
     """.trimIndent()
 
     params {
@@ -92,7 +77,6 @@ object BuildAndTest : BuildType({
             id = "Restore"
             sources = """
                 https://api.nuget.org/v3/index.json
-                http://10.1.10.78:8111/guestAuth/app/nuget/feed/_Root/TeamCity/v3/index.json
             """.trimIndent()
         }
         dotnetBuild {
@@ -120,7 +104,7 @@ object BuildAndTest : BuildType({
     }
 
     failureConditions {
-        executionTimeoutMin = 3
+        executionTimeoutMin = 4
         failOnMetricChange {
             enabled = false
             metric = BuildFailureOnMetric.MetricType.TEST_COUNT
@@ -152,6 +136,11 @@ object BuildAndTest : BuildType({
     features {
         perfmon {
         }
+        nuGetFeedCredentials {
+            feedUrl = "https://api.nuget.org/v3/index.json"
+            username = "credentialsJSON:048b1358-2a0f-4d8f-917b-62869330ea79"
+            password = "credentialsJSON:5577d5f6-64ef-4a22-868b-03a7d05985e6"
+        }
     }
 
     requirements {
@@ -173,7 +162,7 @@ object DeployLocalTeamCityPackage : BuildType({
             name = "Push NuGet package"
             id = "Publish2"
             packages = "NoeticTools.*.nupkg"
-            serverUrl = "http://10.1.10.78:8111/httpAuth/app/nuget/feed/_Root/TeamCity/v3/index.json"
+            serverUrl = "http://10.1.10.78:8111/httpAuth/app/nuget/feed/RobSmyth/TeamCity/v3/index.json"
             apiKey = "credentialsJSON:bd18b974-1188-423d-9efd-8836806c3669"
         }
     }
@@ -194,5 +183,19 @@ object DeployLocalTeamCityPackage : BuildType({
             cleanDestination = true
             artifactRules = "+:NoeticTools.Git2SemVer.MSBuild.*.nupkg"
         }
+    }
+})
+
+object HttpsGithubComNoetictoolsGit2semverMsbuildRefsHeadsMain : GitVcsRoot({
+    name = "https://github.com/noetictools/git2semver.msbuild#refs/heads/main"
+    url = "git@github.com:NoeticTools/Git2SemVer.MSBuild.git"
+    branch = "refs/heads/main"
+    branchSpec = """
+        +:refs/heads/*
+        +:refs/tags/*
+    """.trimIndent()
+    useTagsAsBranches = true
+    authMethod = uploadedKey {
+        uploadedKey = "Git2SemVerMSBuildWriteSSH"
     }
 })

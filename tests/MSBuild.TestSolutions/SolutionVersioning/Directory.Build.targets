@@ -1,0 +1,3 @@
+<Project>
+  <Import Project="$(Git2SemVerSolutionDirectory)MSBuild/Tasks/NoeticTools.Git2SemVer.MSBuild.targets" />
+</Project>
