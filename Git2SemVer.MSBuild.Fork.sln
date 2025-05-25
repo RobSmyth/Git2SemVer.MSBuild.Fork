@@ -42,6 +42,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Git2SemVer.Testing.Core", "Testing.Core\TestingCore\Git2SemVer.Testing.Core.csproj", "{3305E283-1C37-641B-C454-D0BCC6B241AD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Git2SemVer.Core", "Core\Core\Git2SemVer.Core.csproj", "{85836C56-F8DD-7AAF-E3D5-D9A9E5589987}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BB578AE5-A50C-46F3-8F03-D7DD92E696FF} = {BB578AE5-A50C-46F3-8F03-D7DD92E696FF}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
