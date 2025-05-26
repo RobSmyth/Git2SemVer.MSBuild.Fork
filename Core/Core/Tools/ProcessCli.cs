@@ -86,7 +86,7 @@ public sealed class ProcessCli : IProcessCli
                 process.WaitForExit();
             }
             // hack! to allow time for standard outputs to be received
-            //Thread.Sleep(25);
+            Thread.Sleep(25);
         }
 
         if (!completed)
