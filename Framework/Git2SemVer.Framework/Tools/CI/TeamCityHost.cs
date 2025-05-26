@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using JetBrains.TeamCity.ServiceMessages.Write.Special;
 using NoeticTools.Git2SemVer.Core.Logging;
+using NoeticTools.Git2SemVer.Core.Tools.CI;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 
 
@@ -8,19 +9,18 @@ namespace NoeticTools.Git2SemVer.Framework.Tools.CI;
 
 internal class TeamCityHost : BuildHostBase, IDetectableBuildHost
 {
-    private const string BuildNumberEnvVarName = "BUILD_NUMBER";
-    private const string TeamCityVersionEnvVarName = "TEAMCITY_VERSION";
     private readonly ILogger _logger;
-    private readonly string _teamCityVersion;
+    private readonly TeamCityHostSettings _settings;
 
     public TeamCityHost(ILogger logger) : base(logger)
     {
+        _settings = new TeamCityHostSettings();
         _logger = logger;
         Name = "TeamCity";
-        _teamCityVersion = Environment.GetEnvironmentVariable(TeamCityVersionEnvVarName) ?? "";
-        if (_teamCityVersion.Length > 0)
+        var teamCityVersion = _settings.Version;
+        if (teamCityVersion.Length > 0)
         {
-            BuildNumber = GetBuildNumber();
+            BuildNumber = _settings.BuildNumber;
         }
 
         BuildContext = "0";
@@ -31,8 +31,7 @@ internal class TeamCityHost : BuildHostBase, IDetectableBuildHost
 
     public bool MatchesHostSignature()
     {
-        return !string.IsNullOrWhiteSpace(_teamCityVersion) &&
-               !string.IsNullOrWhiteSpace(BuildNumber);
+        return _settings.IsHost();
     }
 
     public override void ReportBuildStatistic(string key, int value)
@@ -54,11 +53,5 @@ internal class TeamCityHost : BuildHostBase, IDetectableBuildHost
         _logger.LogInfo($"Setting TeamCity Build label to '{label}'.");
         using var writer = new TeamCityServiceMessages().CreateWriter(_logger.LogInfo);
         writer.WriteBuildNumber(label);
-    }
-
-    private static string GetBuildNumber()
-    {
-        var buildNumberVariable = Environment.GetEnvironmentVariable(BuildNumberEnvVarName);
-        return int.TryParse(buildNumberVariable!, out var buildNumber) ? buildNumber.ToString(CultureInfo.InvariantCulture) : "";
     }
 }
