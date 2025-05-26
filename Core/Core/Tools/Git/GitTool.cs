@@ -181,7 +181,7 @@ public class GitTool : IGitTool
         var stdOutput = outWriter.ToString();
         if (string.IsNullOrWhiteSpace(stdOutput))
         {
-            _logger.LogWarning("No response from git command.");
+            _logger.LogWarning($"No response from git command 'git {arguments}'.");
         }
 
         return stdOutput;
