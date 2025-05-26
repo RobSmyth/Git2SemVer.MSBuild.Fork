@@ -67,7 +67,7 @@ public class NUnitLogger : ILogger
     {
         if (Level >= LoggingLevel.Debug)
         {
-            TestContext.Out.WriteLine(_debugPrefix + LogPrefix + message);
+            //>>>TestContext.Out.WriteLine(_debugPrefix + LogPrefix + message);
         }
     }
 

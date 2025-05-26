@@ -1,6 +1,7 @@
-using NoeticTools.Git2SemVer.Core.IntegrationTests.Framework;
 using NoeticTools.Git2SemVer.Core.Tools;
 using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
+using NoeticTools.Git2SemVer.Testing.Core;
+using TestDirectoryResource = NoeticTools.Git2SemVer.Core.IntegrationTests.Framework.TestDirectoryResource;
 
 
 namespace NoeticTools.Git2SemVer.Core.IntegrationTests;

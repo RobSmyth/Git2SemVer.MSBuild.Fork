@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Globalization;
 using System.Text;
+// ReSharper disable MemberCanBeMadeStatic.Global
 
 namespace NoeticTools.Git2SemVer.Core.Tools.CI
 {
     public sealed class TeamCityHostSettings
     {
-        public const string BuildNumberEnvVarName = "BUILD_NUMBER";
+        private const string BuildNumberEnvVarName = "BUILD_NUMBER";
         private const string TeamCityVersionEnvVarName = "TEAMCITY_VERSION";
 
         /// <summary>
