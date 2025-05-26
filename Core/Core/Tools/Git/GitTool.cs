@@ -1,4 +1,5 @@
 ﻿using Injectio.Attributes;
+using LibGit2Sharp;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
@@ -236,10 +237,16 @@ public class GitTool : IGitTool
         return Task.Run(GetHasLocalChangesAsync).Result;
     }
 
-    private async Task<bool> GetHasLocalChangesAsync()
+    private Task<bool> GetHasLocalChangesAsync()
     {
-        var stdOutput = await RunAsync("status -u -s --porcelain");
-        return stdOutput.Length > 0;
+        //>>>
+        var repo = new Repository(WorkingDirectory);
+        var statusOptions = new StatusOptions();
+        var status = repo.RetrieveStatus(statusOptions);
+        return Task.FromResult(status.IsDirty);
+        //>>>
+        //var stdOutput = await RunAsync("status -u -s --porcelain");
+        //return stdOutput.Length > 0;
     }
 
     /// <summary>
