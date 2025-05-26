@@ -71,10 +71,10 @@ public sealed class ProcessCli : IProcessCli
 
         process.Start();
 
-        process.BeginErrorReadLine();
+        //process.BeginErrorReadLine();
         standardOut.Write(process.StandardOutput.ReadToEnd());
         //process.BeginOutputReadLine();
-        //process.BeginErrorReadLine();
+        process.BeginErrorReadLine();
 
         //Thread.Sleep(10); // >>>
 
