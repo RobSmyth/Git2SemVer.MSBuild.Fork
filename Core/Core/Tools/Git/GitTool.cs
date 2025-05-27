@@ -28,6 +28,7 @@ public class GitTool : IGitTool
     private Commit? _head;
     private bool _initialised;
     private string _repositoryDirectory;
+    private Repository _repository;
 
     public GitTool(ILogger logger)
     {
@@ -208,16 +209,21 @@ public class GitTool : IGitTool
 
     private string GetBranchName()
     {
-        return Task.Run(GetBranchNameAsync).Result;
+        return Repository.Head.FriendlyName;
+        //return Task.Run(GetBranchNameAsync).Result;
     }
 
-    private async Task<string> GetBranchNameAsync()
+    private Repository Repository
     {
-        var repository = new LibGit2Sharp.Repository(RepositoryDirectory); //>>>
-        Console.WriteLine($"=== branch: {repository.Head.FriendlyName}");
+        get { return _repository ??= new LibGit2Sharp.Repository(RepositoryDirectory); }
+    }
 
-        var stdOutput = await RunAsync("status -b -s --porcelain");
-        return _gitResponseParser.ParseStatusResponseBranchName(stdOutput);
+    private Task<string> GetBranchNameAsync()
+    {
+        return Task.FromResult(Repository.Head.FriendlyName);
+
+        //var stdOutput = await RunAsync("status -b -s --porcelain");
+        //return _gitResponseParser.ParseStatusResponseBranchName(stdOutput);
     }
 
     /// <summary>
@@ -258,16 +264,14 @@ public class GitTool : IGitTool
         return Task.Run(GetHasLocalChangesAsync).Result;
     }
 
-    private async Task<bool> GetHasLocalChangesAsync()
+    private Task<bool> GetHasLocalChangesAsync()
     {
+        var statusOptions = new StatusOptions();
+        var status = Repository.RetrieveStatus(statusOptions);
+        return Task.FromResult(status.IsDirty);
         //>>>
-        //var repo = new Repository(WorkingDirectory);
-        //var statusOptions = new StatusOptions();
-        //var status = repo.RetrieveStatus(statusOptions);
-        //return Task.FromResult(status.IsDirty);
-        //>>>
-        var stdOutput = await RunAsync("status -u -s --porcelain");
-        return stdOutput.Length > 0;
+        //var stdOutput = await RunAsync("status -u -s --porcelain");
+        //return stdOutput.Length > 0;
     }
 
     /// <summary>
