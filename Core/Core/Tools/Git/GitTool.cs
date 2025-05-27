@@ -213,7 +213,7 @@ public class GitTool : IGitTool
 
     private async Task<string> GetBranchNameAsync()
     {
-        //var repository = new LibGit2Sharp.Repository(RepositoryDirectory/*@"C:\Sources\MyRepos\Git2SemVer.MSBuild.Fork"*/); //>>>
+        var repository = new LibGit2Sharp.Repository(RepositoryDirectory/*@"C:\Sources\MyRepos\Git2SemVer.MSBuild.Fork"*/); //>>>
 
         var stdOutput = await RunAsync("status -b -s --porcelain");
         return _gitResponseParser.ParseStatusResponseBranchName(stdOutput);
