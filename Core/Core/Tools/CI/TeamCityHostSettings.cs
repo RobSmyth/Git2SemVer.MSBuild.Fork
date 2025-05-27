@@ -17,8 +17,8 @@ namespace NoeticTools.Git2SemVer.Core.Tools.CI
         /// </summary>
         public bool IsHost()
         {
-            return !string.IsNullOrWhiteSpace(TeamCityVersionEnvVarName) &&
-                   !string.IsNullOrWhiteSpace(BuildNumberEnvVarName);
+            return !string.IsNullOrWhiteSpace(Version) &&
+                   !string.IsNullOrWhiteSpace(BuildNumber);
         }
 
         public string Version => Environment.GetEnvironmentVariable(TeamCityVersionEnvVarName) ?? "";
@@ -27,7 +27,12 @@ namespace NoeticTools.Git2SemVer.Core.Tools.CI
         {
             get
             {
-                var buildNumberVariable = Environment.GetEnvironmentVariable(TeamCityHostSettings.BuildNumberEnvVarName);
+                var buildNumberVariable = Environment.GetEnvironmentVariable(BuildNumberEnvVarName);
+                if (buildNumberVariable == null)
+                {
+                    Console.WriteLine("== BuildNumberEnvVarName not found");
+                    return "";
+                }
                 return int.TryParse(buildNumberVariable!, out var buildNumber) ? buildNumber.ToString(CultureInfo.InvariantCulture) : "";
             }
         }
