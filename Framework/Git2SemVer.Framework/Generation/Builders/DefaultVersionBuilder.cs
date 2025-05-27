@@ -1,11 +1,12 @@
-﻿using System.Text.RegularExpressions;
-using Microsoft.Build.Utilities;
+﻿using Microsoft.Build.Utilities;
+using NoeticTools.Git2SemVer.Core;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using Semver;
+using System.Text.RegularExpressions;
 
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.Builders;
@@ -130,6 +131,7 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
 
         var prereleaseIdentifiers = new List<string> { prereleaseLabel };
         prereleaseIdentifiers.AddRange(host.BuildId);
+        Console.WriteLine($"== prerelease identifiers: {prereleaseIdentifiers[0]}.{prereleaseIdentifiers[1]}"); //>>>
         return versionPrefix.WithPrerelease(prereleaseIdentifiers.ToArray());
     }
 }
