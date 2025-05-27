@@ -1,5 +1,5 @@
 ﻿using Injectio.Attributes;
-using LibGit2Sharp;
+//using LibGit2Sharp;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
@@ -195,6 +195,8 @@ public class GitTool : IGitTool
 
     private async Task<string> GetBranchNameAsync()
     {
+        var repository = new LibGit2Sharp.Repository(@"C:\Sources\MyRepos\Git2SemVer.MSBuild.Fork"); //>>>
+
         var stdOutput = await RunAsync("status -b -s --porcelain");
         return _gitResponseParser.ParseStatusResponseBranchName(stdOutput);
     }
@@ -237,16 +239,16 @@ public class GitTool : IGitTool
         return Task.Run(GetHasLocalChangesAsync).Result;
     }
 
-    private Task<bool> GetHasLocalChangesAsync()
+    private async Task<bool> GetHasLocalChangesAsync()
     {
         //>>>
-        var repo = new Repository(WorkingDirectory);
-        var statusOptions = new StatusOptions();
-        var status = repo.RetrieveStatus(statusOptions);
-        return Task.FromResult(status.IsDirty);
+        //var repo = new Repository(WorkingDirectory);
+        //var statusOptions = new StatusOptions();
+        //var status = repo.RetrieveStatus(statusOptions);
+        //return Task.FromResult(status.IsDirty);
         //>>>
-        //var stdOutput = await RunAsync("status -u -s --porcelain");
-        //return stdOutput.Length > 0;
+        var stdOutput = await RunAsync("status -u -s --porcelain");
+        return stdOutput.Length > 0;
     }
 
     /// <summary>
