@@ -19,7 +19,7 @@ public interface IGitTool
 
     Commit Head { get; }
 
-    string GitDirectory { get; set; }
+    string RepositoryDirectory { get; set; }
 
     Commit Get(CommitId commitId);
 

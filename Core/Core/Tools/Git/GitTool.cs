@@ -27,7 +27,7 @@ public class GitTool : IGitTool
     private int _commitsReadCountFromHead;
     private Commit? _head;
     private bool _initialised;
-    private string _gitDirectory;
+    private string _repositoryDirectory;
 
     public GitTool(ILogger logger)
     {
@@ -35,20 +35,20 @@ public class GitTool : IGitTool
         _inner = new GitProcessCli(logger);
         _gitResponseParser = new GitResponseParser(_cache, new ConventionalCommitsParser(), logger);
         _logger = logger;
-        GitDirectory = DiscoverGitDirectory(_inner.WorkingDirectory);
+        RepositoryDirectory = DiscoverRepositoryDirectory(_inner.WorkingDirectory);
     }
 
-    public string GitDirectory
+    public string RepositoryDirectory
     {
-        get => _gitDirectory;
+        get => _repositoryDirectory;
         set
         {
             _inner.WorkingDirectory = value;
-            _gitDirectory = DiscoverGitDirectory(value);
+            _repositoryDirectory = DiscoverRepositoryDirectory(value);
         }
     }
 
-    private string DiscoverGitDirectory(string currentDirectory)
+    private string DiscoverRepositoryDirectory(string currentDirectory)
     {
         return currentDirectory.EndsWith(".git") == false ? Repository.Discover(currentDirectory) : currentDirectory;
     }
@@ -208,7 +208,7 @@ public class GitTool : IGitTool
 
     private async Task<string> GetBranchNameAsync()
     {
-        var repository = new LibGit2Sharp.Repository(GitDirectory/*@"C:\Sources\MyRepos\Git2SemVer.MSBuild.Fork"*/); //>>>
+        var repository = new LibGit2Sharp.Repository(RepositoryDirectory/*@"C:\Sources\MyRepos\Git2SemVer.MSBuild.Fork"*/); //>>>
 
         var stdOutput = await RunAsync("status -b -s --porcelain");
         return _gitResponseParser.ParseStatusResponseBranchName(stdOutput);
