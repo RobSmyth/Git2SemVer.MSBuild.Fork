@@ -1,4 +1,6 @@
 ﻿using Injectio.Attributes;
+using LibGit2Sharp;
+
 //using LibGit2Sharp;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
@@ -25,6 +27,7 @@ public class GitTool : IGitTool
     private int _commitsReadCountFromHead;
     private Commit? _head;
     private bool _initialised;
+    private string _gitDirectory;
 
     public GitTool(ILogger logger)
     {
@@ -32,12 +35,22 @@ public class GitTool : IGitTool
         _inner = new GitProcessCli(logger);
         _gitResponseParser = new GitResponseParser(_cache, new ConventionalCommitsParser(), logger);
         _logger = logger;
+        GitDirectory = DiscoverGitDirectory(_inner.WorkingDirectory);
     }
 
-    public string WorkingDirectory
+    public string GitDirectory
     {
-        get => _inner.WorkingDirectory;
-        set => _inner.WorkingDirectory = value;
+        get => _gitDirectory;
+        set
+        {
+            _inner.WorkingDirectory = value;
+            _gitDirectory = DiscoverGitDirectory(value);
+        }
+    }
+
+    private string DiscoverGitDirectory(string currentDirectory)
+    {
+        return currentDirectory.EndsWith(".git") == false ? Repository.Discover(currentDirectory) : currentDirectory;
     }
 
     public string BranchName => GetBranchName();
@@ -195,7 +208,7 @@ public class GitTool : IGitTool
 
     private async Task<string> GetBranchNameAsync()
     {
-        var repository = new LibGit2Sharp.Repository(@"C:\Sources\MyRepos\Git2SemVer.MSBuild.Fork"); //>>>
+        var repository = new LibGit2Sharp.Repository(GitDirectory/*@"C:\Sources\MyRepos\Git2SemVer.MSBuild.Fork"*/); //>>>
 
         var stdOutput = await RunAsync("status -b -s --porcelain");
         return _gitResponseParser.ParseStatusResponseBranchName(stdOutput);
