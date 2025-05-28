@@ -258,7 +258,7 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     {
         var logger = new CompositeLogger { Level = LoggingLevel.Trace };
 #pragma warning disable CA2000
-        logger.Add(new MSBuildTaskLogger(Log) { Level = LoggingLevel.Trace });
+        //>>>logger.Add(new MSBuildTaskLogger(Log) { Level = LoggingLevel.Trace });
         var logFilePath = Path.Combine(IntermediateOutputDirectory, "Git2SemVer.MSBuild.log");
         logger.Add(new FileLogger(logFilePath) { Level = LoggingLevel.Trace });
 #pragma warning restore CA2000
