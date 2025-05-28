@@ -23,6 +23,7 @@ public class GitToolIntegrationTests
     [TearDown]
     public void TearDown()
     {
+        _target.Dispose();
         _logger.Dispose();
     }
 

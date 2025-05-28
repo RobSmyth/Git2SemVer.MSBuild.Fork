@@ -30,7 +30,7 @@ namespace NoeticTools.Git2SemVer.Core.Tools.CI
                 var buildNumberVariable = Environment.GetEnvironmentVariable(BuildNumberEnvVarName);
                 if (buildNumberVariable == null)
                 {
-                    Console.WriteLine("== BuildNumberEnvVarName not found");
+                    //Console.WriteLine("== BuildNumberEnvVarName not found");
                     return "";
                 }
                 return int.TryParse(buildNumberVariable!, out var buildNumber) ? buildNumber.ToString(CultureInfo.InvariantCulture) : "";

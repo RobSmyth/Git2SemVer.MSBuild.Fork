@@ -1,4 +1,5 @@
-﻿using Injectio.Attributes;
+﻿using System.Diagnostics;
+using Injectio.Attributes;
 using LibGit2Sharp;
 
 //using LibGit2Sharp;
@@ -16,7 +17,7 @@ using Semver;
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 
 [RegisterTransient]
-public class GitTool : IGitTool
+public class GitTool : IGitTool, IDisposable
 {
     private const int DefaultTakeLimit = 300;
     private readonly SemVersion _assumedLowestGitVersion = new(2, 34, 1);
@@ -28,7 +29,8 @@ public class GitTool : IGitTool
     private Commit? _head;
     private bool _initialised;
     private string _repositoryDirectory;
-    private Repository _repository;
+    private Repository? _repository;
+    private readonly ConventionalCommitsParser _metadataParser;
 
     public GitTool(ILogger logger)
     {
@@ -37,6 +39,7 @@ public class GitTool : IGitTool
         _gitResponseParser = new GitResponseParser(_cache, new ConventionalCommitsParser(), logger);
         _logger = logger;
         RepositoryDirectory = DiscoverRepositoryDirectory(_inner.WorkingDirectory);
+        _metadataParser = new ConventionalCommitsParser();
     }
 
     public string RepositoryDirectory
@@ -51,12 +54,9 @@ public class GitTool : IGitTool
 
     private string DiscoverRepositoryDirectory(string currentDirectory)
     {
-        if (currentDirectory.EndsWith(".git") == true)
-        {
-            return currentDirectory;
-        }
-
-        return new DirectoryInfo(Repository.Discover(currentDirectory)).Parent!.FullName;
+        return currentDirectory.EndsWith(".git") ? 
+            currentDirectory : 
+            new DirectoryInfo(Repository.Discover(currentDirectory)).Parent!.FullName;
     }
 
     public string BranchName => GetBranchName();
@@ -146,9 +146,17 @@ public class GitTool : IGitTool
 
     public async Task<IReadOnlyList<Commit>> GetCommitsAsync(int skipCount, int takeCount)
     {
-        var commits = await GetCommitsAsync(x => x.ReachableFromHead()
-                                           .Skip(skipCount)
-                                           .Take(takeCount));
+        //>>>
+        if (skipCount > 0)
+        {
+            throw new ArgumentException("Must be 0", nameof(skipCount));
+        }
+        //>>>
+
+        var commits = GetCommitsLibGit2Sharp();
+        //var commits = await GetCommitsAsync(x => x.ReachableFromHead()
+        //                                   .Skip(skipCount)
+        //                                   .Take(takeCount));
         if (skipCount == 0)
         {
             _head = commits[0];
@@ -156,6 +164,31 @@ public class GitTool : IGitTool
 
         return commits;
     }
+
+    private IReadOnlyList<Commit> GetCommitsLibGit2Sharp()
+    {
+        var result = Repository.Commits;
+        return result.Select(Convert).ToList();
+    }
+
+    private Commit Convert(LibGit2Sharp.Commit rawCommit)
+    {
+        var parents = rawCommit.Parents.Select(x => x.Sha).ToArray();
+        var metadata = _metadataParser.Parse(rawCommit.MessageShort, rawCommit.Message);
+        var refs = ""; // >>>> todo
+        var tags = Repository.Tags.Where(x => x.Target.Equals(rawCommit)).ToList();
+        var hasTags = tags.Any();
+
+        return new Commit(
+            rawCommit.Sha, 
+            parents, rawCommit.MessageShort, 
+            rawCommit.Message,
+            refs,
+            metadata,
+            tags);
+    }
+
+    public TagCollection Tags { get; set; }
 
     public async Task<IReadOnlyList<Commit>> GetCommitsAsync(Action<IGitRevisionsBuilder> rangeBuilderAction)
     {
@@ -210,21 +243,9 @@ public class GitTool : IGitTool
     private string GetBranchName()
     {
         return Repository.Head.FriendlyName;
-        //return Task.Run(GetBranchNameAsync).Result;
     }
 
-    private Repository Repository
-    {
-        get { return _repository ??= new LibGit2Sharp.Repository(RepositoryDirectory); }
-    }
-
-    private Task<string> GetBranchNameAsync()
-    {
-        return Task.FromResult(Repository.Head.FriendlyName);
-
-        //var stdOutput = await RunAsync("status -b -s --porcelain");
-        //return _gitResponseParser.ParseStatusResponseBranchName(stdOutput);
-    }
+    private Repository Repository => _repository ??= new Repository(RepositoryDirectory);
 
     /// <summary>
     ///     Get next set of commits from head.
@@ -269,17 +290,6 @@ public class GitTool : IGitTool
         var statusOptions = new StatusOptions();
         var status = Repository.RetrieveStatus(statusOptions);
         return Task.FromResult(status.IsDirty);
-        //>>>
-        //var stdOutput = await RunAsync("status -u -s --porcelain");
-        //return stdOutput.Length > 0;
-    }
-
-    /// <summary>
-    ///     Get a semantic version representation of the Git version.
-    /// </summary>
-    private SemVersion? GetVersion()
-    {
-        return Task.Run(GetVersionAsync).Result;
     }
 
     /// <summary>
@@ -320,5 +330,10 @@ public class GitTool : IGitTool
 
         var commits = await GetCommitsAsync();
         Cache.Add(commits.ToArray());
+    }
+
+    public void Dispose()
+    {
+        _repository?.Dispose();
     }
 }

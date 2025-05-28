@@ -2,7 +2,7 @@
 
 public class CommitMessageMetadata
 {
-    private readonly Dictionary<string, CommitChangeTypeId> _changeTypeIdLookup = new()
+    private static readonly Dictionary<string, CommitChangeTypeId> ChangeTypeIdLookup = new()
     {
         { "feat", CommitChangeTypeId.Feature },
         { "fix", CommitChangeTypeId.Fix },
@@ -51,7 +51,7 @@ public class CommitMessageMetadata
 
     private CommitChangeTypeId ToChangeTypeId(string value)
     {
-        if (_changeTypeIdLookup.TryGetValue(value, out var changeTypeId))
+        if (ChangeTypeIdLookup.TryGetValue(value, out var changeTypeId))
         {
             return changeTypeId;
         }

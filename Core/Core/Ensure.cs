@@ -8,6 +8,14 @@ namespace NoeticTools.Git2SemVer.Core
     [DebuggerStepThrough]
     public sealed class Ensure
     {
+        public static void ArgumentIsGreaterThanZero(int argumentValue, string argumentName)
+        {
+            if (argumentValue <= 0)
+            {
+                throw new ArgumentException("Must be >= 0", argumentName);
+            }
+        }
+
         public static void ArgumentNotNullOrEmptyString(string argumentValue, string argumentName)
         {
             ArgumentNotNull(argumentValue, argumentName);
