@@ -87,7 +87,7 @@ object BuildAndTest : BuildType({
             id = "dotnet_1"
             configuration = "%BuildConfiguration%"
             skipBuild = true
-            args = "--logger teamcity"
+            args = ""
             param("dotNetCoverage.dotCover.filters", """
                 +:NoeticTools.*
                 -:NoeticTools.*Tests
