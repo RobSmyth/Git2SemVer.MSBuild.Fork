@@ -5,10 +5,9 @@ using NoeticTools.Git2SemVer.Core.Tools;
 using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
 using NoeticTools.Git2SemVer.Testing.Core;
 
-
 #pragma warning disable NUnit2045
 
-namespace NoeticTools.Git2SemVer.IntegrationTests.VersioningBuilds;
+namespace NoeticTools.Git2SemVer.IntegrationTests.Building;
 
 internal sealed class VersioningBuildTestContext : IDisposable
 {

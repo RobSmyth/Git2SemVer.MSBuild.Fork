@@ -1,13 +1,12 @@
 ﻿using NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
-
 #pragma warning disable NUnit2045
 
-namespace NoeticTools.Git2SemVer.IntegrationTests.VersioningBuilds;
+namespace NoeticTools.Git2SemVer.IntegrationTests.Building;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
-internal class StandAloneVersioningBuildTests : VersioningBuildTestsBase
+internal class StandAloneBuildTests : VersioningBuildTestsBase
 {
     [Test]
     public void BuildAndPackWithForcingProperties2ScriptTest()
