@@ -105,8 +105,9 @@ public sealed class ProcessCli : IProcessCli
             OnError(errorOut, message);
         }
 
-        standardOut.Flush();
+        //standardOut.Flush();
         //errorOut?.Flush();
+        Thread.Sleep(25);
 
         return exitCode;
     }
