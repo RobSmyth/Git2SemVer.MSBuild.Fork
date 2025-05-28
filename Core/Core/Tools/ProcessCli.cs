@@ -11,6 +11,7 @@ namespace NoeticTools.Git2SemVer.Core.Tools;
 public sealed class ProcessCli : IProcessCli
 {
     private const int MaxWaitTimeAfterKillMilliseconds = 30000;
+    private static readonly object Sync = new object();
 
     public ProcessCli(ILogger logger)
     {
@@ -46,70 +47,75 @@ public sealed class ProcessCli : IProcessCli
     public int Run(string application, string commandLineArguments,
                    TextWriter standardOut, TextWriter? errorOut = null)
     {
-//        Logger.LogTrace($"Running '{application} {commandLineArguments}'.");
-        Logger.LogInfo($"Running '{application} {commandLineArguments}'.");
-
-        using var process = new Process();
-        process.StartInfo.FileName = application;
-        process.StartInfo.Arguments = commandLineArguments;
-        process.StartInfo.CreateNoWindow = true;
-        process.StartInfo.UseShellExecute = false;
-        process.StartInfo.RedirectStandardOutput = true;
-        process.StartInfo.RedirectStandardError = true;
-
-        if (WorkingDirectory.Length > 0)
+        lock (Sync)
         {
-            process.StartInfo.WorkingDirectory = WorkingDirectory;
-        }
 
-        //process.OutputDataReceived += (sender, data) => OnOutputDataReceived(data.Data, standardOut);
+            //        Logger.LogTrace($"Running '{application} {commandLineArguments}'.");
+            Logger.LogInfo($"Running '{application} {commandLineArguments}'.");
 
-        if (errorOut != null)
-        {
-            process.ErrorDataReceived += (sender, data) => OnErrorDataReceived(data.Data, errorOut);
-        }
+            using var process = new Process();
+            process.StartInfo.FileName = application;
+            process.StartInfo.Arguments = commandLineArguments;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
 
-        process.Start();
-
-        //process.BeginErrorReadLine();
-        standardOut.Write(process.StandardOutput.ReadToEnd());
-        //process.BeginOutputReadLine();
-        process.BeginErrorReadLine();
-
-        //Thread.Sleep(10); // >>>
-
-        var completed = process.WaitForExit(TimeLimitMilliseconds);
-        if (completed)
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (WorkingDirectory.Length > 0)
             {
-                process.WaitForExit();
+                process.StartInfo.WorkingDirectory = WorkingDirectory;
             }
-            // hack! to allow time for standard outputs to be received
+
+            //process.OutputDataReceived += (sender, data) => OnOutputDataReceived(data.Data, standardOut);
+
+            if (errorOut != null)
+            {
+                process.ErrorDataReceived += (sender, data) => OnErrorDataReceived(data.Data, errorOut);
+            }
+
+            process.Start();
+
+            //process.BeginErrorReadLine();
+            standardOut.Write(process.StandardOutput.ReadToEnd());
+            //process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+
+            //Thread.Sleep(10); // >>>
+
+            var completed = process.WaitForExit(TimeLimitMilliseconds);
+            if (completed)
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    process.WaitForExit();
+                }
+
+                // hack! to allow time for standard outputs to be received
+                Thread.Sleep(25);
+            }
+
+            if (!completed)
+            {
+                var message =
+                    $"ProcessCli Run timed out after {TimeLimitMilliseconds} milliseconds. Command was 'dotnet {commandLineArguments}'.";
+                OnError(errorOut, message);
+                process.Kill();
+                process.WaitForExit(MaxWaitTimeAfterKillMilliseconds);
+            }
+
+            var exitCode = process.ExitCode;
+            if (exitCode != 0)
+            {
+                var message = $"ProcessCli Run returned non-zero exit code {exitCode}.";
+                OnError(errorOut, message);
+            }
+
+            //standardOut.Flush();
+            //errorOut?.Flush();
             Thread.Sleep(25);
+
+            return exitCode;
         }
-
-        if (!completed)
-        {
-            var message =
-                $"ProcessCli Run timed out after {TimeLimitMilliseconds} milliseconds. Command was 'dotnet {commandLineArguments}'.";
-            OnError(errorOut, message);
-            process.Kill();
-            process.WaitForExit(MaxWaitTimeAfterKillMilliseconds);
-        }
-
-        var exitCode = process.ExitCode;
-        if (exitCode != 0)
-        {
-            var message = $"ProcessCli Run returned non-zero exit code {exitCode}.";
-            OnError(errorOut, message);
-        }
-
-        //standardOut.Flush();
-        //errorOut?.Flush();
-        Thread.Sleep(25);
-
-        return exitCode;
     }
 
     public async Task<(int returnCode, string stdOutput)> RunAsync(string application, string commandLineArguments)
