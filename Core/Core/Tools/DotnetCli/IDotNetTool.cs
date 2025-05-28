@@ -6,7 +6,7 @@ public interface IDotNetTool
 
     IDotNetSolutionCommands Solution { get; }
 
-    (int returnCode, string stdOutput) Run(string commandLineArguments);
+    int Run(string commandLineArguments);
 
     /// <summary>
     ///     Run dotnet cli with provided command line arguments.

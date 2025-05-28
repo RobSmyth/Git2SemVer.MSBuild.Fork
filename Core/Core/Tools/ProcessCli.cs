@@ -21,7 +21,7 @@ public sealed class ProcessCli : IProcessCli
 
     public ILogger Logger { get; }
 
-    public int TimeLimitMilliseconds { get; set; } = 60000;
+    public int TimeLimitMilliseconds { get; set; } = 30000;
 
     public string WorkingDirectory { get; set; }
 
@@ -45,7 +45,7 @@ public sealed class ProcessCli : IProcessCli
     ///     Run dotnet cli with provided command line arguments.
     /// </summary>
     public int Run(string application, string commandLineArguments,
-                   TextWriter standardOut, TextWriter? errorOut = null)
+                   TextWriter? standardOut = null, TextWriter? errorOut = null)
     {
         lock (Sync)
         {
@@ -58,8 +58,6 @@ public sealed class ProcessCli : IProcessCli
             process.StartInfo.Arguments = commandLineArguments;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
 
             if (WorkingDirectory.Length > 0)
             {
@@ -68,15 +66,25 @@ public sealed class ProcessCli : IProcessCli
 
             //process.OutputDataReceived += (sender, data) => OnOutputDataReceived(data.Data, standardOut);
 
+            if (standardOut != null)
+            {
+                process.StartInfo.RedirectStandardOutput = true;
+            }
+
             if (errorOut != null)
             {
+                process.StartInfo.RedirectStandardError = true;
                 process.ErrorDataReceived += (sender, data) => OnErrorDataReceived(data.Data, errorOut);
             }
 
             process.Start();
 
             //process.BeginErrorReadLine();
-            standardOut.Write(process.StandardOutput.ReadToEnd());
+            if (standardOut != null)
+            {
+                standardOut.Write(process.StandardOutput.ReadToEnd());
+            }
+
             //process.BeginOutputReadLine();
             process.BeginErrorReadLine();
 

@@ -88,15 +88,15 @@ internal sealed class VersioningBuildTestContext : IDisposable
 
     public void DotNetCliBuildTestSolution(params string[] arguments)
     {
-        var result = DotNetCli.Build(TestSolutionPath, BuildConfiguration, arguments);
-        Assert.That(result.returnCode, Is.EqualTo(0), result.stdOutput);
+        var returnCode= DotNetCli.Build(TestSolutionPath, BuildConfiguration, arguments);
+        Assert.That(returnCode, Is.EqualTo(0));
         Assert.That(Logger.HasError, Is.False);
     }
 
     public void PackTestSolution()
     {
-        var result = DotNetCli.Pack(TestSolutionPath, BuildConfiguration, "--no-restore --no-build");
-        Assert.That(result.returnCode, Is.EqualTo(0), result.stdOutput);
+        var returnCode=DotNetCli.Pack(TestSolutionPath, BuildConfiguration, "--no-restore --no-build");
+        Assert.That(returnCode, Is.EqualTo(0));
         Assert.That(Logger.HasError, Is.False);
     }
 

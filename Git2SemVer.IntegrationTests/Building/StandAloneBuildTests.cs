@@ -16,8 +16,8 @@ internal class StandAloneBuildTests : VersioningBuildTestsBase
 
         var scriptPath = context.DeployScript("ForceProperties2.csx");
 
-        var result = context.DotNetCli.Pack(context.TestSolutionPath, context.BuildConfiguration, $"-p:Git2SemVer_ScriptPath={scriptPath}");
-        Assert.That(result.returnCode, Is.EqualTo(0), result.stdOutput);
+        var returnCode = context.DotNetCli.Pack(context.TestSolutionPath, context.BuildConfiguration, $"-p:Git2SemVer_ScriptPath={scriptPath}");
+        Assert.That(returnCode, Is.EqualTo(0));
         Assert.That(File.Exists(context.CompiledAppPath), Is.True, $"File '{context.CompiledAppPath}' does not exist after build and pack.");
 
         var output = DotNetProcessHelpers.RunDotnetApp(context.CompiledAppPath, context.Logger);

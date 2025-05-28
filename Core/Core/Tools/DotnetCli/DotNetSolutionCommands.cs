@@ -9,45 +9,45 @@ public sealed class DotNetSolutionCommands : IDotNetSolutionCommands
         _inner = inner;
     }
 
-    public (int returnCode, string stdOutput) AddProject(string projectName)
+    public void AddProject(string projectName)
     {
-        return _inner.Run($"sln add {projectName}");
+        _inner.Run($"sln add {projectName}");
     }
 
-    public (int returnCode, string stdOutput) AddProject(string solutionName, string projectName)
+    public void AddProject(string solutionName, string projectName)
     {
-        return _inner.Run($"sln {solutionName} add {projectName}");
+        _inner.Run($"sln {solutionName} add {projectName}");
     }
 
-    public (int returnCode, IReadOnlyList<string> project) GetProjects()
+    //public (int returnCode, IReadOnlyList<string> project) GetProjects()
+    //{
+    //    var result = _inner.Run("sln list");
+    //    return (result.returnCode, result.stdOutput.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries));
+    //}
+
+    //public (int returnCode, IReadOnlyList<string> projects) GetProjects(string solutionName)
+    //{
+    //    var result = _inner.Run($"sln {solutionName} list");
+    //    return (result.returnCode, result.stdOutput.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries));
+    //}
+
+    public void New(string solutionName)
     {
-        var result = _inner.Run("sln list");
-        return (result.returnCode, result.stdOutput.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries));
+        _inner.Run($"new sln --name \"{solutionName}\"");
     }
 
-    public (int returnCode, IReadOnlyList<string> projects) GetProjects(string solutionName)
+    public void New()
     {
-        var result = _inner.Run($"sln {solutionName} list");
-        return (result.returnCode, result.stdOutput.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries));
+        _inner.Run("new sln");
     }
 
-    public (int returnCode, string stdOutput) New(string solutionName)
-    {
-        return _inner.Run($"new sln --name \"{solutionName}\"");
-    }
+    //public (int returnCode, string stdOutput) RemoveProject(string projectName)
+    //{
+    //    return _inner.Run($"sln remove {projectName}");
+    //}
 
-    public (int returnCode, string stdOutput) New()
-    {
-        return _inner.Run("new sln");
-    }
-
-    public (int returnCode, string stdOutput) RemoveProject(string projectName)
-    {
-        return _inner.Run($"sln remove {projectName}");
-    }
-
-    public (int returnCode, string stdOutput) RemoveProject(string solutionName, string projectName)
-    {
-        return _inner.Run($"sln {solutionName} remove {projectName}");
-    }
+    //public (int returnCode, string stdOutput) RemoveProject(string solutionName, string projectName)
+    //{
+    //    return _inner.Run($"sln {solutionName} remove {projectName}");
+    //}
 }

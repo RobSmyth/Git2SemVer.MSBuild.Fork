@@ -40,7 +40,7 @@ public sealed class DotNetTool : IDotNetTool
     /// <remarks>
     ///     See: <see href="https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-build">dotnet build</see>
     /// </remarks>
-    public (int returnCode, string stdOutput) Build(string solution, string configuration, params string[] arguments)
+    public int Build(string solution, string configuration, params string[] arguments)
     {
         _inner.Logger.LogInfo($"Building solution {solution}.");
         var dotNetCommandLine =
@@ -51,7 +51,7 @@ public sealed class DotNetTool : IDotNetTool
     /// <summary>
     ///     Pack project. Generates NuGet package.
     /// </summary>
-    public (int returnCode, string stdOutput) Pack(string project, string configuration, params string[] arguments)
+    public int Pack(string project, string configuration, params string[] arguments)
     {
         _inner.Logger.LogInfo($"Packing project {project}.");
         var dotNetCommandLine = $"pack {project} --configuration {configuration} {string.Join(" ", arguments)}";
@@ -67,8 +67,8 @@ public sealed class DotNetTool : IDotNetTool
         return _inner.Run("dotnet", commandLineArguments, standardOut, errorOut);
     }
 
-    public (int returnCode, string stdOutput) Run(string commandLineArguments)
+    public int Run(string commandLineArguments)
     {
-        return _inner.Run("dotnet", commandLineArguments);
+        return _inner.Run("dotnet", commandLineArguments).returnCode;
     }
 }
