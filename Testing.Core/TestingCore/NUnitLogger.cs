@@ -93,7 +93,7 @@ public class NUnitLogger : ILogger
         if (Level >= LoggingLevel.Error)
         {
             var logMessage = _errorPrefix + LogPrefix + message;
-            TestContext.Error.WriteLine(logMessage);
+            //>>> TestContext.Error.WriteLine(logMessage);
             Assert.Fail(logMessage);
         }
     }
@@ -110,7 +110,7 @@ public class NUnitLogger : ILogger
         _errorMessages.Add(message);
         if (Level >= LoggingLevel.Error)
         {
-            TestContext.Error.WriteLine(message);
+            //>>> TestContext.Error.WriteLine(message);
             Assert.Fail(message);
         }
     }
@@ -119,7 +119,7 @@ public class NUnitLogger : ILogger
     {
         if (Level >= LoggingLevel.Info)
         {
-            TestContext.Out.WriteLine(_infoPrefix + LogPrefix + message);
+            //>>> TestContext.Out.WriteLine(_infoPrefix + LogPrefix + message);
         }
     }
 
@@ -132,7 +132,7 @@ public class NUnitLogger : ILogger
     {
         if (Level >= LoggingLevel.Trace)
         {
-            TestContext.Out.WriteLine(_tracePrefix + LogPrefix + message);
+            //>>> TestContext.Out.WriteLine(_tracePrefix + LogPrefix + message);
         }
     }
 
@@ -154,7 +154,7 @@ public class NUnitLogger : ILogger
     {
         if (Level >= LoggingLevel.Warning)
         {
-            TestContext.Out.WriteLine(_warnPrefix + LogPrefix + message);
+            //>>> TestContext.Out.WriteLine(_warnPrefix + LogPrefix + message);
         }
     }
 
