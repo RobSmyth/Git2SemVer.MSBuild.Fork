@@ -35,7 +35,7 @@ public class Commit : ICommit
         if (string.IsNullOrWhiteSpace(refs) && tags != null)
         {
             // wip - incremental introduction
-            Refs = string.Join(", ", tags.ToList().Select(x => $"tag: {x.FriendlyName}"));
+            Refs = "(" + string.Join(", ", tags.ToList().Select(x => $"tag: {x.FriendlyName}")) + ")";
         }
         else
         {

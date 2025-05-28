@@ -153,7 +153,7 @@ public class GitTool : IGitTool, IDisposable
         }
         //>>>
 
-        var commits = GetCommitsLibGit2Sharp();
+        var commits = GetCommitsLibGit2Sharp(skipCount, takeCount);
         //var commits = await GetCommitsAsync(x => x.ReachableFromHead()
         //                                   .Skip(skipCount)
         //                                   .Take(takeCount));
@@ -165,7 +165,7 @@ public class GitTool : IGitTool, IDisposable
         return commits;
     }
 
-    private IReadOnlyList<Commit> GetCommitsLibGit2Sharp()
+    private IReadOnlyList<Commit> GetCommitsLibGit2Sharp(int skipCount, int takeCount)
     {
         var result = Repository.Commits;
         return result.Select(Convert).ToList();
@@ -175,9 +175,9 @@ public class GitTool : IGitTool, IDisposable
     {
         var parents = rawCommit.Parents.Select(x => x.Sha).ToArray();
         var metadata = _metadataParser.Parse(rawCommit.MessageShort, rawCommit.Message);
-        var refs = ""; // >>>> todo
+        var refs = ""; // >>>> todo - to be phased out
         var tags = Repository.Tags.Where(x => x.Target.Equals(rawCommit)).ToList();
-        var hasTags = tags.Any();
+        var hasTags = tags.Any(); // >>> for breakpoint
 
         return new Commit(
             rawCommit.Sha, 
@@ -187,8 +187,6 @@ public class GitTool : IGitTool, IDisposable
             metadata,
             tags);
     }
-
-    public TagCollection Tags { get; set; }
 
     public async Task<IReadOnlyList<Commit>> GetCommitsAsync(Action<IGitRevisionsBuilder> rangeBuilderAction)
     {
