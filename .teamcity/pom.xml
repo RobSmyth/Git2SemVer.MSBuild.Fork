@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <name>NoeticTools_Git2SemVer Config DSL Script</name>
-  <groupId>NoeticTools_Git2SemVer</groupId>
-  <artifactId>NoeticTools_Git2SemVer_dsl</artifactId>
+  <name>RobSmyth_Git2SemVerMSBuildFork Config DSL Script</name>
+  <groupId>RobSmyth_Git2SemVerMSBuildFork</groupId>
+  <artifactId>RobSmyth_Git2SemVerMSBuildFork_dsl</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <parent>
