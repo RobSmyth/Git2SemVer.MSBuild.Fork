@@ -13,11 +13,9 @@ namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 [RegisterTransient]
 public class GitTool : IGitTool, IDisposable
 {
-    private const int DefaultTakeLimit = 300;
+    private const int TakeLimit = 300;
     private readonly ICommitsCache? _cache;
-    private readonly IGitProcessCli _inner;
     private readonly ILogger _logger;
-    private int _commitsReadCountFromHead;
     private Commit? _head;
     private bool _initialised;
     private string _repositoryDirectory;
@@ -27,20 +25,15 @@ public class GitTool : IGitTool, IDisposable
     public GitTool(ILogger logger)
     {
         _cache = new CommitsCache();
-        _inner = new GitProcessCli(logger);
         _logger = logger;
-        RepositoryDirectory = DiscoverRepositoryDirectory(_inner.WorkingDirectory);
+        RepositoryDirectory = Environment.CurrentDirectory;
         _metadataParser = new ConventionalCommitsParser();
     }
 
     public string RepositoryDirectory
     {
         get => _repositoryDirectory;
-        set
-        {
-            _inner.WorkingDirectory = value;
-            _repositoryDirectory = DiscoverRepositoryDirectory(value);
-        }
+        set => _repositoryDirectory = DiscoverRepositoryDirectory(value);
     }
 
     private static string DiscoverRepositoryDirectory(string currentDirectory)
@@ -108,28 +101,7 @@ public class GitTool : IGitTool, IDisposable
         return Repository.Commits.QueryBy(new CommitFilter()
         {
             IncludeReachableFrom = commitSha,
-        }).Take(DefaultTakeLimit).Select(Convert).ToList();
-    }
-
-    internal IReadOnlyList<Commit> GetCommitsLibGit2Sharp(int skipCount)
-    {
-        //>>> todo - temporary
-        if (skipCount > 0)
-        {
-            throw new ArgumentException("Must be 0", nameof(skipCount));
-        }
-        //>>>
-
-        Repository.Commits.Skip(skipCount).Take(DefaultTakeLimit);
-
-        var result = Repository.Commits;
-        var commits = result.Select(Convert).ToList();
-        if (skipCount == 0)
-        {
-            _head = commits[0];
-        }
-
-        return commits;
+        }).Take(TakeLimit).Select(Convert).ToList();
     }
 
     private Commit Convert(LibGit2Sharp.Commit rawCommit)
@@ -155,24 +127,6 @@ public class GitTool : IGitTool, IDisposable
 
     private Repository Repository => _repository ??= new Repository(RepositoryDirectory);
 
-    /// <summary>
-    ///     Get next set of commits from head.
-    /// </summary>
-    private IReadOnlyList<Commit> GetCommitsLibGit2Sharp()
-    {
-        var commits = GetCommitsLibGit2Sharp(_commitsReadCountFromHead);
-        if (_commitsReadCountFromHead == 0)
-        {
-            if (commits.Count == 0)
-            {
-                throw new Git2SemVerGitOperationException("Unable to get commits. Either new repository and no commits or problem accessing git.");
-            }
-            _head = commits[0];
-        }
-        _commitsReadCountFromHead += commits.Count;
-        return commits;
-    }
-
     private bool GetHasLocalChanges()
     {
         return Task.Run(GetHasLocalChangesAsync).Result;
@@ -187,20 +141,18 @@ public class GitTool : IGitTool, IDisposable
 
     private void PrimeCache()
     {
-        Task.Run(PrimeCacheAsync).Wait();
-    }
-
-    private async Task PrimeCacheAsync()
-    {
         if (_initialised)
         {
-            return;
+            throw new InvalidOperationException($"The method commit tool's {nameof(PrimeCache)} is called more than once.");
         }
-
         _initialised = true;
 
-        var commits = GetCommitsLibGit2Sharp();
-        Cache.Add(commits.ToArray());
+        var commits = Repository.Commits.Take(TakeLimit).Select(Convert).ToList();
+        if (!commits.Any())
+        {
+            throw new Git2SemVerGitOperationException("Unable to get commits. Either new repository and no commits or problem accessing git.");
+        }
+        _head = commits[0];
     }
 
     public void Dispose()

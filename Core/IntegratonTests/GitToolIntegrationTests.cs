@@ -33,17 +33,6 @@ public class GitToolIntegrationTests
     }
 
     [Test]
-    public void MeasurePerformanceTest()
-    {
-        var stopwatch = Stopwatch.StartNew();
-
-        var commits = _target.GetCommitsLibGit2Sharp(0);
-
-        stopwatch.Stop();
-        _logger.LogInfo($"Reading commits took {stopwatch.ElapsedMilliseconds/commits.Count}ms per commit.");
-    }
-
-    [Test]
     public void GetCommitsFromShaTest()
     {
         var commit = GetCommitAtIndex(_target, 5);
