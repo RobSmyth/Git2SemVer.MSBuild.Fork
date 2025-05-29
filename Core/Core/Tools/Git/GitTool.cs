@@ -1,14 +1,8 @@
-﻿using System.Diagnostics;
-using Injectio.Attributes;
+﻿using Injectio.Attributes;
 using LibGit2Sharp;
-
-//using LibGit2Sharp;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
-using NoeticTools.Git2SemVer.Core.Tools.Git.FluentApi;
-using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
-using Semver;
 
 
 #pragma warning disable SYSLIB1045
@@ -20,9 +14,7 @@ namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 public class GitTool : IGitTool, IDisposable
 {
     private const int DefaultTakeLimit = 300;
-    private readonly SemVersion _assumedLowestGitVersion = new(2, 34, 1);
     private readonly ICommitsCache? _cache;
-    private readonly IGitResponseParser _gitResponseParser;
     private readonly IGitProcessCli _inner;
     private readonly ILogger _logger;
     private int _commitsReadCountFromHead;
@@ -36,7 +28,6 @@ public class GitTool : IGitTool, IDisposable
     {
         _cache = new CommitsCache();
         _inner = new GitProcessCli(logger);
-        _gitResponseParser = new GitResponseParser(_cache, new ConventionalCommitsParser(), logger);
         _logger = logger;
         RepositoryDirectory = DiscoverRepositoryDirectory(_inner.WorkingDirectory);
         _metadataParser = new ConventionalCommitsParser();
@@ -52,7 +43,7 @@ public class GitTool : IGitTool, IDisposable
         }
     }
 
-    private string DiscoverRepositoryDirectory(string currentDirectory)
+    private static string DiscoverRepositoryDirectory(string currentDirectory)
     {
         return currentDirectory.EndsWith(".git") ? 
             currentDirectory : 

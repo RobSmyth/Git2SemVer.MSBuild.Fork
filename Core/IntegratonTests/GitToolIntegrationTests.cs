@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
-using NoeticTools.Git2SemVer.Core.Tools.Git.FluentApi;
 #pragma warning disable NUnit2045
 
 

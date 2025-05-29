@@ -1,5 +1,4 @@
-﻿using NoeticTools.Git2SemVer.Core.Tools.Git.FluentApi;
-
+﻿
 
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 
@@ -19,9 +18,5 @@ public interface IGitTool
 
     Commit Head { get; }
 
-    string RepositoryDirectory { get; set; }
-
     Commit Get(CommitId commitId);
-
-    Commit Get(string commitSha);
 }
