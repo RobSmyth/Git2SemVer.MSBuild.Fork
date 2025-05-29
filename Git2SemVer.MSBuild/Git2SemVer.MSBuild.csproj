@@ -78,6 +78,8 @@
     <Content Include="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="buildmultitargeting/" />
     <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.props" PackagePath="build/" />
     <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="build/" />
+    <Content Include="$(OutputPath)git2-3f4182d.dll" PackagePath="tasks/netstandard2.0/" />
+    <Content Include="$(OutputPath)libgit2-3f4182d.so" PackagePath="tasks/netstandard2.0/" />
   </ItemGroup>
 
   <ItemGroup>
