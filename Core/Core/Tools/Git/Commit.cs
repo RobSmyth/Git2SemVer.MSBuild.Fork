@@ -17,8 +17,19 @@ public class Commit : ICommit
     private const string TagVersionPrefix = "v";
     private readonly Regex _tagVersionRegex = new(@$"tag: {TagVersionPrefix}(?<version>\d+\.\d+\.\d+)", RegexOptions.IgnoreCase);
 
-    public Commit(string sha, string[] parents, string summary, string messageBody, string refs,
-        CommitMessageMetadata metadata, IReadOnlyList<Tag>? tags = null)
+    public Commit(string sha, string[] parents, string summary, string messageBody,
+        CommitMessageMetadata metadata, IReadOnlyList<Tag>? tags)
+    : this(sha, parents, summary, messageBody, "", metadata)
+    {
+        Tags = tags;
+        if (tags != null)
+        {
+            // wip - incremental introduction
+            Refs = "(" + string.Join(", ", tags.ToList().Select(x => $"tag: {x.FriendlyName}")) + ")";
+        }
+    }
+
+    public Commit(string sha, string[] parents, string summary, string messageBody, string refs, CommitMessageMetadata metadata)
     {
         CommitId = new CommitId(sha);
 
@@ -31,16 +42,7 @@ public class Commit : ICommit
             Parents = parents.Select(x => new CommitId(x)).ToArray();
         }
 
-        Tags = tags;
-        if (string.IsNullOrWhiteSpace(refs) && tags != null)
-        {
-            // wip - incremental introduction
-            Refs = "(" + string.Join(", ", tags.ToList().Select(x => $"tag: {x.FriendlyName}")) + ")";
-        }
-        else
-        {
-            Refs = refs;
-        }
+        Refs = refs;
 
         Summary = summary;
         MessageBody = messageBody;
@@ -61,8 +63,8 @@ public class Commit : ICommit
     [JsonPropertyOrder(90)]
     public CommitMessageMetadata Metadata { get; }
 
-    [JsonIgnore]
-    public IReadOnlyList<Tag>? Tags { get; }
+    [JsonIgnore] 
+    public IReadOnlyList<Tag>? Tags { get; } = null;
 
     [JsonIgnore]
     public static Commit Null => new("00000000", [], "null commit", "", "", new CommitMessageMetadata());

@@ -175,15 +175,12 @@ public class GitTool : IGitTool, IDisposable
     {
         var parents = rawCommit.Parents.Select(x => x.Sha).ToArray();
         var metadata = _metadataParser.Parse(rawCommit.MessageShort, rawCommit.Message);
-        var refs = ""; // >>>> todo - to be phased out
         var tags = Repository.Tags.Where(x => x.Target.Equals(rawCommit)).ToList();
-        var hasTags = tags.Any(); // >>> for breakpoint
 
         return new Commit(
             rawCommit.Sha, 
             parents, rawCommit.MessageShort, 
             rawCommit.Message,
-            refs,
             metadata,
             tags);
     }

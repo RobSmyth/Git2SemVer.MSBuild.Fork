@@ -27,19 +27,7 @@ public sealed class ProcessCli : IProcessCli
 
     public int Run(string application, string commandLineArguments)
     {
-        //var outWriter = new StringWriter();
-        //var errorWriter = new StringWriter();
-        //var returnCode = Run(application, commandLineArguments, outWriter, errorWriter);
-        var returnCode = Run(application, commandLineArguments, null); //>>>
-        //var output = outWriter.ToString();
-        //var errorOutput = errorWriter.ToString();
-        //if (!string.IsNullOrWhiteSpace(errorOutput) && returnCode == 0)
-        //{
-        //    Logger.LogInfo(output);
-        //    throw new Git2SemVerArgumentException($"ERROR: {errorOutput}\nOUTPUT:\n{output}");
-        //}
-
-        return returnCode;
+        return Run(application, commandLineArguments, null); //>>>
     }
 
     /// <summary>
