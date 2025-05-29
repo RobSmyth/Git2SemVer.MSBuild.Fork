@@ -170,7 +170,7 @@ object DeployLocalTeamCityPackage : BuildType({
     }
 
     dependencies {
-        artifacts(AbsoluteId("NoeticTools_Git2SemVer_BuildAndTest")) {
+        artifacts(BuildAndTest) {
             buildRule = lastSuccessful("""
                 +:<default>
                 +:*
