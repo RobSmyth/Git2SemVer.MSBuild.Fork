@@ -6,7 +6,7 @@
 namespace NoeticTools.Git2SemVer.Core.Tests.ConventionalCommits;
 
 [TestFixture]
-[Parallelizable(ParallelScope.All)]  //[NonParallelizable]
+[Parallelizable(ParallelScope.All)]
 internal class ConventionalCommitsParserTests
 {
     private ConventionalCommitsParser _target;
