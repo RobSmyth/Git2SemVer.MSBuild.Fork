@@ -1,10 +1,10 @@
 ﻿namespace NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
 
-public sealed class DotNetProjectCommands : IDotNetProjectCommands
+public sealed class ProjectCommands : IProjectCommands
 {
     private readonly DotNetTool _inner;
 
-    internal DotNetProjectCommands(DotNetTool inner)
+    internal ProjectCommands(DotNetTool inner)
     {
         _inner = inner;
     }

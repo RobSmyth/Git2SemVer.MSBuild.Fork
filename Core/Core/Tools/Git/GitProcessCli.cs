@@ -16,8 +16,7 @@ public class GitProcessCli : IGitProcessCli
 
         var teamCityGitPath = Environment.GetEnvironmentVariable("TEAMCITY_GIT_PATH") ?? "";
         _gitPath = teamCityGitPath.Length > 0 ? teamCityGitPath : "git";
-        //logger.LogTrace($"Using git path: '{_gitPath}'");
-        logger.LogInfo($"Using git path: '{_gitPath}'");
+        logger.LogTrace("Using git path: '{0}'", _gitPath);
     }
 
     public string WorkingDirectory
@@ -31,10 +30,4 @@ public class GitProcessCli : IGitProcessCli
     {
         return await _inner.RunAsync(_gitPath, commandLineArguments, standardOut, errorOut);
     }
-
-    //public int Run(string commandLineArguments,
-    //               TextWriter standardOut, TextWriter errorOut)
-    //{
-    //    return _inner.Run(_gitPath, commandLineArguments, standardOut, errorOut);
-    //}
 }

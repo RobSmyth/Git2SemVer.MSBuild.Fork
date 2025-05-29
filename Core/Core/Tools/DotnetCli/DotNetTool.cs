@@ -21,18 +21,9 @@ public sealed class DotNetTool : IDotNetTool
         _inner = inner;
     }
 
-    public IDotNetProjectCommands Projects => new DotNetProjectCommands(this);
+    public IProjectCommands Projects => new ProjectCommands(this);
 
-    public IDotNetSolutionCommands Solution => new DotNetSolutionCommands(this);
-
-    /// <summary>
-    ///     Command time limit in milliseconds.
-    /// </summary>
-    public int TimeLimitMilliseconds
-    {
-        get => _inner.TimeLimitMilliseconds;
-        set => _inner.TimeLimitMilliseconds = value;
-    }
+    public ISolutionCommands Solution => new SolutionCommands(this);
 
     /// <summary>
     ///     Build solution with build caching disabled.
@@ -61,12 +52,6 @@ public sealed class DotNetTool : IDotNetTool
     /// <summary>
     ///     Run dotnet cli with provided command line arguments.
     /// </summary>
-    public int Run(string commandLineArguments,
-                   TextWriter standardOut, TextWriter? errorOut = null)
-    {
-        return _inner.Run("dotnet", commandLineArguments, standardOut, errorOut);
-    }
-
     public int Run(string commandLineArguments)
     {
         return _inner.Run("dotnet", commandLineArguments);

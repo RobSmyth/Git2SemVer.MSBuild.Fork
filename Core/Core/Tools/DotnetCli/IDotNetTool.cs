@@ -2,15 +2,12 @@
 
 public interface IDotNetTool
 {
-    IDotNetProjectCommands Projects { get; }
+    IProjectCommands Projects { get; }
 
-    IDotNetSolutionCommands Solution { get; }
-
-    int Run(string commandLineArguments);
+    ISolutionCommands Solution { get; }
 
     /// <summary>
     ///     Run dotnet cli with provided command line arguments.
     /// </summary>
-    int Run(string commandLineArguments,
-            TextWriter standardOut, TextWriter? errorOut = null);
+    int Run(string commandLineArguments);
 }
