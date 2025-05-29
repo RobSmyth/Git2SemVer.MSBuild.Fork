@@ -25,27 +25,28 @@ public sealed class ProcessCli : IProcessCli
 
     public string WorkingDirectory { get; set; }
 
-    public (int returnCode, string stdOutput) Run(string application, string commandLineArguments)
+    public int Run(string application, string commandLineArguments)
     {
-        var outWriter = new StringWriter();
-        var errorWriter = new StringWriter();
-        var returnCode = Run(application, commandLineArguments, outWriter, errorWriter);
-        var output = outWriter.ToString();
-        var errorOutput = errorWriter.ToString();
-        if (!string.IsNullOrWhiteSpace(errorOutput) && returnCode == 0)
-        {
-            Logger.LogInfo(output);
-            throw new Git2SemVerArgumentException($"ERROR: {errorOutput}\nOUTPUT:\n{output}");
-        }
+        //var outWriter = new StringWriter();
+        //var errorWriter = new StringWriter();
+        //var returnCode = Run(application, commandLineArguments, outWriter, errorWriter);
+        var returnCode = Run(application, commandLineArguments, null); //>>>
+        //var output = outWriter.ToString();
+        //var errorOutput = errorWriter.ToString();
+        //if (!string.IsNullOrWhiteSpace(errorOutput) && returnCode == 0)
+        //{
+        //    Logger.LogInfo(output);
+        //    throw new Git2SemVerArgumentException($"ERROR: {errorOutput}\nOUTPUT:\n{output}");
+        //}
 
-        return (returnCode, output);
+        return returnCode;
     }
 
     /// <summary>
     ///     Run dotnet cli with provided command line arguments.
     /// </summary>
     public int Run(string application, string commandLineArguments,
-                   TextWriter? standardOut = null, TextWriter? errorOut = null)
+                   TextWriter? standardOut, TextWriter? errorOut = null)
     {
         lock (Sync)
         {
@@ -80,13 +81,13 @@ public sealed class ProcessCli : IProcessCli
             process.Start();
 
             //process.BeginErrorReadLine();
-            if (standardOut != null)
-            {
-                standardOut.Write(process.StandardOutput.ReadToEnd());
-            }
+            standardOut?.Write(process.StandardOutput.ReadToEnd());
 
             //process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
+            if (errorOut != null)
+            {
+                process.BeginErrorReadLine();
+            }
 
             //Thread.Sleep(10); // >>>
 

@@ -32,9 +32,9 @@ public class GitProcessCli : IGitProcessCli
         return await _inner.RunAsync(_gitPath, commandLineArguments, standardOut, errorOut);
     }
 
-    public int Run(string commandLineArguments,
-                   TextWriter standardOut, TextWriter errorOut)
-    {
-        return _inner.Run(_gitPath, commandLineArguments, standardOut, errorOut);
-    }
+    //public int Run(string commandLineArguments,
+    //               TextWriter standardOut, TextWriter errorOut)
+    //{
+    //    return _inner.Run(_gitPath, commandLineArguments, standardOut, errorOut);
+    //}
 }

@@ -17,7 +17,7 @@ public interface IProcessCli
     /// </summary>
     string WorkingDirectory { get; set; }
 
-    (int returnCode, string stdOutput) Run(string application, string commandLineArguments);
+    int Run(string application, string commandLineArguments);
 
     /// <summary>
     ///     Run dotnet cli with provided command line arguments.
