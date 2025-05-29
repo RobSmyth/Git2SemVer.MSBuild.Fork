@@ -112,13 +112,13 @@ public class GitTool : IGitTool, IDisposable
         return Cache.Get(commitSha);
     }
 
-    public IReadOnlyList<Commit> GetCommits(string commitSha, int? takeCount = null)
+    internal IReadOnlyList<Commit> GetCommits(string commitSha, int? takeCount = null)
     {
         return GetCommits(x => x.ReachableFrom(commitSha)
                                 .Take(takeCount ?? DefaultTakeLimit));
     }
 
-    public IReadOnlyList<Commit> GetCommits(int skipCount, int takeCount)
+    internal IReadOnlyList<Commit> GetCommits(int skipCount, int takeCount)
     {
         var commits = GetCommits(x => x.ReachableFromHead()
                                 .Skip(skipCount)
@@ -131,44 +131,36 @@ public class GitTool : IGitTool, IDisposable
         return commits;
     }
 
-    public IReadOnlyList<Commit> GetCommits(Action<IGitRevisionsBuilder> rangeBuilderAction)
+    internal IReadOnlyList<Commit> GetCommits(Action<IGitRevisionsBuilder> rangeBuilderAction)
     {
         var rangeBuilder = new GitRevisionsBuilder();
         rangeBuilderAction(rangeBuilder);
         return GetCommitsFromGitLog(rangeBuilder.GetArgs());
     }
 
-    public async Task<IReadOnlyList<Commit>> GetCommitsAsync(string commitSha, int? takeCount = null)
+    internal async Task<IReadOnlyList<Commit>> GetCommitsAsync(string commitSha, int? takeCount = null)
     {
         return await GetCommitsAsync(x => x.ReachableFrom(commitSha)
                                            .Take(takeCount ?? DefaultTakeLimit));
     }
 
-    public async Task<IReadOnlyList<Commit>> GetCommitsAsync(int skipCount, int takeCount)
+    private IReadOnlyList<Commit> GetCommitsLibGit2Sharp(int skipCount, int takeCount)
     {
-        //>>>
+        //>>> todo - temporary
         if (skipCount > 0)
         {
             throw new ArgumentException("Must be 0", nameof(skipCount));
         }
         //>>>
 
-        var commits = GetCommitsLibGit2Sharp(skipCount, takeCount);
-        //var commits = await GetCommitsAsync(x => x.ReachableFromHead()
-        //                                   .Skip(skipCount)
-        //                                   .Take(takeCount));
+        var result = Repository.Commits;
+        var commits = result.Select(Convert).ToList();
         if (skipCount == 0)
         {
             _head = commits[0];
         }
 
         return commits;
-    }
-
-    private IReadOnlyList<Commit> GetCommitsLibGit2Sharp(int skipCount, int takeCount)
-    {
-        var result = Repository.Commits;
-        return result.Select(Convert).ToList();
     }
 
     private Commit Convert(LibGit2Sharp.Commit rawCommit)
@@ -247,7 +239,7 @@ public class GitTool : IGitTool, IDisposable
     /// </summary>
     private async Task<IReadOnlyList<Commit>> GetCommitsAsync()
     {
-        var commits = await GetCommitsAsync(_commitsReadCountFromHead, DefaultTakeLimit);
+        var commits = await GetCommitsLibGit2Sharp(_commitsReadCountFromHead, DefaultTakeLimit);
         if (_commitsReadCountFromHead == 0)
         {
             if (commits.Count == 0)
