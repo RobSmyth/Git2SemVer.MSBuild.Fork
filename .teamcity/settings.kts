@@ -149,7 +149,7 @@ object DeployLocalTeamCityPackage : BuildType({
 
     enablePersonalBuilds = false
     type = BuildTypeSettings.Type.DEPLOYMENT
-    buildNumberPattern = "%build.counter% (%dep.NoeticTools_Git2SemVer_BuildAndTest.build.number%)"
+    buildNumberPattern = "%build.counter% (${BuildAndTest.depParamRefs.buildNumber})"
     maxRunningBuilds = 1
 
     steps {
