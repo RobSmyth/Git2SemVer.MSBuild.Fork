@@ -1,6 +1,8 @@
 import jetbrains.buildServer.configs.kotlin.*
+import jetbrains.buildServer.configs.kotlin.buildFeatures.approval
 import jetbrains.buildServer.configs.kotlin.buildFeatures.perfmon
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetBuild
+import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetNugetPush
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetRestore
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetTest
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
@@ -40,6 +42,7 @@ project {
     vcsRoot(HttpsGithubComNoetictoolsGit2semverMsbuildRefsHeadsMain)
 
     buildType(BuildAndTest)
+    buildType(DeployLocalTeamCityPackage)
 }
 
 object BuildAndTest : BuildType({
@@ -137,6 +140,44 @@ object BuildAndTest : BuildType({
 
     requirements {
         exists("DotNetCLI_Path")
+    }
+})
+
+object DeployLocalTeamCityPackage : BuildType({
+    name = "Deploy (local TeamCity) - package"
+    description = "Deploy NuGet package"
+
+    enablePersonalBuilds = false
+    type = BuildTypeSettings.Type.DEPLOYMENT
+    buildNumberPattern = "%build.counter% (%dep.NoeticTools_Git2SemVer_BuildAndTest.build.number%)"
+    maxRunningBuilds = 1
+
+    steps {
+        dotnetNugetPush {
+            name = "Push NuGet package"
+            id = "Publish2"
+            packages = "NoeticTools.*.nupkg"
+            serverUrl = "http://10.1.10.78:8111/httpAuth/app/nuget/feed/_Root/TeamCity/v3/index.json"
+            apiKey = "credentialsJSON:bd18b974-1188-423d-9efd-8836806c3669"
+        }
+    }
+
+    features {
+        approval {
+            approvalRules = "user:robert"
+            manualRunsApproved = false
+        }
+    }
+
+    dependencies {
+        artifacts(AbsoluteId("NoeticTools_Git2SemVer_BuildAndTest")) {
+            buildRule = lastSuccessful("""
+                +:<default>
+                +:*
+            """.trimIndent())
+            cleanDestination = true
+            artifactRules = "+:NoeticTools.Git2SemVer.MSBuild.*.nupkg"
+        }
     }
 })
 
