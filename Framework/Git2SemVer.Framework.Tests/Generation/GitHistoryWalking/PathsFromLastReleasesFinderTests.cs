@@ -6,8 +6,7 @@
 namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.GitHistoryWalking;
 
 [TestFixture]
-[NonParallelizable]
-//>>>[Parallelizable(ParallelScope.All)]
+[Parallelizable(ParallelScope.All)]  //[NonParallelizable]
 internal class PathsFromLastReleasesFinderTests
 {
     [TestCaseSource(typeof(ScenariosFromBuildLogsTestSource))]

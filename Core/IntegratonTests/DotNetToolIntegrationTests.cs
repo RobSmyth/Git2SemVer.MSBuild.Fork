@@ -1,8 +1,7 @@
 namespace NoeticTools.Git2SemVer.Core.IntegrationTests;
 
 [TestFixture]
-[NonParallelizable]
-//>>>[Parallelizable(ParallelScope.All)]
+[Parallelizable(ParallelScope.All)]  //[NonParallelizable]
 public class DotNetToolIntegrationTests
 {
     [Test]
