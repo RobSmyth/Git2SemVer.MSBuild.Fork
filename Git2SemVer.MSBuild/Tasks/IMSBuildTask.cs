@@ -9,7 +9,7 @@ public interface IMSBuildTask
     ///     See
     ///     <see
     ///         href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.build.framework.ibuildengine6?view=msbuild-17-netcore">
-    ///         Build
+    ///          Build
     ///         Framework IBuildEngine9
     ///     </see>
     /// </summary>
