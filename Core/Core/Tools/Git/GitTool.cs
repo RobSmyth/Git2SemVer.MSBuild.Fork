@@ -59,7 +59,7 @@ public class GitTool : IGitTool, IDisposable
             new DirectoryInfo(Repository.Discover(currentDirectory)).Parent!.FullName;
     }
 
-    public string BranchName => GetBranchName();
+    public string BranchName => Repository.Head.FriendlyName;
 
     public ICommitsCache Cache
     {
@@ -102,7 +102,7 @@ public class GitTool : IGitTool, IDisposable
             return existingCommit;
         }
 
-        var commits = GetCommits(commitSha);
+        var commits = GetCommitsLibGit2Sharp(commitSha);
         if (commits.Count == 0)
         {
             throw new Git2SemVerRepositoryException($"Unable to find git commit '{commitSha}' in the repository.");
@@ -112,39 +112,15 @@ public class GitTool : IGitTool, IDisposable
         return Cache.Get(commitSha);
     }
 
-    internal IReadOnlyList<Commit> GetCommits(string commitSha, int? takeCount = null)
+    internal IReadOnlyList<Commit> GetCommitsLibGit2Sharp(string commitSha)
     {
-        return GetCommits(x => x.ReachableFrom(commitSha)
-                                .Take(takeCount ?? DefaultTakeLimit));
-    }
-
-    internal IReadOnlyList<Commit> GetCommits(int skipCount, int takeCount)
-    {
-        var commits = GetCommits(x => x.ReachableFromHead()
-                                .Skip(skipCount)
-                                .Take(takeCount));
-        if (skipCount == 0)
+        return Repository.Commits.QueryBy(new CommitFilter()
         {
-            _head = commits[0];
-        }
-
-        return commits;
+            IncludeReachableFrom = commitSha,
+        }).Take(DefaultTakeLimit).Select(Convert).ToList();
     }
 
-    internal IReadOnlyList<Commit> GetCommits(Action<IGitRevisionsBuilder> rangeBuilderAction)
-    {
-        var rangeBuilder = new GitRevisionsBuilder();
-        rangeBuilderAction(rangeBuilder);
-        return GetCommitsFromGitLog(rangeBuilder.GetArgs());
-    }
-
-    internal async Task<IReadOnlyList<Commit>> GetCommitsAsync(string commitSha, int? takeCount = null)
-    {
-        return await GetCommitsAsync(x => x.ReachableFrom(commitSha)
-                                           .Take(takeCount ?? DefaultTakeLimit));
-    }
-
-    private IReadOnlyList<Commit> GetCommitsLibGit2Sharp(int skipCount, int takeCount)
+    internal IReadOnlyList<Commit> GetCommitsLibGit2Sharp(int skipCount)
     {
         //>>> todo - temporary
         if (skipCount > 0)
@@ -152,6 +128,8 @@ public class GitTool : IGitTool, IDisposable
             throw new ArgumentException("Must be 0", nameof(skipCount));
         }
         //>>>
+
+        Repository.Commits.Skip(skipCount).Take(DefaultTakeLimit);
 
         var result = Repository.Commits;
         var commits = result.Select(Convert).ToList();
@@ -165,71 +143,23 @@ public class GitTool : IGitTool, IDisposable
 
     private Commit Convert(LibGit2Sharp.Commit rawCommit)
     {
-        var parents = rawCommit.Parents.Select(x => x.Sha).ToArray();
-        var metadata = _metadataParser.Parse(rawCommit.MessageShort, rawCommit.Message);
-        var tags = Repository.Tags.Where(x => x.Target.Equals(rawCommit)).ToList();
-
-        return new Commit(
-            rawCommit.Sha, 
-            parents, rawCommit.MessageShort, 
-            rawCommit.Message,
-            metadata,
-            tags);
-    }
-
-    public async Task<IReadOnlyList<Commit>> GetCommitsAsync(Action<IGitRevisionsBuilder> rangeBuilderAction)
-    {
-        var rangeBuilder = new GitRevisionsBuilder();
-        rangeBuilderAction(rangeBuilder);
-        return await GetCommitsFromGitLogAsync(rangeBuilder.GetArgs());
-    }
-
-    public IReadOnlyList<Commit> GetContributingCommits(CommitId commit, CommitId prior)
-    {
-        return GetCommits(x => x.ReachableFrom(commit)
-                                .NotReachableFrom(prior));
-    }
-
-    public async Task<IReadOnlyList<Commit>> GetContributingCommitsAsync(CommitId commit, CommitId prior)
-    {
-        return await GetCommitsAsync(x => x.ReachableFrom(commit)
-                                           .NotReachableFrom(prior));
-    }
-
-    public string Run(string arguments)
-    {
-        return Task.Run(() => RunAsync(arguments)).Result;
-    }
-
-    public async Task<string> RunAsync(string arguments)
-    {
-        var outWriter = new StringWriter();
-        var errorWriter = new StringWriter();
-        var returnCode = await _inner.RunAsync(arguments, outWriter, errorWriter);
-
-        if (returnCode != 0)
+        if (!Cache.TryGet(rawCommit.Sha, out var commit))
         {
-            throw new Git2SemVerGitOperationException($"Command 'git {arguments}' returned non-zero return code: {returnCode}");
+            var parents = rawCommit.Parents.Select(x => x.Sha).ToArray();
+            var metadata = _metadataParser.Parse(rawCommit.MessageShort, rawCommit.Message);
+            var tags = Repository.Tags.Where(x => x.Target.Equals(rawCommit)).ToList();
+
+            commit = new Commit(
+                rawCommit.Sha,
+                parents, rawCommit.MessageShort,
+                rawCommit.Message,
+                metadata,
+                tags);
+
+            Cache.Add(commit);
         }
 
-        var errorOutput = errorWriter.ToString();
-        if (!string.IsNullOrWhiteSpace(errorOutput))
-        {
-            _logger.LogError($"Git command '{arguments}' returned error: {errorOutput}");
-        }
-
-        var stdOutput = outWriter.ToString();
-        if (string.IsNullOrWhiteSpace(stdOutput))
-        {
-            _logger.LogWarning($"No response from git command 'git {arguments}'.");
-        }
-
-        return stdOutput;
-    }
-
-    private string GetBranchName()
-    {
-        return Repository.Head.FriendlyName;
+        return commit;
     }
 
     private Repository Repository => _repository ??= new Repository(RepositoryDirectory);
@@ -237,9 +167,9 @@ public class GitTool : IGitTool, IDisposable
     /// <summary>
     ///     Get next set of commits from head.
     /// </summary>
-    private async Task<IReadOnlyList<Commit>> GetCommitsAsync()
+    private IReadOnlyList<Commit> GetCommitsLibGit2Sharp()
     {
-        var commits = await GetCommitsLibGit2Sharp(_commitsReadCountFromHead, DefaultTakeLimit);
+        var commits = GetCommitsLibGit2Sharp(_commitsReadCountFromHead);
         if (_commitsReadCountFromHead == 0)
         {
             if (commits.Count == 0)
@@ -249,21 +179,6 @@ public class GitTool : IGitTool, IDisposable
             _head = commits[0];
         }
         _commitsReadCountFromHead += commits.Count;
-        return commits;
-    }
-
-    private IReadOnlyList<Commit> GetCommitsFromGitLog(string scopeArguments = "", IGitResponseParser? customParser = null)
-    {
-        return Task.Run(() => GetCommitsFromGitLogAsync(scopeArguments, customParser)).Result;
-    }
-
-    private async Task<IReadOnlyList<Commit>> GetCommitsFromGitLogAsync(string scopeArguments = "", IGitResponseParser? customParser = null)
-    {
-        var parser = customParser ?? _gitResponseParser;
-        var stdOutput = await RunAsync($"log {parser.FormatArgs} {scopeArguments}");
-        var lines = stdOutput.Split(parser.RecordSeparator);
-        var commits = lines.Select(line => parser.ParseGitLogLine(line)).OfType<Commit>().ToList();
-        _logger.LogTrace("Read {0} commits from git history.", commits.Count);
         return commits;
     }
 
@@ -277,21 +192,6 @@ public class GitTool : IGitTool, IDisposable
         var statusOptions = new StatusOptions();
         var status = Repository.RetrieveStatus(statusOptions);
         return Task.FromResult(status.IsDirty);
-    }
-
-    /// <summary>
-    ///     Get a semantic version representation of the Git version.
-    /// </summary>
-    private async Task<SemVersion?> GetVersionAsync()
-    {
-        var process = new ProcessCli(_logger);
-        var (returnCode, response) = await process.RunAsync("git", "--version");
-        if (returnCode != 0)
-        {
-            _logger.LogError($"Unable to read git version. Return code was '{returnCode}'. Git may not be executable from current directory.");
-        }
-
-        return _gitResponseParser.ParseGitVersionResponse(response);
     }
 
     private void PrimeCache()
@@ -308,14 +208,7 @@ public class GitTool : IGitTool, IDisposable
 
         _initialised = true;
 
-        var gitVersion = await GetVersionAsync();
-        if (gitVersion != null &&
-            gitVersion.ComparePrecedenceTo(_assumedLowestGitVersion) < 0)
-        {
-            _logger.LogError($"Git version {_assumedLowestGitVersion} or later is required.");
-        }
-
-        var commits = await GetCommitsAsync();
+        var commits = GetCommitsLibGit2Sharp();
         Cache.Add(commits.ToArray());
     }
 

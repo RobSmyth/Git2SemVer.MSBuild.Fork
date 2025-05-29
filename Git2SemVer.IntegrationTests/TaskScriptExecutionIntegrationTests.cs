@@ -1,9 +1,7 @@
 ﻿using NoeticTools.Git2SemVer.Core;
-using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.IntegrationTests.Framework;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
-using Task = System.Threading.Tasks.Task;
 
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -20,6 +18,12 @@ internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
     public void OneTimeSetup()
     {
         OneTimeSetUpBase();
+    }
+
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        OneTimeTearDownBase();
     }
 
     [SetUp]

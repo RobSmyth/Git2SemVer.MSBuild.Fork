@@ -33,98 +33,27 @@ public class GitToolIntegrationTests
         Assert.That(_target.BranchName, Is.Not.Empty);
     }
 
-    [TestCase(10)]
-    [TestCase(50)]
-    [TestCase(100)]
-    public void MeasurePerformanceTest(int numberToLoad)
+    [Test]
+    public void MeasurePerformanceTest()
     {
         var stopwatch = Stopwatch.StartNew();
 
-        _target.GetCommits(0, numberToLoad);
+        var commits = _target.GetCommitsLibGit2Sharp(0);
 
         stopwatch.Stop();
-        _logger.LogInfo($"Reading {numberToLoad} took {stopwatch.ElapsedMilliseconds/numberToLoad}ms per commit.");
+        _logger.LogInfo($"Reading commits took {stopwatch.ElapsedMilliseconds/commits.Count}ms per commit.");
     }
 
     [Test]
-    public void ContributingCommitsTest()
-    {
-        var commit = GetCommitAtIndex(_target, 10);
-
-        var contributingCommits = _target.GetContributingCommits(commit: _target.Head.CommitId, prior: commit.CommitId);
-
-        Assert.That(contributingCommits, Has.Count.AtLeast(10));
-    }
-
-    [TestCase(3)]
-    [TestCase(1)]
-    public void GetCommitsFromShaTest(int count)
+    public void GetCommitsFromShaTest()
     {
         var commit = GetCommitAtIndex(_target, 5);
 
-        var commits = _target.GetCommits(commit.CommitId.Sha, count);
+        var commits = _target.GetCommitsLibGit2Sharp(commit.CommitId.Sha);
 
-        Assert.That(commits, Has.Count.EqualTo(count));
+        Assert.That(commits, Has.Count.LessThan(301));
+        Assert.That(commits, Has.Count.GreaterThan(100));
         Assert.That(commits[0], Is.SameAs(commit));
-    }
-
-    [TestCase(3)]
-    [TestCase(1)]
-    public async Task GetCommitsAsyncFromShaTest(int count)
-    {
-        var commit = GetCommitAtIndex(_target, 5);
-
-        var commits = await _target.GetCommitsAsync(commit.CommitId.Sha, count);
-
-        Assert.That(commits, Has.Count.EqualTo(count));
-        Assert.That(commits[0], Is.SameAs(commit));
-    }
-
-    [Test]
-    public void GetCommitsInRangeUsingFluentApi()
-    {
-        var commit = GetCommitAtIndex(_target, 5);
-        var headCommitId = _target.Head.CommitId;
-
-        var commits = _target.GetCommits(x => x.ReachableFrom(headCommitId)
-                                               .NotReachableFrom(commit.CommitId));
-
-        var commitsInclusive = _target.GetCommits(x => x.ReachableFrom(headCommitId)
-                                                        .NotReachableFrom(commit.CommitId, inclusive: true));
-
-        Assert.That(commits, Has.Count.AtLeast(5));
-        Assert.That(commits[0].CommitId.ShortSha, Is.SameAs(headCommitId.ShortSha));
-        Assert.That(commitsInclusive, Has.Count.EqualTo(commits.Count + 1));
-    }
-
-    [Test]
-    public void GetCommitsWithMultipleExcludesUsingFluentApi()
-    {
-        var commit1 = GetCommitAtIndex(_target, 5).CommitId;
-        var commit2 = GetCommitAtIndex(_target, 6).CommitId;
-        CommitId[] commitIds = [commit1, commit2];
-        var headCommitId = _target.Head.CommitId;
-
-        var commits = _target.GetCommits(x => x.ReachableFromHead()
-                                               .NotReachableFrom(commitIds));
-
-        Assert.That(commits, Has.Count.AtLeast(5));
-        Assert.That(commits[0].CommitId.ShortSha, Is.SameAs(headCommitId.ShortSha));
-    }
-
-    [Test]
-    public void GetCommitsWithMultipleExcludingCallsUsingFluentApi()
-    {
-        var commit1 = GetCommitAtIndex(_target, 4).CommitId;
-        var commit2 = GetCommitAtIndex(_target, 6).CommitId;
-        var headCommitId = _target.Head.CommitId;
-
-        var commits = _target.GetCommits(x => x.ReachableFromHead()
-                                               .NotReachableFrom(commit1)
-                                               .NotReachableFrom(commit2));
-
-        Assert.That(commits, Has.Count.AtLeast(4));
-        Assert.That(commits[0].CommitId.ShortSha, Is.SameAs(headCommitId.ShortSha));
     }
 
     private static Commit GetCommitAtIndex(GitTool target, int index)
