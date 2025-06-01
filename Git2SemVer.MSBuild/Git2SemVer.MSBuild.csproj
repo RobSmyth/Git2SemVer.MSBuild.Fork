@@ -78,8 +78,18 @@
     <Content Include="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="buildmultitargeting/" />
     <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.props" PackagePath="build/" />
     <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="build/" />
+    <!-- Add LibGit2Sharp.NativeBinaries files to nuget pack -->
+
+    <Content Include="Content\runtimes\**\*">
+      <Pack>True</Pack>
+      <CopyToOutputDirectory>true</CopyToOutputDirectory>
+      <PackagePath>tasks/runtimes/%(RecursiveDir)</PackagePath>
+    </Content>
+
+    <!--
     <Content Include="$(OutputPath)git2-3f4182d.dll" PackagePath="tasks/netstandard2.0/" />
     <Content Include="$(OutputPath)libgit2-3f4182d.so" PackagePath="tasks/netstandard2.0/" />
+    -->
   </ItemGroup>
 
   <ItemGroup>
@@ -89,6 +99,17 @@
   <ItemGroup>
     <ProjectReference Include="..\Framework\Git2SemVer.Framework\Git2SemVer.Framework.csproj" />
   </ItemGroup>
+
+  <Target Name="CopyFiles" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
+    <ItemGroup>
+      <MySourceFiles Include="Content\runtimes\**\*.*"/>
+    </ItemGroup>
+
+    <Copy
+      SourceFiles="@(MySourceFiles)"
+      DestinationFolder="$(OutputPath)runtimes/%(RecursiveDir)"
+    />
+  </Target>
 
   <!-- Ensure that the Git2SemVer version information JSON file is available.  -->
   <Target Name="Git2SemVerEnsureVersionInfoBuilt" Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
