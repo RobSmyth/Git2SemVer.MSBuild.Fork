@@ -30,15 +30,6 @@ public class GitTool : IGitTool, IDisposable
         _logger = logger;
         RepositoryDirectory = Environment.CurrentDirectory;
         _metadataParser = new ConventionalCommitsParser();
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            var nativeLibraryPath = "/opt/TeamCity/buildAgent/work/5310bb125709005e/Git2SemVer.MSBuild/bin/Release/netstandard2.0/runtimes/linux-x64/native/libgit2-3f4182d.so";
-            if (!nativeLibraryPath.Equals(GlobalSettings.NativeLibraryPath))
-            {
-                GlobalSettings.NativeLibraryPath = nativeLibraryPath;
-            }
-        }
     }
 
     public string RepositoryDirectory
