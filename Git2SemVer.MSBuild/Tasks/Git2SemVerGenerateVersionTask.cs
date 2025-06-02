@@ -7,6 +7,7 @@ using NoeticTools.Git2SemVer.Framework;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using System.Runtime.InteropServices;
+using NoeticTools.Git2SemVer.MSBuild.LibGit2Interop;
 using ILogger = NoeticTools.Git2SemVer.Core.Logging.ILogger;
 using Platform = Microsoft.CodeAnalysis.Platform;
 
@@ -305,7 +306,7 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     /// </summary>
     private NativeLibrary LoadLibGit2SharpNative(ILogger logger)
     {
-        var runtimesFolder = Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location)!, "runtimes");
+        //var runtimesFolder = Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location)!, "runtimes");
 
         //var processArchitecture = "";
         //var processor = RuntimeInformation.ProcessArchitecture;
@@ -323,10 +324,10 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
 
         //}
 
-        var nativeLibraryPath = Path.Combine(runtimesFolder, @"win-x64\native\git2-3f4182d.dll");
-        logger.LogInfo($"== Run times folder = {nativeLibraryPath}");
+        //var nativeLibraryPath = Path.Combine(runtimesFolder, @"win-x64\native\git2-3f4182d.dll");
+        //logger.LogInfo($"== Run times folder = {nativeLibraryPath}");
 
-        return new NativeLibrary(nativeLibraryPath);
+        return new LibGit2NativeLibrary();
         //var platformDefaultLoader = LibraryLoader.GetPlatformDefaultLoader();
         //platformDefaultLoader.LoadNativeLibrary(nativeLibraryPath);
 
