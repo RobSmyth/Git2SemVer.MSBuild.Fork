@@ -3,6 +3,7 @@ using LibGit2Sharp;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
+using System.Runtime.InteropServices;
 
 
 #pragma warning disable SYSLIB1045
@@ -28,6 +29,12 @@ public class GitTool : IGitTool, IDisposable
         _logger = logger;
         RepositoryDirectory = Environment.CurrentDirectory;
         _metadataParser = new ConventionalCommitsParser();
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            GlobalSettings.NativeLibraryPath =
+                "/opt/TeamCity/buildAgent/work/5310bb125709005e/Git2SemVer.MSBuild/bin/Release/netstandard2.0/runtimes/linux-x64/native/libgit2-3f4182d.so";
+        }
     }
 
     public string RepositoryDirectory
