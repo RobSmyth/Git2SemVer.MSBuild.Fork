@@ -15,21 +15,21 @@ namespace NoeticTools.Git2SemVer.MSBuild.LibGit2Interop
         ///     Must match both the filenames used in both the 'LibGit2Sharp.NativeBinaries' and Git2SemVer runtimes folders.
         /// </remarks>
         private const string LibGit2Sha = "3f4182d";
+        private const string LibGit2BaseName = "git2";
 
         private static string GetFileName()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                // todo add 'lib' prefix programmatically
-                return $"libgit2-{LibGit2Sha}.dll"; 
+                return $"{LibGit2BaseName}-{LibGit2Sha}.dll"; 
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                return $"libgit2-{LibGit2Sha}.so";
+                return $"lib{LibGit2BaseName}-{LibGit2Sha}.so";
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                return $"git2-{LibGit2Sha}.dylib";
+                return $"lib{LibGit2BaseName}-{LibGit2Sha}.dylib";
             }
 
             throw new PlatformNotSupportedException($"The build host's platform '{RuntimeInformation.OSDescription}' is not supported. Windows, Linux, and OSX are supported");

@@ -8,7 +8,9 @@ namespace NoeticTools.Git2SemVer.MSBuild.LibGit2Interop
         public override IEnumerable<string> EnumeratePossibleLibraryLoadTargets(string name)
         {
             var basePath = Path.GetDirectoryName(GetType().Assembly.Location)!;
-            return [Path.Combine(basePath, GetRuntimePath(), name)];
+            var fullPath = Path.Combine(basePath, GetRuntimePath(), name);
+            Console.WriteLine($"=== Path = {fullPath}");
+            return [fullPath];
         }
 
         private static string GetRuntimePath()

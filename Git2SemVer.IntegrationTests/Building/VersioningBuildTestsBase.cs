@@ -1,4 +1,5 @@
 ﻿using NoeticTools.Git2SemVer.IntegrationTests.Framework;
+using System.Runtime.InteropServices;
 
 namespace NoeticTools.Git2SemVer.IntegrationTests.Building;
 
