@@ -10,6 +10,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.LibGit2Interop
             var basePath = Path.GetDirectoryName(GetType().Assembly.Location)!;
             var fullPath = Path.Combine(basePath, GetRuntimePath(), name);
             Console.WriteLine($"=== Path = {fullPath}");
+            Console.WriteLine($"=== OS = {RuntimeInformation.OSDescription} | {RuntimeInformation.ProcessArchitecture}");
             return [fullPath];
         }
 
@@ -23,7 +24,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.LibGit2Interop
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                return "runtimes/linux-x32/native";
+                return "runtimes/linux-x64/native";
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
