@@ -39,7 +39,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.LibGit2Interop
         }
 
         public LibGit2NativeLibrary() 
-            : base(GetFileName(), LibraryLoader.GetPlatformDefaultLoader(), new LibGit2NativeLibraryPathResolver())
+            : base("/opt/TeamCity/buildAgent/work/5310bb125709005e/Git2SemVer.MSBuild/bin/Release/netstandard2.0/runtimes/linux-x64/native/libgit2-3f4182d.so"/*GetFileName(), LibraryLoader.GetPlatformDefaultLoader(), new LibGit2NativeLibraryPathResolver()*/)
         {
         }
     }
