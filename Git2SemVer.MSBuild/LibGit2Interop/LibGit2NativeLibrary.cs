@@ -24,11 +24,11 @@ namespace NoeticTools.Git2SemVer.MSBuild.LibGit2Interop
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                return $"libgit2-{LibGit2Sha}.dylib";
+                return $"libgit2-{LibGit2Sha}.so";
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                return $"git2-{LibGit2Sha}.os";
+                return $"git2-{LibGit2Sha}.dylib";
             }
 
             throw new PlatformNotSupportedException($"The build host's platform '{RuntimeInformation.OSDescription}' is not supported. Windows, Linux, and OSX are supported");
