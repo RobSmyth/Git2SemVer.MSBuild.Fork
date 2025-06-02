@@ -330,7 +330,7 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            var nativeLibraryPath = "/opt/TeamCity/buildAgent/work/5310bb125709005e/Git2SemVer.MSBuild/bin/Release/netstandard2.0/runtimes/linux-x64/native/libgit2-3f4182d.so";
+            var nativeLibraryPath = "/opt/TeamCity/buildAgent/work/5310bb125709005e/Git2SemVer.MSBuild/bin/Release/netstandard2.0/runtimes/linux-x32/native/libgit2-3f4182d.so";
             if (!nativeLibraryPath.Equals(GlobalSettings.NativeLibraryPath))
             {
                 GlobalSettings.NativeLibraryPath = nativeLibraryPath;
