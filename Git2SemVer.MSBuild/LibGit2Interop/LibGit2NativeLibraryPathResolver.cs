@@ -15,6 +15,8 @@ namespace NoeticTools.Git2SemVer.MSBuild.LibGit2Interop
 
         private static string GetRuntimePath()
         {
+           // System.Environment.Is64BitOperatingSystem;
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 return "runtimes/win-x64/native";

@@ -21,14 +21,17 @@ namespace NoeticTools.Git2SemVer.MSBuild.LibGit2Interop
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
+                Console.WriteLine("== WIN");//>>>
                 return $"{LibGit2BaseName}-{LibGit2Sha}.dll"; 
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
+                Console.WriteLine("== Linux");//>>>
                 return $"lib{LibGit2BaseName}-{LibGit2Sha}.so";
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
+                Console.WriteLine("== OSX");//>>>
                 return $"lib{LibGit2BaseName}-{LibGit2Sha}.dylib";
             }
 
