@@ -1,10 +1,14 @@
 ﻿using Microsoft.Build.Framework;
+using Microsoft.DotNet.PlatformAbstractions;
+using NativeLibraryLoader;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Framework;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Generation;
+using System.Runtime.InteropServices;
 using ILogger = NoeticTools.Git2SemVer.Core.Logging.ILogger;
+using Platform = Microsoft.CodeAnalysis.Platform;
 
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
@@ -267,18 +271,21 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
         {
             logger.LogDebug("Executing Git2SemVer.MSBuild task to generate version. ({0})", DateTime.Now.ToString("r"));
 
-            try
+            using (LoadLibGit2SharpNative(logger))
             {
-                VersioningMode = (VersioningMode)Enum.Parse(typeof(VersioningMode), Mode);
-            }
-            catch (Exception exception)
-            {
-                throw new Git2SemVerConfigurationException($"Invalid Git2SemVer_Mode value '{Mode}'.", exception);
-            }
+                try
+                {
+                    VersioningMode = (VersioningMode)Enum.Parse(typeof(VersioningMode), Mode);
+                }
+                catch (Exception exception)
+                {
+                    throw new Git2SemVerConfigurationException($"Invalid Git2SemVer_Mode value '{Mode}'.", exception);
+                }
 
-            var versionGenerator = new ProjectVersioningFactory(logger).Create(this);
-            SetOutputs(versionGenerator.Run());
-            return !Log.HasLoggedErrors;
+                var versionGenerator = new ProjectVersioningFactory(logger).Create(this);
+                SetOutputs(versionGenerator.Run());
+                return !Log.HasLoggedErrors;
+            }
         }
 #pragma warning disable CA1031
         catch (Exception exception)
@@ -291,6 +298,39 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
         {
             logger.Dispose();
         }
+    }
+
+    /// <summary>
+    /// Load native library required for LibGit2Sharp to work.
+    /// </summary>
+    private NativeLibrary LoadLibGit2SharpNative(ILogger logger)
+    {
+        var runtimesFolder = Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location)!, "runtimes");
+
+        //var processArchitecture = "";
+        //var processor = RuntimeInformation.ProcessArchitecture;
+        //if (((int)processor) == 8)
+        //{
+        //    processArchitecture = "ppc64le"; // not tested
+        //}
+        //else
+        //{
+        //    ///Architecture.
+        //}
+
+        //if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        //{
+
+        //}
+
+        var nativeLibraryPath = Path.Combine(runtimesFolder, @"win-x64\native\git2-3f4182d.dll");
+        logger.LogInfo($"== Run times folder = {nativeLibraryPath}");
+
+        return new NativeLibrary(nativeLibraryPath);
+        //var platformDefaultLoader = LibraryLoader.GetPlatformDefaultLoader();
+        //platformDefaultLoader.LoadNativeLibrary(nativeLibraryPath);
+
+        //xxx // todo - create overload of PathResolver, see: https://github.com/mellinoe/nativelibraryloader/blob/master/NativeLibraryLoader/PathResolver.cs
     }
 
     public bool ValidateScriptInputs(ILogger logger)

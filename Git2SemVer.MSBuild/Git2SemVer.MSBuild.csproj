@@ -62,6 +62,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="4.11.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="9.0.0" PrivateAssets="all" />
+    <PackageReference Include="NativeLibraryLoader" Version="1.0.13" />
     <PackageReference Include="NuGet.Versioning" Version="6.12.1" PrivateAssets="all" />
     <PackageReference Include="Semver" Version="[2.3.0]" PrivateAssets="all" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" PrivateAssets="all" />
@@ -78,12 +79,19 @@
     <Content Include="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="buildmultitargeting/" />
     <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.props" PackagePath="build/" />
     <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="build/" />
-    <!-- Add LibGit2Sharp.NativeBinaries files to nuget pack -->
+  </ItemGroup>
 
+  <!-- Add LibGit2Sharp.NativeBinaries files to nuget pack -->
+  <ItemGroup>
     <Content Include="Content\runtimes\**\*">
       <Pack>True</Pack>
       <CopyToOutputDirectory>true</CopyToOutputDirectory>
-      <PackagePath>tasks/runtimes/%(RecursiveDir)</PackagePath>
+      <PackagePath>tasks/$(TargetFramework)/runtimes/%(RecursiveDir)</PackagePath>
+    </Content>
+    <Content Include="Content\runtimes\**\*">
+      <Pack>True</Pack>
+      <CopyToOutputDirectory>true</CopyToOutputDirectory>
+      <PackagePath>tasks/$(TargetFramework)/lib/%(RecursiveDir)</PackagePath>
     </Content>
 
     <!--
@@ -97,18 +105,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Core\Core\Git2SemVer.Core.csproj" />
     <ProjectReference Include="..\Framework\Git2SemVer.Framework\Git2SemVer.Framework.csproj" />
   </ItemGroup>
 
-  <Target Name="CopyFiles" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
+  <ItemGroup>
+    <None Update="Content\jsconfig1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+    <Target Name="CopyFiles" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
     <ItemGroup>
-      <MySourceFiles Include="Content\runtimes\**\*.*"/>
+      <MySourceFiles Include="Content\runtimes\**\*.*" />
     </ItemGroup>
 
-    <Copy
-      SourceFiles="@(MySourceFiles)"
-      DestinationFolder="$(OutputPath)runtimes/%(RecursiveDir)"
-    />
+    <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutputPath)runtimes/%(RecursiveDir)" />
+    <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutputPath)lib/%(RecursiveDir)" />
   </Target>
 
   <!-- Ensure that the Git2SemVer version information JSON file is available.  -->
