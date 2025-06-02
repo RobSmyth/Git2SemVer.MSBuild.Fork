@@ -7,6 +7,7 @@ using NoeticTools.Git2SemVer.Framework;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using System.Runtime.InteropServices;
+using LibGit2Sharp;
 using NoeticTools.Git2SemVer.MSBuild.LibGit2Interop;
 using ILogger = NoeticTools.Git2SemVer.Core.Logging.ILogger;
 using Platform = Microsoft.CodeAnalysis.Platform;
@@ -326,6 +327,15 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
 
         //var nativeLibraryPath = Path.Combine(runtimesFolder, @"win-x64\native\git2-3f4182d.dll");
         //logger.LogInfo($"== Run times folder = {nativeLibraryPath}");
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            var nativeLibraryPath = "/opt/TeamCity/buildAgent/work/5310bb125709005e/Git2SemVer.MSBuild/bin/Release/netstandard2.0/runtimes/linux-x64/native/libgit2-3f4182d.so";
+            if (!nativeLibraryPath.Equals(GlobalSettings.NativeLibraryPath))
+            {
+                GlobalSettings.NativeLibraryPath = nativeLibraryPath;
+            }
+        }
 
         return new LibGit2NativeLibrary();
         //var platformDefaultLoader = LibraryLoader.GetPlatformDefaultLoader();
