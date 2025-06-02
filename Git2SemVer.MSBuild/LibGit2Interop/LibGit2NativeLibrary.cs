@@ -20,7 +20,8 @@ namespace NoeticTools.Git2SemVer.MSBuild.LibGit2Interop
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                return $"libgit2-{LibGit2Sha}.dll";
+                // todo add 'lib' prefix programmatically
+                return $"libgit2-{LibGit2Sha}.dll"; 
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
