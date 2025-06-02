@@ -1,4 +1,5 @@
-﻿using NativeLibraryLoader;
+﻿using LibGit2Sharp;
+using NativeLibraryLoader;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -39,8 +40,14 @@ namespace NoeticTools.Git2SemVer.MSBuild.LibGit2Interop
         }
 
         public LibGit2NativeLibrary() 
-            : base("/opt/TeamCity/buildAgent/work/5310bb125709005e/Git2SemVer.MSBuild/bin/Release/netstandard2.0/runtimes/linux-x64/native/libgit2-3f4182d.so"/*GetFileName(), LibraryLoader.GetPlatformDefaultLoader(), new LibGit2NativeLibraryPathResolver()*/)
+            : base(GetFileName(), LibraryLoader.GetPlatformDefaultLoader(), new LibGit2NativeLibraryPathResolver())
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                GlobalSettings.NativeLibraryPath =
+                    "/opt/TeamCity/buildAgent/work/5310bb125709005e/Git2SemVer.MSBuild/bin/Release/netstandard2.0/runtimes/linux-x64/native/libgit2-3f4182d.so";
+            }
+            // "/opt/TeamCity/buildAgent/work/5310bb125709005e/Git2SemVer.MSBuild/bin/Release/netstandard2.0/runtimes/linux-x64/native/libgit2-3f4182d.so"
         }
     }
 }
