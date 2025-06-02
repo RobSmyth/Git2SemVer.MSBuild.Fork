@@ -23,7 +23,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.LibGit2Interop
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                return "runtimes/linux-x64/native";
+                return "runtimes/linux-x32/native";
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
