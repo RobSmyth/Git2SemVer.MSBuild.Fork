@@ -1,11 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using Microsoft.Build.Utilities;
 using NoeticTools.Git2SemVer.Core;
-using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 using Semver;
-
 
 namespace NoeticTools.Git2SemVer.Framework.Generation;
 
@@ -39,8 +36,7 @@ public sealed class VersionOutputs : IVersionOutputs
 
     public bool IsInInitialDevelopment { get; set; }
 
-    [JsonIgnore]
-    public bool IsValid => BuildNumber.Length > 0;
+    [JsonIgnore] public bool IsValid => BuildNumber.Length > 0;
 
     public string Output1 { get; set; } = "";
 
@@ -53,34 +49,6 @@ public sealed class VersionOutputs : IVersionOutputs
 
     [JsonConverter(typeof(SemVersionJsonConverter))]
     public SemVersion? Version { get; set; }
-
-    public void SetAllVersionPropertiesFrom([DisallowNull] SemVersion informationalVersion,
-                                            string buildNumber,
-                                            string buildContext)
-    {
-        SetAllVersionPropertiesFrom(informationalVersion);
-        BuildNumber = buildNumber;
-        BuildContext = buildContext;
-    }
-
-    public void SetAllVersionPropertiesFrom([DisallowNull] SemVersion informationalVersion)
-    {
-        Ensure.NotNull(informationalVersion, nameof(informationalVersion));
-
-        var version = informationalVersion.WithoutMetadata();
-        var versionPrefix = informationalVersion.WithoutMetadata()
-                                                .WithoutPrerelease();
-        InformationalVersion = informationalVersion;
-        Version = version;
-        AssemblyVersion = new Version(versionPrefix.ToString());
-        FileVersion = new Version(versionPrefix.ToString());
-        PackageVersion = version;
-        BuildSystemVersion = version;
-        PrereleaseLabel = informationalVersion.IsRelease
-            ? ""
-            : informationalVersion.PrereleaseIdentifiers[0];
-        IsInInitialDevelopment = informationalVersion.Major == 0;
-    }
 
     public string GetReport()
     {
@@ -96,4 +64,33 @@ public sealed class VersionOutputs : IVersionOutputs
                 """;
     }
 
+    public void SetAllVersionPropertiesFrom(SemVersion informationalVersion,
+        string buildNumber,
+        string buildContext)
+    {
+        Ensure.NotNull(informationalVersion, nameof(informationalVersion));
+
+        SetAllVersionPropertiesFrom(informationalVersion);
+        BuildNumber = buildNumber;
+        BuildContext = buildContext;
+    }
+
+    public void SetAllVersionPropertiesFrom(SemVersion informationalVersion)
+    {
+        Ensure.NotNull(informationalVersion, nameof(informationalVersion));
+
+        var version = informationalVersion.WithoutMetadata();
+        var versionPrefix = informationalVersion.WithoutMetadata()
+            .WithoutPrerelease();
+        InformationalVersion = informationalVersion;
+        Version = version;
+        AssemblyVersion = new Version(versionPrefix.ToString());
+        FileVersion = new Version(versionPrefix.ToString());
+        PackageVersion = version;
+        BuildSystemVersion = version;
+        PrereleaseLabel = informationalVersion.IsRelease
+            ? ""
+            : informationalVersion.PrereleaseIdentifiers[0];
+        IsInInitialDevelopment = informationalVersion.Major == 0;
+    }
 }
