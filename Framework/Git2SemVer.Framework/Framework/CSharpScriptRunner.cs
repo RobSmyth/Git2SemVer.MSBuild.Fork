@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.CodeAnalysis.Scripting.Hosting;
 using Microsoft.Extensions.Primitives;
+using NoeticTools.Git2SemVer.Core;
 using NoeticTools.Git2SemVer.Core.Logging;
 using Task = System.Threading.Tasks.Task;
 
@@ -35,6 +36,11 @@ public sealed class CSharpScriptRunner
                                 IReadOnlyList<Type> metadataReferences,
                                 IList<Type> inMemoryTypes)
     {
+        Ensure.NotNull(globalContext, nameof(globalContext));
+        Ensure.NotNull(scriptPath, nameof(scriptPath));
+        Ensure.NotNull(scriptPath, nameof(metadataReferences));
+        Ensure.NotNull(inMemoryTypes, nameof(inMemoryTypes));
+
         try
         {
             if (_logger.HasError)

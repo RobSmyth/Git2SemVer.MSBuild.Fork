@@ -54,7 +54,7 @@ public sealed class VersionOutputs : IVersionOutputs
     [JsonConverter(typeof(SemVersionJsonConverter))]
     public SemVersion? Version { get; set; }
 
-    public void SetAllVersionPropertiesFrom(SemVersion informationalVersion,
+    public void SetAllVersionPropertiesFrom([DisallowNull] SemVersion informationalVersion,
                                             string buildNumber,
                                             string buildContext)
     {
@@ -63,9 +63,9 @@ public sealed class VersionOutputs : IVersionOutputs
         BuildContext = buildContext;
     }
 
-    public void SetAllVersionPropertiesFrom(SemVersion informationalVersion)
+    public void SetAllVersionPropertiesFrom([DisallowNull] SemVersion informationalVersion)
     {
-        Ensure.ArgumentNotNull(informationalVersion, nameof(informationalVersion));
+        Ensure.NotNull(informationalVersion, nameof(informationalVersion));
 
         var version = informationalVersion.WithoutMetadata();
         var versionPrefix = informationalVersion.WithoutMetadata()
