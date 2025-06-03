@@ -271,7 +271,7 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
         {
             logger.LogDebug("Executing Git2SemVer.MSBuild task to generate version. ({0})", DateTime.Now.ToString("r"));
 
-            using (LoadLibGit2SharpNative(logger))  //<<< work for windows
+            LoadLibGit2SharpNative(logger);  //<<< work for windows
             {
                 try
                 {
@@ -303,7 +303,7 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     /// <summary>
     /// Load native library required for LibGit2Sharp to work.
     /// </summary>
-    private NativeLibrary LoadLibGit2SharpNative(ILogger logger)
+    private void LoadLibGit2SharpNative(ILogger logger)
     {
 
         var basePath = Path.GetDirectoryName(GetType().Assembly.Location)!;
@@ -329,7 +329,7 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
             logger.LogInfo($"== GlobalSettings.NativeLibraryPath = {GlobalSettings.NativeLibraryPath}");
         }
 
-        return new LibGit2NativeLibrary();
+        //return new LibGit2NativeLibrary();
         //var platformDefaultLoader = LibraryLoader.GetPlatformDefaultLoader();
         //platformDefaultLoader.LoadNativeLibrary(nativeLibraryPath);
 
