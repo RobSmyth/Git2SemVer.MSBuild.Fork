@@ -109,12 +109,6 @@
     <ProjectReference Include="..\Framework\Git2SemVer.Framework\Git2SemVer.Framework.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Content\jsconfig1.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
     <Target Name="CopyFiles" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
     <ItemGroup>
       <MySourceFiles Include="Content\runtimes\**\*.*" />
