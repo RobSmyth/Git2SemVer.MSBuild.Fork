@@ -39,6 +39,7 @@ internal abstract class ProjectVersioningUnitTestsBase
     [TearDown]
     public void TearDown()
     {
+        Target.Dispose();
         _logger.Dispose();
     }
 

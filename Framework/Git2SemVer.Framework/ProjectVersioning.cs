@@ -8,7 +8,7 @@ using NoeticTools.Git2SemVer.Framework.Persistence;
 
 namespace NoeticTools.Git2SemVer.Framework;
 
-public sealed class ProjectVersioning
+public sealed class ProjectVersioning : IDisposable
 {
     private readonly IBuildHost _host;
     private readonly IVersionGeneratorInputs _inputs;
@@ -98,5 +98,10 @@ public sealed class ProjectVersioning
         {
             _host.SetBuildLabel(output.BuildSystemVersion.ToString());
         }
+    }
+
+    public void Dispose()
+    {
+        _versionGenerator.Dispose();
     }
 }

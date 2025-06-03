@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 
 [RegisterTransient]
-public class GitTool : IGitTool, IDisposable
+public class GitTool : IGitTool
 {
     private const int TakeLimit = 300;
     private readonly ICommitsCache? _cache;
