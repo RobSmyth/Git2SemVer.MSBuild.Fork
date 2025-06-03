@@ -23,13 +23,13 @@ public sealed class MSBuildGlobalProperties
     public MSBuildGlobalProperties(IBuildEngine6 buildEngine)
     {
         All = buildEngine.GetGlobalProperties();
-        Language = GetStringValue("Language");
-        Configuration = GetStringValue("Configuration");
-        LangId = GetStringValue("LangId");
-        SolutionDir = GetStringValue("SolutionDir");
-        Platform = GetStringValue("Platform");
-        SolutionExt = GetStringValue("SolutionExt");
-        BuildingInsideVisualStudio = GetBoolValue("BuildingInsideVisualStudio");
+        Language = GetStringValue(nameof(Language));
+        Configuration = GetStringValue(nameof(Configuration));
+        LangId = GetStringValue(nameof(LangId));
+        SolutionDir = GetStringValue(nameof(SolutionDir));
+        Platform = GetStringValue(nameof(Platform));
+        SolutionExt = GetStringValue(nameof(SolutionExt));
+        BuildingInsideVisualStudio = GetBoolValue(nameof(BuildingInsideVisualStudio));
 
         var projectConfiguration = GetStringValue("ProjectConfiguration");
         if (string.IsNullOrWhiteSpace(projectConfiguration))
