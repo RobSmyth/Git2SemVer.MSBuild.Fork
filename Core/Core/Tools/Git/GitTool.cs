@@ -19,7 +19,7 @@ public class GitTool : IGitTool, IDisposable
     private readonly ILogger _logger;
     private Commit? _head;
     private bool _initialised;
-    private string _repositoryDirectory;
+    private string _repositoryDirectory = null!;
     private Repository? _repository;
     private readonly ConventionalCommitsParser _metadataParser;
 

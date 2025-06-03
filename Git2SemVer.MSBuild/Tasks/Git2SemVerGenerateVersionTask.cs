@@ -11,6 +11,7 @@ using LibGit2Sharp;
 using NoeticTools.Git2SemVer.MSBuild.LibGit2Interop;
 using ILogger = NoeticTools.Git2SemVer.Core.Logging.ILogger;
 using Platform = Microsoft.CodeAnalysis.Platform;
+using NativeLibrary = NativeLibraryLoader.NativeLibrary;
 
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global

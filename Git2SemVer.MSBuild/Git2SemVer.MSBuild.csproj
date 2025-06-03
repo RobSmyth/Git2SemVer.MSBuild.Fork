@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>net8.0;net472</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -55,7 +55,6 @@
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
-    <PackageReference Include="JsonPeek" Version="1.2.0" />
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.4" PrivateAssets="all" ExcludeAssets="Runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -63,6 +62,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="4.11.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="9.0.0" PrivateAssets="all" />
     <PackageReference Include="NativeLibraryLoader" Version="1.0.13" />
+    <PackageReference Include="NoeticTools.JsonPeek" Version="1.0.2" />
     <PackageReference Include="NuGet.Versioning" Version="6.12.1" PrivateAssets="all" />
     <PackageReference Include="Semver" Version="[2.3.0]" PrivateAssets="all" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" PrivateAssets="all" />
@@ -83,6 +83,7 @@
 
   <!-- Add LibGit2Sharp.NativeBinaries files to nuget pack -->
   <ItemGroup>
+    <!--
     <Content Include="Content\runtimes\**\*">
       <Pack>True</Pack>
       <CopyToOutputDirectory>true</CopyToOutputDirectory>
@@ -93,6 +94,8 @@
       <CopyToOutputDirectory>true</CopyToOutputDirectory>
       <PackagePath>tasks/$(TargetFramework)/lib/%(RecursiveDir)</PackagePath>
     </Content>
+    
+    -->
 
     <!--
     <Content Include="$(OutputPath)git2-3f4182d.dll" PackagePath="tasks/netstandard2.0/" />

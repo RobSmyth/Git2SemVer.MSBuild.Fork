@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>net8.0;net472</TargetFrameworks>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
@@ -44,11 +44,11 @@
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
-    <PackageReference Include="JsonPeek" Version="1.2.0" />
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.4" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.11.0" />
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="9.0.0" />
+    <PackageReference Include="NoeticTools.JsonPeek" Version="1.0.2" />
     <PackageReference Include="NuGet.Versioning" Version="6.12.1" />
     <PackageReference Include="TeamCity.ServiceMessages" Version="4.1.1" />
   </ItemGroup>
