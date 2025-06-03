@@ -328,10 +328,20 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
         //var nativeLibraryPath = Path.Combine(runtimesFolder, @"win-x64\native\git2-3f4182d.dll");
         //logger.LogInfo($"== Run times folder = {nativeLibraryPath}");
 
+        var basePath = Path.GetDirectoryName(GetType().Assembly.Location);
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            var nativeLibraryPath = $"{basePath}/runtimes/win-x64/native/git2-3f4182d.so";
+            if (!nativeLibraryPath.Equals(GlobalSettings.NativeLibraryPath))
+            {
+                GlobalSettings.NativeLibraryPath = nativeLibraryPath;
+            }
+        }
+
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            var assemblyDir = Path.GetDirectoryName(GetType().Assembly.Location);
-            var nativeLibraryPath = $"{assemblyDir}/runtimes/linux-x32/native/libgit2-3f4182d.so";
+            var nativeLibraryPath = $"{basePath}/runtimes/linux-x64/native/libgit2-3f4182d.so";
             if (!nativeLibraryPath.Equals(GlobalSettings.NativeLibraryPath))
             {
                 GlobalSettings.NativeLibraryPath = nativeLibraryPath;
