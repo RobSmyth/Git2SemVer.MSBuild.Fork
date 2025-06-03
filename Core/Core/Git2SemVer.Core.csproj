@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="LibGit2Sharp" Version="[0.31.0]" NoWarn="NU1701" />
+    <PackageReference Include="LibGit2Sharp" Version="[0.31.0]" />
     <PackageReference Include="NoeticTools.JsonPeek" Version="1.0.2" />
     <PackageReference Include="Semver" Version="[2.3.0]" />
     <PackageReference Include="Injectio" Version="4.0.0" />
@@ -97,7 +97,10 @@
 
 
   <!-- Ensure that the Git2SemVer version information JSON file is available.  -->
-  <Target Name="Git2SemVerEnsureVersionInfoBuilt" Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
+  <Target Name="Git2SemVerEnsureVersionInfoBuilt" 
+          Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'" 
+          AfterTargets="PrepareResources" 
+          BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
 
     <PropertyGroup>
       <SharedPropsFileExists Condition="Exists($(Git2SemVer_SharedVersioningJsonFile))">true</SharedPropsFileExists>

@@ -1,6 +1,4 @@
 ﻿using Microsoft.Build.Framework;
-using Microsoft.DotNet.PlatformAbstractions;
-using NativeLibraryLoader;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Framework;
@@ -10,7 +8,6 @@ using System.Runtime.InteropServices;
 using LibGit2Sharp;
 using NoeticTools.Git2SemVer.MSBuild.LibGit2Interop;
 using ILogger = NoeticTools.Git2SemVer.Core.Logging.ILogger;
-using Platform = Microsoft.CodeAnalysis.Platform;
 using NativeLibrary = NativeLibraryLoader.NativeLibrary;
 
 
