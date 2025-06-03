@@ -17,7 +17,7 @@
     <SuppressDependenciesWhenPacking>false</SuppressDependenciesWhenPacking>
     <GenerateDependencyFile>true</GenerateDependencyFile>
     <UpdateVersionProperties>true</UpdateVersionProperties>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageOutputPath>./nupkg</PackageOutputPath>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
@@ -71,6 +71,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core\Git2SemVer.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="nupkg\" />
   </ItemGroup>
 
   <!-- Ensure that the Git2SemVer version information JSON file is available.  -->

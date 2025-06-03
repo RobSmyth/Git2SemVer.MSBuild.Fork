@@ -18,7 +18,7 @@
     <SuppressDependenciesWhenPacking>false</SuppressDependenciesWhenPacking>
     <GenerateDependencyFile>true</GenerateDependencyFile>
     <UpdateVersionProperties>true</UpdateVersionProperties>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageOutputPath>./nupkg</PackageOutputPath>
     <RepositoryUrl>https://github.com/NoeticTools/Git2SemVer.Core</RepositoryUrl>
   </PropertyGroup>
@@ -44,39 +44,6 @@
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
-  <!-- Add LibGit2Sharp.NativeBinaries files to nuget pack -->
-  <!--
-  <ItemGroup>
-    <Content Include="Content\runtimes\**\*">
-      <Pack>True</Pack>
-      <CopyToOutputDirectory>true</CopyToOutputDirectory>
-      <PackagePath>tasks/$(TargetFramework)/runtimes/%(RecursiveDir)</PackagePath>
-    </Content>
-    <Content Include="Content\runtimes\**\*">
-      <Pack>True</Pack>
-      <CopyToOutputDirectory>true</CopyToOutputDirectory>
-      <PackagePath>tasks/$(TargetFramework)/lib/%(RecursiveDir)</PackagePath>
-    </Content>
-  </ItemGroup>
-  -->
-
-  <!--
-  <Target Name="CopyFiles" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
-    <ItemGroup>
-      <MySourceFiles Include="Content\runtimes\**\*.*"/>
-    </ItemGroup>
-
-    <Copy
-      SourceFiles="@(MySourceFiles)"
-      DestinationFolder="$(OutputPath)runtimes/%(RecursiveDir)"
-    />
-    <Copy
-      SourceFiles="@(MySourceFiles)"
-      DestinationFolder="$(OutputPath)lib/%(RecursiveDir)"
-    />
-  </Target>
-  -->
-
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
@@ -95,11 +62,9 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Content\" />
-  </ItemGroup>
-
-  <UsingTask TaskName="WaitFor" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+  <UsingTask TaskName="WaitFor" 
+             TaskFactory="RoslynCodeTaskFactory" 
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
     <ParameterGroup>
       <FilePath ParameterType="System.String" Required="true" />
       <Delay ParameterType="System.Int32" Required="true" />
