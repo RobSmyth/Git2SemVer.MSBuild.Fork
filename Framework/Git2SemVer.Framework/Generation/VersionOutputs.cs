@@ -1,5 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 using Microsoft.Build.Utilities;
+using NoeticTools.Git2SemVer.Core;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 using Semver;
@@ -63,6 +65,8 @@ public sealed class VersionOutputs : IVersionOutputs
 
     public void SetAllVersionPropertiesFrom(SemVersion informationalVersion)
     {
+        Ensure.ArgumentNotNull(informationalVersion, nameof(informationalVersion));
+
         var version = informationalVersion.WithoutMetadata();
         var versionPrefix = informationalVersion.WithoutMetadata()
                                                 .WithoutPrerelease();
