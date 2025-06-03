@@ -100,7 +100,7 @@ public sealed class CSharpScriptRunner
         types = types.Distinct().ToList();
         var assemblies = types.Select(x => x.Assembly).Distinct().ToList();
         var namespaces = types.Select(x => x.Namespace).Distinct();
-        ReferencedAssemblies = assemblies.Select(x => x.GetName().Name).ToList();
+        ReferencedAssemblies = assemblies.Select(x => x.GetName().Name!).ToList();
 
         var scriptOptions = ScriptOptions.Default;
         scriptOptions = scriptOptions.AddReferences(assemblies);

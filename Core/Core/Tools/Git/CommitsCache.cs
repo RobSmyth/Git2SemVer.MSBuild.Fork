@@ -29,7 +29,7 @@ public sealed class CommitsCache : ICommitsCache
 
     public bool TryGet(string commitSha, out Commit commit1)
     {
-        return _commitsBySha.TryGetValue(commitSha, out commit1);
+        return _commitsBySha.TryGetValue(commitSha, out commit1!);
     }
 
     public void Add(params Commit[] commits)
