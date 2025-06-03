@@ -306,28 +306,30 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     private void LoadLibGit2SharpNative(ILogger logger)
     {
 
-        var basePath = Path.GetDirectoryName(GetType().Assembly.Location)!;
+        //var basePath = Path.GetDirectoryName(GetType().Assembly.Location)!;
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            var nativeLibraryPath = Path.Combine(basePath, "runtimes/win-x64/native/git2-3f4182d.so");
-            if (!nativeLibraryPath.Equals(GlobalSettings.NativeLibraryPath))
-            {
-                GlobalSettings.NativeLibraryPath = nativeLibraryPath;
-            }
-        }
+        //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        //{
+        //    var nativeLibraryPath = Path.Combine(basePath, "runtimes/win-x64/native/git2-3f4182d.so");
+        //    if (!nativeLibraryPath.Equals(GlobalSettings.NativeLibraryPath))
+        //    {
+        //        GlobalSettings.NativeLibraryPath = nativeLibraryPath;
+        //    }
+        //}
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            var nativeLibraryPath = $"{basePath}/runtimes/linux-x64/native/libgit2-3f4182d.so";
-            if (!nativeLibraryPath.Equals(GlobalSettings.NativeLibraryPath))
-            {
-                GlobalSettings.NativeLibraryPath = nativeLibraryPath;
-            }
+        //if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        //{
+        //    var nativeLibraryPath = $"{basePath}/runtimes/linux-x64/native/libgit2-3f4182d.so";
+        //    if (!nativeLibraryPath.Equals(GlobalSettings.NativeLibraryPath))
+        //    {
+        //        GlobalSettings.NativeLibraryPath = nativeLibraryPath;
+        //    }
 
-            logger.LogInfo($"== nativeLibraryPath = {nativeLibraryPath} | {File.Exists(nativeLibraryPath)}");
-            logger.LogInfo($"== GlobalSettings.NativeLibraryPath = {GlobalSettings.NativeLibraryPath}");
-        }
+        //    logger.LogInfo($"== nativeLibraryPath = {nativeLibraryPath} | {File.Exists(nativeLibraryPath)}");
+        //    logger.LogInfo($"== GlobalSettings.NativeLibraryPath = {GlobalSettings.NativeLibraryPath}");
+        //}
+
+
 
         //return new LibGit2NativeLibrary();
         //var platformDefaultLoader = LibraryLoader.GetPlatformDefaultLoader();
