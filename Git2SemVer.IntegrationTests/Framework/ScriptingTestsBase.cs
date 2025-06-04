@@ -11,6 +11,7 @@ internal abstract class ScriptingTestsBase
 {
     private const int MaximumTestDataFolders = 20;
     private static int _testDataFolderId; // avoid locks on folders not release quickly between tests
+    // ReSharper disable once ChangeFieldTypeToSystemThreadingLock
     private static readonly object SyncToken = new();
 
     protected string TestFolderPath = "";

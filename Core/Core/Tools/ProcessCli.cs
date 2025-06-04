@@ -153,20 +153,14 @@ public sealed class ProcessCli : IProcessCli
         process.BeginErrorReadLine();
 
         var standardOutput = await process.StandardOutput.ReadToEndAsync();
-        if (standardOutput == null)
-        {
-            Logger.LogError($"Unable to read standard output from command '{application} {commandLineArguments}'.");
-        }
-        else
-        {
-            await standardOut.WriteAsync(standardOutput);
-        }
+        await standardOut.WriteAsync(standardOutput);
 
         var completed = process.WaitForExit(TimeLimitMilliseconds);
         if (completed)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
+                // ReSharper disable once MethodHasAsyncOverload
                 process.WaitForExit();
             }
         }

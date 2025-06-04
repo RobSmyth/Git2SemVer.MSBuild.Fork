@@ -51,6 +51,7 @@ public class CommitMessageMetadata
 
     private CommitChangeTypeId ToChangeTypeId(string value)
     {
+        // ReSharper disable once CanSimplifyDictionaryTryGetValueWithGetValueOrDefault
         if (ChangeTypeIdLookup.TryGetValue(value, out var changeTypeId))
         {
             return changeTypeId;

@@ -11,6 +11,7 @@ public sealed class CommitsCache : ICommitsCache
     {
         foreach (var commit in commits)
         {
+            // ReSharper disable once CanSimplifyDictionaryLookupWithTryAdd
             if (!_commitsBySha.ContainsKey(commit.CommitId.Sha))
             {
                 _commitsBySha.Add(commit.CommitId.Sha, commit);

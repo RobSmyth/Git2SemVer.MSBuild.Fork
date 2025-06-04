@@ -24,7 +24,7 @@ public sealed class CSharpScriptRunner
 {
     private readonly ILogger _logger;
 
-    public CSharpScriptRunner(ILogger logger)
+    internal CSharpScriptRunner(ILogger logger)
     {
         _logger = logger;
     }
