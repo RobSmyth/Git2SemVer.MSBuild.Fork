@@ -96,6 +96,11 @@ dotnet_diagnostic.CA1860.severity = none
 dotnet_diagnostic.CA1859.severity = none
 
 
+#### Disable rules that are better handled in Resharper's code analysis
+
+# CA1062: In externally visible method '<method>', validate parameter '<parameter>' is non-null before using it.
+dotnet_diagnostic.CA1062.severity = none
+
 #### Disable rules that are not valie for .NET 4.72 builds
 
 # CA1864: Prefer the 'IDictionary.TryAdd(TKey, TValue)'
