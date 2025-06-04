@@ -101,7 +101,7 @@ Log.LogError($"Waited but couldn't find {this.FilePath}.");
 
     <MSBuild Projects="$(Git2SemVer_VersioningProjectPath)" Condition=" '$(SharedPropsFileExists)' == 'false' " />
 
-    <WaitFor FilePath="$(Git2SemVer_SharedVersioningJsonFile)" Delay="30000" />
+    <WaitFor FilePath="$(Git2SemVer_SharedVersioningJsonFile)" Delay="60000" />
 
   </Target>
 
