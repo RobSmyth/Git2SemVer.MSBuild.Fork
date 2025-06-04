@@ -91,7 +91,7 @@ internal sealed class VersionHistoryPathsBuilder
         return childSegmentsLookup;
     }
 
-    private void LogFoundPaths(HistoryPaths paths, TimeSpan timeTaken)
+    private void LogFoundPaths(IHistoryPaths paths, TimeSpan timeTaken)
     {
         var stringBuilder = new StringBuilder();
 

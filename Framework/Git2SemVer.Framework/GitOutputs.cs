@@ -20,7 +20,7 @@ public sealed class GitOutputs : IGitOutputs
     {
         LastReleaseVersion = paths.BestPath.LastReleasedVersion;
         LastReleaseCommit = paths.BestPath.LastReleasedVersion == null ? null : paths.BestPath.FirstCommit;
-        HeadCommit = paths.HeadCommit;
+        HeadCommit = paths.BestPath.HeadCommit;
         BranchName = gitTool.BranchName;
         CommitsSinceLastRelease = paths.BestPath.CommitsSinceLastRelease;
         HasLocalChanges = gitTool.HasLocalChanges;

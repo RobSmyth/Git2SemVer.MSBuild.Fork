@@ -20,16 +20,6 @@ internal abstract class ScriptingTestsBase
 
     protected ILogger Logger { get; private set; } = null!;
 
-    protected string DeployScript(string destinationDirectory, string scriptFilename)
-    {
-        lock (SyncToken)
-        {
-            var scriptPath = Path.Combine(destinationDirectory, scriptFilename);
-            GetType().Assembly.WriteResourceFile(scriptFilename, scriptPath);
-            return scriptPath;
-        }
-    }
-
     protected void OneTimeSetUpBase()
     {
         Logger = new NUnitLogger(); // todo - Logger is set here and in the SetUpBase method

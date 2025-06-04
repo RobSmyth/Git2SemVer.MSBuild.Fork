@@ -11,7 +11,7 @@ internal sealed class VersionHistorySegmentsBuilder
     private readonly IGitTool _gitTool;
     private readonly ILogger _logger;
     private readonly VersionHistorySegment _segment;
-    private readonly VersionHistorySegmentFactory _segmentFactory;
+    private readonly IVersionHistorySegmentFactory _segmentFactory;
     private readonly Dictionary<int, VersionHistorySegment> _segments = [];
 
     private VersionHistorySegmentsBuilder(VersionHistorySegment segment, VersionHistorySegmentsBuilder parent)
@@ -171,7 +171,6 @@ internal sealed class VersionHistorySegmentsBuilder
 
     private enum SegmentWalkResult
     {
-        Unknown = 0,
         Continue,
         FoundStart
     }

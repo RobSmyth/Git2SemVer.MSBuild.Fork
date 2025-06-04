@@ -22,6 +22,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.Tasks;
 ///         This class exposed properties for inputs from the MSBuild environment and outputs to the environment.
 ///     </para>
 /// </remarks>
+// ReSharper disable once UnusedType.Global
 public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGeneratorInputs
 {
     /// <summary>

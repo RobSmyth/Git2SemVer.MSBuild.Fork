@@ -11,6 +11,7 @@ namespace NoeticTools.Git2SemVer.MSBuild.Tasks;
 /// <summary>
 ///     The Git2SemVer MSBuild task to get the package version from the properties file.
 /// </summary>
+// ReSharper disable once UnusedType.Global
 public class Git2SemVerRestoreVersionPropertiesTask : Git2SemVerTaskBase
 {
     /// <summary>

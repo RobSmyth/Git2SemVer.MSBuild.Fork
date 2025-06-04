@@ -150,6 +150,7 @@ public interface IVersionGeneratorInputs //: IMSBuildTask
     ///         Not used by Git2SemVer but include for optional use in C# script.
     ///     </para>
     /// </remarks>
+    // ReSharper disable once UnusedMember.Global
     string Version { get; }
 
     VersioningMode VersioningMode { get; }
