@@ -23,9 +23,6 @@
     <UpdateVersionProperties>true</UpdateVersionProperties>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageOutputPath>./nupkg</PackageOutputPath>
-    <EnableNETAnalyzers>True</EnableNETAnalyzers>
-    <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
-    <AnalysisLevel>preview-all</AnalysisLevel>
   </PropertyGroup>
 
   <ItemGroup>
