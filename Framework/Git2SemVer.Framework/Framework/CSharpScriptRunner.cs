@@ -110,7 +110,7 @@ public sealed class CSharpScriptRunner
 
         var scriptOptions = ScriptOptions.Default;
         scriptOptions = scriptOptions.AddReferences(assemblies);
-        scriptOptions = scriptOptions.AddImports(namespaces);
+        scriptOptions = scriptOptions.AddImports(namespaces!);
         return scriptOptions;
     }
 }
