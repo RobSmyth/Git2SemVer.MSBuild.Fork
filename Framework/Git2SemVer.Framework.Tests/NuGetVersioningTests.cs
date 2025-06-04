@@ -8,7 +8,7 @@ public class NuGetVersioningTests
     [TestCase("1.2.3-alpha.001")]
     public void IsInvalidTest(string input)
     {
-        var succeeded = NuGetVersion.TryParse(input, out var version);
+        var succeeded = NuGetVersion.TryParse(input, out var _);
 
         Assert.That(succeeded, Is.False);
     }

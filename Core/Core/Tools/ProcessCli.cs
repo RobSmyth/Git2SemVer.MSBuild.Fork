@@ -204,14 +204,4 @@ public sealed class ProcessCli : IProcessCli
 
         errorOut.WriteLine(data);
     }
-
-    private static void OnOutputDataReceived(string? data, TextWriter standardOut)
-    {
-        if (data == null)
-        {
-            return;
-        }
-
-        standardOut.WriteLine(data);
-    }
 }

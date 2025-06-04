@@ -20,6 +20,7 @@ public interface IConfiguration
     /// <summary>
     ///     This configuration's schema revision count. To facilitate future migration.
     /// </summary>
+    // ReSharper disable once UnusedMemberInSuper.Global
     int Rev { get; set; }
 
     /// <summary>

@@ -13,6 +13,7 @@ public static class SemVersionStringExtensions
     /// <summary>
     ///     Convert dot delimited metadata identifiers string to a list of metadata identifiers.
     /// </summary>
+    // ReSharper disable once UnusedMember.Global
     public static IReadOnlyList<MetadataIdentifier> ToMetadataIdentifiers(this string metadata)
     {
         return metadata.ToNormalisedSemVerString().Split('.').Select(x => new MetadataIdentifier(x)).ToReadOnlyList();

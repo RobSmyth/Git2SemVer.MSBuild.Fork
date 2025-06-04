@@ -1,4 +1,5 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
+// ReSharper disable UnusedMemberInSuper.Global
 
 namespace NoeticTools.Git2SemVer.Core.Tools;
 
