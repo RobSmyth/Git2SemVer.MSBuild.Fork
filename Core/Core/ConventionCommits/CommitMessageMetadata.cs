@@ -49,7 +49,7 @@ public class CommitMessageMetadata
 
     public ILookup<string, string> FooterKeyValues { get; }
 
-    private CommitChangeTypeId ToChangeTypeId(string value)
+    private static CommitChangeTypeId ToChangeTypeId(string value)
     {
         // ReSharper disable once CanSimplifyDictionaryTryGetValueWithGetValueOrDefault
         if (ChangeTypeIdLookup.TryGetValue(value, out var changeTypeId))

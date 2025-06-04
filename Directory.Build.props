@@ -8,6 +8,13 @@
     <AssemblyName>NoeticTools.$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>Minimum</AnalysisMode>
+  </PropertyGroup>
+
   <Import Project="Directory.Versioning.Build.props" />
 
   <PropertyGroup>

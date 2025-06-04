@@ -10,17 +10,15 @@ namespace NoeticTools.Git2SemVer.Framework.Tools.CI;
 internal class TeamCityHost : BuildHostBase, IDetectableBuildHost
 {
     private readonly ILogger _logger;
-    private readonly TeamCityHostSettings _settings;
 
     public TeamCityHost(ILogger logger) : base(logger)
     {
-        _settings = new TeamCityHostSettings();
         _logger = logger;
         Name = "TeamCity";
-        var teamCityVersion = _settings.Version;
+        var teamCityVersion = TeamCityHostSettings.Version;
         if (teamCityVersion.Length > 0)
         {
-            BuildNumber = _settings.BuildNumber;
+            BuildNumber = TeamCityHostSettings.BuildNumber;
         }
 
         BuildContext = "0";
@@ -31,7 +29,7 @@ internal class TeamCityHost : BuildHostBase, IDetectableBuildHost
 
     public bool MatchesHostSignature()
     {
-        return _settings.IsHost();
+        return TeamCityHostSettings.IsHost();
     }
 
     public override void ReportBuildStatistic(string key, int value)

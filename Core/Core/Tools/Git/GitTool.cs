@@ -10,7 +10,7 @@ using NoeticTools.Git2SemVer.Core.Logging;
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 
 [RegisterTransient]
-public class GitTool : IGitTool
+public sealed class GitTool : IGitTool
 {
     private const int TakeLimit = 300;
     private readonly ICommitsCache? _cache;

@@ -4,7 +4,7 @@
 namespace NoeticTools.Git2SemVer.Core.Logging;
 
 [RegisterTransient]
-public class FileLogger : LoggerBase, ILogger
+public sealed class FileLogger : LoggerBase, ILogger
 {
     private readonly StreamWriter _stream;
 

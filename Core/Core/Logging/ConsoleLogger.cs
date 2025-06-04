@@ -4,7 +4,7 @@
 namespace NoeticTools.Git2SemVer.Core.Logging;
 
 [RegisterTransient]
-public class ConsoleLogger : LoggerBase, ILogger
+public sealed class ConsoleLogger : LoggerBase, ILogger
 {
     public override LoggingLevel Level { get; set; } = LoggingLevel.Info;
 

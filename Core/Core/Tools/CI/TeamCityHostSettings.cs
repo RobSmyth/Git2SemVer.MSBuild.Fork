@@ -5,12 +5,12 @@
 
 namespace NoeticTools.Git2SemVer.Core.Tools.CI;
 
-public sealed class TeamCityHostSettings
+public static class TeamCityHostSettings
 {
     private const string BuildNumberEnvVarName = "BUILD_NUMBER";
     private const string TeamCityVersionEnvVarName = "TEAMCITY_VERSION";
 
-    public string BuildNumber
+    public static string BuildNumber
     {
         get
         {
@@ -24,12 +24,12 @@ public sealed class TeamCityHostSettings
         }
     }
 
-    public string Version => Environment.GetEnvironmentVariable(TeamCityVersionEnvVarName) ?? "";
+    public static string Version => Environment.GetEnvironmentVariable(TeamCityVersionEnvVarName) ?? "";
 
     /// <summary>
     ///     Returns true currently hosted on a teamcity agent.
     /// </summary>
-    public bool IsHost()
+    public static bool IsHost()
     {
         return !string.IsNullOrWhiteSpace(Version) &&
                !string.IsNullOrWhiteSpace(BuildNumber);

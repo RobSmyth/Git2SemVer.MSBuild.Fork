@@ -20,6 +20,7 @@ public abstract class TaskLoggerBase : LoggerBase, ILogger
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
     }
 
     public void Log(LoggingLevel level, string message)

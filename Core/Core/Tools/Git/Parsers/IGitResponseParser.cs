@@ -10,8 +10,6 @@ public interface IGitResponseParser : IGitLogResponseParser
     /// </summary>
     string FormatArgs { get; }
 
-    char RecordSeparator { get; }
-
     SemVersion? ParseGitVersionResponse(string response);
     string ParseStatusResponseBranchName(string stdOutput);
 }

@@ -32,7 +32,7 @@ public abstract class GitLogCommitParserBase
 
     public string FormatArgs { get; }
 
-    public char RecordSeparator => CharacterConstants.RS;
+    public static char RecordSeparator => CharacterConstants.RS;
 
     protected (Commit? commit, string graph) ParseCommitAndGraph(string line)
     {

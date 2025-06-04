@@ -20,10 +20,6 @@
     <UpdateVersionProperties>true</UpdateVersionProperties>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageOutputPath>./nupkg</PackageOutputPath>
-    <EnableNETAnalyzers>True</EnableNETAnalyzers>
-    <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
-    <AnalysisLevel>preview-all</AnalysisLevel>
-    <AnalysisMode>none</AnalysisMode>
   </PropertyGroup>
 
   <ItemGroup>
