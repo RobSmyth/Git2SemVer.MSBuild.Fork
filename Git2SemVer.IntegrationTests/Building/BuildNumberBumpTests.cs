@@ -16,8 +16,8 @@ public class UncontrolledHostBuildTests
     {
         using var context = CreateTestContext();
 
-        var firstBuildNumber = BuildAndRun(context);
-        var secondBuildNumber = BuildAndRun(context);
+        var firstBuildNumber = RebuildAndRun(context);
+        var secondBuildNumber = RebuildAndRun(context);
 
         Assert.That(secondBuildNumber-firstBuildNumber, Is.EqualTo(1));
     }
@@ -38,7 +38,7 @@ public class UncontrolledHostBuildTests
         Assert.That(host.BuildId, Is.EqualTo(new []{Environment.MachineName, config.BuildNumber.ToString()}));
     }
 
-    private int BuildAndRun(VersioningBuildTestContext context)
+    private int RebuildAndRun(VersioningBuildTestContext context)
     {
         context.DotNetCliBuildTestSolution("--no-incremental");
         var output = DotNetProcessHelpers.RunDotnetApp(context.CompiledAppPath, context.Logger);
