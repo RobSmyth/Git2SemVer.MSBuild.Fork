@@ -21,6 +21,4 @@ internal sealed class HistoryPaths : IHistoryPaths
     public Commit HeadCommit { get; }
 
     public ImmutableSortedSet<IVersionHistoryPath> Paths { get; }
-
-    private int NumberOfCommits => _segments.Sum(x => x.Commits.Count);
 }

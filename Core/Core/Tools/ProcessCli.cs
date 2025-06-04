@@ -61,7 +61,7 @@ public sealed class ProcessCli : IProcessCli
             if (errorOut != null)
             {
                 process.StartInfo.RedirectStandardError = true;
-                process.ErrorDataReceived += (sender, data) => OnErrorDataReceived(data.Data, errorOut);
+                process.ErrorDataReceived += (_, data) => OnErrorDataReceived(data.Data, errorOut);
             }
 
             process.Start();
@@ -153,7 +153,7 @@ public sealed class ProcessCli : IProcessCli
 
         if (errorOut != null)
         {
-            process.ErrorDataReceived += (sender, data) => OnErrorDataReceived(data.Data, errorOut);
+            process.ErrorDataReceived += (_, data) => OnErrorDataReceived(data.Data, errorOut);
         }
 
         process.Start();

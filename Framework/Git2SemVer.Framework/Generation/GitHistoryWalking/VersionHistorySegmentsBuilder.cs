@@ -116,9 +116,9 @@ internal sealed class VersionHistorySegmentsBuilder
         return SegmentWalkResult.FoundStart;
     }
 
-    private void NextCommitBeforeMerge(CommitId parent, Commit mergeCommit)
+    private void NextCommitBeforeMerge(CommitId branchCommitId)
     {
-        var parentCommit = _gitTool.Get(parent);
+        var parentCommit = _gitTool.Get(branchCommitId);
 
         if (_commitsCache.ContainsKey(parentCommit.CommitId))
         {
@@ -160,12 +160,12 @@ internal sealed class VersionHistorySegmentsBuilder
         }
 
         _logger.LogTrace("Continuing branch:");
-        NextCommitBeforeMerge(continuingBranchCommit, mergeCommit);
+        NextCommitBeforeMerge(continuingBranchCommit);
 
         _logger.LogTrace($"Commit {mergeCommit.CommitId.ShortSha} is a merge commit from branch commit {mergedBranchCommit.ShortSha}:");
         using (_logger.EnterLogScope())
         {
-            NextCommitBeforeMerge(mergedBranchCommit, mergeCommit);
+            NextCommitBeforeMerge(mergedBranchCommit);
         }
     }
 

@@ -19,7 +19,7 @@ public sealed class TeamCityHostSettings
                 return "";
             }
 
-            return int.TryParse(buildNumberVariable!, out var buildNumber) ? buildNumber.ToString(CultureInfo.InvariantCulture) : "";
+            return int.TryParse(buildNumberVariable, out var buildNumber) ? buildNumber.ToString(CultureInfo.InvariantCulture) : "";
         }
     }
 

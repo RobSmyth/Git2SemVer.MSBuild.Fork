@@ -14,7 +14,6 @@ public class GitTool : IGitTool
 {
     private const int TakeLimit = 300;
     private readonly ICommitsCache? _cache;
-    private readonly ILogger _logger;
     private readonly ConventionalCommitsParser _metadataParser;
     private Commit? _head;
     private bool _initialised;
@@ -25,7 +24,6 @@ public class GitTool : IGitTool
     public GitTool(ILogger logger)
     {
         _cache = new CommitsCache();
-        _logger = logger;
         RepositoryDirectory = Environment.CurrentDirectory;
         _metadataParser = new ConventionalCommitsParser();
     }
@@ -58,7 +56,6 @@ public class GitTool : IGitTool
 
             return _head!;
         }
-        private set => _head = value;
     }
 
     public string RepositoryDirectory

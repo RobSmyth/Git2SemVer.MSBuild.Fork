@@ -69,8 +69,7 @@ public interface IBuildHost
     string BuildNumber { get; set; }
 
     /// <summary>
-    ///     The host's type ID. Gives an ID for the type of host detected or the type used if
-    ///     <see cref="Git2SemVerGenerateVersionTask.HostType" /> is set.
+    ///     The host's type ID. Gives an ID for the type of host detected or set.
     /// </summary>
     HostTypeIds HostTypeId { get; }
 
