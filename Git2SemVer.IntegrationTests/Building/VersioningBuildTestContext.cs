@@ -76,7 +76,6 @@ internal sealed class VersioningBuildTestContext : IDisposable
     public void Dispose()
     {
         _activeContexts--;
-        //System.Threading.Thread.Sleep(100);//>>>
         _testDirectoryResource.Dispose();
     }
 

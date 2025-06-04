@@ -80,23 +80,6 @@
     <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="build/" />
   </ItemGroup>
 
-  <!-- Add LibGit2Sharp.NativeBinaries files to nuget pack -->
-  <ItemGroup>
-    <!--
-    <Content Include="Content\runtimes\**\*">
-      <Pack>True</Pack>
-      <CopyToOutputDirectory>true</CopyToOutputDirectory>
-      <PackagePath>tasks/$(TargetFramework)/runtimes/%(RecursiveDir)</PackagePath>
-    </Content>
-    <Content Include="Content\runtimes\**\*">
-      <Pack>True</Pack>
-      <CopyToOutputDirectory>true</CopyToOutputDirectory>
-      <PackagePath>tasks/$(TargetFramework)/lib/%(RecursiveDir)</PackagePath>
-    </Content>
-    
-    -->
-  </ItemGroup>
-
   <ItemGroup>
     <Folder Include="nupkg\" />
   </ItemGroup>

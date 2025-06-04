@@ -27,6 +27,7 @@ internal class UncontrolledHost : BuildHostBase, IDetectableBuildHost
     {
         _config.BuildNumber++;
         _config.Save();
+        _logger.LogWarning("=== Bumping build number to {0}.", _config.BuildNumber);//>>>
         _logger.LogDebug("Bumping build number to {0}.", _config.BuildNumber);
         BuildNumber = _config.BuildNumber.ToString(CultureInfo.InvariantCulture);
         return BuildNumber;

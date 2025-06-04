@@ -1,4 +1,5 @@
 ﻿using Injectio.Attributes;
+using Spectre.Console;
 
 namespace NoeticTools.Git2SemVer.Core.Logging;
 
@@ -38,7 +39,7 @@ public class ConsoleLogger : LoggerBase, ILogger
         }
 
         message = IndentLines(message);
-        //>>>Console.Out.WriteLine(message);
+        Console.Out.WriteLine(message);
     }
 
     public void LogDebug(Func<string> messageGenerator)
@@ -65,7 +66,7 @@ public class ConsoleLogger : LoggerBase, ILogger
     {
         HasError = true;
         ErrorMessages.Add(message);
-        //>>> AnsiConsole.MarkupLine("[red]" + message + "[/]");
+        AnsiConsole.MarkupLine("[red]" + message + "[/]");
     }
 
     public void LogError(string message, params object[] messageArgs)
@@ -88,7 +89,7 @@ public class ConsoleLogger : LoggerBase, ILogger
         }
 
         message = IndentLines(message);
-        //>>> Console.Out.WriteLine(message);
+        Console.Out.WriteLine(message);
     }
 
     public void LogInfo(string message, params object[] messageArgs)
@@ -109,7 +110,7 @@ public class ConsoleLogger : LoggerBase, ILogger
         }
 
         message = IndentLines(message);
-        //>>> AnsiConsole.MarkupLine("[grey50]" + message + "[/]");
+        AnsiConsole.MarkupLine("[grey50]" + message + "[/]");
     }
 
     public void LogTrace(Func<string> messageGenerator)
@@ -140,7 +141,7 @@ public class ConsoleLogger : LoggerBase, ILogger
         }
 
         message = IndentLines(message);
-        //>>> AnsiConsole.MarkupLine("[fuchsia]" + message + "[/]");
+        AnsiConsole.MarkupLine("[fuchsia]" + message + "[/]");
     }
 
     public void LogWarning(string format, params object[] args)
