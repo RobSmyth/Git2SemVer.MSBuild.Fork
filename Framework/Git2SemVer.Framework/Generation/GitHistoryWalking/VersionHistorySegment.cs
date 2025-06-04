@@ -43,7 +43,7 @@ internal sealed class VersionHistorySegment
     ///     Parent (older) commits that link to this segment.
     ///     If more than one, a merge commit.
     /// </summary>
-    public IReadOnlyList<CommitId> ParentCommits => OldestCommit.Parents.ToList(); // todo - >>> remove this ... want to list commits
+    public IReadOnlyList<CommitId> ParentCommits => OldestCommit.Parents.ToList();
 
     public SemVersion? TaggedReleasedVersion => _commits.Count != 0 ? OldestCommit.ReleasedVersion : null;
 

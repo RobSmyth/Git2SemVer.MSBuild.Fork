@@ -128,7 +128,6 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
 
         var prereleaseIdentifiers = new List<string> { prereleaseLabel };
         prereleaseIdentifiers.AddRange(host.BuildId);
-        //Console.WriteLine($"== prerelease identifiers[{prereleaseIdentifiers.Count}]: {prereleaseIdentifiers[0]}.{prereleaseIdentifiers[1]}"); //>>>
         return versionPrefix.WithPrerelease(prereleaseIdentifiers.ToArray());
     }
 }
