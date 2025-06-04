@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Microsoft.Build.Framework;
+using NoeticTools.Git2SemVer.Core;
 
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -22,6 +23,8 @@ public sealed class MSBuildGlobalProperties
     /// </summary>
     public MSBuildGlobalProperties(IBuildEngine6 buildEngine)
     {
+        Ensure.NotNull(buildEngine, nameof(buildEngine));
+
         All = buildEngine.GetGlobalProperties();
         Language = GetStringValue(nameof(Language));
         Configuration = GetStringValue(nameof(Configuration));
