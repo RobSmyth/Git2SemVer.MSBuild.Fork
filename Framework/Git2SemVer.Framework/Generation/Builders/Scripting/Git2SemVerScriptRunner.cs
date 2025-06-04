@@ -25,7 +25,7 @@ public sealed class Git2SemVerScriptRunner
         _logger = logger;
     }
 
-    internal static IReadOnlyList<Type> MetadataReferences { get; } =
+    private static IReadOnlyList<Type> MetadataReferences { get; } =
     [
         typeof(TaskLoggingHelper),
         typeof(DotNetTool),

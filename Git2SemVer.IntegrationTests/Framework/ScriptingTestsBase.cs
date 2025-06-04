@@ -17,8 +17,6 @@ internal abstract class ScriptingTestsBase
 
     protected string TestFolderPath = "";
 
-    protected DotNetTool DotNetCli { get; private set; } = null!;
-
     protected GitTool Git { get; private set; } = null!;
 
     protected ILogger Logger { get; private set; } = null!;
@@ -36,7 +34,6 @@ internal abstract class ScriptingTestsBase
     protected void OneTimeSetUpBase()
     {
         Logger = new NUnitLogger(); // todo - Logger is set here and in the SetUpBase method
-        DotNetCli = new DotNetTool(new ProcessCli(Logger));
         Git = new GitTool(Logger);
     }
 

@@ -81,7 +81,7 @@ public sealed class CSharpScriptRunner
         }
     }
 
-    internal static ScriptOptions GetScriptOptions(IReadOnlyList<Type> metadataReferences)
+    private static ScriptOptions GetScriptOptions(IReadOnlyList<Type> metadataReferences)
     {
         var types = new List<Type>(
         [

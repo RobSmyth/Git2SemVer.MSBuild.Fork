@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using LibGit2Sharp;
 using Semver;
 
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;
@@ -17,4 +18,5 @@ public interface ICommit
     SemVersion? ReleasedVersion { get; }
 
     string Summary { get; }
+    IReadOnlyList<Tag>? Tags { get; }
 }

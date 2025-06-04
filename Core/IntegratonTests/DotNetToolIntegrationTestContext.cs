@@ -32,7 +32,7 @@ internal sealed class DotNetToolIntegrationTestContext : IDisposable
 
     public DotNetTool DotNetCli { get; }
 
-    public NUnitLogger Logger { get; }
+    private NUnitLogger Logger { get; }
 
     public DirectoryInfo TestDirectory { get; }
 

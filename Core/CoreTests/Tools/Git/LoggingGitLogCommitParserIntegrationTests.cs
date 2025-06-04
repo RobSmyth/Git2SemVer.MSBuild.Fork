@@ -14,7 +14,6 @@ internal class LoggingGitLogCommitParserIntegrationTests
     public void SetUp()
     {
         var cache = new CommitsCache();
-        var gitTool = new Mock<IGitTool>();
         _target = new LoggingGitLogCommitParser(cache, new CommitObfuscator(), new ConventionalCommitsParser());
     }
 

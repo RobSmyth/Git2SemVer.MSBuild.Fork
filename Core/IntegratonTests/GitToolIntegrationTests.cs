@@ -47,7 +47,7 @@ public class GitToolIntegrationTests
 
     private static Commit GetCommitAtIndex(GitTool target, int index)
     {
-        var commit = target.Head!;
+        var commit = target.Head;
         for (var count = 0; count < index; count++)
         {
             commit = target.Get(commit.Parents[0]);

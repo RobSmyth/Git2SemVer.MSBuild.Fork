@@ -50,7 +50,7 @@ public abstract class GitLogCommitParserBase
         var summary = match.GetGroupValue("summary");
         var body = match.GetGroupValue("body");
 
-        if (_cache.TryGet(sha!, out var commit))
+        if (_cache.TryGet(sha, out var commit))
         {
             return (commit, graph);
         }

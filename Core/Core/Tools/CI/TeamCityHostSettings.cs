@@ -16,7 +16,6 @@ public sealed class TeamCityHostSettings
             var buildNumberVariable = Environment.GetEnvironmentVariable(BuildNumberEnvVarName);
             if (buildNumberVariable == null)
             {
-                //Console.WriteLine("== BuildNumberEnvVarName not found");
                 return "";
             }
 

@@ -76,11 +76,8 @@ public class GitTool : IGitTool
 
     public Commit Get(CommitId commitId)
     {
-        return Get(commitId.Sha);
-    }
+        var commitSha = commitId.Sha;
 
-    public Commit Get(string commitSha)
-    {
         if (Cache.TryGet(commitSha, out var existingCommit))
         {
             return existingCommit;

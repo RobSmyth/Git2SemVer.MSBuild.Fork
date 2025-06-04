@@ -2,9 +2,9 @@
 
 public sealed class ProjectCommands : IProjectCommands
 {
-    private readonly DotNetTool _inner;
+    private readonly IDotNetTool _inner;
 
-    internal ProjectCommands(DotNetTool inner)
+    internal ProjectCommands(IDotNetTool inner)
     {
         _inner = inner;
     }

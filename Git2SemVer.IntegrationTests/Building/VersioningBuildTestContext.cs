@@ -28,7 +28,6 @@ internal sealed class VersioningBuildTestContext : IDisposable
         Logger = new NUnitLogger(false) { Level = LoggingLevel.Trace };
 
         TestDirectory = _testDirectoryResource.Create();
-        TestFolderName = TestDirectory.Name;
         Logger.LogInfo("Created test directory {0}.", TestDirectory.FullName);
 
         var processCli = new ProcessCli(Logger) { WorkingDirectory = TestDirectory.FullName };
@@ -36,9 +35,6 @@ internal sealed class VersioningBuildTestContext : IDisposable
 
         var currentDirectory = Directory.GetCurrentDirectory();
         BuildConfiguration = new DirectoryInfo(currentDirectory).Parent!.Name;
-        //_git2SemVerToolPath =
-        //    Path.Combine(_solutionDirectory, "Git2SemVer.Tool/bin", BuildConfiguration, "net8.0", "NoeticTools.Git2SemVer.Tool.dll");
-
 
         var solutionDirectory = Path.Combine(TestDirectory.FullName, solutionFolderName);
         var projectPath = Path.Combine(solutionDirectory, projectName);
@@ -59,11 +55,9 @@ internal sealed class VersioningBuildTestContext : IDisposable
 
     public string PackageOutputDir { get; }
 
-    public DirectoryInfo TestDirectory { get; }
-
-    public string TestFolderName { get; }
-
     public string TestSolutionPath { get; }
+
+    private DirectoryInfo TestDirectory { get; }
 
     public static void AssertFileExists(string packageDirectory, string expectedFilename)
     {

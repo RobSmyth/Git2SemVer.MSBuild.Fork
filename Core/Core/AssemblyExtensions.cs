@@ -13,7 +13,7 @@ public static class AssemblyExtensions
         try
         {
             using var stream = assembly.GetResourceStream(filename);
-            using var reader = new StreamReader(stream!);
+            using var reader = new StreamReader(stream);
             return reader.ReadToEnd();
         }
         catch (Exception exception)

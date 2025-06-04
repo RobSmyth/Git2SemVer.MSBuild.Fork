@@ -5,11 +5,8 @@ namespace NoeticTools.Git2SemVer.Framework.Tools.CI;
 
 internal class GitHubHost : BuildHostBase, IBuildHost
 {
-    private readonly ILogger _logger;
-
     public GitHubHost(ILogger logger) : base(logger)
     {
-        _logger = logger;
         Name = "GitHub";
         DefaultBuildNumberFunc = () => [BuildNumber, BuildContext];
     }
