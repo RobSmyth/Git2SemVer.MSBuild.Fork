@@ -1,5 +1,4 @@
-﻿using Injectio.Attributes;
-using NoeticTools.Git2SemVer.Core.Logging;
+﻿using NoeticTools.Git2SemVer.Core.Logging;
 
 namespace NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
 

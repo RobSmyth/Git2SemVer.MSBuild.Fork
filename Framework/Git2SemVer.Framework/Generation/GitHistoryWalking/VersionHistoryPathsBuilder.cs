@@ -30,7 +30,7 @@ internal sealed class VersionHistoryPathsBuilder
         _logger.LogDebug("Building git paths to last releases from segments.");
         var foundPaths = FindPaths();
         stopwatch.Stop();
-        var paths = new HistoryPaths(foundPaths, _segments);
+        var paths = new HistoryPaths(foundPaths);
 
         LogFoundPaths(paths, stopwatch.Elapsed);
 

@@ -4,12 +4,8 @@ namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 internal sealed class HistoryPaths : IHistoryPaths
 {
-    private readonly IReadOnlyList<VersionHistorySegment> _segments;
-
-    public HistoryPaths(IReadOnlyList<VersionHistoryPath> paths,
-        IReadOnlyList<VersionHistorySegment> segments)
+    public HistoryPaths(IReadOnlyList<VersionHistoryPath> paths)
     {
-        _segments = segments;
         Paths = paths.ToSortedSet();
         BestPath = Paths.First();
     }

@@ -92,6 +92,7 @@
   </Target>
 
   <!-- Load generated versioning information -->
+  <!-- ReSharper disable once UnknownTarget -->
   <Target Name="Git2SemVerLoadVersionInformation" Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'" DependsOnTargets="Git2SemVerEnsureVersionInfoBuilt" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
 
     <Message Text="Git2SemVer: Loading versioning information." Importance="normal" />

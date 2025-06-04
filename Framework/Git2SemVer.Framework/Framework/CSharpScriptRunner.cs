@@ -29,6 +29,7 @@ public sealed class CSharpScriptRunner
         _logger = logger;
     }
 
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public static IReadOnlyList<string> ReferencedAssemblies { get; private set; } = [];
 
     public async Task RunScript(object globalContext,

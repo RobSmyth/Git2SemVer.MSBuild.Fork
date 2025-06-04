@@ -1,5 +1,4 @@
-﻿using Injectio.Attributes;
-
+﻿
 namespace NoeticTools.Git2SemVer.Core.Interops.DotNet;
 
 [RegisterSingleton]

@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using Injectio.Attributes;
 
 namespace NoeticTools.Git2SemVer.Core.Tools;
 

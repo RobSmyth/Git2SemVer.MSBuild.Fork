@@ -82,6 +82,7 @@
 
     <!-- Generate version information -->
 
+    <!-- ReSharper disable once UnknownTask -->
     <Git2SemVerGenerateVersionTask BuildNumber="$(Git2SemVer_BuildNumber)"
                                    BuildContext="$(Git2SemVer_BuildContext)"
                                    BuildIdFormat="$(Git2SemVer_BuildIDFormat)"
@@ -134,6 +135,7 @@
           AfterTargets="$(Git2SemVerRestorePropertiesAfterTargets)"
           Condition="'$(Git2SemVer_Disable)' == 'false'">
 
+    <!-- ReSharper disable once UnknownTask -->
     <Git2SemVerRestoreVersionPropertiesTask VersionCacheDirectory="$(Git2SemVer_VersionCacheDirectory)">
 
       <Output TaskParameter="AssemblyVersion" PropertyName="Git2SemVer_AssemblyVersion" />

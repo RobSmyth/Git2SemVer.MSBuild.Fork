@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Injectio.Attributes;
 
 namespace NoeticTools.Git2SemVer.Core.Logging;
 

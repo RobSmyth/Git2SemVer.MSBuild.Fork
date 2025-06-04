@@ -1,5 +1,4 @@
-﻿using Injectio.Attributes;
-using Spectre.Console;
+﻿using Spectre.Console;
 
 namespace NoeticTools.Git2SemVer.Core.Logging;
 

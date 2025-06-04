@@ -40,7 +40,7 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
         }
     }
 
-    private SemVersion GetBuildSystemLabel(IBuildHost host, string prereleaseLabel, SemVersion version)
+    private static SemVersion GetBuildSystemLabel(IBuildHost host, string prereleaseLabel, SemVersion version)
     {
         var buildSystemLabel = version.IsRelease
             ? version.WithMetadata(host.BuildNumber)

@@ -1,5 +1,4 @@
-﻿using Injectio.Attributes;
-using LibGit2Sharp;
+﻿using LibGit2Sharp;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
