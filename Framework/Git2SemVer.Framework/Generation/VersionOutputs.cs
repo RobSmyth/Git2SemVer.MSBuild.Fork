@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using NoeticTools.Git2SemVer.Core;
 using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 using Semver;

@@ -1,6 +1,5 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
 
-
 namespace NoeticTools.Git2SemVer.Core.Tools;
 
 public interface IProcessCli
@@ -23,7 +22,7 @@ public interface IProcessCli
     ///     Run dotnet cli with provided command line arguments.
     /// </summary>
     int Run(string application, string commandLineArguments,
-            TextWriter standardOut, TextWriter? errorOut = null);
+        TextWriter standardOut, TextWriter? errorOut = null);
 
     Task<(int returnCode, string stdOutput)> RunAsync(string application, string commandLineArguments);
 
@@ -31,5 +30,5 @@ public interface IProcessCli
     ///     Run dotnet cli with provided command line arguments.
     /// </summary>
     Task<int> RunAsync(string application, string commandLineArguments,
-                       TextWriter standardOut, TextWriter? errorOut = null);
+        TextWriter standardOut, TextWriter? errorOut = null);
 }

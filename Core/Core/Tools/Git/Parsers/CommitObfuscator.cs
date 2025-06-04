@@ -1,15 +1,9 @@
-﻿using System.Text;
-using System.Text.RegularExpressions;
-using NoeticTools.Git2SemVer.Core.ConventionCommits;
-using NoeticTools.Git2SemVer.Core.Exceptions;
-
-
-#pragma warning disable SYSLIB1045
+﻿#pragma warning disable SYSLIB1045
 
 namespace NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
 #pragma warning disable CS1591
-    public sealed class CommitObfuscator : ICommitObfuscator
+public sealed class CommitObfuscator : ICommitObfuscator
 {
     private readonly Dictionary<string, string> _obfuscatedShaLookup = new();
 

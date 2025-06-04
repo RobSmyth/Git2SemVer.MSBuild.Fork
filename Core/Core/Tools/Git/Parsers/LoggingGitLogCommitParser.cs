@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 
-
 namespace NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
 public sealed class LoggingGitLogCommitParser
@@ -11,13 +10,13 @@ public sealed class LoggingGitLogCommitParser
     private readonly ICommitObfuscator? _obfuscator;
 
     public LoggingGitLogCommitParser(IGitTool gitTool)
-        : this(gitTool.Cache, null, null)
+        : this(gitTool.Cache)
     {
     }
 
     public LoggingGitLogCommitParser(ICommitsCache cache,
-                                     ICommitObfuscator? obfuscator = null,
-                                     IConventionalCommitsParser? conventionalCommitParser = null)
+        ICommitObfuscator? obfuscator = null,
+        IConventionalCommitsParser? conventionalCommitParser = null)
         : base(cache, conventionalCommitParser)
     {
         _obfuscator = obfuscator;
@@ -35,33 +34,6 @@ public sealed class LoggingGitLogCommitParser
         var (commit, graph) = ParseCommitAndGraph(line);
         _logLines.Add(GetLogLine(graph, commit));
         return commit;
-    }
-
-    private string GetCommitSummary(Commit commit)
-    {
-        if (_obfuscator == null)
-        {
-            return commit.Summary;
-        }
-
-        if (commit.Metadata.ChangeType == CommitChangeTypeId.Unknown)
-        {
-            return "UNKNOWN";
-        }
-
-        if (commit.Metadata.ChangeType == CommitChangeTypeId.None)
-        {
-            return "REDACTED";
-        }
-
-        var colonPrefix = commit.Summary.IndexOf(':');
-        var prefix = commit.Summary.Substring(0, colonPrefix + 1);
-        return prefix + " REDACTED";
-    }
-
-    private string GetObfuscatedSha(string sha)
-    {
-        return _obfuscator?.GetObfuscatedSha(sha) ?? sha;
     }
 
     /// <summary>
@@ -106,5 +78,32 @@ public sealed class LoggingGitLogCommitParser
         var footer = string.Join("\n", commit.Metadata.FooterKeyValues.SelectMany((kv, _) => kv.Select(value => kv.Key + ": " + value)));
 
         return $"{priorGraphLines}{graphLine,-15} \u001f.|{sha}|{parentShas}|\u0002{summary}\u0003|\u0002{footer}\u0003|{redactedRefs2}|";
+    }
+
+    private string GetCommitSummary(Commit commit)
+    {
+        if (_obfuscator == null)
+        {
+            return commit.Summary;
+        }
+
+        if (commit.Metadata.ChangeType == CommitChangeTypeId.Unknown)
+        {
+            return "UNKNOWN";
+        }
+
+        if (commit.Metadata.ChangeType == CommitChangeTypeId.None)
+        {
+            return "REDACTED";
+        }
+
+        var colonPrefix = commit.Summary.IndexOf(':');
+        var prefix = commit.Summary.Substring(0, colonPrefix + 1);
+        return prefix + " REDACTED";
+    }
+
+    private string GetObfuscatedSha(string sha)
+    {
+        return _obfuscator?.GetObfuscatedSha(sha) ?? sha;
     }
 }

@@ -14,7 +14,6 @@ internal sealed class Git2SemVerBuildLogEntry
     }
 
     public string Branch { get; }
-
     public string BuildNumber { get; }
 
     /// <summary>

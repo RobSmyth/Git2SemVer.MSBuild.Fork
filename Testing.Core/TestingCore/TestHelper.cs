@@ -1,6 +1,5 @@
 using System.Diagnostics;
 
-
 namespace NoeticTools.Git2SemVer.Testing.Core;
 
 public static class TestHelper

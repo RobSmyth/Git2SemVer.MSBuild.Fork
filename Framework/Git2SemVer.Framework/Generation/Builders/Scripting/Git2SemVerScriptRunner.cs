@@ -19,7 +19,7 @@ public sealed class Git2SemVerScriptRunner
     private readonly ILogger _logger;
 
     public Git2SemVerScriptRunner(CSharpScriptRunner innerScriptRunner,
-                                  ILogger logger)
+        ILogger logger)
     {
         _innerScriptRunner = innerScriptRunner;
         _logger = logger;

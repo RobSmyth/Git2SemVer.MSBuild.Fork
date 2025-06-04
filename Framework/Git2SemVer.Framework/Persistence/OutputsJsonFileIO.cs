@@ -5,7 +5,6 @@ using System.Text.Unicode;
 using NoeticTools.Git2SemVer.Core.Git2SemVer;
 using NoeticTools.Git2SemVer.Framework.Generation;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Persistence;
 
 // ReSharper disable once ClassNeverInstantiated.Global
@@ -17,6 +16,12 @@ public class OutputsJsonFileIO : IOutputsJsonIO
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin),
         IncludeFields = false
     };
+
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static VersionOutputs FromJson(string json)
+    {
+        return JsonSerializer.Deserialize<VersioningInfo>(json)!.Git2SemVerVersionInfo!;
+    }
 
     public IVersionOutputs Load(string directory)
     {
@@ -36,12 +41,6 @@ public class OutputsJsonFileIO : IOutputsJsonIO
         return FromJson(json);
     }
 
-    // ReSharper disable once MemberCanBePrivate.Global
-    public static VersionOutputs FromJson(string json)
-    {
-        return JsonSerializer.Deserialize<VersioningInfo>(json)!.Git2SemVerVersionInfo!;
-    }
-
     public static string ToJson(IVersionOutputs outputs)
     {
         var versionInfo = new VersioningInfo { Git2SemVerVersionInfo = (VersionOutputs)outputs };
@@ -51,6 +50,17 @@ public class OutputsJsonFileIO : IOutputsJsonIO
     public void Write(string directory, IVersionOutputs outputs)
     {
         WriteToFile(directory, outputs);
+    }
+
+    private static string GetFilePath(string directory)
+    {
+        return Path.Combine(directory, Git2SemVerConstants.SharedVersionJsonPropertiesFilename);
+    }
+
+    private static string LoadJson(string directory)
+    {
+        var propertiesFilePath = GetFilePath(directory);
+        return !File.Exists(propertiesFilePath) ? "" : File.ReadAllText(propertiesFilePath);
     }
 
     private static void WriteToFile(string directory, IVersionOutputs outputs)
@@ -70,21 +80,9 @@ public class OutputsJsonFileIO : IOutputsJsonIO
         File.WriteAllText(GetFilePath(directory), json);
     }
 
-    private static string GetFilePath(string directory)
-    {
-        return Path.Combine(directory, Git2SemVerConstants.SharedVersionJsonPropertiesFilename);
-    }
-
-    private static string LoadJson(string directory)
-    {
-        var propertiesFilePath = GetFilePath(directory);
-        return !File.Exists(propertiesFilePath) ? "" : File.ReadAllText(propertiesFilePath);
-    }
-
     private sealed class VersioningInfo
     {
-        [JsonPropertyOrder(2)]
-        public VersionOutputs? Git2SemVerVersionInfo { get; set; }
+        [JsonPropertyOrder(2)] public VersionOutputs? Git2SemVerVersionInfo { get; set; }
 
         /// <summary>
         ///     This version info's schema version.

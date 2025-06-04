@@ -3,7 +3,6 @@ using System.Text;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 #pragma warning disable CS1591
@@ -73,8 +72,8 @@ internal sealed class VersionHistoryPathsBuilder
     }
 
     private static ILookup<VersionHistorySegment, VersionHistorySegment> GetChildSegmentsLookup(IReadOnlyList<VersionHistorySegment> segments,
-                                                                                                Dictionary<CommitId, VersionHistorySegment>
-                                                                                                    segmentsByYoungestCommit)
+        Dictionary<CommitId, VersionHistorySegment>
+            segmentsByYoungestCommit)
     {
         var childLinks = new List<(VersionHistorySegment parent, VersionHistorySegment child)>();
         foreach (var segment in segments)

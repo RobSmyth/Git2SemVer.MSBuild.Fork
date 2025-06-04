@@ -1,7 +1,4 @@
-﻿using Moq;
-using NoeticTools.Git2SemVer.Core.Tools.Git;
-using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
-
+﻿using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
 namespace NoeticTools.Git2SemVer.Core.Tests.Tools.Git;
 

@@ -1,7 +1,6 @@
 ﻿using NoeticTools.Git2SemVer.Core.Tools.Git;
 using Semver;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 #pragma warning disable CS1591
@@ -29,7 +28,6 @@ public interface IVersionHistoryPath
     Commit HeadCommit { get; }
 
     int Id { get; }
-
     SemVersion? LastReleasedVersion { get; }
 
     /// <summary>

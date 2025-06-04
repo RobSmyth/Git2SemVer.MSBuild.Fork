@@ -1,16 +1,17 @@
-using System.Diagnostics;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+
 #pragma warning disable NUnit2045
 
 
 namespace NoeticTools.Git2SemVer.Core.IntegrationTests;
 
-[TestFixture, NonParallelizable]
+[TestFixture]
+[NonParallelizable]
 public class GitToolIntegrationTests
 {
-    private GitTool _target;
     private ConsoleLogger _logger;
+    private GitTool _target;
 
     [SetUp]
     public void SetUp()
@@ -51,6 +52,7 @@ public class GitToolIntegrationTests
         {
             commit = target.Get(commit.Parents[0]);
         }
+
         return commit;
     }
 }

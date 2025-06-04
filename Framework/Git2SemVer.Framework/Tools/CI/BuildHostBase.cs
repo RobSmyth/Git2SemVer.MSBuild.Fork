@@ -2,7 +2,6 @@
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Framework.Framework;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Tools.CI;
 
 internal abstract class BuildHostBase : ToolBase
@@ -42,6 +41,16 @@ internal abstract class BuildHostBase : ToolBase
 
     public string Name { get; protected set; } = "UNKNOWN";
 
+    protected Func<IReadOnlyList<string>> DefaultBuildNumberFunc
+    {
+        get => _defaultBuildNumberFunc;
+        set
+        {
+            _defaultBuildNumberFunc = value;
+            SetBuildIdFunc();
+        }
+    }
+
     public virtual string BumpBuildNumber()
     {
         // Default implementation: Not supported
@@ -71,22 +80,12 @@ internal abstract class BuildHostBase : ToolBase
         }
 
         var buildId = BuildIdFormat.Replace("BUILD_NUMBER", BuildNumber)
-                                   .Replace("BUILD_CONTEXT", BuildContext);
+            .Replace("BUILD_CONTEXT", BuildContext);
         return buildId.Split('.');
     }
 
     private void SetBuildIdFunc()
     {
         _buildNumberFunc = BuildIdFormat.Length > 0 ? CustomBuildIdFormat : DefaultBuildNumberFunc;
-    }
-
-    protected Func<IReadOnlyList<string>> DefaultBuildNumberFunc
-    {
-        get => _defaultBuildNumberFunc;
-        set
-        {
-            _defaultBuildNumberFunc = value;
-            SetBuildIdFunc();
-        }
     }
 }

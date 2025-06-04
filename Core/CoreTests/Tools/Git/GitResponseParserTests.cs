@@ -3,8 +3,6 @@ using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
-using Semver;
-
 
 namespace NoeticTools.Git2SemVer.Core.Tests.Tools.Git;
 
@@ -19,18 +17,6 @@ internal class GitResponseParserTests
         var cache = new CommitsCache();
         var conventionalCommitsParser = new Mock<IConventionalCommitsParser>();
         _parser = new GitResponseParser(cache, conventionalCommitsParser.Object, new ConsoleLogger());
-    }
-
-    [TestCase("git version 2.41.0.8", "2.41.0+8")]
-    [TestCase("git version 222.41.0", "222.41.0")]
-    [TestCase("git version 2.41.0.windows.1", "2.41.0+windows.1")]
-    [TestCase("git version 2.39.5 (Apple Git-154)", "2.39.5")]
-    [TestCase("git version 2.41.0 garbage", "2.41.0")]
-    public void ParseVersionResponseTest(string response, string expected)
-    {
-        var result = _parser.ParseGitVersionResponse(response);
-
-        Assert.That(result!.ToString(), Is.EqualTo(expected));
     }
 
     [Test]
@@ -49,5 +35,17 @@ internal class GitResponseParserTests
         var result = _parser.ParseStatusResponseBranchName(response);
 
         Assert.That(result, Is.EqualTo("My-Branch/Thing_A"));
+    }
+
+    [TestCase("git version 2.41.0.8", "2.41.0+8")]
+    [TestCase("git version 222.41.0", "222.41.0")]
+    [TestCase("git version 2.41.0.windows.1", "2.41.0+windows.1")]
+    [TestCase("git version 2.39.5 (Apple Git-154)", "2.39.5")]
+    [TestCase("git version 2.41.0 garbage", "2.41.0")]
+    public void ParseVersionResponseTest(string response, string expected)
+    {
+        var result = _parser.ParseGitVersionResponse(response);
+
+        Assert.That(result!.ToString(), Is.EqualTo(expected));
     }
 }

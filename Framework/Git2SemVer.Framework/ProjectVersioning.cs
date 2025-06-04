@@ -3,7 +3,6 @@ using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Persistence;
 
-
 #pragma warning disable CA1859
 
 namespace NoeticTools.Git2SemVer.Framework;
@@ -28,6 +27,11 @@ public sealed class ProjectVersioning : IDisposable
         _outputsCacheJsonFile = outputsCacheJsonFile;
         _versionGenerator = versionGenerator;
         _logger = logger;
+    }
+
+    public void Dispose()
+    {
+        _versionGenerator.Dispose();
     }
 
     public IVersionOutputs Run()
@@ -98,10 +102,5 @@ public sealed class ProjectVersioning : IDisposable
         {
             _host.SetBuildLabel(output.BuildSystemVersion.ToString());
         }
-    }
-
-    public void Dispose()
-    {
-        _versionGenerator.Dispose();
     }
 }

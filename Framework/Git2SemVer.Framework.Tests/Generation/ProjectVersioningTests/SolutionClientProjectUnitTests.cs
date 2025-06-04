@@ -8,13 +8,6 @@ namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.ProjectVersioningTes
 
 internal class SolutionClientProjectUnitTests : ProjectVersioningUnitTestsBase
 {
-    [SetUp]
-    public void SetUp()
-    {
-        ModeIs(VersioningMode.SolutionClientProject);
-        Host.Setup(x => x.BuildNumber).Returns("42");
-    }
-
     [Test]
     public void DoesGenerate_WhenCachedOutputsNotAvailableTest()
     {
@@ -77,5 +70,12 @@ internal class SolutionClientProjectUnitTests : ProjectVersioningUnitTestsBase
 
         VersionGenerator.Verify(x => x.Run(), Times.Never);
         Assert.That(result, Is.SameAs(SharedCachedOutputs.Object));
+    }
+
+    [SetUp]
+    public void SetUp()
+    {
+        ModeIs(VersioningMode.SolutionClientProject);
+        Host.Setup(x => x.BuildNumber).Returns("42");
     }
 }

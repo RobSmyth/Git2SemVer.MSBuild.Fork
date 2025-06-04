@@ -1,6 +1,5 @@
 ﻿using NuGet.Versioning;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Tests;
 
 [TestFixture]

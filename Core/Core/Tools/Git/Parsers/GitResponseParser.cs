@@ -1,9 +1,8 @@
-﻿using NoeticTools.Git2SemVer.Core.ConventionCommits;
+﻿using System.Text.RegularExpressions;
+using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
 using Semver;
-using System.Text.RegularExpressions;
-
 
 namespace NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
@@ -21,19 +20,6 @@ public class GitResponseParser : GitLogCommitParserBase, IGitResponseParser
     public Commit? ParseGitLogLine(string line)
     {
         return ParseCommitAndGraph(line).commit;
-    }
-
-    public string ParseStatusResponseBranchName(string stdOutput)
-    {
-        var regex = new Regex(@"^## (?<branchName>[a-zA-Z0-9!$*\._\/-]+?)(\.\.\..*)?\s*?$", RegexOptions.Multiline);
-        var match = regex.Match(stdOutput);
-
-        if (!match.Success)
-        {
-            throw new Git2SemVerGitOperationException($"Unable to read branch name from Git status response '{stdOutput}'.\n");
-        }
-
-        return match.Groups["branchName"].Value;
     }
 
     public SemVersion? ParseGitVersionResponse(string response)
@@ -68,5 +54,18 @@ public class GitResponseParser : GitLogCommitParserBase, IGitResponseParser
             _logger.LogWarning($"Unable to parse git --version response: '{response}'. Exception: {exception.Message}.");
             return null;
         }
+    }
+
+    public string ParseStatusResponseBranchName(string stdOutput)
+    {
+        var regex = new Regex(@"^## (?<branchName>[a-zA-Z0-9!$*\._\/-]+?)(\.\.\..*)?\s*?$", RegexOptions.Multiline);
+        var match = regex.Match(stdOutput);
+
+        if (!match.Success)
+        {
+            throw new Git2SemVerGitOperationException($"Unable to read branch name from Git status response '{stdOutput}'.\n");
+        }
+
+        return match.Groups["branchName"].Value;
     }
 }

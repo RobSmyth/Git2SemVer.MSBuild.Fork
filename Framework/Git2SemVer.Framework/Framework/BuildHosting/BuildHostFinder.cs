@@ -3,7 +3,6 @@ using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Framework.Framework.Config;
 using NoeticTools.Git2SemVer.Framework.Tools.CI;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 
 internal class BuildHostFinder

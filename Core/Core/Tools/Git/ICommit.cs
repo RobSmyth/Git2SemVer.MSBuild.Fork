@@ -1,7 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using Semver;
 
-
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 
 [JsonDerivedType(typeof(Commit), "Commit")]

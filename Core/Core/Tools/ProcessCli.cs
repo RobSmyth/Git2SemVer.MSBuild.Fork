@@ -4,14 +4,13 @@ using Injectio.Attributes;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
 
-
 namespace NoeticTools.Git2SemVer.Core.Tools;
 
 [RegisterTransient]
 public sealed class ProcessCli : IProcessCli
 {
     private const int MaxWaitTimeAfterKillMilliseconds = 30000;
-    private static readonly object Sync = new object();
+    private static readonly object Sync = new();
 
     public ProcessCli(ILogger logger)
     {
@@ -34,11 +33,10 @@ public sealed class ProcessCli : IProcessCli
     ///     Run dotnet cli with provided command line arguments.
     /// </summary>
     public int Run(string application, string commandLineArguments,
-                   TextWriter? standardOut, TextWriter? errorOut = null)
+        TextWriter? standardOut, TextWriter? errorOut = null)
     {
         lock (Sync)
         {
-
             //        Logger.LogTrace($"Running '{application} {commandLineArguments}'.");
             Logger.LogInfo($"Running '{application} {commandLineArguments}'.");
 
@@ -135,7 +133,7 @@ public sealed class ProcessCli : IProcessCli
     ///     Run dotnet cli with provided command line arguments.
     /// </summary>
     public async Task<int> RunAsync(string application, string commandLineArguments,
-                                    TextWriter standardOut, TextWriter? errorOut = null)
+        TextWriter standardOut, TextWriter? errorOut = null)
     {
         //        Logger.LogTrace($"Running '{application} {commandLineArguments}'.");
         Logger.LogInfo($"Running '{application} {commandLineArguments}'.");

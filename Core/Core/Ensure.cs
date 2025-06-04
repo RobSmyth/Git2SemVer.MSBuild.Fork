@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
-namespace NoeticTools.Git2SemVer.Core
+namespace NoeticTools.Git2SemVer.Core;
+
+[DebuggerStepThrough]
+public static class Ensure
 {
-    [DebuggerStepThrough]
-    public static class Ensure
+    public static void NotNull(object argumentValue, string argumentName)
     {
-        public static void NotNull(object argumentValue, string argumentName)
+        if (argumentValue == null)
         {
-            if (argumentValue == null)
-            {
-                throw new ArgumentNullException(argumentName);
-            }
+            throw new ArgumentNullException(argumentName);
         }
     }
 }

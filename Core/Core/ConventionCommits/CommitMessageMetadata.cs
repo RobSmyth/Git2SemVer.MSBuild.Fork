@@ -17,7 +17,7 @@ public class CommitMessageMetadata
     };
 
     public CommitMessageMetadata(string changeType, bool breakingChangeFlagged, string changeDescription, string body,
-                                 List<(string key, string value)> footerKeyValues)
+        List<(string key, string value)> footerKeyValues)
     {
         ChangeType = ToChangeTypeId(changeType.ToLower());
         ChangeDescription = changeDescription;

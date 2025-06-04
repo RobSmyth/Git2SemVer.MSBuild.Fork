@@ -2,7 +2,6 @@
 using NoeticTools.Git2SemVer.Framework.Persistence;
 using Semver;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Tests.Generation;
 
 [TestFixture]
@@ -87,7 +86,7 @@ internal class VersionOutputsTests
     {
         var target = new VersionOutputs();
         var informationalVersion = new SemVersion(0, 5, 6).WithPrerelease("Beta-InitialDev", "77")
-                                                          .WithMetadata("METADATA");
+            .WithMetadata("METADATA");
 
         target.SetAllVersionPropertiesFrom(informationalVersion, "BUILD_NUMBER", "BUILD_CONTEXT");
 

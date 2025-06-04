@@ -1,7 +1,6 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Generation.Builders;
 
 internal sealed class DefaultVersionBuilderFactory : IDefaultVersionBuilderFactory

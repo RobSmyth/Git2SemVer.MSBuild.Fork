@@ -252,7 +252,7 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     public string WorkingDirectory { get; set; } = "";
 
     /// <summary>
-    ///    Called by MSBuild to execute the task.
+    ///     Called by MSBuild to execute the task.
     /// </summary>
     public override bool Execute()
     {

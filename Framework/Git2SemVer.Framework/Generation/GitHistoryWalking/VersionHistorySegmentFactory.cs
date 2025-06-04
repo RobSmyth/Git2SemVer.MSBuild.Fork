@@ -1,7 +1,6 @@
-﻿using NoeticTools.Git2SemVer.Core.Logging;
+﻿using System.Diagnostics.CodeAnalysis;
+using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
-using System.Diagnostics.CodeAnalysis;
-
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 

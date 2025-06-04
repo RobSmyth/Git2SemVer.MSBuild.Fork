@@ -1,13 +1,10 @@
-﻿using Microsoft.Build.Utilities;
-using NoeticTools.Git2SemVer.Core;
+﻿using System.Text.RegularExpressions;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using Semver;
-using System.Text.RegularExpressions;
-
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.Builders;
 
@@ -32,12 +29,12 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
         using (_logger.EnterLogScope())
         {
             var prereleaseLabel = GetPrereleaseLabel(inputs, outputs);
-            
+
             var version = GetVersion(prereleaseLabel, host);
             var informationalVersion = GetInformationalVersion(version, host, outputs);
             outputs.SetAllVersionPropertiesFrom(informationalVersion,
-                                                host.BuildNumber,
-                                                host.BuildContext);
+                host.BuildNumber,
+                host.BuildContext);
 
             outputs.BuildSystemVersion = GetBuildSystemLabel(host, prereleaseLabel, version);
         }
@@ -75,7 +72,7 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
         }
 
         if (VersioningConstants.ReleaseGroupName.Equals(inputs.VersionSuffix,
-                                                        StringComparison.Ordinal))
+                StringComparison.Ordinal))
         {
             return initialDevSuffix;
         }

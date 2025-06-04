@@ -1,6 +1,5 @@
 ﻿using Microsoft.Build.Framework;
 
-
 namespace NoeticTools.Git2SemVer.MSBuild.Tasks;
 
 public interface IMSBuildTask

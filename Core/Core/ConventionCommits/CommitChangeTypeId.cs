@@ -13,5 +13,5 @@ public enum CommitChangeTypeId
     Style,
     Refactoring,
     Performance,
-    Testing,
+    Testing
 }

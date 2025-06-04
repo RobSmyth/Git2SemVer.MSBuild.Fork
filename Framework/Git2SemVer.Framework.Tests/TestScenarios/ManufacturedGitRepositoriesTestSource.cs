@@ -2,7 +2,6 @@
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Tests.TestScenarios;
 
 public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
@@ -42,31 +41,31 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                        |
                                        | first commit
                                      """,
-                                     [
-                                         new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.002.0000", ["1.001.0000"], "", "", "tag: A tag", new CommitMessageMetadata()),
-                                         new Commit("1.003.0000", ["1.002.0000"], "", "", "tag: A6.7.8", new CommitMessageMetadata()),
-                                         new Commit("1.004.0000", ["1.003.0000", "2.003.0000"], "Merge", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.005.0000", ["1.004.0000"], "", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.006.0000", ["1.005.0000"], "", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.007.0000", ["1.006.0000"], "", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.008.0000", ["1.007.0000", "3.005.0000"], "Merge", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.009.0000", ["1.008.0000"], "", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.010.0000", ["1.009.0000"], "Head commit", "", "", new CommitMessageMetadata()),
+            [
+                new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
+                new Commit("1.002.0000", ["1.001.0000"], "", "", "tag: A tag", new CommitMessageMetadata()),
+                new Commit("1.003.0000", ["1.002.0000"], "", "", "tag: A6.7.8", new CommitMessageMetadata()),
+                new Commit("1.004.0000", ["1.003.0000", "2.003.0000"], "Merge", "", "", new CommitMessageMetadata()),
+                new Commit("1.005.0000", ["1.004.0000"], "", "", "", new CommitMessageMetadata()),
+                new Commit("1.006.0000", ["1.005.0000"], "", "", "", new CommitMessageMetadata()),
+                new Commit("1.007.0000", ["1.006.0000"], "", "", "", new CommitMessageMetadata()),
+                new Commit("1.008.0000", ["1.007.0000", "3.005.0000"], "Merge", "", "", new CommitMessageMetadata()),
+                new Commit("1.009.0000", ["1.008.0000"], "", "", "", new CommitMessageMetadata()),
+                new Commit("1.010.0000", ["1.009.0000"], "Head commit", "", "", new CommitMessageMetadata()),
 
-                                         new Commit("2.001.0000", ["1.001.0000"], "Branch commit", "", "", new CommitMessageMetadata()),
-                                         new Commit("2.002.0000", ["2.001.0000"], "", "", "", new CommitMessageMetadata()),
-                                         new Commit("2.003.0000", ["2.002.0000"], "", "", "", new CommitMessageMetadata()),
+                new Commit("2.001.0000", ["1.001.0000"], "Branch commit", "", "", new CommitMessageMetadata()),
+                new Commit("2.002.0000", ["2.001.0000"], "", "", "", new CommitMessageMetadata()),
+                new Commit("2.003.0000", ["2.002.0000"], "", "", "", new CommitMessageMetadata()),
 
-                                         new Commit("3.001.0000", ["1.007.0000"], "Branch commit", "", "", new CommitMessageMetadata()),
-                                         new Commit("3.002.0000", ["3.001.0000"], "", "", "tag: v1.2.3", new CommitMessageMetadata()),
-                                         new Commit("3.003.0000", ["3.002.0000"], "", "", "tag: v1.2.4", new CommitMessageMetadata()),
-                                         new Commit("3.004.0000", ["3.003.0000"], "", "", "", new CommitMessageMetadata()),
-                                         new Commit("3.005.0000", ["3.004.0000"], "", "", "", new CommitMessageMetadata())
-                                     ],
-                                     "1.010.0000",
-                                     3,
-                                     "1.2.5");
+                new Commit("3.001.0000", ["1.007.0000"], "Branch commit", "", "", new CommitMessageMetadata()),
+                new Commit("3.002.0000", ["3.001.0000"], "", "", "tag: v1.2.3", new CommitMessageMetadata()),
+                new Commit("3.003.0000", ["3.002.0000"], "", "", "tag: v1.2.4", new CommitMessageMetadata()),
+                new Commit("3.004.0000", ["3.003.0000"], "", "", "", new CommitMessageMetadata()),
+                new Commit("3.005.0000", ["3.004.0000"], "", "", "", new CommitMessageMetadata())
+            ],
+            "1.010.0000",
+            3,
+            "1.2.5");
     }
 
     private static GitTestRepository BuildScenario02()
@@ -89,21 +88,21 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                      .      |
                                      1.001  | first commit
                                      """,
-                                     [
-                                         new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.007.0000", ["1.001.0000"], "", "", "Branched from", new CommitMessageMetadata()),
-                                         new Commit("1.008.0000", ["1.007.0000", "2.005.0000"], "Merge commit", "", "tag: v1.2.2",
-                                                    new CommitMessageMetadata()),
-                                         new Commit("1.009.0000", ["1.008.0000"], "", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.010.0000", ["1.009.0000"], "Head commit", "", "", new CommitMessageMetadata()),
+            [
+                new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
+                new Commit("1.007.0000", ["1.001.0000"], "", "", "Branched from", new CommitMessageMetadata()),
+                new Commit("1.008.0000", ["1.007.0000", "2.005.0000"], "Merge commit", "", "tag: v1.2.2",
+                    new CommitMessageMetadata()),
+                new Commit("1.009.0000", ["1.008.0000"], "", "", "", new CommitMessageMetadata()),
+                new Commit("1.010.0000", ["1.009.0000"], "Head commit", "", "", new CommitMessageMetadata()),
 
-                                         new Commit("2.001.0000", ["1.007.0000"], "Branch commit", "", "", new CommitMessageMetadata()),
-                                         new Commit("2.003.0000", ["2.001.0000"], "", "", "tag: v1.2.4", new CommitMessageMetadata()),
-                                         new Commit("2.005.0000", ["2.003.0000"], "", "", "", new CommitMessageMetadata())
-                                     ],
-                                     "1.010.0000",
-                                     1,
-                                     "1.2.3");
+                new Commit("2.001.0000", ["1.007.0000"], "Branch commit", "", "", new CommitMessageMetadata()),
+                new Commit("2.003.0000", ["2.001.0000"], "", "", "tag: v1.2.4", new CommitMessageMetadata()),
+                new Commit("2.005.0000", ["2.003.0000"], "", "", "", new CommitMessageMetadata())
+            ],
+            "1.010.0000",
+            1,
+            "1.2.3");
     }
 
     private static GitTestRepository BuildScenario03()
@@ -123,17 +122,17 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                      .      |
                                      1.001  | first commit
                                      """,
-                                     [
-                                         new Commit("1.001", [], "First commit in repo", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.002", ["1.001"], "", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.003", ["1.002"], "", "", "tag: v2.2.2", new CommitMessageMetadata()),
-                                         new Commit("1.004", ["1.003"], "", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.005", ["1.004"], "", "", "tag: V1.5.9", new CommitMessageMetadata()),
-                                         new Commit("1.006", ["1.005"], "", "", "Head commit", new CommitMessageMetadata())
-                                     ],
-                                     "1.006",
-                                     1,
-                                     "1.5.10");
+            [
+                new Commit("1.001", [], "First commit in repo", "", "", new CommitMessageMetadata()),
+                new Commit("1.002", ["1.001"], "", "", "", new CommitMessageMetadata()),
+                new Commit("1.003", ["1.002"], "", "", "tag: v2.2.2", new CommitMessageMetadata()),
+                new Commit("1.004", ["1.003"], "", "", "", new CommitMessageMetadata()),
+                new Commit("1.005", ["1.004"], "", "", "tag: V1.5.9", new CommitMessageMetadata()),
+                new Commit("1.006", ["1.005"], "", "", "Head commit", new CommitMessageMetadata())
+            ],
+            "1.006",
+            1,
+            "1.5.10");
     }
 
     private static GitTestRepository BuildScenario04()
@@ -145,12 +144,12 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
 
                                      1.001  | head
                                      """,
-                                     [
-                                         new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata())
-                                     ],
-                                     "1.001.0000",
-                                     1,
-                                     "0.1.0");
+            [
+                new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata())
+            ],
+            "1.001.0000",
+            1,
+            "0.1.0");
     }
 
     private static GitTestRepository BuildScenario06()
@@ -171,24 +170,24 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                      .      |
                                      1.001  | first commit
                                      """,
-                                     [
-                                         new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.002.0000", ["1.001.0000"], "Branch from", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.003.0000", ["1.002.0000"], "", "", "tag: v5.7.0", new CommitMessageMetadata()),
-                                         new Commit("1.004.0000", ["1.003.0000", "2.003.0000"], "Merge", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.005.0000", ["1.004.0000", "3.003.0000"], "Merge", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.006.0000", ["1.005.0000"], "Head commit", "", "", new CommitMessageMetadata()),
+            [
+                new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
+                new Commit("1.002.0000", ["1.001.0000"], "Branch from", "", "", new CommitMessageMetadata()),
+                new Commit("1.003.0000", ["1.002.0000"], "", "", "tag: v5.7.0", new CommitMessageMetadata()),
+                new Commit("1.004.0000", ["1.003.0000", "2.003.0000"], "Merge", "", "", new CommitMessageMetadata()),
+                new Commit("1.005.0000", ["1.004.0000", "3.003.0000"], "Merge", "", "", new CommitMessageMetadata()),
+                new Commit("1.006.0000", ["1.005.0000"], "Head commit", "", "", new CommitMessageMetadata()),
 
-                                         new Commit("2.001.0000", ["1.002.0000"], "Branch", "", "", new CommitMessageMetadata()),
-                                         new Commit("2.002.0000", ["2.001.0000"], "", "", "tag: v5.7.1", new CommitMessageMetadata()),
-                                         new Commit("2.003.0000", ["2.002.0000"], "", "", "", new CommitMessageMetadata()),
+                new Commit("2.001.0000", ["1.002.0000"], "Branch", "", "", new CommitMessageMetadata()),
+                new Commit("2.002.0000", ["2.001.0000"], "", "", "tag: v5.7.1", new CommitMessageMetadata()),
+                new Commit("2.003.0000", ["2.002.0000"], "", "", "", new CommitMessageMetadata()),
 
-                                         new Commit("3.001.0000", ["1.002.0000"], "Branch", "", "", new CommitMessageMetadata()),
-                                         new Commit("3.002.0000", ["3.001.0000"], "", "", "tag: v5.6.99", new CommitMessageMetadata()),
-                                         new Commit("3.003.0000", ["3.002.0000"], "", "", "", new CommitMessageMetadata())
-                                     ],
-                                     "1.006.0000",
-                                     3,
-                                     "5.7.2");
+                new Commit("3.001.0000", ["1.002.0000"], "Branch", "", "", new CommitMessageMetadata()),
+                new Commit("3.002.0000", ["3.001.0000"], "", "", "tag: v5.6.99", new CommitMessageMetadata()),
+                new Commit("3.003.0000", ["3.002.0000"], "", "", "", new CommitMessageMetadata())
+            ],
+            "1.006.0000",
+            3,
+            "5.7.2");
     }
 }

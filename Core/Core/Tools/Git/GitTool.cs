@@ -3,8 +3,6 @@ using LibGit2Sharp;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
-using System.Runtime.InteropServices;
-
 
 #pragma warning disable SYSLIB1045
 #pragma warning disable CS1591
@@ -17,11 +15,11 @@ public class GitTool : IGitTool
     private const int TakeLimit = 300;
     private readonly ICommitsCache? _cache;
     private readonly ILogger _logger;
+    private readonly ConventionalCommitsParser _metadataParser;
     private Commit? _head;
     private bool _initialised;
-    private string _repositoryDirectory = null!;
     private Repository? _repository;
-    private readonly ConventionalCommitsParser _metadataParser;
+    private string _repositoryDirectory = null!;
 
 
     public GitTool(ILogger logger)
@@ -30,19 +28,6 @@ public class GitTool : IGitTool
         _logger = logger;
         RepositoryDirectory = Environment.CurrentDirectory;
         _metadataParser = new ConventionalCommitsParser();
-    }
-
-    public string RepositoryDirectory
-    {
-        get => _repositoryDirectory;
-        set => _repositoryDirectory = DiscoverRepositoryDirectory(value);
-    }
-
-    private static string DiscoverRepositoryDirectory(string currentDirectory)
-    {
-        return currentDirectory.EndsWith(".git") ? 
-            currentDirectory : 
-            new DirectoryInfo(Repository.Discover(currentDirectory)).Parent!.FullName;
     }
 
     public string BranchName => Repository.Head.FriendlyName;
@@ -76,6 +61,19 @@ public class GitTool : IGitTool
         private set => _head = value;
     }
 
+    public string RepositoryDirectory
+    {
+        get => _repositoryDirectory;
+        set => _repositoryDirectory = DiscoverRepositoryDirectory(value);
+    }
+
+    private Repository Repository => _repository ??= new Repository(RepositoryDirectory);
+
+    public void Dispose()
+    {
+        _repository?.Dispose();
+    }
+
     public Commit Get(CommitId commitId)
     {
         return Get(commitId.Sha);
@@ -100,9 +98,9 @@ public class GitTool : IGitTool
 
     internal IReadOnlyList<Commit> GetCommitsLibGit2Sharp(string commitSha)
     {
-        return Repository.Commits.QueryBy(new CommitFilter()
+        return Repository.Commits.QueryBy(new CommitFilter
         {
-            IncludeReachableFrom = commitSha,
+            IncludeReachableFrom = commitSha
         }).Take(TakeLimit).Select(Convert).ToList();
     }
 
@@ -127,7 +125,10 @@ public class GitTool : IGitTool
         return commit;
     }
 
-    private Repository Repository => _repository ??= new Repository(RepositoryDirectory);
+    private static string DiscoverRepositoryDirectory(string currentDirectory)
+    {
+        return currentDirectory.EndsWith(".git") ? currentDirectory : new DirectoryInfo(Repository.Discover(currentDirectory)).Parent!.FullName;
+    }
 
     private bool GetHasLocalChanges()
     {
@@ -147,6 +148,7 @@ public class GitTool : IGitTool
         {
             throw new InvalidOperationException($"The method commit tool's {nameof(PrimeCache)} is called more than once.");
         }
+
         _initialised = true;
 
         var commits = Repository.Commits.Take(TakeLimit).Select(Convert).ToList();
@@ -154,11 +156,7 @@ public class GitTool : IGitTool
         {
             throw new Git2SemVerGitOperationException("Unable to get commits. Either new repository and no commits or problem accessing git.");
         }
-        _head = commits[0];
-    }
 
-    public void Dispose()
-    {
-        _repository?.Dispose();
+        _head = commits[0];
     }
 }

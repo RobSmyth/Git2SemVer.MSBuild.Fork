@@ -1,7 +1,6 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Generation;
 
 /// <summary>

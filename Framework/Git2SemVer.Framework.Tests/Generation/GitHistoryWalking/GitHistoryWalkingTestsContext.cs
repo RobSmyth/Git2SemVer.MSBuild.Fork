@@ -5,7 +5,6 @@ using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 using NoeticTools.Git2SemVer.Testing.Core;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.GitHistoryWalking;
 
 internal class GitHistoryWalkingTestsContext : IDisposable
@@ -22,13 +21,12 @@ internal class GitHistoryWalkingTestsContext : IDisposable
 
     public Mock<IGitTool> GitTool { get; }
 
-    private List<Commit> GetCommits(string gitLog)
-    {
-        var lines = gitLog.Split('\n');
-        return lines.Select(line => _logParser.ParseGitLogLine(line)).OfType<Commit>().ToList();
-    }
-
     public NUnitLogger Logger { get; }
+
+    public void Dispose()
+    {
+        Logger.Dispose();
+    }
 
     public void SetupGitRepository(LoggedScenario scenario)
     {
@@ -37,8 +35,9 @@ internal class GitHistoryWalkingTestsContext : IDisposable
         GitTool.Setup(x => x.Head).Returns(commits[scenario.HeadCommitId]);
     }
 
-    public void Dispose()
+    private List<Commit> GetCommits(string gitLog)
     {
-        Logger.Dispose();
+        var lines = gitLog.Split('\n');
+        return lines.Select(line => _logParser.ParseGitLogLine(line)).OfType<Commit>().ToList();
     }
 }

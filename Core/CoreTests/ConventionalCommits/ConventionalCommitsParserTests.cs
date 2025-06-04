@@ -1,6 +1,5 @@
 ﻿using NoeticTools.Git2SemVer.Core.ConventionCommits;
 
-
 #pragma warning disable NUnit2045
 
 namespace NoeticTools.Git2SemVer.Core.Tests.ConventionalCommits;
@@ -18,72 +17,72 @@ internal class ConventionalCommitsParserTests
     }
 
     [TestCase(
-                 """
-                 Body - paragraph1
+        """
+        Body - paragraph1
 
-                 Body - paragraph2
+        Body - paragraph2
 
-                 Body - paragraph2
-                 """,
-                 """
-                 Body - paragraph1
+        Body - paragraph2
+        """,
+        """
+        Body - paragraph1
 
-                 Body - paragraph2
+        Body - paragraph2
 
-                 Body - paragraph2
-                 """,
-                 "",
-                 false)]
+        Body - paragraph2
+        """,
+        "",
+        false)]
     [TestCase(
-                 """
-                 Body - paragraph1
-                 """,
-                 "Body - paragraph1",
-                 "",
-                 false)]
+        """
+        Body - paragraph1
+        """,
+        "Body - paragraph1",
+        "",
+        false)]
     [TestCase(
-                 """
-                 Body - paragraph1
+        """
+        Body - paragraph1
 
-                 BREAKING CHANGE: Oops
-                 """,
-                 "Body - paragraph1",
-                 "BREAKING CHANGE|Oops",
-                 true)]
+        BREAKING CHANGE: Oops
+        """,
+        "Body - paragraph1",
+        "BREAKING CHANGE|Oops",
+        true)]
     [TestCase(
-                 """
-                 Body - paragraph1
+        """
+        Body - paragraph1
 
-                 BREAKING CHANGE: Oops very sorry
+        BREAKING CHANGE: Oops very sorry
 
-                 """,
-                 "Body - paragraph1",
-                 "BREAKING CHANGE|Oops very sorry",
-                 true)]
+        """,
+        "Body - paragraph1",
+        "BREAKING CHANGE|Oops very sorry",
+        true)]
     [TestCase(
-                 """
-                 Body - paragraph1
+        """
+        Body - paragraph1
 
-                 BREAKING CHANGE: Oops very sorry
-                 ref: 1234
-                 """,
-                 "Body - paragraph1",
-                 """
-                 BREAKING CHANGE|Oops very sorry
-                 ref|1234
-                 """,
-                 true)]
+        BREAKING CHANGE: Oops very sorry
+        ref: 1234
+        """,
+        "Body - paragraph1",
+        """
+        BREAKING CHANGE|Oops very sorry
+        ref|1234
+        """,
+        true)]
     [TestCase(
-                 """
-                 Body - paragraph1
-                 """,
-                 "Body - paragraph1",
-                 "",
-                 false)]
+        """
+        Body - paragraph1
+        """,
+        "Body - paragraph1",
+        "",
+        false)]
     public void BodyMultiLineBodyAndFooterTest(string messageBody,
-                                               string expectedBody,
-                                               string expectedFooter,
-                                               bool hasBreakingChange)
+        string expectedBody,
+        string expectedFooter,
+        bool hasBreakingChange)
     {
         var result = _target.Parse("feat: Added a real nice feature", messageBody);
 
@@ -97,29 +96,29 @@ internal class ConventionalCommitsParserTests
     }
 
     [TestCase(
-                 """
-                 Body - paragraph1
+        """
+        Body - paragraph1
 
-                 Body - paragraph2
+        Body - paragraph2
 
-                 Body - paragraph2
-                 """,
-                 """
-                 Body - paragraph1
+        Body - paragraph2
+        """,
+        """
+        Body - paragraph1
 
-                 Body - paragraph2
+        Body - paragraph2
 
-                 Body - paragraph2
-                 """)]
+        Body - paragraph2
+        """)]
     [TestCase(
-                 """
-                 Body - paragraph1
-                 """,
-                 """
-                 Body - paragraph1
-                 """)]
+        """
+        Body - paragraph1
+        """,
+        """
+        Body - paragraph1
+        """)]
     public void BodyWithFooterTest(string messageBody,
-                                   string expectedBody)
+        string expectedBody)
     {
         var result = _target.Parse("feat: Added a real nice feature", messageBody);
 
@@ -131,22 +130,22 @@ internal class ConventionalCommitsParserTests
     }
 
     [TestCase(
-                 "BREAKING CHANGE: Oops very sorry",
-                 "BREAKING CHANGE|Oops very sorry",
-                 true)]
+        "BREAKING CHANGE: Oops very sorry",
+        "BREAKING CHANGE|Oops very sorry",
+        true)]
     [TestCase(
-                 """
-                 BREAKING CHANGE: Oops very sorry
-                 refs: 12345
-                 """,
-                 """
-                 BREAKING CHANGE|Oops very sorry
-                 refs|12345
-                 """,
-                 true)]
+        """
+        BREAKING CHANGE: Oops very sorry
+        refs: 12345
+        """,
+        """
+        BREAKING CHANGE|Oops very sorry
+        refs|12345
+        """,
+        true)]
     public void FooterWithoutBodyTest(string messageBody,
-                                      string expectedFooter,
-                                      bool hasBreakingChange)
+        string expectedFooter,
+        bool hasBreakingChange)
     {
         var result = _target.Parse("feat: Added a real nice feature", messageBody);
 
@@ -199,9 +198,9 @@ internal class ConventionalCommitsParserTests
     [TestCase("perf: Did something ", CommitChangeTypeId.Performance, "Did something ", false)]
     [TestCase("test: Did something", CommitChangeTypeId.Testing, "Did something", false)]
     public void SubjectWithConventionalCommitInfoTest(string messageSubject,
-                                                      CommitChangeTypeId expectedChangeTypeId,
-                                                      string expectedChangeDescription,
-                                                      bool hasBreakingChange)
+        CommitChangeTypeId expectedChangeTypeId,
+        string expectedChangeDescription,
+        bool hasBreakingChange)
     {
         var result = _target.Parse(messageSubject, "");
 

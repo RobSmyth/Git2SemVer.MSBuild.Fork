@@ -4,7 +4,6 @@ using LibGit2Sharp;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using Semver;
 
-
 #pragma warning disable SYSLIB1045
 
 // ReSharper disable MergeIntoPattern
@@ -19,7 +18,7 @@ public class Commit : ICommit
 
     public Commit(string sha, string[] parents, string summary, string messageBody,
         CommitMessageMetadata metadata, IReadOnlyList<Tag>? tags)
-    : this(sha, parents, summary, messageBody, "", metadata)
+        : this(sha, parents, summary, messageBody, "", metadata)
     {
         Tags = tags;
         if (tags != null)
@@ -51,35 +50,25 @@ public class Commit : ICommit
         ReleasedVersion = GetReleaseTag();
     }
 
-    [JsonPropertyOrder(11)]
-    public CommitId CommitId { get; }
+    [JsonPropertyOrder(11)] public CommitId CommitId { get; }
 
-    [JsonIgnore]
-    public bool HasReleaseTag => ReleasedVersion != null;
+    [JsonIgnore] public bool HasReleaseTag => ReleasedVersion != null;
 
-    [JsonPropertyOrder(22)]
-    public string MessageBody { get; }
+    [JsonPropertyOrder(22)] public string MessageBody { get; }
 
-    [JsonPropertyOrder(90)]
-    public CommitMessageMetadata Metadata { get; }
+    [JsonPropertyOrder(90)] public CommitMessageMetadata Metadata { get; }
 
-    [JsonIgnore] 
-    public IReadOnlyList<Tag>? Tags { get; } = null;
+    [JsonIgnore] public static Commit Null => new("00000000", [], "null commit", "", "", new CommitMessageMetadata());
 
-    [JsonIgnore]
-    public static Commit Null => new("00000000", [], "null commit", "", "", new CommitMessageMetadata());
+    [JsonPropertyOrder(31)] public CommitId[] Parents { get; }
 
-    [JsonPropertyOrder(31)]
-    public CommitId[] Parents { get; }
+    [JsonPropertyOrder(25)] public string Refs { get; }
 
-    [JsonPropertyOrder(25)]
-    public string Refs { get; }
+    [JsonPropertyOrder(12)] public SemVersion? ReleasedVersion { get; }
 
-    [JsonPropertyOrder(12)]
-    public SemVersion? ReleasedVersion { get; }
+    [JsonPropertyOrder(21)] public string Summary { get; }
 
-    [JsonPropertyOrder(21)]
-    public string Summary { get; }
+    [JsonIgnore] public IReadOnlyList<Tag>? Tags { get; }
 
     private SemVersion? GetReleaseTag()
     {

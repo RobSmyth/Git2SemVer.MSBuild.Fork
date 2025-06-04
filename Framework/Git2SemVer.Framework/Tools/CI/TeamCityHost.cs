@@ -4,7 +4,6 @@ using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.CI;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Tools.CI;
 
 internal class TeamCityHost : BuildHostBase, IDetectableBuildHost

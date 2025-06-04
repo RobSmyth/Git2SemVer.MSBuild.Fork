@@ -1,5 +1,4 @@
 ﻿using NoeticTools.Git2SemVer.IntegrationTests.Framework;
-using System.Runtime.InteropServices;
 
 namespace NoeticTools.Git2SemVer.IntegrationTests.Building;
 
@@ -52,7 +51,7 @@ internal abstract class VersioningBuildTestsBase
         var scriptPath = context.DeployScript("ForceProperties1.csx");
 
         var returnCode = context.DotNetCli.Pack(context.TestSolutionPath, context.BuildConfiguration,
-                                            $"-p:Git2SemVer_ScriptPath={scriptPath} -fileLogger");
+            $"-p:Git2SemVer_ScriptPath={scriptPath} -fileLogger");
         Assert.That(returnCode, Is.EqualTo(0));
 
         var output = DotNetProcessHelpers.RunDotnetApp(context.CompiledAppPath, context.Logger);

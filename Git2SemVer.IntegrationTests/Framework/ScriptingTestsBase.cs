@@ -6,7 +6,6 @@ using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Testing.Core;
 
-
 namespace NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
 [NonParallelizable]
@@ -16,23 +15,35 @@ internal abstract class ScriptingTestsBase
     private static int _testDataFolderId; // avoid locks on folders not release quickly between tests
     private static readonly object SyncToken = new();
 
-    private static bool WaitUntil(Func<bool> predicate)
+    protected string TestFolderPath = "";
+
+    protected DotNetTool DotNetCli { get; private set; } = null!;
+
+    protected GitTool Git { get; private set; } = null!;
+
+    protected ILogger Logger { get; private set; } = null!;
+
+    protected string DeployScript(string destinationDirectory, string scriptFilename)
     {
-        var stopwatch = Stopwatch.StartNew();
-        while (!predicate())
+        lock (SyncToken)
         {
-            if (stopwatch.Elapsed > TimeSpan.FromSeconds(30))
-            {
-                return false;
-            }
-
-            Thread.Sleep(5);
+            var scriptPath = Path.Combine(destinationDirectory, scriptFilename);
+            GetType().Assembly.WriteResourceFile(scriptFilename, scriptPath);
+            return scriptPath;
         }
-
-        return true;
     }
 
-    protected string TestFolderPath = "";
+    protected void OneTimeSetUpBase()
+    {
+        Logger = new NUnitLogger(); // todo - Logger is set here and in the SetUpBase method
+        DotNetCli = new DotNetTool(new ProcessCli(Logger));
+        Git = new GitTool(Logger);
+    }
+
+    protected void OneTimeTearDownBase()
+    {
+        Git.Dispose();
+    }
 
     protected void SetUpBase()
     {
@@ -45,8 +56,8 @@ internal abstract class ScriptingTestsBase
 
         var dataFolderId = ++_testDataFolderId;
         TestFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                                      "Git2SemVer",
-                                      $"TestData{dataFolderId}");
+            "Git2SemVer",
+            $"TestData{dataFolderId}");
         if (Directory.Exists(TestFolderPath))
         {
             Directory.Delete(TestFolderPath, true);
@@ -63,31 +74,19 @@ internal abstract class ScriptingTestsBase
         }
     }
 
-    protected DotNetTool DotNetCli { get; private set; } = null!;
-
-    protected ILogger Logger { get; private set; } = null!;
-
-    protected void OneTimeSetUpBase()
+    private static bool WaitUntil(Func<bool> predicate)
     {
-        Logger = new NUnitLogger(); // todo - Logger is set here and in the SetUpBase method
-        DotNetCli = new DotNetTool(new ProcessCli(Logger));
-        Git = new GitTool(Logger);
-    }
-
-    protected void OneTimeTearDownBase()
-    {
-        Git.Dispose();
-    }
-
-    protected GitTool Git { get; private set; } = null!;
-
-    protected string DeployScript(string destinationDirectory, string scriptFilename)
-    {
-        lock (SyncToken)
+        var stopwatch = Stopwatch.StartNew();
+        while (!predicate())
         {
-            var scriptPath = Path.Combine(destinationDirectory, scriptFilename);
-            GetType().Assembly.WriteResourceFile(scriptFilename, scriptPath);
-            return scriptPath;
+            if (stopwatch.Elapsed > TimeSpan.FromSeconds(30))
+            {
+                return false;
+            }
+
+            Thread.Sleep(5);
         }
+
+        return true;
     }
 }

@@ -6,19 +6,18 @@ using NoeticTools.Git2SemVer.Framework.Generation.Builders;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using NoeticTools.Git2SemVer.Framework.Persistence;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Generation;
 
 internal sealed class VersionGenerator : IVersionGenerator
 {
-    private readonly IVersionGeneratorInputs _inputs;
-    private readonly IBuildHost _host;
-    private readonly IOutputsJsonIO _generatedOutputsJsonFile;
-    private readonly IGitTool _gitTool;
-    private readonly IGitHistoryPathsFinder _gitPathsFinder;
     private readonly IDefaultVersionBuilderFactory _defaultVersionBuilderFactory;
-    private readonly IVersionBuilder _scriptBuilder;
+    private readonly IOutputsJsonIO _generatedOutputsJsonFile;
+    private readonly IGitHistoryPathsFinder _gitPathsFinder;
+    private readonly IGitTool _gitTool;
+    private readonly IBuildHost _host;
+    private readonly IVersionGeneratorInputs _inputs;
     private readonly ILogger _logger;
+    private readonly IVersionBuilder _scriptBuilder;
 
     public VersionGenerator(IVersionGeneratorInputs inputs,
         IBuildHost host,
@@ -37,6 +36,11 @@ internal sealed class VersionGenerator : IVersionGenerator
         _defaultVersionBuilderFactory = defaultVersionBuilderFactory;
         _scriptBuilder = scriptBuilder;
         _logger = logger;
+    }
+
+    public void Dispose()
+    {
+        _gitTool.Dispose();
     }
 
     public IVersionOutputs Run()
@@ -96,10 +100,5 @@ internal sealed class VersionGenerator : IVersionGenerator
         {
             _generatedOutputsJsonFile.Write(_inputs.SolutionSharedDirectory, outputs);
         }
-    }
-
-    public void Dispose()
-    {
-        _gitTool.Dispose();
     }
 }

@@ -2,7 +2,6 @@
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using Semver;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 #pragma warning disable CS1591
@@ -30,13 +29,9 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
     }
 
     public Commit FirstCommit => _segments.First().OldestCommit;
-
     public Commit HeadCommit => _segments.Last().YoungestCommit;
-
     public int Id { get; internal set; }
-
     public SemVersion? LastReleasedVersion { get; }
-
     public SemVersion Version { get; }
 
     public override string ToString()

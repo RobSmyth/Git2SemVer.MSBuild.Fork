@@ -3,7 +3,6 @@ using System.Text;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 internal sealed class VersionHistorySegmentsBuilder
@@ -53,6 +52,14 @@ internal sealed class VersionHistorySegmentsBuilder
         return _segments.Values.ToList();
     }
 
+    private void BuildSegmentsTo(Commit commit)
+    {
+        while (NextCommit(commit) == SegmentWalkResult.Continue)
+        {
+            commit = _gitTool.Get(commit.Parents.First());
+        }
+    }
+
     private void LogFoundSegments()
     {
         if (_logger.Level < LoggingLevel.Debug)
@@ -70,14 +77,6 @@ internal sealed class VersionHistorySegmentsBuilder
         }
 
         _logger.LogDebug(stringBuilder.ToString());
-    }
-
-    private void BuildSegmentsTo(Commit commit)
-    {
-        while (NextCommit(commit) == SegmentWalkResult.Continue)
-        {
-            commit = _gitTool.Get(commit.Parents.First());
-        }
     }
 
     private SegmentWalkResult NextCommit(Commit commit)

@@ -8,12 +8,6 @@ namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.ProjectVersioningTes
 
 internal class StandAloneProjectUnitTests : ProjectVersioningUnitTestsBase
 {
-    [SetUp]
-    public void SetUp()
-    {
-        ModeIs(VersioningMode.StandAloneProject);
-    }
-
     [TestCase]
     public void AlwaysGeneratesVersionTest()
     {
@@ -23,5 +17,11 @@ internal class StandAloneProjectUnitTests : ProjectVersioningUnitTestsBase
         Assert.That(result, Is.SameAs(GeneratedOutputs.Object));
         OutputsCacheJsonFile.Verify(x => x.Load(It.IsAny<string>()), Times.Never);
         OutputsCacheJsonFile.Verify(x => x.Write(It.IsAny<string>(), It.IsAny<IVersionOutputs>()), Times.Never);
+    }
+
+    [SetUp]
+    public void SetUp()
+    {
+        ModeIs(VersioningMode.StandAloneProject);
     }
 }

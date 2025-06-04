@@ -1,6 +1,5 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
 
-
 namespace NoeticTools.Git2SemVer.Testing.Core;
 
 /// <summary>
@@ -142,6 +141,7 @@ public class NUnitLogger : ILogger
         {
             return;
         }
+
         LogTrace(messageGenerator());
     }
 

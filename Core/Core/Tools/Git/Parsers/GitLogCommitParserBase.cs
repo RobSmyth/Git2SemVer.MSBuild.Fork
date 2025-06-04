@@ -2,14 +2,10 @@
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 
-
 namespace NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
 public abstract class GitLogCommitParserBase
 {
-    private readonly ICommitsCache _cache;
-    private readonly IConventionalCommitsParser _conventionalCommitParser;
-
     private const string GitLogParsingPattern =
         """
         ^(?<graph>[^\x1f$]*) 
@@ -22,22 +18,25 @@ public abstract class GitLogCommitParserBase
            \|$)?
         """;
 
+    private readonly ICommitsCache _cache;
+    private readonly IConventionalCommitsParser _conventionalCommitParser;
+
     protected GitLogCommitParserBase(ICommitsCache cache,
-                                     IConventionalCommitsParser? conventionalCommitParser = null)
+        IConventionalCommitsParser? conventionalCommitParser = null)
     {
         _cache = cache;
         _conventionalCommitParser = conventionalCommitParser ?? new ConventionalCommitsParser();
         FormatArgs = "--graph --pretty=\"format:%x1f.|%H|%P|%x02%s%x03|%x02%b%x03|%d|%x1e\"";
     }
 
-    public char RecordSeparator => CharacterConstants.RS;
-
     public string FormatArgs { get; }
+
+    public char RecordSeparator => CharacterConstants.RS;
 
     protected (Commit? commit, string graph) ParseCommitAndGraph(string line)
     {
         line = line.Trim();
-        var regex = new Regex(GitResponseParser.GitLogParsingPattern, RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
+        var regex = new Regex(GitLogParsingPattern, RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
         var match = regex.Match(line);
         if (!match.Success)
         {

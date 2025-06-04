@@ -32,9 +32,9 @@ public sealed class CSharpScriptRunner
     public static IReadOnlyList<string> ReferencedAssemblies { get; private set; } = [];
 
     public async Task RunScript(object globalContext,
-                                string scriptPath,
-                                IReadOnlyList<Type> metadataReferences,
-                                IList<Type> inMemoryTypes)
+        string scriptPath,
+        IReadOnlyList<Type> metadataReferences,
+        IList<Type> inMemoryTypes)
     {
         Ensure.NotNull(globalContext, nameof(globalContext));
         Ensure.NotNull(scriptPath, nameof(scriptPath));
@@ -63,9 +63,9 @@ public sealed class CSharpScriptRunner
                     var scriptOptions = GetScriptOptions(metadataReferences);
                     scriptOptions.WithEmitDebugInformation(true);
                     var script = CSharpScript.Create<int>(scriptContent,
-                                                          scriptOptions,
-                                                          assemblyLoader: loader,
-                                                          globalsType: globalsType);
+                        scriptOptions,
+                        assemblyLoader: loader,
+                        globalsType: globalsType);
                     await script.RunAsync(globalContext);
                 }
             }

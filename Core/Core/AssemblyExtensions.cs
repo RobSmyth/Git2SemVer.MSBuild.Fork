@@ -25,7 +25,7 @@ public static class AssemblyExtensions
     public static Stream GetResourceStream(this Assembly assembly, string filename)
     {
         var resourcePath = assembly.GetManifestResourceNames()
-                                   .SingleOrDefault(str => str.EndsWith(filename));
+            .SingleOrDefault(str => str.EndsWith(filename));
         if (resourcePath == null)
         {
             throw new Exception($"Resource file {filename} not found.");

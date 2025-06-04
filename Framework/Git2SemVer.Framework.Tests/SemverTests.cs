@@ -1,6 +1,5 @@
 ﻿using Semver;
 
-
 namespace NoeticTools.Git2SemVer.Framework.Tests;
 
 [TestFixture]
