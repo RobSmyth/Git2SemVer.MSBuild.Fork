@@ -8,6 +8,7 @@ using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
 using NoeticTools.Git2SemVer.Framework.Persistence;
 using NoeticTools.Git2SemVer.Framework.Tools.CI;
 
+
 namespace NoeticTools.Git2SemVer.Framework;
 
 [ExcludeFromCodeCoverage]
@@ -31,26 +32,26 @@ public sealed class ProjectVersioningFactory
         config ??= Git2SemVerConfiguration.Load();
 
         var host = new BuildHostFactory(config, _logger).Create(inputs.HostType,
-            inputs.BuildNumber,
-            inputs.BuildContext,
-            inputs.BuildIdFormat);
+                                                                inputs.BuildNumber,
+                                                                inputs.BuildContext,
+                                                                inputs.BuildIdFormat);
         var gitTool = new GitTool(_logger) { RepositoryDirectory = inputs.WorkingDirectory };
         var gitPathsFinder = new PathsFromLastReleasesFinder(gitTool, _logger);
 
         var defaultBuilderFactory = new DefaultVersionBuilderFactory(_logger);
         var scriptBuilder = new ScriptVersionBuilder(_logger);
         var versionGenerator = new VersionGenerator(inputs,
-            host,
-            outputsJsonIO,
-            gitTool,
-            gitPathsFinder,
-            defaultBuilderFactory,
-            scriptBuilder,
-            _logger);
+                                                    host,
+                                                    outputsJsonIO,
+                                                    gitTool,
+                                                    gitPathsFinder,
+                                                    defaultBuilderFactory,
+                                                    scriptBuilder,
+                                                    _logger);
         var projectVersioning = new ProjectVersioning(inputs, host,
-            outputsJsonIO,
-            versionGenerator,
-            _logger);
+                                                      outputsJsonIO,
+                                                      versionGenerator,
+                                                      _logger);
         return projectVersioning;
     }
 }

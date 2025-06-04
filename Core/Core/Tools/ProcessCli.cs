@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Injectio.Attributes;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
+
 
 namespace NoeticTools.Git2SemVer.Core.Tools;
 
@@ -33,7 +33,7 @@ public sealed class ProcessCli : IProcessCli
     ///     Run dotnet cli with provided command line arguments.
     /// </summary>
     public int Run(string application, string commandLineArguments,
-        TextWriter? standardOut, TextWriter? errorOut = null)
+                   TextWriter? standardOut, TextWriter? errorOut = null)
     {
         lock (Sync)
         {
@@ -125,7 +125,7 @@ public sealed class ProcessCli : IProcessCli
     ///     Run dotnet cli with provided command line arguments.
     /// </summary>
     public async Task<int> RunAsync(string application, string commandLineArguments,
-        TextWriter standardOut, TextWriter? errorOut = null)
+                                    TextWriter standardOut, TextWriter? errorOut = null)
     {
         //        Logger.LogTrace($"Running '{application} {commandLineArguments}'.");
         Logger.LogInfo($"Running '{application} {commandLineArguments}'.");

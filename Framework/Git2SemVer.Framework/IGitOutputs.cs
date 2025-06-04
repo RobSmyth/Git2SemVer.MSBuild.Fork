@@ -3,6 +3,7 @@ using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using Semver;
 
+
 namespace NoeticTools.Git2SemVer.Framework;
 
 [JsonDerivedType(typeof(GitOutputs), "GitOutputs")]

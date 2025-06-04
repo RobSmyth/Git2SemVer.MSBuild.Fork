@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Microsoft.Build.Framework;
 
+
 namespace NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
 internal class BuildEngine9Stub : IBuildEngine9
@@ -30,20 +31,20 @@ internal class BuildEngine9Stub : IBuildEngine9
     }
 
     public bool BuildProjectFile(string projectFileName, string[] targetNames, IDictionary globalProperties, IDictionary targetOutputs,
-        string toolsVersion)
+                                 string toolsVersion)
     {
         return false;
     }
 
     public bool BuildProjectFilesInParallel(string[] projectFileNames, string[] targetNames, IDictionary[] globalProperties,
-        IDictionary[] targetOutputsPerProject, string[] toolsVersion, bool useResultsCache,
-        bool unloadProjectsOnCompletion)
+                                            IDictionary[] targetOutputsPerProject, string[] toolsVersion, bool useResultsCache,
+                                            bool unloadProjectsOnCompletion)
     {
         return false;
     }
 
     public BuildEngineResult BuildProjectFilesInParallel(string[] projectFileNames, string[] targetNames, IDictionary[] globalProperties,
-        IList<string>[] removeGlobalProperties, string[] toolsVersion, bool returnTargetOutputs)
+                                                         IList<string>[] removeGlobalProperties, string[] toolsVersion, bool returnTargetOutputs)
     {
         throw new NotImplementedException();
     }

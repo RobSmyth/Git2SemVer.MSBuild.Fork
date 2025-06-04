@@ -2,6 +2,7 @@
 using LibGit2Sharp;
 using Semver;
 
+
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 
 [JsonDerivedType(typeof(Commit), "Commit")]
@@ -18,5 +19,6 @@ public interface ICommit
     SemVersion? ReleasedVersion { get; }
 
     string Summary { get; }
+
     IReadOnlyList<Tag>? Tags { get; }
 }

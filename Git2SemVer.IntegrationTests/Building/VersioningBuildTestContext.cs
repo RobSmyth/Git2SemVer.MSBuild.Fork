@@ -5,6 +5,7 @@ using NoeticTools.Git2SemVer.Core.Tools;
 using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
 using NoeticTools.Git2SemVer.Testing.Core;
 
+
 #pragma warning disable NUnit2045
 
 namespace NoeticTools.Git2SemVer.IntegrationTests.Building;
@@ -57,8 +58,6 @@ internal sealed class VersioningBuildTestContext : IDisposable
 
     public string TestSolutionPath { get; }
 
-    private DirectoryInfo TestDirectory { get; }
-
     public static void AssertFileExists(string packageDirectory, string expectedFilename)
     {
         var directory = new DirectoryInfo(packageDirectory);
@@ -92,6 +91,8 @@ internal sealed class VersioningBuildTestContext : IDisposable
         Assert.That(returnCode, Is.EqualTo(0));
         Assert.That(Logger.HasError, Is.False);
     }
+
+    private DirectoryInfo TestDirectory { get; }
 
     private void ExtractResourceToDirectory(string filename, string extractPath)
     {

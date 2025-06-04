@@ -32,8 +32,6 @@ internal sealed class DotNetToolIntegrationTestContext : IDisposable
 
     public DotNetTool DotNetCli { get; }
 
-    private NUnitLogger Logger { get; }
-
     public DirectoryInfo TestDirectory { get; }
 
     public string TestFolderName { get; }
@@ -43,4 +41,6 @@ internal sealed class DotNetToolIntegrationTestContext : IDisposable
         _activeContexts--;
         TestDirectoryResource.Release();
     }
+
+    private NUnitLogger Logger { get; }
 }

@@ -1,8 +1,8 @@
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 
-#pragma warning disable NUnit2045
 
+#pragma warning disable NUnit2045
 
 namespace NoeticTools.Git2SemVer.Core.IntegrationTests;
 

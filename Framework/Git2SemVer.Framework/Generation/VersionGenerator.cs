@@ -6,6 +6,7 @@ using NoeticTools.Git2SemVer.Framework.Generation.Builders;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using NoeticTools.Git2SemVer.Framework.Persistence;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Generation;
 
 internal sealed class VersionGenerator : IVersionGenerator
@@ -20,13 +21,13 @@ internal sealed class VersionGenerator : IVersionGenerator
     private readonly IVersionBuilder _scriptBuilder;
 
     public VersionGenerator(IVersionGeneratorInputs inputs,
-        IBuildHost host,
-        IOutputsJsonIO generatedOutputsJsonFile,
-        IGitTool gitTool,
-        IGitHistoryPathsFinder gitPathsFinder,
-        IDefaultVersionBuilderFactory defaultVersionBuilderFactory,
-        IVersionBuilder scriptBuilder,
-        ILogger logger)
+                            IBuildHost host,
+                            IOutputsJsonIO generatedOutputsJsonFile,
+                            IGitTool gitTool,
+                            IGitHistoryPathsFinder gitPathsFinder,
+                            IDefaultVersionBuilderFactory defaultVersionBuilderFactory,
+                            IVersionBuilder scriptBuilder,
+                            ILogger logger)
     {
         _inputs = inputs;
         _host = host;

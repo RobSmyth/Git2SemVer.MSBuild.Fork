@@ -5,6 +5,7 @@ using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Tests.TestScenarios;
 using NoeticTools.Git2SemVer.Testing.Core;
 
+
 #pragma warning disable NUnit2045
 
 namespace NoeticTools.Git2SemVer.Framework.Tests.Generation;
@@ -28,9 +29,9 @@ internal class PathsFromLastReleasesFinderTests
         _repository = new Mock<ICommitsCache>();
         _gitTool = new Mock<IGitTool>();
         _gitTool.Setup(x => x.Get(It.IsAny<CommitId>()))
-            .Returns((CommitId commitId) => _commitsLookup[commitId.Sha]);
+                .Returns((CommitId commitId) => _commitsLookup[commitId.Sha]);
         _gitTool.Setup(x => x.BranchName)
-            .Returns("master");
+                .Returns("master");
     }
 
     [TearDown]
@@ -45,7 +46,7 @@ internal class PathsFromLastReleasesFinderTests
         _logger.LogInfo(scenario.Description + "\n");
         LoadRepository(scenario.Commits, scenario.HeadCommitId);
         var target = new PathsFromLastReleasesFinder(_gitTool.Object,
-            _logger);
+                                                     _logger);
 
         var historyPaths = target.FindPathsToHead();
 

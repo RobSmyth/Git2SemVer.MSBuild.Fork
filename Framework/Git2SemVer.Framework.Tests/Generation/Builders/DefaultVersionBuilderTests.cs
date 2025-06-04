@@ -9,6 +9,7 @@ using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using NoeticTools.Git2SemVer.Testing.Core;
 using Semver;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.Builders;
 
 [TestFixture]
@@ -84,11 +85,11 @@ internal class DefaultVersionBuilderTests
         _target.Build(_host.Object, _git.Object, _inputs.Object, _outputs.Object);
 
         var expectedVersion = _version.WithPrerelease(expectedPrereleaseLabel, "77")
-            .WithMetadata(branchName.ToNormalisedSemVerIdentifier(), "001");
+                                      .WithMetadata(branchName.ToNormalisedSemVerIdentifier(), "001");
         _outputs.VerifySet(x => x.BuildSystemVersion = expectedVersion.WithoutMetadata(), Times.Once);
         _outputs.Verify(x => x.SetAllVersionPropertiesFrom(expectedVersion,
-            BuildNumber,
-            "BUILD_CONTEXT"));
+                                                           BuildNumber,
+                                                           "BUILD_CONTEXT"));
     }
 
     [TestCase("1.0.0", "main")]

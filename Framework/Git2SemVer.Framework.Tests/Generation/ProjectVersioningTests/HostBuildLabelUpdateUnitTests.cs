@@ -2,10 +2,19 @@
 using NoeticTools.Git2SemVer.Framework.Generation;
 using Semver;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.ProjectVersioningTests;
 
 internal class HostBuildLabelUpdateUnitTests : ProjectVersioningUnitTestsBase
 {
+    [SetUp]
+    public void SetUp()
+    {
+        SharedCachedOutputs.Setup(x => x.IsValid).Returns(true);
+        GeneratedOutputs.Setup(x => x.IsValid).Returns(true);
+        VersionGenerator.Setup(x => x.Run()).Returns(GeneratedOutputs.Object);
+    }
+
     [TestCase(VersioningMode.SolutionVersioningProject)]
     [TestCase(VersioningMode.SolutionClientProject)]
     [TestCase(VersioningMode.StandAloneProject)]
@@ -33,14 +42,6 @@ internal class HostBuildLabelUpdateUnitTests : ProjectVersioningUnitTestsBase
         Target.Run();
 
         Host.Verify(x => x.SetBuildLabel(It.IsAny<string>()), Times.Never);
-    }
-
-    [SetUp]
-    public void SetUp()
-    {
-        SharedCachedOutputs.Setup(x => x.IsValid).Returns(true);
-        GeneratedOutputs.Setup(x => x.IsValid).Returns(true);
-        VersionGenerator.Setup(x => x.Run()).Returns(GeneratedOutputs.Object);
     }
 
     [TestCase(VersioningMode.SolutionVersioningProject)]

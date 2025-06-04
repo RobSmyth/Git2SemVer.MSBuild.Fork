@@ -2,6 +2,7 @@
 
 using NoeticTools.Git2SemVer.Core.Exceptions;
 
+
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 
 public sealed class CommitId : IEquatable<CommitId>, IEquatable<string>

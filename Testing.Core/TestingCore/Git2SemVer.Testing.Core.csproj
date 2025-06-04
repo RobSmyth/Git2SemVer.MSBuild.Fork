@@ -69,14 +69,17 @@
   </ItemGroup>
 
   <!-- Ensure that the Git2SemVer version information JSON file is available.  -->
-  <Target Name="Git2SemVerEnsureVersionInfoBuilt" Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
+  <Target Name="Git2SemVerEnsureVersionInfoBuilt"
+          Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'" AfterTargets="PrepareResources"
+          BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
 
     <PropertyGroup>
       <SharedPropsFileExists Condition="Exists($(Git2SemVer_SharedVersioningJsonFile))">true</SharedPropsFileExists>
       <SharedPropsFileExists Condition="'$(SharedPropsFileExists)' == ''">false</SharedPropsFileExists>
     </PropertyGroup>
 
-    <Message Text="Git2SemVer: Generating versioning information." Importance="high" Condition=" '$(SharedPropsFileExists)' == 'false' " />
+    <Message Text="Git2SemVer: Generating versioning information." Importance="high"
+             Condition=" '$(SharedPropsFileExists)' == 'false' " />
 
     <MSBuild Projects="$(Git2SemVer_VersioningProjectPath)" Condition=" '$(SharedPropsFileExists)' == 'false' " />
 
@@ -84,7 +87,10 @@
 
   <!-- Load generated versioning information -->
   <!-- ReSharper disable once UnknownTarget -->
-  <Target Name="Git2SemVerLoadVersionInformation" Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'" DependsOnTargets="Git2SemVerEnsureVersionInfoBuilt" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
+  <Target Name="Git2SemVerLoadVersionInformation"
+          Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'"
+          DependsOnTargets="Git2SemVerEnsureVersionInfoBuilt" AfterTargets="PrepareResources"
+          BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
 
     <Message Text="Git2SemVer: Loading versioning information." Importance="normal" />
 

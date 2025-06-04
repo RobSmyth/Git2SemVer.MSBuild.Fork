@@ -1,5 +1,6 @@
 ﻿using NuGet.Versioning;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Tests;
 
 [TestFixture]
@@ -8,7 +9,7 @@ public class NuGetVersioningTests
     [TestCase("1.2.3-alpha.001")]
     public void IsInvalidTest(string input)
     {
-        var succeeded = NuGetVersion.TryParse(input, out var _);
+        var succeeded = NuGetVersion.TryParse(input, out _);
 
         Assert.That(succeeded, Is.False);
     }

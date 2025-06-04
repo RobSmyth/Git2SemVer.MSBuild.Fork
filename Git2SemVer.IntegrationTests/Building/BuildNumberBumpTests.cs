@@ -1,8 +1,8 @@
-﻿using DotNetConfig;
-using NoeticTools.Git2SemVer.IntegrationTests.Framework;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Framework.Config;
+using NoeticTools.Git2SemVer.IntegrationTests.Framework;
+
 
 namespace NoeticTools.Git2SemVer.IntegrationTests.Building;
 
@@ -19,7 +19,7 @@ public class UncontrolledHostBuildTests
         var firstBuildNumber = RebuildAndRun(context);
         var secondBuildNumber = RebuildAndRun(context);
 
-        Assert.That(secondBuildNumber-firstBuildNumber, Is.EqualTo(1));
+        Assert.That(secondBuildNumber - firstBuildNumber, Is.EqualTo(1));
     }
 
     [Test]
@@ -35,7 +35,7 @@ public class UncontrolledHostBuildTests
         Assert.That(int.Parse(host.BuildNumber), Is.GreaterThan(0));
         Assert.That(host.BuildNumber, Is.EqualTo(config.BuildNumber.ToString()));
         Assert.That(host.BuildContext, Is.EqualTo(Environment.MachineName));
-        Assert.That(host.BuildId, Is.EqualTo(new []{Environment.MachineName, config.BuildNumber.ToString()}));
+        Assert.That(host.BuildId, Is.EqualTo(new[] { Environment.MachineName, config.BuildNumber.ToString() }));
     }
 
     private int RebuildAndRun(VersioningBuildTestContext context)
@@ -56,6 +56,6 @@ public class UncontrolledHostBuildTests
     private VersioningBuildTestContext CreateTestContext()
     {
         return new VersioningBuildTestContext("UncontrolledHost", "StandAloneTestSolution",
-            "StandAloneVersioning.sln", "TestApplication");
+                                              "StandAloneVersioning.sln", "TestApplication");
     }
 }

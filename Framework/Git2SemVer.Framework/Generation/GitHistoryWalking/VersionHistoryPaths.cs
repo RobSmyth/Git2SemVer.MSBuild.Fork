@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 internal sealed class HistoryPaths : IHistoryPaths

@@ -1,5 +1,6 @@
 ﻿using Semver;
 
+
 namespace NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
 public interface IGitResponseParser : IGitLogResponseParser

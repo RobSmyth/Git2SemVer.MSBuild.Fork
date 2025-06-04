@@ -5,6 +5,7 @@ using System.Text.Unicode;
 using NoeticTools.Git2SemVer.Core.Git2SemVer;
 using NoeticTools.Git2SemVer.Framework.Generation;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Persistence;
 
 // ReSharper disable once ClassNeverInstantiated.Global
@@ -82,7 +83,8 @@ public class OutputsJsonFileIO : IOutputsJsonIO
 
     private sealed class VersioningInfo
     {
-        [JsonPropertyOrder(2)] public VersionOutputs? Git2SemVerVersionInfo { get; set; }
+        [JsonPropertyOrder(2)]
+        public VersionOutputs? Git2SemVerVersionInfo { get; set; }
 
         /// <summary>
         ///     This version info's schema version.

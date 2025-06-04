@@ -1,5 +1,4 @@
-﻿
-namespace NoeticTools.Git2SemVer.Core.Interops.DotNet;
+﻿namespace NoeticTools.Git2SemVer.Core.Interops.DotNet;
 
 [RegisterSingleton]
 public sealed class FileInterop : IFiles

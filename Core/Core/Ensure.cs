@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 
+
 namespace NoeticTools.Git2SemVer.Core;
 
 [DebuggerStepThrough]

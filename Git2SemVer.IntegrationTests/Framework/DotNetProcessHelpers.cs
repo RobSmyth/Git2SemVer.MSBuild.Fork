@@ -2,6 +2,7 @@
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools;
 
+
 namespace NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
 public static class DotNetProcessHelpers

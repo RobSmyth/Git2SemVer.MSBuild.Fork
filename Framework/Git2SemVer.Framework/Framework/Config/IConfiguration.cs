@@ -1,5 +1,6 @@
 ﻿using NoeticTools.Git2SemVer.Framework.Tools.CI;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Framework.Config;
 
 public interface IConfiguration

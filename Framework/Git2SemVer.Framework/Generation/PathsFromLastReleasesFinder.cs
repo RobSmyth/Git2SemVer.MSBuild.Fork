@@ -3,6 +3,7 @@ using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
+
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 // ReSharper disable CanSimplifyDictionaryLookupWithTryAdd

@@ -3,6 +3,7 @@ using System.Text;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 internal sealed class VersionHistorySegmentsBuilder

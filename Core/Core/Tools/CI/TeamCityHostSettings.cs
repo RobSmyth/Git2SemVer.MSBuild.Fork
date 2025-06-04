@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 
+
 // ReSharper disable MemberCanBeMadeStatic.Global
 
 namespace NoeticTools.Git2SemVer.Core.Tools.CI;

@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Text.Unicode;
 using NoeticTools.Git2SemVer.Framework.Tools.CI;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Framework.Config;
 
 /// <summary>
@@ -14,13 +15,15 @@ internal sealed class Git2SemVerConfiguration : IConfiguration
 {
     private static Mutex _fileMutex = new(false, "G2SemVerConfigFileMutex");
 
-    [JsonIgnore] private static JsonSerializerOptions _serialiseOptions = new()
+    [JsonIgnore]
+    private static JsonSerializerOptions _serialiseOptions = new()
     {
         WriteIndented = true,
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
     };
 
-    [JsonIgnore] private int _onLoadHash;
+    [JsonIgnore]
+    private int _onLoadHash;
 
     /// <summary>
     ///     The local build log size.
@@ -123,11 +126,6 @@ internal sealed class Git2SemVerConfiguration : IConfiguration
         }
     }
 
-    internal static Git2SemVerConfiguration Load(string json)
-    {
-        return JsonSerializer.Deserialize<Git2SemVerConfiguration>(json)!;
-    }
-
     private int GetCurrentHashCode()
     {
         return HashCode.Combine(BuildLogSizeLimit, BuildNumber, Rev);
@@ -142,5 +140,10 @@ internal sealed class Git2SemVerConfiguration : IConfiguration
         }
 
         return Path.Combine(folderPath, "Configuration.json");
+    }
+
+    internal static Git2SemVerConfiguration Load(string json)
+    {
+        return JsonSerializer.Deserialize<Git2SemVerConfiguration>(json)!;
     }
 }

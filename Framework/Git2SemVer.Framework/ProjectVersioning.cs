@@ -3,6 +3,7 @@ using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Persistence;
 
+
 #pragma warning disable CA1859
 
 namespace NoeticTools.Git2SemVer.Framework;

@@ -4,6 +4,7 @@ using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
+
 namespace NoeticTools.Git2SemVer.Core.Tests.Tools.Git;
 
 [TestFixture]

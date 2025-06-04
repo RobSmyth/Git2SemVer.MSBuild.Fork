@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
+
 namespace NoeticTools.Git2SemVer.Core.ConventionCommits;
 
 public sealed class ConventionalCommitsParser : IConventionalCommitsParser
@@ -35,7 +36,7 @@ public sealed class ConventionalCommitsParser : IConventionalCommitsParser
                                             )
                                             \Z 
                                             """,
-        RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.CultureInvariant);
+                                            RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.CultureInvariant);
 
     private readonly Regex _summaryRegex = new("""
                                                \A
@@ -43,7 +44,7 @@ public sealed class ConventionalCommitsParser : IConventionalCommitsParser
                                                    (\((?<scope>[\w\-\.]+)\))?(?<breakFlag>!)?: \s+(?<desc>\S.*?)
                                                \Z
                                                """,
-        RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline);
+                                               RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline);
 
     public CommitMessageMetadata Parse(string commitSummary, string commitMessageBody)
     {

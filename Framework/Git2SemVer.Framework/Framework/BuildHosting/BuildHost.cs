@@ -1,5 +1,6 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 
 internal class BuildHost : IBuildHost

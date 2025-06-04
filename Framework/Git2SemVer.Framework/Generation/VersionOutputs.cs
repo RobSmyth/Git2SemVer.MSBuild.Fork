@@ -3,6 +3,7 @@ using NoeticTools.Git2SemVer.Core;
 using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 using Semver;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Generation;
 
 public sealed class VersionOutputs : IVersionOutputs
@@ -35,7 +36,8 @@ public sealed class VersionOutputs : IVersionOutputs
 
     public bool IsInInitialDevelopment { get; set; }
 
-    [JsonIgnore] public bool IsValid => BuildNumber.Length > 0;
+    [JsonIgnore]
+    public bool IsValid => BuildNumber.Length > 0;
 
     public string Output1 { get; set; } = "";
 
@@ -64,8 +66,8 @@ public sealed class VersionOutputs : IVersionOutputs
     }
 
     public void SetAllVersionPropertiesFrom(SemVersion informationalVersion,
-        string buildNumber,
-        string buildContext)
+                                            string buildNumber,
+                                            string buildContext)
     {
         Ensure.NotNull(informationalVersion, nameof(informationalVersion));
 
@@ -80,7 +82,7 @@ public sealed class VersionOutputs : IVersionOutputs
 
         var version = informationalVersion.WithoutMetadata();
         var versionPrefix = informationalVersion.WithoutMetadata()
-            .WithoutPrerelease();
+                                                .WithoutPrerelease();
         InformationalVersion = informationalVersion;
         Version = version;
         AssemblyVersion = new Version(versionPrefix.ToString());

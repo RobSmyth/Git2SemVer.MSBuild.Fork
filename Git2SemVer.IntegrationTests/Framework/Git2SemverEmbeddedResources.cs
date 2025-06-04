@@ -1,6 +1,7 @@
 ﻿using Injectio.Attributes;
 using NoeticTools.Git2SemVer.Core;
 
+
 namespace NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
 [RegisterSingleton]

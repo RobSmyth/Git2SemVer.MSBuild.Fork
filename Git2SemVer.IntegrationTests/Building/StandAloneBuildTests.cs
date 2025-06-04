@@ -1,5 +1,6 @@
 ﻿using NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
+
 #pragma warning disable NUnit2045
 
 namespace NoeticTools.Git2SemVer.IntegrationTests.Building;
@@ -50,6 +51,6 @@ internal class StandAloneBuildTests : VersioningBuildTestsBase
     protected override VersioningBuildTestContext CreateTestContext()
     {
         return new VersioningBuildTestContext("StandAlone", "StandAloneTestSolution",
-            "StandAloneVersioning.sln", "TestApplication");
+                                              "StandAloneVersioning.sln", "TestApplication");
     }
 }

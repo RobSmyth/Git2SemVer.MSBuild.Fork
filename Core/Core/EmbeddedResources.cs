@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 
+
 namespace NoeticTools.Git2SemVer.Core;
 
 public sealed class EmbeddedResources<T> : IEmbeddedResources

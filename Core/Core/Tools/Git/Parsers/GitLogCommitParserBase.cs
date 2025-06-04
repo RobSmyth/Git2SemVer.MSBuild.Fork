@@ -2,6 +2,7 @@
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 
+
 namespace NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
 public abstract class GitLogCommitParserBase
@@ -22,7 +23,7 @@ public abstract class GitLogCommitParserBase
     private readonly IConventionalCommitsParser _conventionalCommitParser;
 
     protected GitLogCommitParserBase(ICommitsCache cache,
-        IConventionalCommitsParser? conventionalCommitParser = null)
+                                     IConventionalCommitsParser? conventionalCommitParser = null)
     {
         _cache = cache;
         _conventionalCommitParser = conventionalCommitParser ?? new ConventionalCommitsParser();

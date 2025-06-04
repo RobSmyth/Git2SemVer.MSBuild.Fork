@@ -4,27 +4,12 @@ using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Persistence;
 using NoeticTools.Git2SemVer.Testing.Core;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.ProjectVersioningTests;
 
 internal abstract class ProjectVersioningUnitTestsBase
 {
     private NUnitLogger _logger;
-
-    protected Mock<IVersionOutputs> GeneratedOutputs { get; private set; }
-
-    protected Mock<IBuildHost> Host { get; private set; }
-
-    protected Mock<IVersionGeneratorInputs> Inputs { get; private set; }
-
-    protected Mock<IVersionOutputs> LocalCachedOutputs { get; private set; }
-
-    protected Mock<IOutputsJsonIO> OutputsCacheJsonFile { get; private set; }
-
-    protected Mock<IVersionOutputs> SharedCachedOutputs { get; private set; }
-
-    protected ProjectVersioning Target { get; private set; }
-
-    protected Mock<IVersionGenerator> VersionGenerator { get; private set; }
 
     [SetUp]
     public void SetUpBase()
@@ -57,6 +42,22 @@ internal abstract class ProjectVersioningUnitTestsBase
         Target.Dispose();
         _logger.Dispose();
     }
+
+    protected Mock<IVersionOutputs> GeneratedOutputs { get; private set; }
+
+    protected Mock<IBuildHost> Host { get; private set; }
+
+    protected Mock<IVersionGeneratorInputs> Inputs { get; private set; }
+
+    protected Mock<IVersionOutputs> LocalCachedOutputs { get; private set; }
+
+    protected Mock<IOutputsJsonIO> OutputsCacheJsonFile { get; private set; }
+
+    protected Mock<IVersionOutputs> SharedCachedOutputs { get; private set; }
+
+    protected ProjectVersioning Target { get; private set; }
+
+    protected Mock<IVersionGenerator> VersionGenerator { get; private set; }
 
     protected void ModeIs(VersioningMode mode)
     {

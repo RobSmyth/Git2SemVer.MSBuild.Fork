@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using NUnit.Framework.Internal;
 
+
 namespace NoeticTools.Git2SemVer.Core.IntegrationTests.Framework;
 
 public static class TestDirectoryResource

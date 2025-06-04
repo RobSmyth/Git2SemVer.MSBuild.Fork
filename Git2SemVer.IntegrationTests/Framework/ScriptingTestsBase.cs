@@ -1,8 +1,8 @@
 using System.Diagnostics;
-using NoeticTools.Git2SemVer.Core;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Testing.Core;
+
 
 namespace NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
@@ -11,6 +11,7 @@ internal abstract class ScriptingTestsBase
 {
     private const int MaximumTestDataFolders = 20;
     private static int _testDataFolderId; // avoid locks on folders not release quickly between tests
+
     // ReSharper disable once ChangeFieldTypeToSystemThreadingLock
     private static readonly object SyncToken = new();
 
@@ -42,8 +43,8 @@ internal abstract class ScriptingTestsBase
 
         var dataFolderId = ++_testDataFolderId;
         TestFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "Git2SemVer",
-            $"TestData{dataFolderId}");
+                                      "Git2SemVer",
+                                      $"TestData{dataFolderId}");
         if (Directory.Exists(TestFolderPath))
         {
             Directory.Delete(TestFolderPath, true);

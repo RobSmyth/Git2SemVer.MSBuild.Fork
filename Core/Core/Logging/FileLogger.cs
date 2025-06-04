@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 
+
 namespace NoeticTools.Git2SemVer.Core.Logging;
 
 [RegisterTransient]
@@ -11,6 +12,7 @@ public class FileLogger : LoggerBase, ILogger
     {
         var stopwatch = Stopwatch.StartNew();
         while (true)
+        {
             try
             {
                 _stream = new StreamWriter(filePath, false) { AutoFlush = true };
@@ -27,6 +29,7 @@ public class FileLogger : LoggerBase, ILogger
                     throw;
                 }
             }
+        }
     }
 
     public override LoggingLevel Level { get; set; } = LoggingLevel.Trace;

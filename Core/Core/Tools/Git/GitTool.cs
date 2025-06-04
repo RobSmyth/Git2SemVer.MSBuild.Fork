@@ -3,6 +3,7 @@ using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
 
+
 #pragma warning disable SYSLIB1045
 #pragma warning disable CS1591
 
@@ -18,7 +19,6 @@ public class GitTool : IGitTool
     private bool _initialised;
     private Repository? _repository;
     private string _repositoryDirectory = null!;
-
 
     public GitTool(ILogger logger)
     {
@@ -63,8 +63,6 @@ public class GitTool : IGitTool
         set => _repositoryDirectory = DiscoverRepositoryDirectory(value);
     }
 
-    private Repository Repository => _repository ??= new Repository(RepositoryDirectory);
-
     public void Dispose()
     {
         _repository?.Dispose();
@@ -89,13 +87,7 @@ public class GitTool : IGitTool
         return Cache.Get(commitSha);
     }
 
-    internal IReadOnlyList<Commit> GetCommitsLibGit2Sharp(string commitSha)
-    {
-        return Repository.Commits.QueryBy(new CommitFilter
-        {
-            IncludeReachableFrom = commitSha
-        }).Take(TakeLimit).Select(Convert).ToList();
-    }
+    private Repository Repository => _repository ??= new Repository(RepositoryDirectory);
 
     private Commit Convert(LibGit2Sharp.Commit rawCommit)
     {
@@ -106,11 +98,11 @@ public class GitTool : IGitTool
             var tags = Repository.Tags.Where(x => x.Target.Equals(rawCommit)).ToList();
 
             commit = new Commit(
-                rawCommit.Sha,
-                parents, rawCommit.MessageShort,
-                rawCommit.Message,
-                metadata,
-                tags);
+                                rawCommit.Sha,
+                                parents, rawCommit.MessageShort,
+                                rawCommit.Message,
+                                metadata,
+                                tags);
 
             Cache.Add(commit);
         }
@@ -151,5 +143,13 @@ public class GitTool : IGitTool
         }
 
         _head = commits[0];
+    }
+
+    internal IReadOnlyList<Commit> GetCommitsLibGit2Sharp(string commitSha)
+    {
+        return Repository.Commits.QueryBy(new CommitFilter
+        {
+            IncludeReachableFrom = commitSha
+        }).Take(TakeLimit).Select(Convert).ToList();
     }
 }

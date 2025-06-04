@@ -1,5 +1,6 @@
 ﻿using NoeticTools.Git2SemVer.Framework.Framework.Config;
 
+
 #pragma warning disable NUnit2045
 
 namespace NoeticTools.Git2SemVer.Framework.Tests.Config;

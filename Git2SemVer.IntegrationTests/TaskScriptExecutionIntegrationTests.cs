@@ -3,6 +3,7 @@ using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
 using NoeticTools.Git2SemVer.IntegrationTests.Framework;
 
+
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace NoeticTools.Git2SemVer.IntegrationTests;
@@ -12,18 +13,6 @@ internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
     private const string TestScriptFilename = "TestScript.csx";
     private BuildEngine9Stub _buildEngine;
     private Dictionary<string, string> _globalProperties;
-
-    [Test]
-    [MaxTime(10000)]
-    public void ControlledPrereleaseBuildScenario01()
-    {
-        var context = GetContext("12345", "1");
-        var runner = new ScriptVersionBuilder(Logger);
-
-        runner.Build(context.Host, Git, context.Inputs, context.Outputs);
-
-        Assert.That(Logger.HasError, Is.False);
-    }
 
     [OneTimeSetUp]
     public void OneTimeSetup()
@@ -44,6 +33,18 @@ internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
 
         _globalProperties = new Dictionary<string, string>();
         _buildEngine = new BuildEngine9Stub(_globalProperties);
+    }
+
+    [Test]
+    [MaxTime(10000)]
+    public void ControlledPrereleaseBuildScenario01()
+    {
+        var context = GetContext("12345", "1");
+        var runner = new ScriptVersionBuilder(Logger);
+
+        runner.Build(context.Host, Git, context.Inputs, context.Outputs);
+
+        Assert.That(Logger.HasError, Is.False);
     }
 
     [Test]
@@ -71,7 +72,7 @@ internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
     }
 
     private VersioningContext GetContext(string hostBuildNumber,
-        string hostBuildContext)
+                                         string hostBuildContext)
     {
         var taskInputs = GetTaskInputs();
         var buildHost = new BuildHostStub(Logger)

@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Framework;
 
 public static class CharExtensions

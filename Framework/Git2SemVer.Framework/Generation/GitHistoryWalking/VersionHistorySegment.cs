@@ -4,6 +4,7 @@ using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using Semver;
 
+
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
@@ -136,8 +137,8 @@ internal sealed class VersionHistorySegment
 
             var olderSegment = segmentFactory.Create(olderSegmentCommits);
             _logger.LogTrace("Split out new segment {2} from segment {0} at commit {1}.",
-                Id, commit.CommitId.ShortSha,
-                olderSegment.Id);
+                             Id, commit.CommitId.ShortSha,
+                             olderSegment.Id);
 
             return olderSegment;
         }

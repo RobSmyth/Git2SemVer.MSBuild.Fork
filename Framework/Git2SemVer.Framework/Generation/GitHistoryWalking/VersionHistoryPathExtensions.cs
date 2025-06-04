@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 #pragma warning disable CS1591
@@ -19,12 +20,7 @@ internal static class VersionHistoryPathExtensions
             if (versionPrecedence == 0)
             {
                 var sizePrecedence = left.CommitsSinceLastRelease - right.CommitsSinceLastRelease;
-                if (sizePrecedence != 0)
-                {
-                    return sizePrecedence;
-                }
-
-                return left.Id - right.Id;
+                return sizePrecedence != 0 ? sizePrecedence : left.Id - right.Id;
             }
 
             return versionPrecedence;

@@ -33,9 +33,9 @@ public sealed class CSharpScriptRunner
     public static IReadOnlyList<string> ReferencedAssemblies { get; private set; } = [];
 
     public async Task RunScript(object globalContext,
-        string scriptPath,
-        IReadOnlyList<Type> metadataReferences,
-        IList<Type> inMemoryTypes)
+                                string scriptPath,
+                                IReadOnlyList<Type> metadataReferences,
+                                IList<Type> inMemoryTypes)
     {
         Ensure.NotNull(globalContext, nameof(globalContext));
         Ensure.NotNull(scriptPath, nameof(scriptPath));
@@ -52,23 +52,21 @@ public sealed class CSharpScriptRunner
             _logger.LogDebug($"Running script: {scriptPath}.");
             using (_logger.EnterLogScope())
             {
-                using (var loader = new InteractiveAssemblyLoader())
+                using var loader = new InteractiveAssemblyLoader();
+                var globalsType = globalContext.GetType();
+                foreach (var inMemoryType in inMemoryTypes)
                 {
-                    var globalsType = globalContext.GetType();
-                    foreach (var inMemoryType in inMemoryTypes)
-                    {
-                        loader.RegisterDependency(inMemoryType.Assembly);
-                    }
-
-                    var scriptContent = File.ReadAllText(scriptPath);
-                    var scriptOptions = GetScriptOptions(metadataReferences);
-                    scriptOptions.WithEmitDebugInformation(true);
-                    var script = CSharpScript.Create<int>(scriptContent,
-                        scriptOptions,
-                        assemblyLoader: loader,
-                        globalsType: globalsType);
-                    await script.RunAsync(globalContext);
+                    loader.RegisterDependency(inMemoryType.Assembly);
                 }
+
+                var scriptContent = File.ReadAllText(scriptPath);
+                var scriptOptions = GetScriptOptions(metadataReferences);
+                scriptOptions.WithEmitDebugInformation(true);
+                var script = CSharpScript.Create<int>(scriptContent,
+                                                      scriptOptions,
+                                                      assemblyLoader: loader,
+                                                      globalsType: globalsType);
+                await script.RunAsync(globalContext);
             }
         }
         catch (CompilationErrorException exception)

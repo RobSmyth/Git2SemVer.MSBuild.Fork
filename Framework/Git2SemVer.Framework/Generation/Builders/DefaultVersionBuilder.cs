@@ -6,6 +6,7 @@ using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using Semver;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Generation.Builders;
 
 /// <summary>
@@ -33,8 +34,8 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
             var version = GetVersion(prereleaseLabel, host);
             var informationalVersion = GetInformationalVersion(version, host, outputs);
             outputs.SetAllVersionPropertiesFrom(informationalVersion,
-                host.BuildNumber,
-                host.BuildContext);
+                                                host.BuildNumber,
+                                                host.BuildContext);
 
             outputs.BuildSystemVersion = GetBuildSystemLabel(host, prereleaseLabel, version);
         }
@@ -72,7 +73,7 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
         }
 
         if (VersioningConstants.ReleaseGroupName.Equals(inputs.VersionSuffix,
-                StringComparison.Ordinal))
+                                                        StringComparison.Ordinal))
         {
             return initialDevSuffix;
         }

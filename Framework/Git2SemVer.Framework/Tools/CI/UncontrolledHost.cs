@@ -4,6 +4,7 @@ using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Framework.Config;
 using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Tools.CI;
 
 internal class UncontrolledHost : BuildHostBase, IDetectableBuildHost

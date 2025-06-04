@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
+
 namespace NoeticTools.Git2SemVer.Core;
 
 public static class RegexMatchExtensions

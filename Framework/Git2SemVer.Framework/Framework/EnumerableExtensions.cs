@@ -2,6 +2,7 @@
 
 using System.Runtime.CompilerServices;
 
+
 namespace NoeticTools.Git2SemVer.Framework.Framework;
 
 internal static class EnumerableExtensions

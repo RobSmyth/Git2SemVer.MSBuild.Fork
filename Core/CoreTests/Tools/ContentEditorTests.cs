@@ -1,5 +1,6 @@
 using NoeticTools.Git2SemVer.Core.Tools;
 
+
 namespace NoeticTools.Git2SemVer.Core.Tests.Tools;
 
 public class ContentEditorTests
@@ -21,6 +22,12 @@ public class ContentEditorTests
 
     private ContentEditor _target;
 
+    [SetUp]
+    public void Setup()
+    {
+        _target = new ContentEditor();
+    }
+
     [TestCase("true")]
     [TestCase("Project")]
     [TestCase("x")]
@@ -33,43 +40,37 @@ public class ContentEditorTests
     }
 
     [TestCase("<PropertyGroup>",
-        """
-        <Project>
-          
-            <Git2SemVerSolutionDirectory>$(MSBuildThisFileDirectory)../../</Git2SemVerSolutionDirectory>
-            <Git2SemVer_NuGetLoad_Disable >true</Git2SemVer_NuGetLoad_Disable>
-          </PropertyGroup>
-        
-          <Import Project="$(Git2SemVerSolutionDirectory)Directory.Build.props" />
-          <Import Project="$(Git2SemVerSolutionDirectory)Git2SemVer.MSBuild/Build/NoeticTools.Git2SemVer.MSBuild.props" />
+                 """
+                 <Project>
+                   
+                     <Git2SemVerSolutionDirectory>$(MSBuildThisFileDirectory)../../</Git2SemVerSolutionDirectory>
+                     <Git2SemVer_NuGetLoad_Disable >true</Git2SemVer_NuGetLoad_Disable>
+                   </PropertyGroup>
+                 
+                   <Import Project="$(Git2SemVerSolutionDirectory)Directory.Build.props" />
+                   <Import Project="$(Git2SemVerSolutionDirectory)Git2SemVer.MSBuild/Build/NoeticTools.Git2SemVer.MSBuild.props" />
 
-        </Project>
+                 </Project>
 
-        """)]
+                 """)]
     [TestCase("<Git2SemVerSolutionDirectory>$(MSBuildThisFileDirectory)../../</Git2SemVerSolutionDirectory>",
-        """
-        <Project>
-          
-          <PropertyGroup>
-            <Git2SemVer_NuGetLoad_Disable >true</Git2SemVer_NuGetLoad_Disable>
-          </PropertyGroup>
-        
-          <Import Project="$(Git2SemVerSolutionDirectory)Directory.Build.props" />
-          <Import Project="$(Git2SemVerSolutionDirectory)Git2SemVer.MSBuild/Build/NoeticTools.Git2SemVer.MSBuild.props" />
+                 """
+                 <Project>
+                   
+                   <PropertyGroup>
+                     <Git2SemVer_NuGetLoad_Disable >true</Git2SemVer_NuGetLoad_Disable>
+                   </PropertyGroup>
+                 
+                   <Import Project="$(Git2SemVerSolutionDirectory)Directory.Build.props" />
+                   <Import Project="$(Git2SemVerSolutionDirectory)Git2SemVer.MSBuild/Build/NoeticTools.Git2SemVer.MSBuild.props" />
 
-        </Project>
+                 </Project>
 
-        """)]
+                 """)]
     public void RemoveLineWhenSignaturePresentRemovesLine(string signature, string expected)
     {
         var result = _target.RemoveLinesWith(signature, Content);
 
         Assert.That(expected, Is.EqualTo(result));
-    }
-
-    [SetUp]
-    public void Setup()
-    {
-        _target = new ContentEditor();
     }
 }

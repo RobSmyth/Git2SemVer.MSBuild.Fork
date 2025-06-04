@@ -23,6 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolutionVersioningProject",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Solution Items", "0 - Solution Items", "{4F5F4537-80BA-4561-A29C-DF6AD9921C08}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		ChangeLog.md = ChangeLog.md
 		Directory.Build.props = Directory.Build.props

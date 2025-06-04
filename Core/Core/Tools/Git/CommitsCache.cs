@@ -1,5 +1,6 @@
 ﻿using NoeticTools.Git2SemVer.Core.Exceptions;
 
+
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 
 #pragma warning disable CS1591
