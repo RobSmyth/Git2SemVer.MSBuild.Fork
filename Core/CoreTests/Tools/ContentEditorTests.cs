@@ -14,7 +14,7 @@ public class ContentEditorTests
                                      </PropertyGroup>
                                    
                                      <Import Project="$(Git2SemVerSolutionDirectory)Directory.Build.props" />
-                                     <Import Project="$(Git2SemVerSolutionDirectory)Git2SemVer.MSBuild/Build/NoeticTools.Git2SemVer.MSBuild.props" />
+                                     <Import Project="$(Git2SemVerSolutionDirectory)MSBuild/Build/NoeticTools.Git2SemVer.MSBuild.props" />
 
                                    </Project>
 
@@ -48,7 +48,7 @@ public class ContentEditorTests
                    </PropertyGroup>
                  
                    <Import Project="$(Git2SemVerSolutionDirectory)Directory.Build.props" />
-                   <Import Project="$(Git2SemVerSolutionDirectory)Git2SemVer.MSBuild/Build/NoeticTools.Git2SemVer.MSBuild.props" />
+                   <Import Project="$(Git2SemVerSolutionDirectory)MSBuild/Build/NoeticTools.Git2SemVer.MSBuild.props" />
 
                  </Project>
 
@@ -62,7 +62,7 @@ public class ContentEditorTests
                    </PropertyGroup>
                  
                    <Import Project="$(Git2SemVerSolutionDirectory)Directory.Build.props" />
-                   <Import Project="$(Git2SemVerSolutionDirectory)Git2SemVer.MSBuild/Build/NoeticTools.Git2SemVer.MSBuild.props" />
+                   <Import Project="$(Git2SemVerSolutionDirectory)MSBuild/Build/NoeticTools.Git2SemVer.MSBuild.props" />
 
                  </Project>
 

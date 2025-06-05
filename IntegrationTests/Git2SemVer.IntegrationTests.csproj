@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Git2SemVer.MSBuild\Git2SemVer.MSBuild.csproj" />
+    <ProjectReference Include="..\MSBuild\Git2SemVer.MSBuild.csproj" />
     <ProjectReference Include="..\Testing.Core\TestingCore\Git2SemVer.Testing.Core.csproj" />
   </ItemGroup>
 
