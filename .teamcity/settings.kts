@@ -158,7 +158,7 @@ object DeployLocalTeamCityPackage : BuildType({
             id = "Publish2"
             packages = "NoeticTools.*.nupkg"
             serverUrl = "http://10.1.10.78:8111/httpAuth/app/nuget/feed/_Root/TeamCity/v3/index.json"
-            apiKey = "%teamcity.nuget.feed.api.key%""
+            apiKey = "%teamcity.nuget.feed.api.key%"
         }
     }
 
