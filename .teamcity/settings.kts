@@ -141,6 +141,17 @@ object BuildAndTest : BuildType({
     requirements {
         exists("DotNetCLI_Path")
     }
+
+    cleanup {
+        keepRule {
+            id = "KEEP_RULE_1"
+            keepAtLeast = allBuilds()
+            dataToKeep = historyAndStatistics {
+                preserveLogs = true
+            }
+            preserveArtifactsDependencies = true
+        }
+    }
 })
 
 object DeployLocalTeamCityPackage : BuildType({
