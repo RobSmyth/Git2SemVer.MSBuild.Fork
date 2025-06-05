@@ -170,6 +170,7 @@ object DeployLocalTeamCityPackage : BuildType({
         nuGetPublish {
             name = "Publish"
             id = "Publish"
+            enabled = false
             toolPath = "%teamcity.tool.NuGet.CommandLine.DEFAULT%"
             packages = "NoeticTools.*.nupkg"
             serverUrl = "http://10.1.10.78:8111/httpAuth/app/nuget/feed/_Root/TeamCity/v3/index.json"
