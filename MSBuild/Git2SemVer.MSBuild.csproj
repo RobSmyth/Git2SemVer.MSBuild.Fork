@@ -45,6 +45,7 @@
     </ItemGroup>
   </Target>
 
+  <!-- ReSharper disable once UnknownTarget -->
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
     <ItemGroup>
       <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths)" TargetPath="%(ReferenceCopyLocalPaths.DestinationSubPath)" />
