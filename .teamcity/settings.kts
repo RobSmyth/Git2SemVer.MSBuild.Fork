@@ -55,7 +55,7 @@ object BuildAndTest : BuildType({
     name = "Build and test"
 
     artifactRules = """
-        +:Git2SemVer.MSBuild/nupkg/NoeticTools.*.nupkg
+        +:MSBuild/nupkg/NoeticTools.*.nupkg
         +:SolutionVersioningProject/obj/Git2SemVer.MSBuild.log
         +:SolutionVersioningProject/.git2semver/Git2SemVer.VersionInfo.g.json
     """.trimIndent()
