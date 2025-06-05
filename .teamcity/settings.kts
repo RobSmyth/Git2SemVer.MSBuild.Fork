@@ -43,6 +43,12 @@ project {
 
     buildType(BuildAndTest)
     buildType(DeployLocalTeamCityPackage)
+
+    cleanup {
+        baseRule {
+            option("disableCleanupPolicies", true)
+        }
+    }
 }
 
 object BuildAndTest : BuildType({
