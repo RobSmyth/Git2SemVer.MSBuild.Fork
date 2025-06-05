@@ -5,7 +5,6 @@ import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetBuild
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetNugetPush
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetRestore
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetTest
-import jetbrains.buildServer.configs.kotlin.buildSteps.nuGetPublish
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.failureConditions.BuildFailureOnMetric
 import jetbrains.buildServer.configs.kotlin.failureConditions.BuildFailureOnText
@@ -163,15 +162,6 @@ object DeployLocalTeamCityPackage : BuildType({
         dotnetNugetPush {
             name = "Push NuGet package"
             id = "Publish2"
-            packages = "NoeticTools.*.nupkg"
-            serverUrl = "http://10.1.10.78:8111/httpAuth/app/nuget/feed/_Root/TeamCity/v3/index.json"
-            apiKey = "credentialsJSON:bd18b974-1188-423d-9efd-8836806c3669"
-        }
-        nuGetPublish {
-            name = "Publish"
-            id = "Publish"
-            enabled = false
-            toolPath = "%teamcity.tool.NuGet.CommandLine.DEFAULT%"
             packages = "NoeticTools.*.nupkg"
             serverUrl = "http://10.1.10.78:8111/httpAuth/app/nuget/feed/_Root/TeamCity/v3/index.json"
             apiKey = "credentialsJSON:bd18b974-1188-423d-9efd-8836806c3669"
