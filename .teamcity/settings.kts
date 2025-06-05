@@ -43,6 +43,17 @@ project {
 
     buildType(BuildAndTest)
     buildType(DeployLocalTeamCityPackage)
+
+    cleanup {
+        keepRule {
+            id = "KEEP_RULE_2"
+            keepAtLeast = allBuilds()
+            dataToKeep = historyAndStatistics {
+                preserveLogs = true
+            }
+            preserveArtifactsDependencies = true
+        }
+    }
 }
 
 object BuildAndTest : BuildType({
