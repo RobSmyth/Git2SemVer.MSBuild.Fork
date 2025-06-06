@@ -1,5 +1,4 @@
 import jetbrains.buildServer.configs.kotlin.*
-import jetbrains.buildServer.configs.kotlin.buildFeatures.approval
 import jetbrains.buildServer.configs.kotlin.buildFeatures.perfmon
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetBuild
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetNugetPush
@@ -162,13 +161,6 @@ object DeployLocalTeamCityPackage : BuildType({
             packages = "NoeticTools.*.nupkg"
             serverUrl = "http://10.1.10.78:8111/guestAuth/app/nuget/feed/RobSmyth/RobSmyth/v3/index.json"
             apiKey = "credentialsJSON:bd18b974-1188-423d-9efd-8836806c3669"
-        }
-    }
-
-    features {
-        approval {
-            approvalRules = "user:robert"
-            manualRunsApproved = false
         }
     }
 
