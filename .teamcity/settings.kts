@@ -11,7 +11,6 @@ import jetbrains.buildServer.configs.kotlin.failureConditions.BuildFailureOnText
 import jetbrains.buildServer.configs.kotlin.failureConditions.failOnMetricChange
 import jetbrains.buildServer.configs.kotlin.failureConditions.failOnText
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
-import jetbrains.buildServer.configs.kotlin.vcs.GitVcsRoot
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -38,8 +37,6 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2025.03"
 
 project {
-
-    vcsRoot(HttpsGithubComNoetictoolsGit2semverMsbuildRefsHeadsMain)
 
     buildType(BuildAndTest)
     buildType(DeployLocalTeamCityPackage)
@@ -184,19 +181,5 @@ object DeployLocalTeamCityPackage : BuildType({
             cleanDestination = true
             artifactRules = "+:NoeticTools.Git2SemVer.MSBuild.*.nupkg"
         }
-    }
-})
-
-object HttpsGithubComNoetictoolsGit2semverMsbuildRefsHeadsMain : GitVcsRoot({
-    name = "https://github.com/noetictools/git2semver.msbuild#refs/heads/main"
-    url = "git@github.com:NoeticTools/Git2SemVer.MSBuild.git"
-    branch = "refs/heads/main"
-    branchSpec = """
-        +:refs/heads/*
-        +:refs/tags/*
-    """.trimIndent()
-    useTagsAsBranches = true
-    authMethod = uploadedKey {
-        uploadedKey = "Git2SemVerMSBuildWriteSSH"
     }
 })
