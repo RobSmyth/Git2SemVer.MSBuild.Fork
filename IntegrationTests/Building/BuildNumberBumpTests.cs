@@ -38,14 +38,14 @@ public class UncontrolledHostBuildTests
         Assert.That(host.BuildId, Is.EqualTo(new[] { Environment.MachineName, config.BuildNumber.ToString() }));
     }
 
-    private int RebuildAndRun(VersioningBuildTestContext context)
+    private static int RebuildAndRun(VersioningBuildTestContext context)
     {
         context.DotNetCliBuildTestSolution("--no-incremental");
         var output = DotNetProcessHelpers.RunDotnetApp(context.CompiledAppPath, context.Logger);
         return GetBuildNumber(output);
     }
 
-    private int GetBuildNumber(string output)
+    private static int GetBuildNumber(string output)
     {
         var regex = new Regex(@"^Informational version:\s+.+-.*\.(?<build_number>\d+)\+", RegexOptions.Multiline);
         var match = regex.Match(output);
@@ -53,7 +53,7 @@ public class UncontrolledHostBuildTests
         return int.Parse(match.Groups["build_number"].Value);
     }
 
-    private VersioningBuildTestContext CreateTestContext()
+    private static VersioningBuildTestContext CreateTestContext()
     {
         return new VersioningBuildTestContext("UncontrolledHost", "StandAloneTestSolution",
                                               "StandAloneVersioning.sln", "TestApplication");
