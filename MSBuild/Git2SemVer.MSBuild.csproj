@@ -76,6 +76,11 @@
     <Content Include="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="buildmultitargeting/" />
     <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.props" PackagePath="build/" />
     <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="build/" />
+    <Content Include="Content\Native\**\*.*"
+          Link="Images\%(RecursiveDir)%(Filename)%(Extension)"
+          Pack="true" 
+          PackagePath="tasks/net472/%(RecursiveDir)%(Filename)%(Extension)">
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -86,16 +91,38 @@
     <ProjectReference Include="..\Core\Core\Git2SemVer.Core.csproj" />
     <ProjectReference Include="..\Framework\Git2SemVer.Framework\Git2SemVer.Framework.csproj" />
   </ItemGroup>
+<!--
 
-    <Target Name="CopyFiles" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
+  <ItemGroup>
+    <NativeFiles Include="Content\Native\**\*.*" />
+  </ItemGroup>
+
+  <Target Name="CopyNet472NativeFiles" AfterTargets="CopyFilesToOutputDirectory" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion" Condition="'$(TargetFramework)' == 'net472'">
+
+    <Message Text="=== $(OutDir)" Importance="high" />
+
+    <Message Text="===========================" Importance="high" />
+
+    <Copy SourceFiles="@(NativeFiles)" DestinationFolder="$(OutputPath)xxx/%(RecursiveDir)" />
+
+    <Message Text="===========================" Importance="high" />
+
+    <Copy SourceFiles="@(NativeFiles)" DestinationFolder="$(OutDir)lib2/%(RecursiveDir)" />
+
     <ItemGroup>
-      <MySourceFiles Include="Content\runtimes\**\*.*" />
+      <None Include="@(NativeFiles)"
+            Pack="true" 
+            PackagePath="tasks\$(TargetFramework)\lib3\%(RecursiveDir)">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
-    <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutputPath)runtimes/%(RecursiveDir)" />
-    <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutputPath)lib/%(RecursiveDir)" />
-  </Target>
+    <Message Text="=== @(NativeFiles->'%(Identity)')" Importance="high" />
 
+    <Message Text="=== Batched: %(NativeFiles.Identity)" Importance="high" />
+
+  </Target>
+-->
   <!-- Ensure that the Git2SemVer version information JSON file is available.  -->
   <Target Name="Git2SemVerEnsureVersionInfoBuilt" Condition="'$(MSBuildProjectName)' != '$(Git2SemVer_VersioningProjectName)'" AfterTargets="PrepareResources" BeforeTargets="CoreBuild;Build;Pack;GetAssemblyVersion">
 
