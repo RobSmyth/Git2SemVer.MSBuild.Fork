@@ -14,16 +14,12 @@
 
   <!-- Multitargeting project properties -->
   <PropertyGroup>
-
     <CrossTargetingBuild Condition=" '$(TargetFrameworks)' != '' ">true</CrossTargetingBuild>
     <CrossTargetingBuild Condition="'$(CrossTargetingBuild)' == ''">false</CrossTargetingBuild>
-
     <CrossTargetingOuterBuild Condition=" '$(IsCrossTargetingBuild)' == 'true' ">true</CrossTargetingOuterBuild>
     <CrossTargetingOuterBuild Condition="'$(CrossTargetingOuterBuild)' == ''">false</CrossTargetingOuterBuild>
-
     <CrossTargetingInnerBuild Condition=" '$(CrossTargetingBuild)' == 'true' And '$(IsCrossTargetingBuild)' == '' ">true</CrossTargetingInnerBuild>
     <CrossTargetingInnerBuild Condition="'$(CrossTargetingInnerBuild)' == '' ">false</CrossTargetingInnerBuild>
-
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(CrossTargetingBuild)' == 'false' ">
