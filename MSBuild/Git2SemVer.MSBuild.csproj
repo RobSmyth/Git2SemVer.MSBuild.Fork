@@ -25,6 +25,26 @@
     <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
+    <NoWarn>NU5100;NU1803;NU5128;NU5118</NoWarn>
+    <WarningsNotAsErrors>NU5118</WarningsNotAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
+    <NoWarn>NU5100;NU1803;NU5128;NU5118</NoWarn>
+    <WarningsNotAsErrors>NU5118</WarningsNotAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
+    <NoWarn>NU5100;NU1803;NU5128;NU5118</NoWarn>
+    <WarningsNotAsErrors>NU5118</WarningsNotAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
+    <NoWarn>NU5100;NU1803;NU5128;NU5118</NoWarn>
+    <WarningsNotAsErrors>NU5118</WarningsNotAsErrors>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.props" />
     <None Remove="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.targets" />
@@ -68,7 +88,10 @@
 
   <ItemGroup>
     <Content Include="Git2SemVer_icon_64x64.ico" Pack="False" />
-    <None Include="..\Documentation\Images\Git2SemVer_icon_32x32.png" Link="Git2SemVer_icon_32x32.png" Pack="True" PackagePath="\" />
+    <None Include="..\Documentation\Images\Git2SemVer_icon_32x32.png" 
+          Link="Git2SemVer_icon_32x32.png" 
+          Pack="True" 
+          PackagePath="\" />
     <None Include="NuGet_description.md" Pack="True" PackagePath="\" />
     <Content Include="Tasks\NoeticTools.Git2SemVer.MSBuild.props" PackagePath="tasks/" />
     <Content Include="Tasks\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="tasks/" />
@@ -76,11 +99,17 @@
     <Content Include="Content\BuildMultiTargeting\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="buildmultitargeting/" />
     <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.props" PackagePath="build/" />
     <Content Include="Content\Build\NoeticTools.Git2SemVer.MSBuild.targets" PackagePath="build/" />
-    <Content Include="Content\Native\**\*.*"
-          Link="Images\%(RecursiveDir)%(Filename)%(Extension)"
-          Pack="true" 
-          PackagePath="tasks/net472/%(RecursiveDir)%(Filename)%(Extension)">
-    </Content>
+    <Content Include="Content\Native\lib\**\*.*" 
+             Link="tasks\net472\lib\%(RecursiveDir)%(Filename)%(Extension)" 
+             Pack="true" 
+             CopyToOutputDirectory="PreserveNewer" 
+             PackagePath="tasks/net472/lib/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include="Content\Native\runtimes\**\*.*"
+             Exclude="Content\Native\runtimes\win\**\*.*;Content\Native\runtimes\win-arm64\**\*.*;Content\Native\runtimes\win-x64\**\*.*;Content\Native\runtimes\win-x86\**\*.*"
+             Link="tasks\net8.0\runtimes\%(RecursiveDir)%(Filename)%(Extension)" 
+             Pack="true" 
+             CopyToOutputDirectory="Never" 
+             PackagePath="tasks/net8.0/runtimes/%(RecursiveDir)%(Filename)%(Extension)"/>
   </ItemGroup>
 
   <ItemGroup>
