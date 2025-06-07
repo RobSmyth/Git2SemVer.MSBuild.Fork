@@ -76,6 +76,7 @@ object BuildAndTest : BuildType({
             id = "Restore"
             sources = """
                 https://api.nuget.org/v3/index.json
+                http://10.1.10.78:8111/guestAuth/app/nuget/feed/RobSmyth/RobSmyth/v3/index.json
             """.trimIndent()
         }
         dotnetBuild {
