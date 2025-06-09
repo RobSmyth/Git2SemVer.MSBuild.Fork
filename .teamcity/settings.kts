@@ -1,4 +1,5 @@
 import jetbrains.buildServer.configs.kotlin.*
+import jetbrains.buildServer.configs.kotlin.buildFeatures.nuGetFeedCredentials
 import jetbrains.buildServer.configs.kotlin.buildFeatures.perfmon
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetBuild
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetNugetPush
@@ -136,6 +137,11 @@ object BuildAndTest : BuildType({
 
     features {
         perfmon {
+        }
+        nuGetFeedCredentials {
+            feedUrl = "https://api.nuget.org/v3/index.json"
+            username = "RobSmyth"
+            password = "credentialsJSON:5577d5f6-64ef-4a22-868b-03a7d05985e6"
         }
     }
 
