@@ -1,4 +1,6 @@
 import jetbrains.buildServer.configs.kotlin.*
+import jetbrains.buildServer.configs.kotlin.CustomChart
+import jetbrains.buildServer.configs.kotlin.CustomChart.*
 import jetbrains.buildServer.configs.kotlin.buildFeatures.nuGetFeedCredentials
 import jetbrains.buildServer.configs.kotlin.buildFeatures.perfmon
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetBuild
@@ -6,6 +8,7 @@ import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetNugetPush
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetRestore
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetTest
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
+import jetbrains.buildServer.configs.kotlin.buildTypeCustomChart
 import jetbrains.buildServer.configs.kotlin.failureConditions.BuildFailureOnMetric
 import jetbrains.buildServer.configs.kotlin.failureConditions.BuildFailureOnText
 import jetbrains.buildServer.configs.kotlin.failureConditions.failOnMetricChange
@@ -40,6 +43,18 @@ project {
 
     buildType(BuildAndTest)
     buildType(DeployLocalTeamCityPackage)
+
+    features {
+        buildTypeCustomChart {
+            id = "PROJECT_EXT_6"
+            title = "Versioning time"
+            seriesTitle = "Serie"
+            format = CustomChart.Format.TEXT
+            series = listOf(
+                Serie(title = "Git2SemVerRunTime_sec", key = SeriesKey("Git2SemVerRunTime_sec"))
+            )
+        }
+    }
 
     cleanup {
         baseRule {
