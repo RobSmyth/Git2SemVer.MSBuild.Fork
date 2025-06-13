@@ -58,6 +58,7 @@ project {
             authType = storedToken {
                 tokenId = "tc_token_id:CID_3de2c2727993edab40e4371046ac9db7:-1:9e7b82f7-5941-476b-ba54-211a20bbb5ca"
             }
+        }
         buildTypeCustomChart {
             id = "PROJECT_EXT_6"
             title = "Versioning time"
