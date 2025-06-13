@@ -37,21 +37,21 @@ internal sealed class TeamCityHost : BuildHostBase, IDetectableBuildHost
 
     public override void ReportBuildStatistic(string key, int value)
     {
-        _logger.LogInfo($"Reporting build statistic {key} = {value}");
+        _logger.LogDebug($"Reporting build statistic {key} = {value}");
         using var writer = new TeamCityServiceMessages().CreateWriter(_logger.LogInfo);
         writer.WriteBuildStatistics(key, value.ToString(CultureInfo.InvariantCulture));
     }
 
     public override void ReportBuildStatistic(string key, double value)
     {
-        _logger.LogInfo($"Reporting build statistic {key} = {value:G13}");
+        _logger.LogDebug($"Reporting build statistic {key} = {value:G13}");
         using var writer = new TeamCityServiceMessages().CreateWriter(_logger.LogInfo);
         writer.WriteBuildStatistics(key, $"{value:G13}");
     }
 
     public override void SetBuildLabel(string label)
     {
-        _logger.LogInfo($"Setting TeamCity Build label to '{label}'.");
+        _logger.LogDebug($"Setting TeamCity Build label to '{label}'.");
         using var writer = new TeamCityServiceMessages().CreateWriter(_logger.LogInfo);
         writer.WriteBuildNumber(label);
     }

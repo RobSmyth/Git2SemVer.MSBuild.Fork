@@ -61,7 +61,7 @@ internal sealed class VersionGenerator : IVersionGenerator
         _logger.LogInfo($"Informational version: {outputs.InformationalVersion}");
         _logger.LogDebug($"Version generation completed (in {stopwatch.Elapsed.TotalSeconds:F1} seconds).");
 
-        _host.ReportBuildStatistic("Git2SemVerRunTime_sec", stopwatch.Elapsed.TotalSeconds);
+        _host.ReportBuildStatistic("git2semver.runtime.seconds", stopwatch.Elapsed.TotalSeconds);
 
         return outputs;
     }
