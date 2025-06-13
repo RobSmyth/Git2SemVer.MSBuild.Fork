@@ -26,7 +26,7 @@ public sealed class ProcessCli : IProcessCli
 
     public int Run(string application, string commandLineArguments)
     {
-        return Run(application, commandLineArguments, null); //>>>
+        return Run(application, commandLineArguments, null);
     }
 
     /// <summary>
@@ -37,8 +37,7 @@ public sealed class ProcessCli : IProcessCli
     {
         lock (Sync)
         {
-            //        Logger.LogTrace($"Running '{application} {commandLineArguments}'.");
-            Logger.LogInfo($"Running '{application} {commandLineArguments}'.");
+            Logger.LogTrace($"Running '{application} {commandLineArguments}'.");
 
             using var process = new Process();
             process.StartInfo.FileName = application;
@@ -78,9 +77,6 @@ public sealed class ProcessCli : IProcessCli
                 {
                     process.WaitForExit();
                 }
-
-                // hack! to allow time for standard outputs to be received
-                //Thread.Sleep(25); >>>
             }
 
             if (!completed)
@@ -93,14 +89,12 @@ public sealed class ProcessCli : IProcessCli
             }
 
             var exitCode = process.ExitCode;
-            if (exitCode != 0)
+            if (exitCode == 0)
             {
-                var message = $"ProcessCli Run returned non-zero exit code {exitCode}.";
-                OnError(errorOut, message);
+                return exitCode;
             }
 
-            //Thread.Sleep(25); >>>
-
+            OnError(errorOut, $"ProcessCli Run returned non-zero exit code {exitCode}.");
             return exitCode;
         }
     }
