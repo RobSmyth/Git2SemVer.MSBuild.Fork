@@ -117,3 +117,6 @@ dotnet_diagnostic.CA1510.severity = none
 
 # IDE0008: Use concrete type instead of var
 dotnet_diagnostic.IDE0008.severity = none
+
+# CA1916: Call GC.SuppressFinalize correctly
+dotnet_diagnostic.CA1816.severity = none
