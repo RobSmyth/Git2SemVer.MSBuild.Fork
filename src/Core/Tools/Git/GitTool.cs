@@ -3,7 +3,6 @@ using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 
 
-#pragma warning disable SYSLIB1045
 #pragma warning disable CS1591
 
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;

@@ -26,12 +26,7 @@ public sealed class CommitId : IEquatable<CommitId>, IEquatable<string>
 
     public bool Equals(string? other)
     {
-        if (ReferenceEquals(null, other))
-        {
-            return false;
-        }
-
-        return Sha.Equals(other);
+        return !ReferenceEquals(null, other) && Sha.Equals(other);
     }
 
     public bool Equals(CommitId? other)

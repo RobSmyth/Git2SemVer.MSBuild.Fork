@@ -13,10 +13,10 @@ namespace NoeticTools.Git2SemVer.Framework.Framework.Config;
 /// </summary>
 public sealed class Git2SemVerConfiguration : IConfiguration
 {
-    private static Mutex _fileMutex = new(false, "G2SemVerConfigFileMutex");
+    private static readonly Mutex FileMutex = new(false, "G2SemVerConfigFileMutex");
 
     [JsonIgnore]
-    private static JsonSerializerOptions _serialiseOptions = new()
+    private static readonly JsonSerializerOptions SerialiseOptions = new()
     {
         WriteIndented = true,
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
@@ -72,7 +72,7 @@ public sealed class Git2SemVerConfiguration : IConfiguration
 
         var filePath = GetFilePath();
 
-        _fileMutex.WaitOne(TimeSpan.FromSeconds(10));
+        FileMutex.WaitOne(TimeSpan.FromSeconds(10));
         try
         {
             if (File.Exists(filePath))
@@ -87,7 +87,7 @@ public sealed class Git2SemVerConfiguration : IConfiguration
         }
         finally
         {
-            _fileMutex.ReleaseMutex();
+            FileMutex.ReleaseMutex();
         }
 
         instance._onLoadHash = instance.GetCurrentHashCode();
@@ -112,17 +112,17 @@ public sealed class Git2SemVerConfiguration : IConfiguration
 
         _onLoadHash = currentHashCode;
 
-        var json = JsonSerializer.Serialize(this, _serialiseOptions);
+        var json = JsonSerializer.Serialize(this, SerialiseOptions);
         json = Regex.Unescape(json);
 
-        _fileMutex.WaitOne(TimeSpan.FromSeconds(10));
+        FileMutex.WaitOne(TimeSpan.FromSeconds(10));
         try
         {
             File.WriteAllText(GetFilePath(), json);
         }
         finally
         {
-            _fileMutex.ReleaseMutex();
+            FileMutex.ReleaseMutex();
         }
     }
 

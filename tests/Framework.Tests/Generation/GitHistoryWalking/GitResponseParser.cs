@@ -8,7 +8,7 @@ namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.GitHistoryWalking;
 #pragma warning disable CS1591
 public class GitResponseParser : GitLogCommitParserBase
 {
-    public GitResponseParser(ICommitsCache cache, IConventionalCommitsParser conventionalCommitParser, ILogger logger)
+    public GitResponseParser(ICommitsCache cache, IConventionalCommitsParser conventionalCommitParser)
         : base(cache, conventionalCommitParser)
     {
     }

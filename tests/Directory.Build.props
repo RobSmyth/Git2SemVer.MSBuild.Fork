@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>NoeticTools.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <AssemblyName>NoeticTools.$(MSBuildProjectName)</AssemblyName>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -19,13 +20,8 @@
     <Git2SemVer_TestSolutionsDirectory>$(MSBuildThisFileDirectory)/MSBuild.TestSolutions/</Git2SemVer_TestSolutionsDirectory>
   </PropertyGroup>
 
-  <!-- NuGet package properties -->
   <PropertyGroup>
-    <Authors>RobSmyth</Authors>
-    <RepositoryUrl>https://github.com/NoeticTools/Git2SemVer</RepositoryUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Copyright>Copyright (c) RobSmyth $([System.DateTime]::Now.Year)</Copyright>
-    <NoWarn>NU5100;NU1803;NU5128</NoWarn>
+    <NoWarn>NU5100;NU1803;NU5128;CA1816;SYSLIB1045</NoWarn>
   </PropertyGroup>
 
 </Project>

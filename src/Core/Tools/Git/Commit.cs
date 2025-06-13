@@ -5,18 +5,16 @@ using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using Semver;
 
 
-#pragma warning disable SYSLIB1045
-
-// ReSharper disable MergeIntoPattern
-
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 
 #pragma warning disable CS1591
+// ReSharper disable MergeIntoPattern
+
 public class Commit : ICommit
 {
     private const string TagVersionPrefix = "v";
-    private readonly Regex _tagVersionFromRefsRegex = new(@$"tag: {TagVersionPrefix}(?<version>\d+\.\d+\.\d+)", RegexOptions.IgnoreCase);
-    private readonly Regex _tagVersionRegex = new(@$"^{TagVersionPrefix}(?<version>\d+\.\d+\.\d+)", RegexOptions.IgnoreCase);
+    private readonly Regex _tagVersionFromRefsRegex = new (@$"tag: {TagVersionPrefix}(?<version>\d+\.\d+\.\d+)", RegexOptions.IgnoreCase);
+    private readonly Regex _tagVersionRegex = new (@$"^{TagVersionPrefix}(?<version>\d+\.\d+\.\d+)", RegexOptions.IgnoreCase);
 
     /// <summary>
     ///     /Construct commit from LibGit2Sharp objects.
@@ -73,7 +71,7 @@ public class Commit : ICommit
     public CommitMessageMetadata Metadata { get; }
 
     [JsonIgnore]
-    public static Commit Null => new("00000000", [], "null commit", "", "", new CommitMessageMetadata());
+    public static Commit Null => new ("00000000", [], "null commit", "", "", new CommitMessageMetadata());
 
     [JsonPropertyOrder(31)]
     public CommitId[] Parents { get; }

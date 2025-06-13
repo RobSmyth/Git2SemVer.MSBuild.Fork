@@ -120,3 +120,13 @@ dotnet_diagnostic.IDE0008.severity = none
 
 # CA1916: Call GC.SuppressFinalize correctly
 dotnet_diagnostic.CA1816.severity = none
+
+# NUnit2045: Use Assert.EnterMultipleScope or Assert.Multiple
+dotnet_diagnostic.NUnit2045.severity = none
+
+# IDE0044: Make field readonly
+dotnet_style_readonly_field = true:warning
+
+# IDE0079: Remove unnecessary suppression
+dotnet_remove_unnecessary_suppression_exclusions = none
+dotnet_diagnostic.IDE0079.severity = none

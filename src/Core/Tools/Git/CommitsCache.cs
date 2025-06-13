@@ -3,6 +3,7 @@
 
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 
+
 #pragma warning disable CS1591
 public sealed class CommitsCache : ICommitsCache
 {
