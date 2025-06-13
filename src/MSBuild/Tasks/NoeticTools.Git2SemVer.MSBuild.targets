@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project>
+
+  <PropertyGroup>
+    <_Git2SemVerRuntTimeFramework Condition=" '$(MSBuildRuntimeType)' == 'Full'">net472</_Git2SemVerRuntTimeFramework>
+    <_Git2SemVerRuntTimeFramework Condition=" '$(_Git2SemVerRuntTimeFramework)' == ''">net8.0</_Git2SemVerRuntTimeFramework>
+    <Git2SemVerTasksPath Condition="'$(Git2SemVerTasksPath)' == ''">$([MSBuild]::EnsureTrailingSlash($(MSBuildThisFileDirectory)..\tasks\$(_Git2SemVerRuntTimeFramework)))</Git2SemVerTasksPath>
+    <Git2SemVerTasksAssembly Condition="'$(Git2SemVerTasksAssembly)' == ''">$(Git2SemVerTasksPath)NoeticTools.Git2SemVer.MSBuild.dll</Git2SemVerTasksAssembly>
+    <Git2SemVer_IntermediateOutputPath Condition="'$(Git2SemVer_IntermediateOutputPath)' == '' ">$(BaseIntermediateOutputPath)</Git2SemVer_IntermediateOutputPath>
+    <Git2SemVer_VersionCacheDirectory Condition="'$(Git2SemVer_Mode)'=='StandAloneProject'">$(BaseIntermediateOutputPath)</Git2SemVer_VersionCacheDirectory>
+    <Git2SemVer_VersionCacheDirectory Condition="'$(Git2SemVer_VersionCacheDirectory)'==''">$(Git2SemVer_ShareDirectory)</Git2SemVer_VersionCacheDirectory>
+  </PropertyGroup>
+
+  <!-- Multitargeting project properties -->
+  <PropertyGroup>
+    <CrossTargetingBuild Condition=" '$(TargetFrameworks)' != '' ">true</CrossTargetingBuild>
+    <CrossTargetingBuild Condition="'$(CrossTargetingBuild)' == ''">false</CrossTargetingBuild>
+    <CrossTargetingOuterBuild Condition=" '$(IsCrossTargetingBuild)' == 'true' ">true</CrossTargetingOuterBuild>
+    <CrossTargetingOuterBuild Condition="'$(CrossTargetingOuterBuild)' == ''">false</CrossTargetingOuterBuild>
+    <CrossTargetingInnerBuild Condition=" '$(CrossTargetingBuild)' == 'true' And '$(IsCrossTargetingBuild)' == '' ">true</CrossTargetingInnerBuild>
+    <CrossTargetingInnerBuild Condition="'$(CrossTargetingInnerBuild)' == '' ">false</CrossTargetingInnerBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(CrossTargetingBuild)' == 'false' ">
+
+    <Git2SemVerBeforeTargets Condition=" '$(Git2SemVerBeforeTargets)' == '' ">
+      Build;
+      CoreCompile;
+      GetAssemblyVersion;
+    </Git2SemVerBeforeTargets>
+
+    <Git2SemVerRestorePropertiesBeforeTargets Condition=" '$(Git2SemVerRestorePropertiesBeforeTargets)' == '' ">
+      GetPackageVersion;
+      GenerateNuspec;
+    </Git2SemVerRestorePropertiesBeforeTargets>
+
+    <Git2SemVerRestorePropertiesAfterTargets Condition="'$(Git2SemVerRestorePropertiesAfterTargets)' == ''">
+    </Git2SemVerRestorePropertiesAfterTargets>
+
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(CrossTargetingInnerBuild)' == 'true' ">
+
+    <Git2SemVerBeforeTargets Condition="'$(Git2SemVerBeforeTargets)' == ''">
+    </Git2SemVerBeforeTargets>
+
+    <Git2SemVerRestorePropertiesBeforeTargets Condition="'$(Git2SemVerRestorePropertiesBeforeTargets)' == ''">
+      Build;
+      CoreCompile;
+      GetAssemblyVersion;
+    </Git2SemVerRestorePropertiesBeforeTargets>
+
+    <Git2SemVerRestorePropertiesAfterTargets Condition="'$(Git2SemVerRestorePropertiesAfterTargets)' == ''">
+    </Git2SemVerRestorePropertiesAfterTargets>
+
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(CrossTargetingOuterBuild)' == 'true' ">
+
+    <Git2SemVerBeforeTargets Condition="'$(Git2SemVerBeforeTargets)' == ''">
+      DispatchToInnerBuilds;
+    </Git2SemVerBeforeTargets>
+
+    <Git2SemVerRestorePropertiesBeforeTargets Condition="'$(Git2SemVerRestorePropertiesBeforeTargets)' == ''">
+    </Git2SemVerRestorePropertiesBeforeTargets>
+
+    <Git2SemVerRestorePropertiesAfterTargets Condition="'$(Git2SemVerRestorePropertiesAfterTargets)' == ''">
+    </Git2SemVerRestorePropertiesAfterTargets>
+
+  </PropertyGroup>
+
+  <UsingTask TaskName="Git2SemVerGenerateVersionTask"
+             AssemblyFile="$(Git2SemVerTasksAssembly)" />
+
+  <Target Name="Git2SemVerGenerateVersionTask"
+          BeforeTargets="$(Git2SemVerBeforeTargets)"
+          Condition="'$(Git2SemVer_Disable)' == 'false'">
+
+    <!-- Generate version information -->
+
+    <!-- ReSharper disable once UnknownTask -->
+    <Git2SemVerGenerateVersionTask BuildNumber="$(Git2SemVer_BuildNumber)"
+                                   BuildContext="$(Git2SemVer_BuildContext)"
+                                   BuildIdFormat="$(Git2SemVer_BuildIDFormat)"
+                                   Version="$(Version)"
+                                   UpdateHostBuildLabel="$(Git2SemVer_UpdateHostBuildLabel)"
+                                   ScriptArgs="$(Git2SemVer_ScriptArgs)"
+                                   HostType="$(Git2SemVer_HostType)"
+                                   BuildScriptPath="$(Git2SemVer_ScriptPath)"
+                                   BranchMaturityPattern="$(Git2SemVer_BranchMaturityPattern)"
+                                   WorkingDirectory="$(MSBuildProjectDirectory)"
+                                   SolutionSharedDirectory="$(Git2SemVer_ShareDirectory)"
+                                   SolutionSharedVersioningPropsFile="$(Git2SemVer_SharedVersioningJsonFile)"
+                                   IntermediateOutputDirectory="$(Git2SemVer_IntermediateOutputPath)"
+                                   Mode="$(Git2SemVer_Mode)">
+
+      <Output TaskParameter="AssemblyVersion" PropertyName="Git2SemVer_AssemblyVersion" />
+      <Output TaskParameter="CommitsSinceLastRelease" PropertyName="Git2SemVer_CommitsSinceLastRelease" />
+      <Output TaskParameter="FileVersion" PropertyName="Git2SemVer_FileVersion" />
+      <Output TaskParameter="InformationalVersion" PropertyName="Git2SemVer_InformationalVersion" />
+      <Output TaskParameter="PackageVersion" PropertyName="Git2SemVer_PackageVersion" />
+      <Output TaskParameter="Version" PropertyName="Git2SemVer_Version" />
+      <Output TaskParameter="VersionPrefix" PropertyName="Git2SemVer_VersionPrefix" />
+      <Output TaskParameter="VersionSuffix" PropertyName="Git2SemVer_VersionSuffix" />
+      <Output TaskParameter="Output1" PropertyName="Git2SemVer_Output1" />
+      <Output TaskParameter="Output2" PropertyName="Git2SemVer_Output2" />
+
+    </Git2SemVerGenerateVersionTask>
+
+    <PropertyGroup>
+      <Version Condition=" '$(Git2SemVer_Version)' != '' ">$(Git2SemVer_Version)</Version>
+      <VersionPrefix Condition=" '$(Git2SemVer_VersionPrefix)' != '' ">$(Git2SemVer_VersionPrefix)</VersionPrefix>
+      <VersionSuffix Condition=" '$(Git2SemVer_VersionSuffix)' != '' ">$(Git2SemVer_VersionSuffix)</VersionSuffix>
+      <PackageVersion Condition=" '$(Git2SemVer_PackageVersion)' != '' ">$(Git2SemVer_PackageVersion)</PackageVersion>
+      <InformationalVersion Condition=" '$(Git2SemVer_InformationalVersion)' != '' ">$(Git2SemVer_InformationalVersion)</InformationalVersion>
+      <AssemblyVersion Condition=" '$(Git2SemVer_AssemblyVersion)' != '' ">$(Git2SemVer_AssemblyVersion)</AssemblyVersion>
+      <FileVersion Condition=" '$(Git2SemVer_FileVersion)' != '' ">$(Git2SemVer_FileVersion)</FileVersion>
+    </PropertyGroup>
+
+    <Touch Files="$(Git2SemVer_GeneratedVersionStamp)" AlwaysCreate="True" />
+
+  </Target>
+
+  <!-- Restore version propeties from file so that we can pack without rebuild. -->
+
+  <UsingTask TaskName="Git2SemVerRestoreVersionPropertiesTask"
+             AssemblyFile="$(Git2SemVerTasksAssembly)" />
+
+  <Target Name="Git2SemVerRestoreVersionPropertiesTask"
+          BeforeTargets="$(Git2SemVerRestorePropertiesBeforeTargets)"
+          AfterTargets="$(Git2SemVerRestorePropertiesAfterTargets)"
+          Condition="'$(Git2SemVer_Disable)' == 'false'">
+
+    <!-- ReSharper disable once UnknownTask -->
+    <Git2SemVerRestoreVersionPropertiesTask VersionCacheDirectory="$(Git2SemVer_VersionCacheDirectory)">
+
+      <Output TaskParameter="AssemblyVersion" PropertyName="Git2SemVer_AssemblyVersion" />
+      <Output TaskParameter="CommitsSinceLastRelease" PropertyName="Git2SemVer_CommitsSinceLastRelease" />
+      <Output TaskParameter="FileVersion" PropertyName="Git2SemVer_FileVersion" />
+      <Output TaskParameter="InformationalVersion" PropertyName="Git2SemVer_InformationalVersion" />
+      <Output TaskParameter="PackageVersion" PropertyName="Git2SemVer_PackageVersion" />
+      <Output TaskParameter="Version" PropertyName="Git2SemVer_Version" />
+      <Output TaskParameter="VersionPrefix" PropertyName="Git2SemVer_VersionPrefix" />
+      <Output TaskParameter="VersionSuffix" PropertyName="Git2SemVer_VersionSuffix" />
+      <Output TaskParameter="Output1" PropertyName="Git2SemVer_Output1" />
+      <Output TaskParameter="Output2" PropertyName="Git2SemVer_Output2" />
+
+    </Git2SemVerRestoreVersionPropertiesTask>
+
+    <PropertyGroup>
+      <Version Condition=" '$(Git2SemVer_Version)' != '' ">$(Git2SemVer_Version)</Version>
+      <VersionPrefix Condition=" '$(Git2SemVer_VersionPrefix)' != '' ">$(Git2SemVer_VersionPrefix)</VersionPrefix>
+      <VersionSuffix Condition=" '$(Git2SemVer_VersionSuffix)' != '' ">$(Git2SemVer_VersionSuffix)</VersionSuffix>
+      <PackageVersion Condition=" '$(Git2SemVer_PackageVersion)' != '' ">$(Git2SemVer_PackageVersion)</PackageVersion>
+      <InformationalVersion Condition=" '$(Git2SemVer_InformationalVersion)' != '' ">$(Git2SemVer_InformationalVersion)</InformationalVersion>
+      <AssemblyVersion Condition=" '$(Git2SemVer_AssemblyVersion)' != '' ">$(Git2SemVer_AssemblyVersion)</AssemblyVersion>
+      <FileVersion Condition=" '$(Git2SemVer_FileVersion)' != '' ">$(Git2SemVer_FileVersion)</FileVersion>
+    </PropertyGroup>
+
+  </Target>
+
+</Project>
