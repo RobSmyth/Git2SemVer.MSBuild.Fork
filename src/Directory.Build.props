@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>NoeticTools.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <AssemblyName>NoeticTools.$(MSBuildProjectName)</AssemblyName>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup>
