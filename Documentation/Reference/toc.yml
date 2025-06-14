@@ -2,3 +2,5 @@
   href: MSBuildProperties.md
 - name: Glossary
   href: Glossary.md
+- name: Diagnostic codes
+  href: DiagCodes/

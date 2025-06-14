@@ -1,0 +1,27 @@
+<Project>
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>NoeticTools.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <AssemblyName>NoeticTools.$(MSBuildProjectName)</AssemblyName>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>Minimum</AnalysisMode>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Git2SemVer_TestSolutionsDirectory>$(MSBuildThisFileDirectory)/MSBuild.TestSolutions/</Git2SemVer_TestSolutionsDirectory>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>NU5100;NU1803;NU5128;CA1816;SYSLIB1045</NoWarn>
+  </PropertyGroup>
+
+</Project>
