@@ -30,6 +30,24 @@ namespace NoeticTools.Git2SemVer.MSBuild.Tasks;
 public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGeneratorInputs
 {
     /// <summary>
+    ///     MSBuild's IncludeSourceRevisionInInformationalVersion property.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    ///     As of .NET SDK 8.0 Source Link appends the git SHA to the informational version
+    ///     regardless if it has already been appended.
+    ///     This property gives the value of the `IncludeSourceRevisionInInformationalVersion`
+    ///     property to allow Git2SemVer to handle this.
+    /// </para>
+    /// <para>
+    ///     The value is an empty string if using an earlier .NET SDK, otherwise true or false.
+    /// </para>
+    /// </remarks>
+    /// <seealso href="https://learn.microsoft.com/en-us/dotnet/core/compatibility/sdk/8.0/source-link"/>
+    [Required]
+    public string SourceLinkAppendingSha { get; set; } = "";
+
+    /// <summary>
     ///     Optional case-insensitive regular expression that maps branch name to build maturity such as "release" or "beta".
     /// </summary>
     /// <remarks>
@@ -270,6 +288,15 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
 
         try
         {
+            if (!string.IsNullOrWhiteSpace(SourceLinkAppendingSha))
+            {
+                var sourceLinkAppendingSha = bool.Parse(SourceLinkAppendingSha);
+                if (sourceLinkAppendingSha)
+                {
+                    logger.LogWarning(new GSV003());
+                }
+            }
+
             var informationalVersion = GetCustomAttribute<AssemblyInformationalVersionAttribute>(GetType().Assembly).InformationalVersion;
             logger.LogTrace("Git2SemVer.MSBuild version {0}", informationalVersion);
             logger.LogDebug("Executing Git2SemVer.MSBuild task to generate version. ({0})", DateTime.Now.ToString("o"));
@@ -318,7 +345,7 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
             return true;
         }
 
-        logger.LogError(new GSV003(BuildScriptPath));
+        logger.LogError(new GSV004(BuildScriptPath));
         return false;
     }
 

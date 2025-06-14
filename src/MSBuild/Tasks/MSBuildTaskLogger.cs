@@ -72,5 +72,19 @@ public class MSBuildTaskLogger : TaskLoggerBase
         {
             _inner.LogWarningFromException(exception);
         }
+
+        public void LogWarning(DiagnosticCodeBase code)
+        {
+            _inner.LogWarning(subcategory: code.SubCategory, 
+                            warningCode: code.Code,
+                            helpKeyword: null, 
+                            helpLink: code.HelpLink, 
+                            file: null, 
+                            lineNumber: 0, 
+                            columnNumber: 0, 
+                            endLineNumber: 0, 
+                            endColumnNumber: 0, 
+                            message: code.Message);
+        }
     }
 }

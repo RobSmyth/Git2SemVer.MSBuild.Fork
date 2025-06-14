@@ -171,6 +171,11 @@ public class NUnitLogger : ILogger
         LogTrace(string.Format(message, messageArgs));
     }
 
+    public void LogWarning(DiagnosticCodeBase code)
+    {
+        LogWarning(code.MessageWithCode);
+    }
+
     public void LogWarning(string message)
     {
         if (Level >= LoggingLevel.Warning)

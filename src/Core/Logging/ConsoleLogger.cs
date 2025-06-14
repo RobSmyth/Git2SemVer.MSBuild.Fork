@@ -171,4 +171,9 @@ public sealed class ConsoleLogger : LoggerBase, ILogger
     {
         LogError(code.MessageWithCode);
     }
+
+    public void LogWarning(DiagnosticCodeBase code)
+    {
+        LogWarning(code.MessageWithCode);
+    }
 }

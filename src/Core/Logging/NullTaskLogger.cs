@@ -45,5 +45,9 @@ public sealed class NullTaskLogger : TaskLoggerBase
         public void LogWarning(Exception exception)
         {
         }
+
+        public void LogWarning(DiagnosticCodeBase exception)
+        {
+        }
     }
 }

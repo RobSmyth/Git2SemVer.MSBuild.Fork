@@ -93,6 +93,7 @@
                                    SolutionSharedDirectory="$(Git2SemVer_ShareDirectory)"
                                    SolutionSharedVersioningPropsFile="$(Git2SemVer_SharedVersioningJsonFile)"
                                    IntermediateOutputDirectory="$(Git2SemVer_IntermediateOutputPath)"
+                                   SourceLinkAppendingSha="$(IncludeSourceRevisionInInformationalVersion)"
                                    Mode="$(Git2SemVer_Mode)">
 
       <Output TaskParameter="AssemblyVersion" PropertyName="Git2SemVer_AssemblyVersion" />

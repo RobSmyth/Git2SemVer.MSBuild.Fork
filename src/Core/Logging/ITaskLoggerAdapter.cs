@@ -16,4 +16,5 @@ public interface ITaskLoggerAdapter
     void LogTrace(string message);
     void LogWarning(string message);
     void LogWarning(Exception exception);
+    void LogWarning(DiagnosticCodeBase exception);
 }

@@ -135,4 +135,9 @@ public abstract class TaskLoggerBase : LoggerBase, ILogger
     {
         _adapter.LogError(code);
     }
+
+    public void LogWarning(DiagnosticCodeBase code)
+    {
+        _adapter.LogWarning(code);
+    }
 }

@@ -125,4 +125,6 @@ public interface ILogger : IDisposable
     void LogWarning(Exception exception);
 
     void LogError(DiagnosticCodeBase code);
+
+    void LogWarning(DiagnosticCodeBase code);
 }

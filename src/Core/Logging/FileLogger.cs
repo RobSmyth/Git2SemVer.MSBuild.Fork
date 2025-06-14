@@ -103,6 +103,11 @@ public sealed class FileLogger : LoggerBase, ILogger
         LogError(message);
     }
 
+    public void LogError(DiagnosticCodeBase code)
+    {
+        LogError(code.MessageWithCode);
+    }
+
     public void LogInfo(string message)
     {
         Log(LoggingLevel.Info, message);
@@ -168,8 +173,8 @@ public sealed class FileLogger : LoggerBase, ILogger
         LogWarning($"Exception - {exception.Message}");
     }
 
-    public void LogError(DiagnosticCodeBase code)
+    public void LogWarning(DiagnosticCodeBase code)
     {
-        LogError(code.MessageWithCode);
+        LogWarning(code.MessageWithCode);
     }
 }
