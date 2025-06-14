@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DiagnosticCodesDocBuilder": {
+      "commandName": "Project",
+      "commandLineArgs": "$(MSBuildThisFileDirectory)..\\..\\Documentation\\Reference\\DiagCodes"
+    }
+  }
+}

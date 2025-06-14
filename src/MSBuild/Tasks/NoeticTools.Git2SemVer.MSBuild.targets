@@ -94,7 +94,8 @@
                                    SolutionSharedVersioningPropsFile="$(Git2SemVer_SharedVersioningJsonFile)"
                                    IntermediateOutputDirectory="$(Git2SemVer_IntermediateOutputPath)"
                                    SourceLinkAppendingSha="$(IncludeSourceRevisionInInformationalVersion)"
-                                   Mode="$(Git2SemVer_Mode)">
+                                   Mode="$(Git2SemVer_Mode)"
+                                   RunScript="$(Git2SemVer_RunScript)">
 
       <Output TaskParameter="AssemblyVersion" PropertyName="Git2SemVer_AssemblyVersion" />
       <Output TaskParameter="CommitsSinceLastRelease" PropertyName="Git2SemVer_CommitsSinceLastRelease" />

@@ -2,12 +2,14 @@
 namespace NoeticTools.Git2SemVer.Core.Diagnostics;
 
 [DiagnosticCode]
-public class GSV003 : DiagnosticCodeBase
+public sealed class GSV003 : DiagnosticCodeBase
 {
     public GSV003()
         : base(id: 3,
+               subcategory: "Versioning",
                description: $"""
                              This occurs when using .NET SDK 8.0 or later and IncludeSourceRevisionInInformationalVersion is true.
+                             It is used  warn users that Source Link will appended an extra Git SHA to the informational version.
                              """,
                resolution: $"""
                             To prevent Source Link from appending an extra git SHA to the information version either add the following
