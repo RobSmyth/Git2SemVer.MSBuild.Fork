@@ -8,21 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 3.0.0 - _June 15, 2025_
 
-This release has breaking changes that will impact users that are either:
-* Using versioning build time statistic on TeamCity ([#44](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/44)).
-* Using custom C# script (csx) code. Some changes to API.
+Git2SemVer.MSBuild 3.0.0 has breaking changes:
 
-XXXXXXXXXXXX upgrade notes
+* The TeamCity version build time statistic was renamed from to `Git2SemVerRunTime_sec` to `git2semver.runtime.seconds`.
+* Builds on Linux hosts (e.g: Ubuntu >= 22) may break with an error that `libdl.so` was not found.
+
+For futher information see: [Upgrading V2 to V3](https://noetictools.github.io/Git2SemVer.MSBuild/Reference/Upgrading/UpgradingV2toV3).
 
 ### Added
 
-* Handling .net sdk 8.0 adding git SHA suffix to versions ([#43](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/43)).
-* Provide further information in logs/report as to how the version is calculated ([#42](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/42)).
-* Improvde diagnostics - Add warning and error IDs for MSBuild integration ([#41](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/41)).
+* Warning if .net sdk 8.0 adding git SHA suffix to versions ([#43](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/43)).
+* Further information in logs/report as to how the version is calculated ([#42](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/42)).
+* Add warning and error IDs for MSBuild integration ([#41](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/41)).
 
 ### Changed
 
-* **Breaking change** Improve build statistic naming  ([#44](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/44)).
+* **Breaking change -** Improve build statistic naming  ([#44](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/44)).
 
 ### Fixed
 
