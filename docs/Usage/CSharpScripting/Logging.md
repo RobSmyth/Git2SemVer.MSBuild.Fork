@@ -10,8 +10,8 @@ uid: script-logging
 
 Log messages are are seen in the compiler output.
 
-The C# script uses a [ITaskLogger](xref:NoeticTools.Common.Logging.ILogger) logger instance
-available on the ScriptRunner's context [Logger](xref:NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting.VersioningContext.Logger) property.
+The C# script uses a [ITaskLogger](xref:NoeticTools.Git2SemVer.Core.Logging.ILogger) logger instance
+available on the ScriptRunner's context [Logger](xref:NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting.VersioningContext.Logger) property.
 This logger is available in both the script's global and class contexts.
 
 

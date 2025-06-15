@@ -3,31 +3,19 @@
     {
       "src": [
         {
-          "src": "../Git2SemVer.MSBuild",
+          "src": "../src/MSBuild",
           "files": [
             "**/*.csproj"
           ]
         },
         {
-          "src": "../Git2SemVer.Tool",
+          "src": "../src/Core",
           "files": [
             "**/*.csproj"
           ]
         },
         {
-          "src": "../MSBuild.Tasking.Logging",
-          "files": [
-            "**/*.csproj"
-          ]
-        },
-        {
-          "src": "../MSBuild.Tasking",
-          "files": [
-            "**/*.csproj"
-          ]
-        },
-        {
-          "src": "../Git2Semver.Common",
+          "src": "../src/Framework",
           "files": [
             "**/*.csproj"
           ]

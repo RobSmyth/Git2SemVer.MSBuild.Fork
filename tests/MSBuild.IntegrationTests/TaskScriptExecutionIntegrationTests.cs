@@ -13,6 +13,7 @@ internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
     private const string TestScriptFilename = "TestScript.csx";
     private BuildEngine9Stub _buildEngine;
     private Dictionary<string, string> _globalProperties;
+    private MSBuildGlobalProperties _msBuildGlobalProperties;
 
     [OneTimeSetUp]
     public void OneTimeSetup()
@@ -33,6 +34,7 @@ internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
 
         _globalProperties = new Dictionary<string, string>();
         _buildEngine = new BuildEngine9Stub(_globalProperties);
+        _msBuildGlobalProperties = new MSBuildGlobalProperties(_buildEngine);
     }
 
     [Test]
@@ -42,7 +44,7 @@ internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
         var context = GetContext("12345", "1");
         var runner = new ScriptVersionBuilder(Logger);
 
-        runner.Build(context.Host, Git, context.Inputs, context.Outputs);
+        runner.Build(context.Host, Git, context.Inputs, context.Outputs, _msBuildGlobalProperties);
 
         Assert.That(Logger.HasError, Is.False);
     }
@@ -54,7 +56,7 @@ internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
         var context = GetContext("12345", "MACHINE-NAME");
         var runner = new ScriptVersionBuilder(Logger);
 
-        runner.Build(context.Host, Git, context.Inputs, context.Outputs);
+        runner.Build(context.Host, Git, context.Inputs, context.Outputs, _msBuildGlobalProperties);
 
         Assert.That(Logger.HasError, Is.False);
     }
@@ -66,7 +68,7 @@ internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
         var context = GetContext("12345", "MACHINE-NAME");
         var runner = new ScriptVersionBuilder(Logger);
 
-        runner.Build(context.Host, Git, context.Inputs, context.Outputs);
+        runner.Build(context.Host, Git, context.Inputs, context.Outputs, _msBuildGlobalProperties);
 
         Assert.That(Logger.HasError, Is.False);
     }
@@ -81,7 +83,7 @@ internal class ScriptExecutionIntegrationTests : ScriptingTestsBase
             BuildContext = hostBuildContext
         };
 
-        return new VersioningContext(taskInputs, new TaskOutputsStub(), buildHost, Git, Logger);
+        return new VersioningContext(taskInputs, new TaskOutputsStub(), buildHost, Git, _msBuildGlobalProperties, Logger);
     }
 
     private IVersionGeneratorInputs GetTaskInputs()

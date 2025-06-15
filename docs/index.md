@@ -70,16 +70,16 @@ This tool is best for suited teams that:
 
  <tr>
      <td style="width:33%">
-      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/VisualStudio_128x128.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/VisualStudio_128x128.png" height=64 />
     </td>
     <td style="width:33%">
       <a href="https://semver.org/">
-        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/SemVer213x128(dark).png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/SemVer213x128(dark).png" height=64 />
       </a>
     </td>
     <td  style="width:33%">
       <a href="https://www.conventionalcommits.org/en/v1.0.0/">
-        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/ConventionalCommits_128x128.png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/ConventionalCommits_128x128.png" height=64 />
       </a>
     </td>
 </tr>
@@ -134,14 +134,14 @@ This tool is best for suited teams that:
 <tr>
     <td >
       <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Reference/Glossary.html##environment-parity">
-        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/consistency_128x128.png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/consistency_128x128.png" height=64 />
       </a>
     </td>
     <td >
-      <p style="font-size:100px; margin:0px;color:DarkCyan;">#</p>
+      <p style="font-size:50px; margin:0px;color:DarkCyan;">#</p>
     </td>
     <td >
-      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/CSharp_128x128.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/CSharp_128x128.png" height=64 />
     </td>
 </tr>
 <tr>
@@ -196,13 +196,13 @@ This tool is best for suited teams that:
 
 <tr>
     <td style="width:33%">
-      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/OpenSource_128x128.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/OpenSource_128x128.png" height=64 />
     </td>
     <td >
-      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/ComputerMonitor.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/ComputerMonitor.png" height=64 />
     </td>
     <td >
-      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/git_workflow_128x128.png" height=128 />
+      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/git_workflow_128x128.png" height=64 />
     </td>
 </tr>
 <tr>
@@ -248,12 +248,12 @@ This tool is best for suited teams that:
 <tr>
     <td >
       <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Usage/BuildHosts/TeamCity.html">
-        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/TeamCity_128x128.png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/TeamCity_128x128.png" height=64 />
       </a>
     </td>
     <td >
       <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Usage/BuildHosts/GitHubWorkflows.html">
-        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/github_gray_128x128.png" height=128 />
+        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/github_gray_128x128.png" height=64 />
       </a>
     </td>
     <td >

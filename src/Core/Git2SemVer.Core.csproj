@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\Documentation\Images\Git2SemVer_icon_32x32.png" Link="Git2SemVer_icon_32x32.png" Pack="True" PackagePath="\" />
+    <None Include="..\..\docs\Images\Git2SemVer_icon_32x32.png" Link="Git2SemVer_icon_32x32.png" Pack="True" PackagePath="\" />
     <Content Include="Git2SemVer_icon_64x64.ico" Pack="False" />
   </ItemGroup>
 

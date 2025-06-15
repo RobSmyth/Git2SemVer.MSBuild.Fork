@@ -35,7 +35,7 @@ public interface IVersioningContext
     ///// <summary>
     /////     Harvested MSBuild global properties for script use.
     ///// </summary>
-    //MSBuildGlobalProperties MsBuildGlobalProperties { get; }
+    IMSBuildGlobalProperties MsBuildGlobalProperties { get; }
 
     /// <summary>
     ///     Outputs that the C# script may use. Available to other MSBuild tasks as MSBuild properties.

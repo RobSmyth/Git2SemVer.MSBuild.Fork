@@ -3,6 +3,7 @@ using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders;
+using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using NoeticTools.Git2SemVer.Framework.Persistence;
 
@@ -19,6 +20,7 @@ internal sealed class VersionGenerator : IVersionGenerator
     private readonly IVersionGeneratorInputs _inputs;
     private readonly ILogger _logger;
     private readonly IVersionBuilder _scriptBuilder;
+    private readonly IMSBuildGlobalProperties _msBuildGlobalProperties;
 
     public VersionGenerator(IVersionGeneratorInputs inputs,
                             IBuildHost host,
@@ -27,6 +29,7 @@ internal sealed class VersionGenerator : IVersionGenerator
                             IGitHistoryPathsFinder gitPathsFinder,
                             IDefaultVersionBuilderFactory defaultVersionBuilderFactory,
                             IVersionBuilder scriptBuilder,
+                            IMSBuildGlobalProperties msBuildGlobalProperties,
                             ILogger logger)
     {
         _inputs = inputs;
@@ -36,6 +39,7 @@ internal sealed class VersionGenerator : IVersionGenerator
         _gitPathsFinder = gitPathsFinder;
         _defaultVersionBuilderFactory = defaultVersionBuilderFactory;
         _scriptBuilder = scriptBuilder;
+        _msBuildGlobalProperties = msBuildGlobalProperties;
         _logger = logger;
     }
 
@@ -73,9 +77,9 @@ internal sealed class VersionGenerator : IVersionGenerator
         {
             var stopwatch = Stopwatch.StartNew();
 
-            _defaultVersionBuilderFactory.Create(historyPaths).Build(_host, _gitTool, _inputs, outputs);
+            _defaultVersionBuilderFactory.Create(historyPaths).Build(_host, _gitTool, _inputs, outputs, _msBuildGlobalProperties);
 
-            _scriptBuilder.Build(_host, _gitTool, _inputs, outputs);
+            _scriptBuilder.Build(_host, _gitTool, _inputs, outputs, _msBuildGlobalProperties);
 
             stopwatch.Stop();
             _logger.LogDebug($"Version building completed (in {stopwatch.Elapsed.TotalSeconds:F1} sec).");

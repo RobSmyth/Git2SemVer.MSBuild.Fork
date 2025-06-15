@@ -5,10 +5,9 @@
 bin
 obj
 .vs
-/Documentation/api
-/Documentation/_site
+/docs/api
+/docs/_site
 nupkg
-/Git2SemVer.sln.DotSettings.user
 /TestSolutions/TestSolutionWithTwoProjects/Directory.Build.props
 /TestSolutions/TestSolutionWithTwoProjects/SolutionVersioningProject
 /TestSolutions/TestSolutionWithTwoProjects/Versioning.Build.props
@@ -20,4 +19,3 @@ nupkg
 *.user
 /artifacts
 .git2semver
-/docs/api

@@ -7,6 +7,7 @@ using NoeticTools.Git2SemVer.Framework.Generation;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using NoeticTools.Git2SemVer.Core.Diagnostics;
+using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
 using ILogger = NoeticTools.Git2SemVer.Core.Logging.ILogger;
 
 
@@ -310,7 +311,7 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
                 throw new Git2SemVerConfigurationException($"Invalid Git2SemVer_Mode value '{Mode}'.", exception);
             }
 
-            using var versionGenerator = new ProjectVersioningFactory(msg => Log.LogMessage(MessageImportance.High, msg), logger).Create(this);
+            using var versionGenerator = new ProjectVersioningFactory(msg => Log.LogMessage(MessageImportance.High, msg), logger).Create(this, new MSBuildGlobalProperties(BuildEngine6));
             SetOutputs(versionGenerator.Run());
             return !Log.HasLoggedErrors;
         }

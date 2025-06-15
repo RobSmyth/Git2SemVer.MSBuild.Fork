@@ -70,7 +70,7 @@ The MSBuild input poperties are:
  <tr>
     <td>
       <div class="headerCell">
-        Open Source
+        Property
       </div>
     </td>
     <td>

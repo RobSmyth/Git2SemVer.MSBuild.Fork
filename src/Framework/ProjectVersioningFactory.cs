@@ -23,7 +23,8 @@ public sealed class ProjectVersioningFactory
         _logger = logger;
     }
 
-    public ProjectVersioning Create(IVersionGeneratorInputs inputs, IOutputsJsonIO? outputsJsonIO = null, IConfiguration? config = null)
+    public ProjectVersioning Create(IVersionGeneratorInputs inputs, IMSBuildGlobalProperties msBuildGlobalProperties,
+                                    IOutputsJsonIO? outputsJsonIO = null, IConfiguration? config = null)
     {
         if (inputs == null)
         {
@@ -49,6 +50,7 @@ public sealed class ProjectVersioningFactory
                                                     gitPathsFinder,
                                                     defaultBuilderFactory,
                                                     scriptBuilder,
+                                                    msBuildGlobalProperties,
                                                     _logger);
         var projectVersioning = new ProjectVersioning(inputs, host,
                                                       outputsJsonIO,

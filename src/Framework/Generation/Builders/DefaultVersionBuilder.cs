@@ -3,6 +3,7 @@ using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Framework.Semver;
+using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using Semver;
 
@@ -23,7 +24,8 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
         _logger = logger;
     }
 
-    public void Build(IBuildHost host, IGitTool gitTool, IVersionGeneratorInputs inputs, IVersionOutputs outputs)
+    public void Build(IBuildHost host, IGitTool gitTool, IVersionGeneratorInputs inputs, IVersionOutputs outputs,
+                      IMSBuildGlobalProperties msBuildGlobalProperties)
     {
         _logger.LogDebug("Running default (built-in) version builder.");
         using (_logger.EnterLogScope())

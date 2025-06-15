@@ -15,7 +15,8 @@ public sealed class ScriptVersionBuilder : IVersionBuilder
         _logger = logger;
     }
 
-    public void Build(IBuildHost host, IGitTool gitTool, IVersionGeneratorInputs inputs, IVersionOutputs outputs)
+    public void Build(IBuildHost host, IGitTool gitTool, IVersionGeneratorInputs inputs, IVersionOutputs outputs,
+                      IMSBuildGlobalProperties msBuildGlobalProperties)
     {
         if (inputs == null)
         {
@@ -51,7 +52,7 @@ public sealed class ScriptVersionBuilder : IVersionBuilder
         _logger.LogDebug("Running user C# script version builder.");
         using (_logger.EnterLogScope())
         {
-            var context = new VersioningContext(inputs, outputs, host, gitTool, _logger);
+            var context = new VersioningContext(inputs, outputs, host, gitTool, msBuildGlobalProperties, _logger);
             var scriptRunner = new Git2SemVerScriptRunner(new CSharpScriptRunner(_logger), _logger);
 
             // ReSharper disable once UnusedVariable

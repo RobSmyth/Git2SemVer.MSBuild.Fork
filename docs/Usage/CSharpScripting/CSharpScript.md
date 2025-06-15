@@ -40,25 +40,24 @@ Examples setting script path:
 
 ## API
 
-The script is given reference to the versioning API [VersioningContext](xref:NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting.IVersioningContext).
+The script is given reference to the versioning API [VersioningContext](xref:NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting.IVersioningContext).
 The API's properties are available as globals. 
 
-An instance of the API is also available from the static [ContextVersioning's Instance property](xref:NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting.VersioningContext.Instance).
+An instance of the API is also available from the static [ContextVersioning's Instance property](xref:NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting.VersioningContext.Instance).
 This can be used for class context coding. 
 
 Both global and class context approaches are explained in following sections.
 
-[VersioningContext](xref:NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting.IVersioningContext) properties:
+[VersioningContext](xref:NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting.IVersioningContext) properties:
 
 | Property                      | Description   |
 |:---                           |:---           |
-| [Host](xref:NoeticTools.Git2SemVer.MSBuild.Framework.BuildHosting.IBuildHost)               | A build host instance modeling the detected, or set, current host type. Provides a `BuildNumber` property.   |
-| [Inputs](xref:NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.IVersionGeneratorInputs) | The task's MSBuild input property values. Includes a property for optional script arguments.          |
-| [Logger](xref:NoeticTools.Common.Logging.ILogger)                                           | An MSBuild logger. Logging an error will cause the build to fail.                                     |
-| [MsBuildGlobalProperties](xref:NoeticTools.MSBuild.Tasking.MSBuildGlobalProperties)         | Harvested MSBuild global properties for optional script use.                                          |
-| [Outputs](xref:NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.IVersionOutputs)        | Outputs that the script may optionally write to. These will be available to other MSBuild tasks.      |
+| [Host](xref:NoeticTools.Git2SemVer.Framework.Framework.BuildHosting.IBuildHost)               | A build host instance modeling the detected, or set, current host type. Provides a `BuildNumber` property.   |
+| [Inputs](xref:NoeticTools.Git2SemVer.Framework.Generation.IVersionGeneratorInputs) | The task's MSBuild input property values. Includes a property for optional script arguments.          |
+| [Logger](xref:NoeticTools.Git2SemVer.Core.Logging.ILogger)                                           | An MSBuild logger. Logging an error will cause the build to fail.                                     |
+| [Outputs](xref:NoeticTools.Git2SemVer.Framework.Generation.IVersionOutputs)        | Outputs that the script may optionally write to. These will be available to other MSBuild tasks.      |
 
-[ContextVersioning's Instance property](xref:NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting.VersioningContext.Instance) is a static property that gives access to the VersioningContext instance. 
+[ContextVersioning's Instance property](xref:NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting.VersioningContext.Instance) is a static property that gives access to the VersioningContext instance. 
 Required for class context code.
 
 
@@ -77,7 +76,7 @@ It is the same instance but will be easier to edit.
 ## Using the global context (recommened)
 
 The C# script has a global context and a class context.
-The global context is given [VersioningContext](xref:NoeticTools.Git2SemVer.MSBuild.Versioning.Generation.Builders.Scripting.IVersioningContext)
+The global context is given [VersioningContext](xref:NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting.IVersioningContext)
 properties as globals.
 
 For example the `Logger` property can be accessed as a global:

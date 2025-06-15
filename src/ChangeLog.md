@@ -6,6 +6,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## 3.0.0 - _June 15, 2025_
+
+This release has breaking changes that will impact users that are either:
+* Using versioning build time statistic on TeamCity ([#44](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/44)).
+* Using custom C# script (csx) code. Some changes to API.
+
+XXXXXXXXXXXX upgrade notes
+
+### Added
+
+* Handling .net sdk 8.0 adding git SHA suffix to versions ([#43](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/43)).
+* Provide further information in logs/report as to how the version is calculated ([#42](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/42)).
+* Improvde diagnostics - Add warning and error IDs for MSBuild integration ([#41](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/41)).
+
+### Changed
+
+* **Breaking change** Improve build statistic naming  ([#44](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/44)).
+
+### Fixed
+
+* Unable to parse git --version response: '' ([#40](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/40)).
+* Breaking change footnote is not bumping version ([#38](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/38)).
+* A metadata identifier can contain only ASCII alphanumeric characters and hyphens ' (Apple Git-154)' ([#35](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/35)).
+
+
 ## 2.0.0 - _December 1, 2024_
 
 This release has breaking changes that will impact users that are either:

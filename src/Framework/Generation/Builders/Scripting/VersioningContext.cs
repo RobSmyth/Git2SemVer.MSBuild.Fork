@@ -11,6 +11,7 @@ public sealed class VersioningContext : IVersioningContext
                                IVersionOutputs outputs,
                                IBuildHost host,
                                IGitTool gitTool,
+                               IMSBuildGlobalProperties msBuildGlobalProperties,
                                ILogger logger)
     {
         Inputs = inputs;
@@ -19,6 +20,7 @@ public sealed class VersioningContext : IVersioningContext
         Logger = logger;
         Instance = this;
         Git = gitTool;
+        MsBuildGlobalProperties = msBuildGlobalProperties;
     }
 
     public IGitTool Git { get; }
@@ -31,6 +33,8 @@ public sealed class VersioningContext : IVersioningContext
     public static IVersioningContext? Instance { get; private set; }
 
     public ILogger Logger { get; }
+
+    public IMSBuildGlobalProperties MsBuildGlobalProperties { get; }
 
     public IVersionOutputs Outputs { get; }
 }

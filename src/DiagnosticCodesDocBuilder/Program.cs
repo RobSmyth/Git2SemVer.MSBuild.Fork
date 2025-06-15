@@ -1,47 +1,41 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel.DataAnnotations;
+using NoeticTools.DiagnosticCodesDocBuilder.DocFx;
 using NoeticTools.Git2SemVer.Core.Diagnostics;
 
 
 namespace NoeticTools.DiagnosticCodesDocBuilder;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 internal class Program
 {
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
         Console.WriteLine("Diagnostics DocFx pages builder.");
 
-        var destinationDirectory = args[0];
-        if (!Directory.Exists(destinationDirectory))
+        var docsPath = args[0];
+        if (!Directory.Exists(docsPath))
         {
-            throw new ArgumentException($"Directory '{destinationDirectory}' does not exist.");
-        }
-        Console.WriteLine($"Generate pages in directory: {destinationDirectory}");
-
-        var assembly = typeof(DiagnosticCodeBase).Assembly;
-        var types = assembly.GetTypes()
-                              .Where(t => t.GetCustomAttributes(typeof(DiagnosticCodeAttribute), false).Length > 0)
-                              .ToArray();
-
-        Console.WriteLine($"Generating {types.Length} diagnostic code pages.");
-
-        foreach (var type in types)
-        {
-            var constructor = type.GetConstructors().First();
-
-            var valueArgs = new object[constructor.GetParameters().Length]!;
-            for (var index=0; index < valueArgs.Length; index++)
-            {
-                valueArgs[index] = "value";
-            }
-
-            var instance = (DiagnosticCodeBase)constructor.Invoke(valueArgs);
-            Console.WriteLine($"  Code: {instance.Code}.");
-
-            var filePath = Path.Combine(destinationDirectory, $"{instance.Code}.md");
-            File.WriteAllText(filePath, instance.DocFxPageContents);
+            throw new ArgumentException($"Directory '{docsPath}' does not exist.");
         }
 
+        Console.WriteLine($"Generate pages in directory: {docsPath}");
+
+        var diagCodes = DiagCodeInfoProvider.Get();
+        Validate(diagCodes);
+        new DiagCodesContentBuilder(docsPath).Build(diagCodes);
+
+        Console.WriteLine("Done");
     }
 
-
+    private static void Validate(IReadOnlyList<DiagnosticCodeBase> diagCodes)
+    {
+        foreach (var diagCode in diagCodes)
+        {
+            var className = diagCode.GetType().Name;
+            if (!className.Equals(diagCode.Code))
+            {
+                throw new ValidationException($"Diagnostic code class name '{className}' does not match the code '{diagCode.Code}'.");
+            }
+        }
+    }
 }
