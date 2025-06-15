@@ -6,6 +6,11 @@ uid: example-scripts
   <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/Git2SemVer_banner_840x70.png"/>
 </div>
 
+[![Current Version](https://img.shields.io/nuget/v/NoeticTools.Git2SemVer.MSBuild?label=Git2SemVer.MSBuild)](https://www.nuget.org/packages/NoeticTools.Git2SemVer.MsBuild)
+<a href="https://github.com/NoeticTools/Git2SemVer">
+  ![Static Badge](https://img.shields.io/badge/GitHub%20project-944248?logo=github)
+</a>
+
 # Example C# Scripts
 
 ## Demo - Happy New Year
