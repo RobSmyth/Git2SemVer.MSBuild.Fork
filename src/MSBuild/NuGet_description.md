@@ -3,7 +3,7 @@
 Automatic true [Semmantic Versioning](https://semver.org/) for both **Visual Studio** and donet CLI builds of .NET solutions and projects.
 Provides versioning _out of box_. It is fully customisable by by built-in C# scripting and versioning API.
 
-Just works on every <b>Visual Studio</b> or dotnet CLI build on every box.
+Just works on every **Visual Studio** or dotnet CLI build on every box.
 
 Go to [documentation](https://noetictools.github.io/Git2SemVer.MSBuild/) for more information.
 
