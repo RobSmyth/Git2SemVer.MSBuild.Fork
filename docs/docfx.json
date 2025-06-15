@@ -21,7 +21,10 @@
           ]
         }
       ],
-      "dest": "api"
+      "dest": "api",
+      "properties": {
+        "TargetFrameworks": "net8.0"
+      }
     }
   ],
   "build": {
