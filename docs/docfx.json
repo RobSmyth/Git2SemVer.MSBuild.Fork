@@ -3,7 +3,7 @@
     {
       "src": [
         {
-          "src": "../src/MSBuild",
+          "src": "../src/SolutionVersioningProject",
           "files": [
             "**/*.csproj"
           ]
@@ -16,6 +16,12 @@
         },
         {
           "src": "../src/Framework",
+          "files": [
+            "**/*.csproj"
+          ]
+        },
+        {
+          "src": "../src/MSBuild",
           "files": [
             "**/*.csproj"
           ]
