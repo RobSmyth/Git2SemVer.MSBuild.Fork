@@ -20,3 +20,4 @@ nupkg
 *.user
 /artifacts
 .git2semver
+/docs/api
