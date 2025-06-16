@@ -19,3 +19,4 @@ nupkg
 *.user
 /artifacts
 .git2semver
+/packages
