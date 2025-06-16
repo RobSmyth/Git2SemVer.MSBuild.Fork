@@ -9,7 +9,7 @@
   <PropertyGroup>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>git2semver</ToolCommandName>
-    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <PackageOutputPath>./../../../packages</PackageOutputPath>
     <Title>Simple automatic Git to Semantic Versioning for .NET projects.</Title>
     <Description>Automated Semantic Versioning for Visual Studio and dotnet cli.</Description>
     <PackageProjectUrl>https://github.com/NoeticTools/Git2SemVer.MSBuild</PackageProjectUrl>
