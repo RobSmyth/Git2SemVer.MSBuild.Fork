@@ -192,7 +192,7 @@ public interface IVersionGeneratorInputs //: IMSBuildTask
     ///         MSBuild task input.
     ///     </para>
     /// </remarks>
-    string ReleaseTagFormat { get; set; }
+    string ReleaseTagFormat { get; }
 
     bool ValidateScriptInputs(ILogger logger);
 }

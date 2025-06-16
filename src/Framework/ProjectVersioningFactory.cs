@@ -38,7 +38,7 @@ public sealed class ProjectVersioningFactory
                                                                               inputs.BuildNumber,
                                                                               inputs.BuildContext,
                                                                               inputs.BuildIdFormat);
-        var gitTool = new GitTool(new TagParser()) { RepositoryDirectory = inputs.WorkingDirectory };
+        var gitTool = new GitTool(new TagParser(inputs.ReleaseTagFormat)) { RepositoryDirectory = inputs.WorkingDirectory };
         var gitPathsFinder = new PathsFromLastReleasesFinder(gitTool, _logger);
 
         var defaultBuilderFactory = new DefaultVersionBuilderFactory(_logger);

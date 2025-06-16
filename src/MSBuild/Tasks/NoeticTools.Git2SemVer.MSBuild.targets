@@ -96,7 +96,7 @@
                                    SourceLinkAppendingSha="$(IncludeSourceRevisionInInformationalVersion)"
                                    Mode="$(Git2SemVer_Mode)"
                                    RunScript="$(Git2SemVer_RunScript)"
-                                   ReleaseTagFormat="$Git2SemVer_ReleaseTagFormat)">
+                                   ReleaseTagFormat="$(Git2SemVer_ReleaseTagFormat)">
 
       <Output TaskParameter="AssemblyVersion" PropertyName="Git2SemVer_AssemblyVersion" />
       <Output TaskParameter="CommitsSinceLastRelease" PropertyName="Git2SemVer_CommitsSinceLastRelease" />
