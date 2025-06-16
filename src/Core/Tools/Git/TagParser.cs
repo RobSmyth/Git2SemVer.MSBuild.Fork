@@ -1,5 +1,7 @@
 ﻿using System.Text.RegularExpressions;
+using System.Xml;
 using LibGit2Sharp;
+using NoeticTools.Git2SemVer.Core.Diagnostics;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using Semver;
 
@@ -19,6 +21,13 @@ public sealed class TagParser : ITagParser
     private const string DefaultVersionPrefix = "v";
     private const string VersionPattern = @"(?<version>\d+\.\d+\.\d+)";
 
+    public static readonly Dictionary<string, string> ReservedPatternPrefixes = new Dictionary<string,string>
+        {
+        {"^","Is not permitted as the format is used with prefix such as `tag: `"},
+        {"tag: ","A prefix found in git log reports"},
+        {".gsm","A prefix reserved for future Git2SemVer functionality"}
+    };
+
     public TagParser(string? releaseTagFormat = null)
     {
         var parsePattern = GetParsePattern(releaseTagFormat);
@@ -33,14 +42,15 @@ public sealed class TagParser : ITagParser
             return DefaultVersionPrefix + VersionPattern;
         }
 
-        if (releaseTagFormat!.StartsWith("^", StringComparison.InvariantCulture))
+        var reservedPrefix = ReservedPatternPrefixes.Keys.FirstOrDefault(x => releaseTagFormat!.StartsWith(x));
+        if (reservedPrefix != null)
         {
-            throw new Git2SemVerConfigurationException($"The build property `Git2SemVer_ReleaseTagFormat` value `{releaseTagFormat}` may not commence with '^'.");//>>> use exception supporting diagnostic code
+            throw new Git2SemVerDiagnosticCodeException(new GSV005(releaseTagFormat!, reservedPrefix));
         }
 
         if (!releaseTagFormat!.Contains(VersionPlaceholder))
         {
-            throw new Git2SemVerConfigurationException($"The build property `Git2SemVer_ReleaseTagFormat` value `{releaseTagFormat}` must contain the placeholder text '{VersionPattern}'.");//>>> use exception supporting diagnostic code
+            throw new Git2SemVerDiagnosticCodeException(new GSV006(releaseTagFormat!));
         }
 
         return releaseTagFormat!.Replace(VersionPlaceholder, VersionPattern);

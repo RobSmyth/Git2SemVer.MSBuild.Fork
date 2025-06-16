@@ -21,7 +21,7 @@ public abstract class DiagnosticCodeBase
     /// <summary>
     ///     Description that will appear on the documentation page only.
     /// </summary>
-    public string Description { get; }
+    public string Description { get; protected set; }
 
     public string HelpLink => $"https://noetictools.github.io/Git2SemVer.MSBuild/{DocFolders.ErrorsAndWarnings}/{Code}.html";
 
