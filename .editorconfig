@@ -127,6 +127,9 @@ dotnet_diagnostic.NUnit2045.severity = none
 # IDE0044: Make field readonly
 dotnet_style_readonly_field = true:warning
 
+# IDE0058: Remove unnecessary expression value
+csharp_style_unused_value_expression_statement_preference = none
+
 # IDE0079: Remove unnecessary suppression
 dotnet_remove_unnecessary_suppression_exclusions = none
 dotnet_diagnostic.IDE0079.severity = none
