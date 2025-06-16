@@ -17,7 +17,7 @@ public class GitToolIntegrationTests
     public void SetUp()
     {
         _logger = new ConsoleLogger();
-        _target = new GitTool();
+        _target = new GitTool(new TagParser());
     }
 
     [TearDown]

@@ -9,7 +9,7 @@ namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.GitHistoryWalking;
 public class GitResponseParser : GitLogCommitParserBase
 {
     public GitResponseParser(ICommitsCache cache, IConventionalCommitsParser conventionalCommitParser)
-        : base(cache, conventionalCommitParser)
+        : base(cache, new TagParser(), conventionalCommitParser)
     {
     }
 

@@ -12,9 +12,6 @@ internal abstract class ScriptingTestsBase
     private const int MaximumTestDataFolders = 20;
     private static int _testDataFolderId; // avoid locks on folders not release quickly between tests
 
-    // ReSharper disable once ChangeFieldTypeToSystemThreadingLock
-    private static readonly object SyncToken = new();
-
     protected string TestFolderPath = "";
 
     protected GitTool Git { get; private set; } = null!;
@@ -24,7 +21,7 @@ internal abstract class ScriptingTestsBase
     protected void OneTimeSetUpBase()
     {
         Logger = new NUnitLogger(); // todo - Logger is set here and in the SetUpBase method
-        Git = new GitTool();
+        Git = new GitTool(new TagParser());
     }
 
     protected void OneTimeTearDownBase()

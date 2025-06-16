@@ -22,12 +22,15 @@ public abstract class GitLogCommitParserBase
         """;
 
     private readonly ICommitsCache _cache;
+    private readonly TagParser _tagParser;
     private readonly IConventionalCommitsParser _conventionalCommitParser;
 
     protected GitLogCommitParserBase(ICommitsCache cache,
+                                     TagParser tagParser,
                                      IConventionalCommitsParser? conventionalCommitParser = null)
     {
         _cache = cache;
+        _tagParser = tagParser;
         _conventionalCommitParser = conventionalCommitParser ?? new ConventionalCommitsParser();
         FormatArgs = "--graph --pretty=\"format:%x1f.|%H|%P|%x02%s%x03|%x02%b%x03|%d|%x1e\"";
     }
@@ -70,7 +73,7 @@ public abstract class GitLogCommitParserBase
         var commitMetadata = _conventionalCommitParser.Parse(summary, body);
 
         commit = hasCommitMetadata
-            ? new Commit(sha, parents, summary, body, refs, commitMetadata)
+            ? new Commit(sha, parents, summary, body, refs, commitMetadata, _tagParser)
             : null;
 
         return (commit, graph);

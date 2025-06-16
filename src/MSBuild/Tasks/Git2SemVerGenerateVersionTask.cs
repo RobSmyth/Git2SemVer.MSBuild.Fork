@@ -205,6 +205,16 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     public bool? RunScript { get; set; }
 
     /// <summary>
+    ///     Optional MSBuild <c>Git2SemVer_ReleaseTagFormat</c> property.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         MSBuild task input.
+    ///     </para>
+    /// </remarks>
+    public string ReleaseTagFormat { get; set; } = "";
+
+    /// <summary>
     ///     The optional MSBuild <c>Git2SemVer_ScriptArg</c> property.
     /// </summary>
     /// <remarks>
