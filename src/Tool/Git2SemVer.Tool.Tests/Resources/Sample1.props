@@ -1,0 +1,13 @@
+<Project>
+  <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
+  <PropertyGroup>
+    <Git2SemVerInstalled Condition="'$(Git2SemVer_Installed)' == ''">false</Git2SemVerInstalled>
+    <PropertyA Condition="'$(PropertyA)' == ''">false</PropertyA>
+    <PropertyC Condition="'$(PropertyC)' == ''">false</PropertyC>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PropertyB Condition="'$(PropertyB)' == ''">true</PropertyB>
+    <PropertyC Condition="'$(PropertyC)' == ''">false</PropertyC>
+  </PropertyGroup>
+</Project>

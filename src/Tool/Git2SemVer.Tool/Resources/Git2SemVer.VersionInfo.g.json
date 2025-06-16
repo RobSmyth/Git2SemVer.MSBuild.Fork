@@ -1,0 +1,48 @@
+{
+  "Rev": 2,
+  "Git2SemVerVersionInfo": {
+    "AssemblyVersion": "0.1.0",
+    "BuildContext": "",
+    "BuildNumber": "",
+    "BuildSystemVersion": "0.1.0",
+    "FileVersion": "0.1.0",
+    "Git": {
+      "$type": "GitOutputs",
+      "BranchName": "main",
+      "CommitsSinceLastRelease": 99999,
+      "HasLocalChanges": true,
+      "HeadCommit": {
+        "CommitId": {
+          "Sha": "Sample0000000",
+          "ShortSha": "Sample0"
+        },
+        "ReleasedVersion": null,
+        "Summary": "null commit",
+        "MessageBody": "",
+        "Refs": "",
+        "Parents": [],
+        "Metadata": {
+          "ApiChangeFlags": {
+            "BreakingChange": false,
+            "Fix": false,
+            "FunctionalityChange": false
+          },
+          "Body": "",
+          "ChangeDescription": "",
+          "ChangeType": 1,
+          "FooterKeyValues": []
+        },
+        "LastReleaseCommit": null,
+        "LastReleaseVersion": null
+      },
+      "InformationalVersion": "0.1.0-Sample",
+      "IsInInitialDevelopment": true,
+      "Output1": "",
+      "Output2": "",
+      "PackageVersion": "0.1.0",
+      "PrereleaseLabel": "Sample",
+      "Version": "0.1.0"
+    },
+    "Version": "1.0.0"
+  }
+}

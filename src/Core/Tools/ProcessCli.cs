@@ -29,6 +29,22 @@ public sealed class ProcessCli : IProcessCli
         return Run(application, commandLineArguments, null);
     }
 
+    public int Run(string application, string commandLineArguments, out string standardOutput)
+    {
+        var outWriter = new StringWriter();
+        var errorWriter = new StringWriter();
+        var returnCode = Run(application, commandLineArguments, outWriter, errorWriter);
+        standardOutput = outWriter.ToString();
+        var errorOutput = errorWriter.ToString();
+        if (!string.IsNullOrWhiteSpace(errorOutput) && returnCode == 0)
+        {
+            Logger.LogInfo(standardOutput);
+            throw new Git2SemVerArgumentException($"ERROR: {errorOutput}\nOUTPUT:\n{standardOutput}");
+        }
+
+        return returnCode;
+    }
+
     /// <summary>
     ///     Run dotnet cli with provided command line arguments.
     /// </summary>
