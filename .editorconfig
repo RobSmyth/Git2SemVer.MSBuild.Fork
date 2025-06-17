@@ -127,9 +127,13 @@ dotnet_diagnostic.NUnit2045.severity = none
 # IDE0044: Make field readonly
 dotnet_style_readonly_field = true:warning
 
+# IDE0058: Remove unnecessary expression value
+csharp_style_unused_value_expression_statement_preference = none
+
 # CA1822: Members that do not access instance data or call instance methods can be marked as static.
 # Resharper does a better job
 dotnet_diagnostic.CA1822.severity = none
+
 
 # IDE0079: Remove unnecessary suppression
 dotnet_remove_unnecessary_suppression_exclusions = none

@@ -55,4 +55,9 @@ public sealed class DotNetTool : IDotNetTool
     {
         return _inner.Run("dotnet", commandLineArguments);
     }
+
+    public int RunReturningStdOut(string commandLineArguments, out string standardOutput)
+    {
+        return _inner.Run("dotnet", commandLineArguments, out standardOutput);
+    }
 }
