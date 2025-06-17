@@ -205,6 +205,16 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     public bool? RunScript { get; set; }
 
     /// <summary>
+    ///     Optional MSBuild <c>Git2SemVer_ReleaseTagFormat</c> property.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         MSBuild task input.
+    ///     </para>
+    /// </remarks>
+    public string ReleaseTagFormat { get; set; } = "";
+
+    /// <summary>
     ///     The optional MSBuild <c>Git2SemVer_ScriptArg</c> property.
     /// </summary>
     /// <remarks>
@@ -311,9 +321,16 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
                 throw new Git2SemVerConfigurationException($"Invalid Git2SemVer_Mode value '{Mode}'.", exception);
             }
 
-            using var versionGenerator = new ProjectVersioningFactory(msg => Log.LogMessage(MessageImportance.High, msg), logger).Create(this, new MSBuildGlobalProperties(BuildEngine6));
+            using var versionGenerator =
+                new ProjectVersioningFactory(msg => Log.LogMessage(MessageImportance.High, msg), logger)
+                    .Create(this, new MSBuildGlobalProperties(BuildEngine6));
             SetOutputs(versionGenerator.Run());
             return !Log.HasLoggedErrors;
+        }
+        catch (Git2SemVerDiagnosticCodeException diagnosticException)
+        {
+            logger.LogError(diagnosticException.DiagCode);
+            return false;
         }
 #pragma warning disable CA1031
         catch (Exception exception)

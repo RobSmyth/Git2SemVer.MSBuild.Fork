@@ -1,5 +1,6 @@
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
 
 #pragma warning disable NUnit2045
@@ -17,7 +18,7 @@ public class GitToolIntegrationTests
     public void SetUp()
     {
         _logger = new ConsoleLogger();
-        _target = new GitTool();
+        _target = new GitTool(new TagParser());
     }
 
     [TearDown]

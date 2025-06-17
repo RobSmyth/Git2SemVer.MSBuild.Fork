@@ -6,6 +6,9 @@
           "src": "../src",
           "files": [
             "**/*.csproj"
+          ],
+          "exclude": [
+            "Tool/**"
           ]
         }
       ],

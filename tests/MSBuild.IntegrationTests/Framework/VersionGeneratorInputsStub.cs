@@ -45,6 +45,8 @@ public class VersionGeneratorInputsStub : IVersionGeneratorInputs
 
     public string WorkingDirectory { get; set; } = "";
 
+    public string ReleaseTagFormat { get; set; } = "";
+
     public bool ValidateScriptInputs(ILogger logger)
     {
         return true;

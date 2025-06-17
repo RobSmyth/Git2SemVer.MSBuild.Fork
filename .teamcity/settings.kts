@@ -65,7 +65,7 @@ project {
             seriesTitle = "Serie"
             format = CustomChart.Format.TEXT
             series = listOf(
-                Serie(title = "Git2SemVerRunTime_sec", key = SeriesKey("Git2SemVerRunTime_sec"))
+                Serie(title = "git2semver.runtime.seconds", key = SeriesKey("git2semver.runtime.seconds"))
             )
         }
     }
@@ -94,7 +94,7 @@ object BuildAndTest : BuildType({
         script {
             name = "Clear NuGet caches"
             id = "Clear_NuGet_caches"
-            enabled = false
+            enabled = true
             scriptContent = "dotnet nuget locals all --clear"
         }
         dotnetRestore {

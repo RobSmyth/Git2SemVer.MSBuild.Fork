@@ -222,7 +222,7 @@ The MSBuild input poperties are:
         </div>
     </td>
   </tr>
-    <tr>
+  <tr>
     <td>
         <div class="propertyCol">
             Git2SemVer_UpdateHostBuildLabel
@@ -236,6 +236,32 @@ The MSBuild input poperties are:
             </p>
             <p>
                 Default is false. To update the build system's label set this on the command line or in the csproj file.
+            </p>
+        </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <div class="propertyCol">
+            Git2SemVer_ReleaseTagFormat
+        </div>
+    </td>
+    <td>
+        <div class="descriptionCol">
+            <p>
+                Optional regular expression format to identify a release from a Git tag's friendly name.
+                Must contain the version number placeholder `%VERSION%`. May not start with `^`, `tag: `, or `.gsm`.
+                The default value is `v%VERSION%` which will match names like `v1.2.3`.
+            </p>
+            <p>
+                <code>`%VERSION%`</code> is replaced with <code>`(?<version>\d+\.\d+\.\d+)`</code>.
+            </p>
+            <p>
+                Examples:
+                <ul>
+                  <li><code>`%VERSION%`</code> will match <code>`1.2.3`</code> or <code>`1.2.3 abc`</code>.</li>
+                  <li><code>`release: %VERSION%`</code> will match <code>`release: 1.2.3`</code> but not <code>`1.2.3`</code>.</li>
+                </ul>
             </p>
         </div>
     </td>
