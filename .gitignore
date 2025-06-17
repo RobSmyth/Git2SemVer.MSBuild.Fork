@@ -19,4 +19,6 @@ nupkg
 *.user
 /artifacts
 .git2semver
+/src/Tool/Documentation/api
+/src/Tool/Documentation/_site
 /packages
