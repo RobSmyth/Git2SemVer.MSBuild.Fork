@@ -10,6 +10,7 @@ namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 [RegisterTransient]
 public sealed class GitTool : IGitTool
 {
+    private readonly ITagParser _tagParser;
     private const int TakeLimit = 300;
     private readonly ICommitsCache? _cache;
     private readonly ConventionalCommitsParser _metadataParser;
@@ -18,8 +19,9 @@ public sealed class GitTool : IGitTool
     private Repository? _repository;
     private string _repositoryDirectory = null!;
 
-    public GitTool()
+    public GitTool(ITagParser tagParser)
     {
+        _tagParser = tagParser;
         _cache = new CommitsCache();
         RepositoryDirectory = Environment.CurrentDirectory;
         _metadataParser = new ConventionalCommitsParser();
@@ -99,7 +101,7 @@ public sealed class GitTool : IGitTool
                                 rawCommit.Sha,
                                 parents, rawCommit.MessageShort,
                                 rawCommit.Message,
-                                metadata,
+                                metadata, _tagParser,
                                 tags);
 
             Cache.Add(commit);

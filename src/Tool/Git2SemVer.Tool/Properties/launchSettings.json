@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Git2SemVer.Tool": {
+      "commandName": "Project",
+      "commandLineArgs": "run -u --verbosity trace"
+    }
+  }
+}

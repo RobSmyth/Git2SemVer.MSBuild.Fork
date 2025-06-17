@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
     <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>Minimum</AnalysisMode>
@@ -32,7 +32,7 @@
     <RepositoryUrl>https://github.com/NoeticTools/Git2SemVer</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>Copyright (c) RobSmyth $([System.DateTime]::Now.Year)</Copyright>
-    <NoWarn>NU5100;NU1803;NU5128;CA1816;SYSLIB1045</NoWarn>
+    <NoWarn>NU5100;NU1803;NU5128;CS0121;CA1816;SYSLIB1045</NoWarn>
   </PropertyGroup>
 
 </Project>

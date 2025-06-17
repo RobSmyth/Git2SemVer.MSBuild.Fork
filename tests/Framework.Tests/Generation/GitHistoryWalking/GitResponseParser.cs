@@ -1,6 +1,7 @@
 ﻿using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
 
 namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.GitHistoryWalking;
@@ -9,7 +10,7 @@ namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.GitHistoryWalking;
 public class GitResponseParser : GitLogCommitParserBase
 {
     public GitResponseParser(ICommitsCache cache, IConventionalCommitsParser conventionalCommitParser)
-        : base(cache, conventionalCommitParser)
+        : base(cache, new TagParser(), conventionalCommitParser)
     {
     }
 

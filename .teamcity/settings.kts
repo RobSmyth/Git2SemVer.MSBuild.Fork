@@ -65,7 +65,7 @@ project {
             seriesTitle = "Serie"
             format = CustomChart.Format.TEXT
             series = listOf(
-                Serie(title = "Git2SemVerRunTime_sec", key = SeriesKey("Git2SemVerRunTime_sec"))
+                Serie(title = "git2semver.runtime.seconds", key = SeriesKey("git2semver.runtime.seconds"))
             )
         }
     }

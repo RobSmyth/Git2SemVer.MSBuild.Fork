@@ -184,5 +184,15 @@ public interface IVersionGeneratorInputs //: IMSBuildTask
     /// </remarks>
     string WorkingDirectory { get; }
 
+    /// <summary>
+    ///     Optional MSBuild <c>Git2SemVer_ReleaseTagFormat</c> property.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         MSBuild task input.
+    ///     </para>
+    /// </remarks>
+    string ReleaseTagFormat { get; }
+
     bool ValidateScriptInputs(ILogger logger);
 }

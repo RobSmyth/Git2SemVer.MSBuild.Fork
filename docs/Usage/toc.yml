@@ -1,5 +1,7 @@
 - name: Versioning
   uid: versioning
+- name: Release tagging
+  uid: release-tagging
 - name: Build ID/number
   uid: build-id
 - name: Branch naming

@@ -77,7 +77,8 @@ internal sealed class VersionGenerator : IVersionGenerator
         {
             var stopwatch = Stopwatch.StartNew();
 
-            _defaultVersionBuilderFactory.Create(historyPaths).Build(_host, _gitTool, _inputs, outputs, _msBuildGlobalProperties);
+            var defaultBuilder = _defaultVersionBuilderFactory.Create(historyPaths);
+            defaultBuilder.Build(_host, _gitTool, _inputs, outputs, _msBuildGlobalProperties);
 
             _scriptBuilder.Build(_host, _gitTool, _inputs, outputs, _msBuildGlobalProperties);
 

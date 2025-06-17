@@ -38,7 +38,11 @@ a
 <div style="background-color:#944248;padding:0px;margin-bottom:0.5em">
   <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/Git2SemVer_banner_840x70.png"/>
 </div>
-<br/>
+
+[![Current Version](https://img.shields.io/nuget/v/NoeticTools.Git2SemVer.MSBuild?label=Git2SemVer.MSBuild)](https://www.nuget.org/packages/NoeticTools.Git2SemVer.MsBuild)
+<a href="https://github.com/NoeticTools/Git2SemVer">
+  ![Static Badge](https://img.shields.io/badge/GitHub%20project-944248?logo=github)
+</a>
 
 # MSBuild properties
 
@@ -218,7 +222,7 @@ The MSBuild input poperties are:
         </div>
     </td>
   </tr>
-    <tr>
+  <tr>
     <td>
         <div class="propertyCol">
             Git2SemVer_UpdateHostBuildLabel
@@ -232,6 +236,32 @@ The MSBuild input poperties are:
             </p>
             <p>
                 Default is false. To update the build system's label set this on the command line or in the csproj file.
+            </p>
+        </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <div class="propertyCol">
+            Git2SemVer_ReleaseTagFormat
+        </div>
+    </td>
+    <td>
+        <div class="descriptionCol">
+            <p>
+                Optional regular expression format to identify a release from a Git tag's friendly name.
+                Must contain the version number placeholder `%VERSION%`. May not start with `^`, `tag: `, or `.gsm`.
+                The default value is `v%VERSION%` which will match names like `v1.2.3`.
+            </p>
+            <p>
+                <code>`%VERSION%`</code> is replaced with <code>`(?<version>\d+\.\d+\.\d+)`</code>.
+            </p>
+            <p>
+                Examples:
+                <ul>
+                  <li><code>`%VERSION%`</code> will match <code>`1.2.3`</code> or <code>`1.2.3 abc`</code>.</li>
+                  <li><code>`release: %VERSION%`</code> will match <code>`release: 1.2.3`</code> but not <code>`1.2.3`</code>.</li>
+                </ul>
             </p>
         </div>
     </td>
