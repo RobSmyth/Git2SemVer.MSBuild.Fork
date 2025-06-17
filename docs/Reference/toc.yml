@@ -4,3 +4,5 @@
   href: Glossary.md
 - name: Errors and Warnings
   href: ErrorsAndWarnings/
+- name: Upgrading
+  href: Upgrading/

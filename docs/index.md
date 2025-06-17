@@ -311,7 +311,7 @@ This tool is best for suited teams that:
 
 ## Quick introduction
 
-You identify a release by adding a git tag like "`v1.2.3`" to the release's commit.
+You identify a release by adding a [git tag](xref:release-tagging) like `v1.2.3` to the release's commit.
 Then, Git2SemVer works out build version of following commits by identifying breaking changes, new features, or bug fixes from from your <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> 
 compliant commit messages. You already use Conventional Commits generate your changelog so it is getting two for the price of one.
 
@@ -333,6 +333,7 @@ No build system version generation steps are needed, keeps developer and build e
 * [Getting Started](xref:getting-started)
 * [Default Versioning](xref:versioning)
 * Usage
+  * [Release Tagging](xref:release-tagging)
   * [Build Hosts](xref:build-hosts)
   * [C# Script](xref:csharp-script)
 
