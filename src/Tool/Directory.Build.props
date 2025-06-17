@@ -20,7 +20,7 @@
     <RepositoryUrl>https://github.com/NoeticTools/Git2SemVer.MSBuild</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>Copyright (c) RobSmyth $([System.DateTime]::Now.Year)</Copyright>
-    <NoWarn>NU5100;NU1803;NU5128</NoWarn>
+    <NoWarn>NU5100;NU1803;NU5128;CS0121</NoWarn>
   </PropertyGroup>
 
 </Project>
