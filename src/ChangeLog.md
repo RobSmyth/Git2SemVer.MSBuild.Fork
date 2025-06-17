@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.1.0 - _June 18, 2025_
+
+### Added
+
+* Build property to enable customising the release tag format ([#37](https://github.com/NoeticTools/Git2SemVer.MSBuild/issues/37)).
+
+### Changed
+
+None.
+
+### Fixed
+
+None.
 
 ## 3.0.0 - _June 15, 2025_
 
