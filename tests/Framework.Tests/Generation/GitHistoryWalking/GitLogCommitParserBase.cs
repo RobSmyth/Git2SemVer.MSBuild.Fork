@@ -3,6 +3,7 @@ using NoeticTools.Git2SemVer.Core;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
 
 namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.GitHistoryWalking;

@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
 
 namespace NoeticTools.Git2SemVer.Core.Diagnostics;
@@ -8,24 +8,29 @@ namespace NoeticTools.Git2SemVer.Core.Diagnostics;
 public sealed class GSV005 : DiagnosticCodeBase
 {
     public GSV005(string tagFormat, string reservedPrefix)
-        : base(5,
-               "Versioning",
-               "SET IN CONSTRUCTOR",
-               """
-               Correct the `Git2SemVer_ScriptPath` build property value to not use the reported prefix.
+        : base(id: 5,
+               subcategory: "Versioning",
+               description: BuildDescription(),
+               resolution: """
+                           Correct the `Git2SemVer_ScriptPath` build property value to not use the reported prefix.
 
-               The `Git2SemVer_ScriptPath` build property is set the project file or in a directory build properties file like `Directory.Build.props`.
+                           The `Git2SemVer_ScriptPath` build property is set the project file or in a directory build properties file like `Directory.Build.props`.
 
-               For example:
-               ```xml
-               <PropertyGroup>
-                 <Git2SemVer_ReleaseTagFormat>MyRelease %VERSION%</Git2SemVer_ReleaseTagFormat>
-               </PropertyGroup>
-               ```
-               """,
+                           For example:
+                           ```xml
+                           <PropertyGroup>
+                             <Git2SemVer_ReleaseTagFormat>MyRelease %VERSION%</Git2SemVer_ReleaseTagFormat>
+                           </PropertyGroup>
+                           ```
+                           """,
+               message:
                "'{1}' is a reserved release tag format prefix an may not be used in the build property `Git2SemVer_ReleaseTagFormat` value `{0}`.",
                tagFormat, reservedPrefix)
 
+    {
+    }
+
+    private static string BuildDescription()
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.Append("""
@@ -39,6 +44,6 @@ public sealed class GSV005 : DiagnosticCodeBase
             stringBuilder.AppendLine($"* `{keyValue.Key}` - {keyValue.Value}.");
         }
 
-        Description = stringBuilder.ToString();
+        return stringBuilder.ToString();
     }
 }

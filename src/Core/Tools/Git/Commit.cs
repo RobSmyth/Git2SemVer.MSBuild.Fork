@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using LibGit2Sharp;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
+using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 using Semver;
 
 

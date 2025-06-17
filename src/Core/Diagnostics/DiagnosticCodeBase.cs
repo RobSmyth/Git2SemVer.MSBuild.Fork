@@ -11,7 +11,6 @@ public abstract class DiagnosticCodeBase
         Code = $"GSV{id:D3}";
         Message = string.Format(message, messageArgs);
         Description = string.Format(description, messageArgs);
-        ;
         Resolution = string.Format(resolution, messageArgs);
         Subcategory = subcategory;
     }
