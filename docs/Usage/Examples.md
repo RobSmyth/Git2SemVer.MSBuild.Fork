@@ -11,9 +11,9 @@ uid: examples
   ![Static Badge](https://img.shields.io/badge/GitHub%20project-944248?logo=github)
 </a>
 
-# Example versioning
+# Version examples
 
-Default versioning examples. 
+Default versioning examples.
 
 ## Releases
 

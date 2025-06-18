@@ -4,14 +4,14 @@
   uid: versioning
 - name: Release tagging
   uid: release-tagging
-- name: Build ID/number
-  uid: build-id
 - name: Branch naming
   uid: branch-naming
 - name: Build maturity identifier
   uid: maturity-identifier
 - name: Commit SHA
   uid: commit-sha
+- name: Build ID/number
+  uid: build-id
 - name: Version examples
   uid: examples
 - name: Logging
