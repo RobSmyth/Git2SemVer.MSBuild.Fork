@@ -19,15 +19,6 @@ th {
 
 ## Workflow
 
-> [!TIP]
-> Semantic versioning conveys meaning about underlying code and what has been modified to those who consume releases.
-> What is "a release" needs to target on user/consumer that will benefit from knowing if the build has breaking changes, features, or only fixes.
->
-> That user may be an internal customer (such as a testing team or other teams) or external users like the devlopment community consuming open source projects.
-> Often marketing are focused on a product MVP and use driven naming versioning.
->
-> Product naming and versioning is often best separated from software versioning.
-
 ### The workflow starting point
 
 If the Git code repository does not have any release tags it is assumed that the project has not yet made a release. 
@@ -36,7 +27,7 @@ This is then a project in the [Semver initial development phase](https://semver.
 If there has been a prior release the most recent releases that are directly reachable from the head commit should be marked with (release tags)[xref:release-tagging]. 
 These tag defines the starting version for Git2SemVer. 
 There is no benefit to adding tags for all prior releases in the repository's history.
-Git2SemVer stops walking Git commits when it reaches a release tag.
+Git2SemVer stops walking Git commits when it reaches a (release tags)[xref:release-tagging].
 
 ### Guava example
 
@@ -88,7 +79,7 @@ However only one of these builds may be released as the released version number 
 
 **Does the release need to be the most recent commit on the release branch**
 
-No - If it is not the most recent then, after adding a release tag, rebuilding following commits will result in their versions following the released version according to semantic versioning rules.
+No - If it is not the most recent then, after adding a (release tag)[xref:release-tagging], rebuilding following commits will result in their versions following the released version according to semantic versioning rules.
 
 ## Related topics
 

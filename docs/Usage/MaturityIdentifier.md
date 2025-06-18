@@ -37,6 +37,7 @@ The default settings are (first match from top is used):
 
 ## Related topics
 
+* [Workflow](xref:workflow)
 * [Release tagging](xref:release-tagging)
 * [Versioning](xref:versioning)
 * [Branch naming](xref:branch-naming)

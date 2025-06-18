@@ -333,6 +333,7 @@ No build system version generation steps are needed, keeps developer and build e
 * [Getting Started](xref:getting-started)
 * [Default Versioning](xref:versioning)
 * Usage
+  * [Workflow](xref:workflow)
   * [Release Tagging](xref:release-tagging)
   * [Branch naming](xref:branch-naming)
   * [Build Hosts](xref:build-hosts)
