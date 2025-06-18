@@ -74,7 +74,7 @@ Default release version tag friendly name example matching:
                 </code>
             <td>
                 <code>
-                    v1.2.3
+                    1.2.3
                 </code>
                 <br/>
                 <code>
