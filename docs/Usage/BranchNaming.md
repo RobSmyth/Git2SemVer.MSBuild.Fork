@@ -35,6 +35,30 @@ The table below gives example default release/pre-release branch [versioning](xr
 | `feature`<br/>`feature/oranges`           | Pre-release (Beta)  | 1.2.3-beta.801           | 1.2.3-beta.801+\<branchName>.e10c9cc0   |
 | Others not matching                       | Pre-release (Alpha) | 1.2.3-alpha.801          | 1.2.3-alpha.801+\<branchName>.e10c9cc0  |
 
+An example workflow starting in a repository that has no release tag (no release), with conventional commit elements (e.g: `fix:bug1`) 
+and resulting version:
+```mermaid
+gitGraph
+       commit id:"0.1.0+100"
+       branch feature/berry
+       checkout feature/berry
+       commit id:"0.1.0-beta.101"
+       branch develop/berry
+       checkout develop/berry
+       commit id:"0.1.0-alpha.102"
+       commit id:"fix:bug1 0.1.1-alpha.103"
+       checkout main
+       commit id:"0.1.0+104"
+       checkout develop/berry
+       commit id:"fix:bug2 0.1.1+105"
+       commit id:"feat:x: 0.2.0+106"
+       checkout feature/berry
+       merge develop/berry id:"0.2.0-beta.107"
+       checkout main
+       merge feature/berry id:"0.2.0+108"
+       commit id:"1.0.0+109" tag:"v1.0.0"
+       commit id:"1.0.1+.110"
+```
 
 ## Custom configuration
 
