@@ -3,8 +3,14 @@
 
 namespace NoeticTools.Git2SemVer.Core.ConventionCommits;
 
+/// <summary>
+///     Flags indicating breaking changes, new features, or fixes are present.
+/// </summary>
 public sealed class ApiChangeFlags
 {
+    /// <summary>
+    ///     A change has been made since last release.
+    /// </summary>
     [JsonIgnore]
     public bool Any => BreakingChange || FunctionalityChange || Fix;
 

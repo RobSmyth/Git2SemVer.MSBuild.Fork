@@ -17,10 +17,12 @@ Git2SemVer generates versioning information and passes this to the optional [C# 
 
 ![](../Images/MSBuild_tasks_01.png)
 
+This topic describes the default versioning without a custom C# script and without customised [build properties](xref:msbuild-properties).
 
 ## Release versioning
 
-Format:
+Builds on [release branches](xref:branch-naming) use release versioning.
+The default release versioning format is:
 
 ```
   <major>.<minor>.<patch>[+<build-id>.<branch>.<commit-sha>]
@@ -45,7 +47,8 @@ Examples:
 
 ## Pre-release versioning
 
-Format:
+Builds on [pre-release branches](xref:branch-naming) use release versioning.
+The default pre-release versioning format is:
 
 ```
   <major>.<minor>.<patch>-<maturity-label>.<build-id>[+<branch>.<commit-sha>]
@@ -101,3 +104,11 @@ the table below.
 
 See [Versioning examples](xref:examples).
 
+
+## Related topics
+
+* [Workflow](xref:workflow)
+* [Release tagging](xref:release-tagging)
+* [Branch naming](xref:branch-naming)
+* [Build maturity identifier](xref:maturity-identifier)
+* [Build properties](xref:msbuild-properties)

@@ -23,21 +23,14 @@ When a build is released commit must be tagged with release version tag.
 Release tags are identified as tags with a friendly name that matches the _release tag format_.
 This format is used to extract the  released version (`<major>.<minor>.<patch>`).
 
-## Workflow
-
 > [!TIP]
-> For the end user to best benefit from Semmantic Versioning a release should be defined as when a build is made available to users that 
-> will benefit from knowing if the build has breaking changes, features, or only fixes.
+> Semantic versioning conveys meaning about underlying code and what has been modified to those who consume releases.
+> What is "a release" needs to target on user/consumer that will benefit from knowing if the build has breaking changes, features, or only fixes.
 >
-> That end user may be an internal customer (such as tested or marketing or other teams) of external users like the community.
-> Often marketing are focused on a product release/version identified by marketing drived naming versioning.
-> A release, for semantic versioning, may be when delivered to a testing team.
-
-Rebuilds of the commit with a release version tag will 
-produce builds with the same released base version but with different build numbers in the full version metadata.
-
-The commit being tagged does not need to be the most recent commit on a release branch. 
-If it is not the most recent then rebuilding following commits will result in their versions following the released version according to semantic versioning rules.
+> That user may be an internal customer (such as a testing team or other teams) or external users like the devlopment community consuming open source projects.
+> Often marketing are focused on a product MVP and use driven naming versioning.
+>
+> Product naming and versioning is often best separated from software versioning.
 
 
 ## Default release tag format
@@ -204,3 +197,11 @@ Examples:
     </tbody>
 </table>
 
+
+## Related topics
+
+* [Workflow](xref:workflow)
+* [Versioning](xref:versioning)
+* [Branch naming](xref:branch-naming)
+* [Build maturity identifier](xref:maturity-identifier)
+* [Build properties](xref:msbuild-properties)
