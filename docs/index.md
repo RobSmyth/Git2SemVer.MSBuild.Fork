@@ -334,6 +334,7 @@ No build system version generation steps are needed, keeps developer and build e
 * [Default Versioning](xref:versioning)
 * Usage
   * [Release Tagging](xref:release-tagging)
+  * [Branch naming](xref:branch-naming)
   * [Build Hosts](xref:build-hosts)
   * [C# Script](xref:csharp-script)
 

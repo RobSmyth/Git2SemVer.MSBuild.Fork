@@ -34,3 +34,10 @@ The default settings are (first match from top is used):
 | Beta     | `^(feature)[\\/_]?`                       | `feature`, `feature/feature_name`  |
 | Alpha    | `^((.+))[\\/_]?`                          | `dev/MyBranch`, `tom` |
 
+
+## Related topics
+
+* [Release tagging](xref:release-tagging)
+* [Versioning](xref:versioning)
+* [Branch naming](xref:branch-naming)
+* [Build properties](xref:msbuild-properties)

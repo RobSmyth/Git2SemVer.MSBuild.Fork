@@ -204,3 +204,10 @@ Examples:
     </tbody>
 </table>
 
+
+## Related topics
+
+* [Versioning](xref:versioning)
+* [Branch naming](xref:branch-naming)
+* [Build maturity identifier](xref:maturity-identifier)
+* [Build properties](xref:msbuild-properties)
