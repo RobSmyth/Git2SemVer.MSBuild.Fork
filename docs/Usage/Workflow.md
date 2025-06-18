@@ -33,19 +33,16 @@ Git2SemVer stops walking Git commits when it reaches a (release tags)[xref:relea
 
 An example workflow:
 
-| Step                                                  | Resulting build version                                                         |
-|:--                                                    |:--                                                                              |
-| Starts at a release (`1.2.3`) marked by tag `v1.2.3`. | 1.2.3                                                                           |
-| Then a build on without API changes                   | 1.2.4 as a released version may not be reused. See [Semver spec, item 6](<see href="https://semver.org/#spec-item-6">)
-| Then, in a developer branch fixes 2 bugs (e.g: [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) `fix:bug1`). | Remains at 1.2.4 the patch number has already been bumped. Note that [Semver spec, item 6](https://semver.org/#spec-item-6) refers to "fixes" (plural). |
-| Then, adds a feature.                                 | 1.3.0 as a feature added since last release.                                    |
-| Then, fixes another bug.                              | Features trump bugs. See [Semver spec, item 7](https://semver.org/#spec-item-7) |
-| Then, the work is merged back to a feature branch and then the main branch and this build is released (commit is tagged with used version). | 1.3.0 |
+| Step    | Action                                        | Version | Explanation                                                 |
+| :--:    |:--                                            | :--:    |:--                                                          |
+| &#9312; | Start at a release (`1.2.3`) marked by tag `v1.2.3`. | **1.2.3**  | The tag defines this commit as the released version 1.2.3. The versioning release cycle starts from a tagget release.  |
+| &#9313; | A commit without API changes                  | 1.2.4 | Bumped as a released version may not be reused. See [Semver spec, item 6](<see href="https://semver.org/#spec-item-6">)
+| &#9314; | In a developer branch fix 2 bugs (e.g: [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) `fix:bug1` and `fix:bug2`). | 1.2.4 | No change as the patch number has already been bumped. Note: [Semver spec, item 6](https://semver.org/#spec-item-6) refers to "fixes" (plural). |
+| &#9315; | Add a feature `feat:x`.                       | 1.3.0 | See [Semver item 7](https://semver.org/spec/v2.0.0.html#spec-item-7)     |
+| &#9316; | Fix another bug `fix:bug3`.                   | 1.3.0 | See [Semver spec, item 7](https://semver.org/#spec-item-7). It is about changes between releases, not order of changes. |
+| &#9317; | Merge the work to a feature branch and then the main branch and this build is released (commit is tagged with used version). | **1.3.0** | A release, the versioning release cycle starts again. |
 
-Build versions are .
-
-Worklow git diagram showing build version and, where applicable, [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) git message 
-elements:
+An example of this worklow's git diagram:
 ```mermaid
 gitGraph
        commit id:"1.2.3+100" tag:"v1.2.3"
