@@ -9,7 +9,7 @@ _layout: landing
 }
 
 .iconcolumn {
-  width:15%;
+  width:10%;
   text-align:center;
 }
 
