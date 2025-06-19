@@ -24,10 +24,10 @@ th {
 If the Git code repository does not have any release tags it is assumed that the project has not yet made a release. 
 This is then a project in the [Semver initial development phase](https://semver.org/#how-should-i-deal-with-revisions-in-the-0yz-initial-development-phase) and the starting version is `0.1.0`.
 
-If there has been a prior release the most recent releases that are directly reachable from the head commit should be marked with (release tags)[xref:release-tagging]. 
+If there has been a prior release the most recent releases that are directly reachable from the head commit should be marked with [release tags](xref:release-tagging). 
 These tag defines the starting version for Git2SemVer. 
 There is no benefit to adding tags for all prior releases in the repository's history.
-Git2SemVer stops walking Git commits when it reaches a (release tags)[xref:release-tagging].
+Git2SemVer stops walking Git commits when it reaches a [release tags](xref:release-tagging).
 
 ### Guava example
 
@@ -76,7 +76,7 @@ However only one of these builds may be released as the released version number 
 
 **Does the release need to be the most recent commit on the release branch**
 
-No - If it is not the most recent then, after adding a (release tag)[xref:release-tagging], rebuilding following commits will result in their versions following the released version according to semantic versioning rules.
+No - If it is not the most recent then, after adding a [release tag](xref:release-tagging), rebuilding following commits will result in their versions following the released version according to semantic versioning rules.
 
 ## Related topics
 
