@@ -85,7 +85,7 @@ Git2SemVer automatically, on every build, provides:
   * Other MSBuild version properties
   * [Pre-release identifier](xref:maturity-identifier) like `alpha`/`beta`/`rc` (from branch name)
 * [Build number](xref:glossary#build-number)
-* Host adaptive version formating like:
+* [Host adaptive version formating](xref:examples) like:
   * Including machine name in semantic version metadata when building on a developer's box.
   * Different build number sources and formating on GitHub Workflow and TeamCity.
 

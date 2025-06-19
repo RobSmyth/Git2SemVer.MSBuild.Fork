@@ -13,7 +13,7 @@ uid: examples
 
 # Version examples
 
-Default versioning examples.
+Default versioning examples. Showing how Git2SemVer adapts the version format to best match the build host (build host adaptive versioning).
 
 ## Releases
 
