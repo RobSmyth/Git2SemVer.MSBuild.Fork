@@ -101,10 +101,14 @@ gitGraph
         commit id:"1.2.3+100" tag:"1.2.3"
         branch feature/berry
         checkout feature/berry
-        commit id:"1.2.3-beta.101"
+        commit id:"1.2.4-beta.101"
 
         checkout main
-        commit id:"1.2.3-alpha.102"
+        commit id:"1.2.4+102"
+
+        branch feature/peach
+
+
         checkout feature/berry
 
         branch develop/berry
@@ -112,11 +116,14 @@ gitGraph
         commit id:"feat:berry 1.3.0-alpha.103"
         checkout feature/berry
         merge develop/berry id:"1.3.0-beta.104"
-        checkout main
-        merge feature/berry id:"1.3.0+105"
-        branch feature/peach
+
         checkout feature/peach
-        commit id:"feat:peach 1.3.1-beta.106"
+        commit id:"feat:peach 1.3.0-beta.105"
+
+        checkout main
+        merge feature/berry id:"1.3.0+106"
+        
+        checkout feature/peach
         commit id:"feat!:peach 2.0.0-beta.107"
         checkout main
         merge feature/peach id:"2.0.0+108" tag:"v2.0.0"
