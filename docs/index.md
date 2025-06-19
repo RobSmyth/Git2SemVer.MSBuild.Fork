@@ -5,6 +5,12 @@ _layout: landing
 
 .featureTitle {
   font-size:1.2em;
+  font-weight:bold;
+}
+
+.iconcolumn {
+  width:15%;
+  text-align:center;
 }
 
 .featureBody {
@@ -51,282 +57,70 @@ Git2SemVer is a Visual Studio and developer friendly <a href="https://semver.org
 It works the same with both Visual Studio and dotnet CLI builds. 
 Every build, on both developer boxes and the build system, get traceable build numbering (no commit counting).
 
-This tool is best for suited teams that:
+This tool is for teams that:
 
-* Wants true <a href="https://semver.org">Semantic Versioning</a>.
+* Can benefit from true <a href="https://semver.org">Semantic Versioning</a>.
 * Uses <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> to automatically generate change logs.
 * Uses branches to separate releasable code from feature or under development code (e.g: GitHub flow or GitFlow). 
 * Only releases builds from a build system (or controlled host).
-* Wants to avoid custom build scripts, or tools, on a build system.
+* Wants to avoid custom build scripts, and tools, on a build system.
 * Uses Visual Studio as well as dotnet CLI.
 * Values full traceability for every build regardless if on a build system or an uncontrolled developer box (commit counts/depth will not do).
-* Needs unique versioning customisation that internal C# scripting may provide.
-
-
-# Features
-
-<div style="margin:5px; text-align:center; width:95%">
-<table>
-
- <tr>
-     <td style="width:33%">
-      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/VisualStudio_128x128.png" height=64 />
-    </td>
-    <td style="width:33%">
-      <a href="https://semver.org/">
-        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/SemVer213x128(dark).png" height=64 />
-      </a>
-    </td>
-    <td  style="width:33%">
-      <a href="https://www.conventionalcommits.org/en/v1.0.0/">
-        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/ConventionalCommits_128x128.png" height=64 />
-      </a>
-    </td>
-</tr>
-
-<tr>
-  <td>
-    <div class="featureTitle">
-        Visual Studio Friendly
-    </div>
-  </td>
-  <td>
-    <div class="featureTitle">
-      <a href="https://semver.org/">Semmantic Versioning</a>
-    </div>
-  </td>
-  <td>
-    <div class="featureTitle" >
-        <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a>
-    </div>
-  </td>
-</tr>
-
-<tr>
-  <td class="featureBody" style="vertical-align:top">
-    <div class="featureBody">
-      <p>Versioning, with build numbering, on every Visual Studio or dotnet CLI build.</p>
-      <p>.NET developer friendly. Fast and silent</p>
-    </div>
-  </td>
-
-  <td class="featureBody" style="vertical-align:top">
-    <div class="featureBody">
-      <p style="text-align:center">
-        Benefit from comprehensive industry standard Semmantic Version compliance.
-      </p>
-      <p>
-        Only tool compliant with <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Reference/Glossary.html##initial-development">initial development versioning.</a> 
-    </div>
-  </td>
-
-  <td class="featureBody" style="vertical-align:top">
-    <div class="featureBody">
-        <p style="margin-top: 0em;margin-bottom: 0em;">
-          Use the same commit message standards for versioning that you also use for automated changelog generation.
-        </p>
-    </div>
-  </td>
-</tr>
-
-<!-- Row 2 -->
-
-<tr>
-    <td >
-      <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Reference/Glossary.html##environment-parity">
-        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/consistency_128x128.png" height=64 />
-      </a>
-    </td>
-    <td >
-      <p style="font-size:50px; margin:0px;color:DarkCyan;">#</p>
-    </td>
-    <td >
-      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/CSharp_128x128.png" height=64 />
-    </td>
-</tr>
-<tr>
-  <td>
-    <div class="featureTitle">
-        <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Reference/Glossary.html##environment-parity">Environment Parity</a>
-    </div>
-  </td>
-  <td>
-    <div class="featureTitle">
-      <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Reference/Glossary.html##build-number">
-        Build Numbering
-      </a>
-    </div>
-  </td>
-  <td>
-    <div class="featureTitle">
-        <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Usage/CSharpScripting/CSharpScript.html">C# Scripting</a>
-    </div>
-  </td>
-</tr>
-<tr>
-  <td class="featureBody" style="vertical-align:top">
-    <div class="featureBody" style="vertical-align:top">
-      <p>
-        Visual Studio, VS Code, and dotnet CLI are all the same to Git2SemVer.
-        Build system and developer environments all get versioning without custom build steps or scripts.
-      </p>
-    </div>
-  </td>
-  <td class="featureBody" style="vertical-align:top">
-    <div class="featureBody">
-      <p>
-        Automatic build numbering on all <b>developer boxes</b> and the build system builds.
-      <p>
-      <p>
-        Full traceability.
-        <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Reference/Glossary.html##build-height">Build height</a> <b>NOT</b> used.
-      </p>
-    </div>
-  </td>
-  <td class="featureBody" style="vertical-align:top">
-    <div class="featureBody">
-        <p>
-          <b>No limits customisable</b> by built-in C# scripting with a versioning API.
-        </p>
-    </div>
-  </td>
-</tr>
-
-<!-- Row 3 -->
-
-<tr>
-    <td style="width:33%">
-      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/OpenSource_128x128.png" height=64 />
-    </td>
-    <td >
-      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/ComputerMonitor.png" height=64 />
-    </td>
-    <td >
-      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/git_workflow_128x128.png" height=64 />
-    </td>
-</tr>
-<tr>
-  <td>
-    <div class="featureTitle" >
-        Open Source
-    </div>
-  </td>
-  <td>
-    <div class="featureTitle">
-        Build Host Adaptive Versioning
-    </div>
-  </td>
-  <td>
-    <div class="featureTitle">
-        Git Workflow Agnostic
-    </div>
-  </td>
-</tr>
-<tr>
-  <td class="featureBody" style="vertical-align:top">
-    <div class="featureBody">
-        <p>Free and open source.</p>
-    </div>
-  </td>
-  <td class="featureBody" style="vertical-align:top">
-    <div class="featureBody">
-        <p>The versioning adapts according to the build host.</p>
-        <p>e.g: Prelease/metadata identifiers are added to identify dev box builds.</p>
-    </div>
-  </td>
-  <td class="featureBody" style="vertical-align:top">
-    <div class="featureBody">
-        <p>
-        No Git workflow configuration required. It works the same for GitFlow and GitHub Flow.
-        </p>
-    </div>
-  </td>
-</tr>
-
-<!-- Row 4 -->
-
-<tr>
-    <td >
-      <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Usage/BuildHosts/TeamCity.html">
-        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/TeamCity_128x128.png" height=64 />
-      </a>
-    </td>
-    <td >
-      <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Usage/BuildHosts/GitHubWorkflows.html">
-        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/github_gray_128x128.png" height=64 />
-      </a>
-    </td>
-    <td >
-      <!-- Empty -->
-    </td>
-</tr>
-<tr>
-  <td>
-    <div class="featureTitle">
-      <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Usage/BuildHosts/TeamCity.html">
-        TeamCity Integration
-      </a>
-    </div>
-  </td>
-  <td>
-    <div class="featureTitle">
-      <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Usage/BuildHosts/GitHubWorkflows.html">
-        GitHub Workflows
-      </a>
-    </div>
-  </td>
-  <td>
-    <div class="featureTitle">
-      <!-- Empty -->
-    </div>
-  </td>
-</tr>
-<tr>
-  <td class="featureBody" style="vertical-align:top">
-    <div class="featureBody">
-      <p>
-        Automatic build system detection with server build number (label) updated with
-        a build version specifically adapted for TeamCity.
-      </p>
-      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/TeamCity-01.png">
-    </div>
-  </td>
-  <td class="featureBody" style="vertical-align:top">
-    <div class="featureBody">
-        <p>Built in support for builds using GitHub Actions.</p>
-        <p>Constructs build number from run and run attempt numbers
-        and adapts the version for GitHub builds.</p>
-    </div>
-  </td>
-  <td class="featureBody" style="vertical-align:top">
-    <div class="featureBody">
-      <!-- Empty -->
-    </div>
-  </td>
-</tr>
-</table> 
-</div>
-
-<br/>
+* Needs unique versioning customisation that the built-in C# scripting may provide.
 
 ## Quick introduction
 
-You identify a release by adding a [git tag](xref:release-tagging) like `v1.2.3` to the release's commit.
-Then, Git2SemVer works out build version of following commits by identifying breaking changes, new features, or bug fixes from from your <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> 
-compliant commit messages. You already use Conventional Commits generate your changelog so it is getting two for the price of one.
+You:
+* Mark a release's commit by adding a [git tag](xref:release-tagging) like `v1.2.3`.
+* Use [separate branches](xref:branch-naming) for building release and non-release commits.
+* Use <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commit</a> mesages like `fix: fixed crash on shutdown`
+to mark commits with fixes, features, and/or breaking changes.
 
-Versioning includes:
+Git2SemVer automatically, on every build, provides:
+* Semantic versioning:
+  * File version
+  * Assembly version
+  * Informational version
+  * Package version (NuGet package version)
+  * Other MSBuild version properties
+  * [Pre-release identifier](xref:maturity-identifier) like `alpha`/`beta`/`rc` (from branch name)
+* [Build number](#build-number)
+* Host adaptive version formating like:
+  * Including machine name in semantic version metadata when building on a developer's box.
+  * Different build number sources and formating on GitHub Workflow and TeamCity.
 
-* .NET file and assembly versions
-* NuGet package version (including version in filename)
-
-The branch name determines if the build is a release build or a `alpha`/`beta`/`rc` pre-release build.
-See [Build maturity identifier](xref:maturity-identifier) for more information.
-
-For no limits customisation, Git2SemVer detects and executes an optional [C# script](xref:csharp-script) that can change any part of the versioning.
+Git2SemVer also detects and executes an optional [C# script](xref:csharp-script). This script can change any part of the versioning.
 
 It can be configured for any mix of solution versioning and individual project versioning without external build-time tools.
 No build system version generation steps are needed, keeps developer and build environments simple and aligned.
+
+An example git workflow from a release `1.2.3` to the next release `2.0.0`:
+
+```mermaid
+gitGraph
+        commit id:"1.2.3+100" tag:"1.2.3"
+        branch feature/berry
+        checkout feature/berry
+        commit id:"1.2.3-beta.101"
+
+        checkout main
+        commit id:"1.2.3-alpha.102"
+        checkout feature/berry
+
+        branch develop/berry
+        checkout develop/berry
+        commit id:"feat:berry 1.3.0-alpha.103"
+        checkout feature/berry
+        merge develop/berry id:"1.3.0-beta.104"
+        checkout main
+        merge feature/berry id:"1.3.0+105"
+        branch feature/peach
+        checkout feature/peach
+        commit id:"feat:peach 1.3.1-beta.106"
+        commit id:"feat!:peach 2.0.0-beta.107"
+        checkout main
+        merge feature/peach id:"2.0.0+108" tag:"v2.0.0"
+```
 
 ## Quick links
 
@@ -338,6 +132,188 @@ No build system version generation steps are needed, keeps developer and build e
   * [Branch naming](xref:branch-naming)
   * [Build Hosts](xref:build-hosts)
   * [C# Script](xref:csharp-script)
+
+
+## Features
+
+<br/>
+
+<table style="margin-left:0px; margin-right:auto; align:left">
+
+<!-- Conventional Commits -->
+<tr>
+    <td class="iconcolumn">
+      <a href="https://www.conventionalcommits.org/en/v1.0.0/">
+        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/ConventionalCommits_128x128.png" height=64 width=64 />
+      </a>
+    </td>
+    <td class="featureBody" style="vertical-align:center; text-align:left">
+        <p class="featureTitle">
+           <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a>
+        </p>
+        <p>
+            Use conventional commits to automate both changelog generation and get semantic versioning for free.
+        </p>
+    </td>
+</tr>
+
+<!-- Visual studio -->
+<tr>
+    <td class="iconcolumn">
+        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/VisualStudio_128x128.png" height=64 width=64 />
+    </td>
+    <td class="featureBody" style="vertical-align:center; text-align:left">
+        <p class="featureTitle">
+            Visual Studio and .NET developer friendly
+        </p>
+        <p>
+            Versioning on every Visual Studio or dotnet CLI build without exernal tools. Just build.
+        </p>
+    </td>
+</tr>
+
+<!-- Semver -->
+<tr>
+    <td class="iconcolumn">
+      <a href="https://semver.org/">
+        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/SemVer122x64(dark).png" height=64 width=122 />
+      </a>
+    </td>
+    <td class="featureBody" style="vertical-align:center; text-align:left">
+        <p class="featureTitle">
+          <a href="https://semver.org/">Semmantic Versioning</a>
+        </p>
+        <p>
+           Industry standard Semmantic Version compliance.
+        </p>
+        <p>
+           Supports <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Reference/Glossary.html##initial-development">initial development versioning.</a> 
+        </p>
+</tr>
+
+<!-- Environmental Parity -->
+<tr>
+    <td class="iconcolumn">
+      <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Reference/Glossary.html##environment-parity">
+            <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/consistency_128x128.png"  height=64 width=64 />
+      </a>
+    </td>
+    <td class="featureBody" style="vertical-align:center; text-align:left">
+        <p class="featureTitle">
+            <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Reference/Glossary.html##environment-parity">Environment Parity</a>
+        </p>
+        <p>
+            Visual Studio, VS Code, and dotnet CLI are all the same to Git2SemVer.
+            Build system and developer environments all get versioning without custom build steps, tools, or scripts.
+        </p>
+    </td>
+</tr>
+
+<!-- Build Numbering -->
+<tr>
+    <td class="iconcolumn">
+        <p style="font-size:50px; margin:0px;color:DarkCyan;">#</p>
+    </td>
+    <td class="featureBody" style="vertical-align:center; text-align:left">
+        <p class="featureTitle">
+          <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Reference/Glossary.html##build-number">
+            Build Numbering
+          </a>
+        </p>
+        <p>
+            Automatic build numbering on all <b>developer boxes</b> and build system builds.
+        <p>
+        <p>
+           Full traceability.
+           <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Reference/Glossary.html##build-height">Build height</a> <b>NOT</b> used.
+        </p>
+    </td>
+</tr>
+
+<!-- C# -->
+<tr>
+    <td class="iconcolumn">
+      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/CSharp_128x128.png" height=64 width=64 />
+    </td>
+    <td class="featureBody" style="vertical-align:center; text-align:left">
+        <p class="featureTitle">
+           <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Usage/CSharpScripting/CSharpScript.html">C# Scripting</a>
+        </p>
+        <p>
+           <b>No limits customisable</b> by built-in C# scripting with a versioning API.
+        </p>
+    </td>
+</tr>
+
+<!-- Build Host Adaptive Versioning -->
+<tr>
+    <td class="iconcolumn">
+      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/ComputerMonitor.png" height=64 width=64 />
+    </td>
+    <td class="featureBody" style="vertical-align:center; text-align:left">
+        <p class="featureTitle">
+           Build Host Adaptive Versioning
+        </p>
+        <p>The versioning adapts according to the build host.</p>
+        <p>e.g: Automatically uses TeamCity build counter for build number and drops machine name metadata.</p>
+    </td>
+</tr>
+
+<!-- Workflow agnostic -->
+<tr>
+    <td class="iconcolumn">
+      <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/git_workflow_128x128.png" height=64 width=64 />
+    </td>
+    <td class="featureBody" style="vertical-align:center; text-align:left">
+        <p class="featureTitle">Git Workflow Agnostic</p>
+        <p>No Git workflow configuration required. It works the same for GitFlow and GitHub Flow.</p>
+    </td>
+</tr>
+
+<!-- TeamCity -->
+<tr>
+    <td class="iconcolumn">
+      <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Usage/BuildHosts/TeamCity.html">
+        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/TeamCity_128x128.png" height=64 width=64 />
+      </a>
+    </td>
+    <td class="featureBody" style="vertical-align:center; text-align:left">
+        <p class="featureTitle">
+           <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Usage/BuildHosts/TeamCity.html">
+            TeamCity Integration
+           </a>
+        </p>
+        <p>
+           Automatic build system detection with server build number (label) updated with
+           a build version specifically adapted for TeamCity.
+         </p>
+         <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/TeamCity-01.png">
+    </td>
+</tr>
+
+<!-- GitHub Workflows -->
+<tr>
+    <td class="iconcolumn">
+      <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Usage/BuildHosts/GitHubWorkflows.html">
+        <img src="https://noetictools.github.io/Git2SemVer.MSBuild/Images/github_gray_128x128.png" height=64 width=64 />
+      </a>
+    </td>
+    <td class="featureBody" style="vertical-align:center; text-align:left">
+        <p class="featureTitle">
+          <a href="https://noetictools.github.io/Git2SemVer.MSBuild/Usage/BuildHosts/GitHubWorkflows.html">
+            GitHub Workflows
+          </a>
+        </p>
+        <p>Built in support for builds using GitHub Actions.</p>
+        <p>Constructs build number from run and run attempt numbers
+        and adapts the version for GitHub builds.</p>
+        </p>
+    </td>
+</tr>
+
+</table>
+
+<br/>
 
  
 ## License
