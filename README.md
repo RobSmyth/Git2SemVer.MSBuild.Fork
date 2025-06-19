@@ -8,6 +8,8 @@ Provides versioning _out of box_ and is fully customisable by by built-in C# scr
 
 Just works on every <b>Visual Studio</b> or dotnet CLI build on every box.
 
+[![Documentation Shield]](https://noetictools.github.io/Git2SemVer.MSBuild/)
+
 An example git workflow from a release `1.2.3` to the next release `2.0.0`:
 
 ```mermaid
@@ -37,8 +39,6 @@ gitGraph
 ```
 
 <br/>
-
-[![Documentation Shield]](https://noetictools.github.io/Git2SemVer.MSBuild/)
 
 ## License
 
