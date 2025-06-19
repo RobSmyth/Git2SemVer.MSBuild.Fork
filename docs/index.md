@@ -57,36 +57,70 @@ Git2SemVer is a Visual Studio and developer friendly <a href="https://semver.org
 It works the same with both Visual Studio and dotnet CLI builds. 
 Every build, on both developer boxes and the build system, get traceable build numbering (no commit counting).
 
-This tool is best for suited teams that:
+This tool is for teams that:
 
-* Wants true <a href="https://semver.org">Semantic Versioning</a>.
+* Can benefit from true <a href="https://semver.org">Semantic Versioning</a>.
 * Uses <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> to automatically generate change logs.
 * Uses branches to separate releasable code from feature or under development code (e.g: GitHub flow or GitFlow). 
 * Only releases builds from a build system (or controlled host).
-* Wants to avoid custom build scripts, or tools, on a build system.
+* Wants to avoid custom build scripts, and tools, on a build system.
 * Uses Visual Studio as well as dotnet CLI.
 * Values full traceability for every build regardless if on a build system or an uncontrolled developer box (commit counts/depth will not do).
-* Needs unique versioning customisation that internal C# scripting may provide.
-
+* Needs unique versioning customisation that the built-in C# scripting may provide.
 
 ## Quick introduction
 
-You identify a release by adding a [git tag](xref:release-tagging) like `v1.2.3` to the release's commit.
-Then, Git2SemVer works out build version of following commits by identifying breaking changes, new features, or bug fixes from from your <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> 
-compliant commit messages. You already use Conventional Commits generate your changelog so it is getting two for the price of one.
+You:
+* Mark a release's commit by adding a [git tag](xref:release-tagging) like `v1.2.3`.
+* Use [separate branches](xref:branch-naming) for building release and non-release commits.
+* Use <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commit</a> mesages like `fix: fixed crash on shutdown`
+to mark commits with fixes, features, and/or breaking changes.
 
-Versioning includes:
+Git2SemVer automatically, on every build, provides:
+* Semantic versioning:
+  * File version
+  * Assembly version
+  * Informational version
+  * Package version (NuGet package version)
+  * Other MSBuild version properties
+  * [Pre-release identifier](xref:maturity-identifier) like `alpha`/`beta`/`rc` (from branch name)
+* [Build number](#build-number)
+* Host adaptive version formating like:
+  * Including machine name in semantic version metadata when building on a developer's box.
+  * Different build number sources and formating on GitHub Workflow and TeamCity.
 
-* .NET file and assembly versions
-* NuGet package version (including version in filename)
-
-The branch name determines if the build is a release build or a `alpha`/`beta`/`rc` pre-release build.
-See [Build maturity identifier](xref:maturity-identifier) for more information.
-
-For no limits customisation, Git2SemVer detects and executes an optional [C# script](xref:csharp-script) that can change any part of the versioning.
+Git2SemVer also detects and executes an optional [C# script](xref:csharp-script). This script can change any part of the versioning.
 
 It can be configured for any mix of solution versioning and individual project versioning without external build-time tools.
 No build system version generation steps are needed, keeps developer and build environments simple and aligned.
+
+An example git workflow from a release `1.2.3` to the next release `2.0.0`:
+
+```mermaid
+gitGraph
+        commit id:"1.2.3+100" tag:"1.2.3"
+        branch feature/berry
+        checkout feature/berry
+        commit id:"1.2.3-beta.101"
+
+        checkout main
+        commit id:"1.2.3-alpha.102"
+        checkout feature/berry
+
+        branch develop/berry
+        checkout develop/berry
+        commit id:"feat:berry 1.3.0-alpha.103"
+        checkout feature/berry
+        merge develop/berry id:"1.3.0-beta.104"
+        checkout main
+        merge feature/berry id:"1.3.0+105"
+        branch feature/peach
+        checkout feature/peach
+        commit id:"feat:peach 1.3.1-beta.106"
+        commit id:"feat!:peach 2.0.0-beta.107"
+        checkout main
+        merge feature/peach id:"2.0.0+108" tag:"v2.0.0"
+```
 
 ## Quick links
 
