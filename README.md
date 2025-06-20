@@ -19,10 +19,10 @@ gitGraph
         commit id:"1.2.3+100" tag:"1.2.3"
         branch feature/berry order: 1
         checkout feature/berry
-        commit id:"1.2.3-beta.101"
+        commit id:"1.2.4-beta.101"
 
         checkout main
-        commit id:"1.2.3-alpha.102"
+        commit id:"1.2.4+102"
         branch feature/peach order: 3
         checkout feature/berry
 
@@ -35,7 +35,7 @@ gitGraph
         merge feature/berry id:"1.3.0+105"
 
         checkout feature/peach
-        commit id:"fix:bug1 1.2.3-beta.106"
+        commit id:"fix:bug1 1.2.4-beta.106"
         commit id:"feat!:peach 2.0.0-beta.107"
         checkout main
         merge feature/peach id:"2.0.0+108" tag:"v2.0.0"
