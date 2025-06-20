@@ -1,14 +1,6 @@
 ﻿namespace NoeticTools.Git2SemVer.Tool.Commands.Add;
 
-internal struct UserOptions
+internal readonly struct UserOptions(string leadingProjectName)
 {
-    public string VersioningProjectName { get; }
-
-    public string VersionTagPrefix { get; } // todo
-
-    public UserOptions(string leadingProjectName, string versionTagPrefix)
-    {
-        VersioningProjectName = leadingProjectName;
-        VersionTagPrefix = versionTagPrefix;
-    }
+    public string VersioningProjectName { get; } = leadingProjectName;
 }

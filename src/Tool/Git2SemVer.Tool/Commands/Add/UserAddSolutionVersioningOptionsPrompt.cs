@@ -26,10 +26,8 @@ internal sealed class UserAddSolutionVersioningOptionsPrompt : IUserOptionsPromp
                                                      .Validate(folderName => ValidateFolderDoesNotExist(folderName, solution.Directory!)),
                                                  SolutionVersioningConstants.DefaultVersioningProjectName);
 
-        var versionTagPrefix = _console.Ask<string>("Release git tag prefix?", "v");
-
         _console.WriteLine();
-        var options = new UserOptions(leadingProjectName, versionTagPrefix);
+        var options = new UserOptions(leadingProjectName);
         _console.MarkupLine($"Ready to add Git2SemVer versioning to '[em]{solution.Name}[/]' solution. If the solution is currently open in Visual Studio, close it before proceeding.");
         var proceed = _console.Prompt(new TextPrompt<bool>("Proceed?")
                                       .AddChoices([true, false])

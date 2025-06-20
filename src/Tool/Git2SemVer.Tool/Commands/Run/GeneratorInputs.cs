@@ -38,6 +38,8 @@ internal sealed class GeneratorInputs : IVersionGeneratorInputs
 
     public string WorkingDirectory { get; } = "";
 
+    public string ReleaseTagFormat { get; } = "";
+
     public bool ValidateScriptInputs(ILogger logger)
     {
         return true;

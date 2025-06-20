@@ -96,33 +96,32 @@ dotnet_diagnostic.CA1860.severity = none
 dotnet_diagnostic.CA1859.severity = none
 
 
-#### Disable rules that are better handled in Resharper's code analysis
-
-# CA1062: In externally visible method '<method>', validate parameter '<parameter>' is non-null before using it.
-dotnet_diagnostic.CA1062.severity = none
+#### Disable rules that are better handled in Resharper's code analysis or do not play well in multi-targetting solution
 
 # Argument cannot be used for parameter due to differences in the nullability of reference types.
 dotnet_diagnostic.CA8620.severity = none
 
-#### Disable rules that are not valie for .NET 4.72 builds
-
-# CA1864: Prefer the 'IDictionary.TryAdd(TKey, TValue)'
-dotnet_diagnostic.CA1864.severity = none
-
-# CA2263: Prefer generic overload when type is known
-dotnet_diagnostic.CA2263.severity = none
+# CA1062: In externally visible method '<method>', validate parameter '<parameter>' is non-null before using it.
+dotnet_diagnostic.CA1062.severity = none
 
 # CA1510: Use ArgumentNullException throw helper
 dotnet_diagnostic.CA1510.severity = none
 
-# IDE0008: Use concrete type instead of var
-dotnet_diagnostic.IDE0008.severity = none
+# CA1822: Members that do not access instance data or call instance methods can be marked as static.
+# Resharper does a better job
+dotnet_diagnostic.CA1822.severity = none
+
+# CA1864: Prefer the 'IDictionary.TryAdd(TKey, TValue)'
+dotnet_diagnostic.CA1864.severity = none
 
 # CA1916: Call GC.SuppressFinalize correctly
 dotnet_diagnostic.CA1816.severity = none
 
-# NUnit2045: Use Assert.EnterMultipleScope or Assert.Multiple
-dotnet_diagnostic.NUnit2045.severity = none
+# CA2263: Prefer generic overload when type is known
+dotnet_diagnostic.CA2263.severity = none
+
+# IDE0008: Use concrete type instead of var
+dotnet_diagnostic.IDE0008.severity = none
 
 # IDE0044: Make field readonly
 dotnet_style_readonly_field = true:warning
@@ -130,11 +129,15 @@ dotnet_style_readonly_field = true:warning
 # IDE0058: Remove unnecessary expression value
 csharp_style_unused_value_expression_statement_preference = none
 
-# CA1822: Members that do not access instance data or call instance methods can be marked as static.
-# Resharper does a better job
-dotnet_diagnostic.CA1822.severity = none
+# IDE0059: Remove unnecessary value assignment
+csharp_style_unused_value_assignment_preference = none
 
+# IDE0060: Remove unused parameter
+dotnet_code_quality_unused_parameters = none
 
 # IDE0079: Remove unnecessary suppression
 dotnet_remove_unnecessary_suppression_exclusions = none
 dotnet_diagnostic.IDE0079.severity = none
+
+# NUnit2045: Use Assert.EnterMultipleScope or Assert.Multiple
+dotnet_diagnostic.NUnit2045.severity = none
