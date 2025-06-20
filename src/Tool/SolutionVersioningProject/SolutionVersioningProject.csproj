@@ -5,6 +5,14 @@
     <Git2SemVer_UpdateHostBuildLabel>true</Git2SemVer_UpdateHostBuildLabel>
   </PropertyGroup>
 
+  <!--
+    Define different release tag formt for the tool.
+    Done here as MSBuild code projects cannot reference the MSBuild package.
+  -->
+  <PropertyGroup>
+    <Git2SemVer_ReleaseTagFormat>tool.v%VERSION%</Git2SemVer_ReleaseTagFormat>
+  </PropertyGroup>
+
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
@@ -19,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NoeticTools.Git2SemVer.MSBuild" Version="3.0.0" />
+    <PackageReference Include="NoeticTools.Git2SemVer.MSBuild" Version="3.1.0" />
   </ItemGroup>
 
 </Project>
