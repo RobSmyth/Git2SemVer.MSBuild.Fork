@@ -1,42 +1,44 @@
-![](Documentation/Images/Git2SemVer_banner_840x70.png)
+![](docs/Images/Git2SemVer_banner_840x70.png)
+[![Current Version](https://img.shields.io/nuget/v/NoeticTools.Git2SemVer.MSBuild?label=Git2SemVer.MSBuild)](https://www.nuget.org/packages/NoeticTools.Git2SemVer.MsBuild) 
 
 # NoeticTools.GitSemVer
 
 Automatic true [Semmantic Versioning](https://semver.org/) for both **Visual Studio** and donet CLI builds of .NET solutions and projects.
-Provides versioning _out of box_. It is fully customisable by by built-in C# scripting and versioning API.
+Provides versioning _out of box_ and is fully customisable by by built-in C# scripting with a versioning API.
 
 Just works on every <b>Visual Studio</b> or dotnet CLI build on every box.
 
-Go to [documentation](https://noetictools.github.io/Git2SemVer.MSBuild/) for more information.
+[![Documentation Shield]](https://noetictools.github.io/Git2SemVer.MSBuild/)
 
+An example git workflow from a release `1.2.3` to the next release `2.0.0`:
 
-## Features
+```mermaid
+gitGraph
+        commit id:"1.2.3+100" tag:"1.2.3"
+        branch feature/berry
+        checkout feature/berry
+        commit id:"1.2.3-beta.101"
 
-* _Out of box_ automatic true [Semmantic Versioning](https://semver.org/).
-* **No limits** customisable by built-in C# scripting and versioning API.
-* Every build (& rebuild) is traceable (default versioning):
-  * Incrementing build number on each build system or developer's box build or rebuild (not reliant on commit depth).
-  * Version identifies its build host as build system or developer's box and which developer's box.
-  * Automatically uses build system (e.g: TeamCity) provided build number.
-* No extra build system version generation step or tools.
-* Automatic versioning of developer and build system builds in both **Visual Studio** and donet CLI builds. Just build.
-* Uses [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) message elements to manage version.
-* Branching model (such as GitHub Flow or GitFlow) agnostic. No model configuration.
-* Easy solution setup with dotnet tool Git2SemVer.Tool.
+        checkout main
+        commit id:"1.2.3-alpha.102"
+        checkout feature/berry
 
-See more about features [here](https://noetictools.github.io/Git2SemVer.MSBuild).
+        branch develop/berry
+        checkout develop/berry
+        commit id:"feat:berry 1.3.0-alpha.103"
+        checkout feature/berry
+        merge develop/berry id:"1.3.0-beta.104"
+        checkout main
+        merge feature/berry id:"1.3.0+105"
+        branch feature/peach
+        checkout feature/peach
+        commit id:"feat:peach 1.3.1-beta.106"
+        commit id:"feat!:peach 2.0.0-beta.107"
+        checkout main
+        merge feature/peach id:"2.0.0+108" tag:"v2.0.0"
+```
 
-
-## Why use? 
-
-Use if you want:
-
-* [Environment parity](Documentation/Glossary.md#environment-parity) - Same build on any host, fewer environment tools. Reduces maintenance costs.
-* Entirely specialised versioning like: `<year>.<moon phase>.<local surf conditions>`
-* Build traceability - Build build numbering on all builds including developer box builds. Commit height is too unreliable for you.
-* Semmantic Versioning _release_ versioning.
-* To use Visual Studio as well as dotnet CLI.
-
+<br/>
 
 ## License
 
@@ -55,4 +57,9 @@ This project uses the following tools and libraries. Many thanks to those who cr
 * [Moq](https://github.com/devlooped/moq)
 * [docfx](https://dotnet.github.io/docfx/)
 * <a href="https://www.flaticon.com/free-icons/brain" title="brain icons">Brain icons created by Freepik - Flaticon</a>
+
+
+<!---------------------------------------------------------------------------->
+
+[Documentation Shield]: https://img.shields.io/badge/See_the_full_documentation_here-37a779?style=for-the-badge
 
