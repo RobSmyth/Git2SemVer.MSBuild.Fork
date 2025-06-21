@@ -15,14 +15,14 @@ internal sealed class VersionHistorySegmentsBuilder
     private readonly IVersionHistorySegmentFactory _segmentFactory;
     private readonly Dictionary<int, VersionHistorySegment> _segments = [];
 
-    private VersionHistorySegmentsBuilder(VersionHistorySegmentsBuilder parent)
+    private VersionHistorySegmentsBuilder(Commit childCommit, VersionHistorySegmentsBuilder parent)
     {
         _logger = parent._logger;
         _segments = parent._segments;
         _segmentFactory = parent._segmentFactory;
         _gitTool = parent._gitTool;
         _commitsCache = parent._commitsCache;
-        _segment = _segmentFactory.Create([]);
+        _segment = _segmentFactory.Create(childCommit);
         _segments.Add(_segment.Id, _segment);
     }
 
@@ -31,7 +31,7 @@ internal sealed class VersionHistorySegmentsBuilder
         _gitTool = gitTool;
         _logger = logger;
         _segmentFactory = new VersionHistorySegmentFactory(logger);
-        _segment = _segmentFactory.Create([]);
+        _segment = _segmentFactory.Create(null);
         _segments.Add(_segment.Id, _segment);
     }
 
@@ -104,7 +104,7 @@ internal sealed class VersionHistorySegmentsBuilder
         return SegmentWalkResult.FoundStart;
     }
 
-    private void NextCommitBeforeMerge(CommitId branchCommitId)
+    private void NextCommitBeforeMerge(Commit childCommit, CommitId branchCommitId)
     {
         var parentCommit = _gitTool.Get(branchCommitId);
 
@@ -116,25 +116,42 @@ internal sealed class VersionHistorySegmentsBuilder
         {
             using (_logger.EnterLogScope())
             {
-                var newSegmentVisitor = new VersionHistorySegmentsBuilder(this);
+                var newSegmentVisitor = new VersionHistorySegmentsBuilder(childCommit, this);
                 newSegmentVisitor.FindPathSegmentsReachableFrom(parentCommit);
             }
         }
     }
 
-    private void OnBranchFromExistingSegment(Commit commit)
+    /// <summary>
+    ///     Found commit which is merge point on existing segment.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    ///     Claves off new segment from an existing segment at a given "branched from" commit.
+    /// </para>
+    /// <code>
+    ///        merge commit  |   |
+    ///                     / \  | intersected segment (existing)
+    ///                    /   \ |
+    ///                   /     \|
+    ///                  |       | branched from commit
+    ///                  |       |
+    /// segment 2 (new)  |       | split segment (split from intersected segment)
+    /// </code>
+    /// </remarks>
+    private void OnBranchFromExistingSegment(Commit branchedFromCommit)
     {
-        var intersectingSegment = _commitsCache[commit.CommitId];
-        var branchedFromSegment = intersectingSegment.BranchesFrom(_segment, commit, _segmentFactory);
-        if (branchedFromSegment == null)
+        var intersectedSegment = _commitsCache[branchedFromCommit.CommitId];
+        var splitSegment = intersectedSegment.BranchesFrom(_segment, branchedFromCommit, _segmentFactory);
+        if (splitSegment == null)
         {
             return;
         }
 
-        _segments.Add(branchedFromSegment.Id, branchedFromSegment);
-        foreach (var segmentCommit in branchedFromSegment.Commits)
+        _segments.Add(splitSegment.Id, splitSegment);
+        foreach (var segmentCommit in splitSegment.Commits)
         {
-            _commitsCache[segmentCommit.CommitId] = branchedFromSegment;
+            _commitsCache[segmentCommit.CommitId] = splitSegment;
         }
     }
 
@@ -148,12 +165,12 @@ internal sealed class VersionHistorySegmentsBuilder
         }
 
         _logger.LogTrace("Continuing branch:");
-        NextCommitBeforeMerge(continuingBranchCommit);
+        NextCommitBeforeMerge(mergeCommit, continuingBranchCommit);
 
         _logger.LogTrace($"Commit {mergeCommit.CommitId.ShortSha} is a merge commit from branch commit {mergedBranchCommit.ShortSha}:");
         using (_logger.EnterLogScope())
         {
-            NextCommitBeforeMerge(mergedBranchCommit);
+            NextCommitBeforeMerge(mergeCommit, mergedBranchCommit);
         }
     }
 

@@ -11,8 +11,8 @@ internal sealed class VersionHistorySegmentFactory(ILogger logger) : IVersionHis
 {
     private int _nextId = 1;
 
-    public VersionHistorySegment Create(List<Commit> commits)
+    public VersionHistorySegment Create(Commit? childCommit, params Commit[] commits)
     {
-        return new VersionHistorySegment(_nextId++, commits, logger);
+        return new VersionHistorySegment(_nextId++, childCommit, commits, logger);
     }
 }

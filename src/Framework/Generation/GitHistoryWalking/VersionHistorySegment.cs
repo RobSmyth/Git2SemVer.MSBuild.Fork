@@ -11,20 +11,53 @@ namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 internal sealed class VersionHistorySegment
 {
+    private readonly List<Commit> _childCommits = [];
     private readonly List<Commit> _commits = [];
     private readonly ILogger _logger;
     private ApiChanges? _bumps;
 
-    internal VersionHistorySegment(int id, List<Commit> commits, ILogger logger)
+    internal VersionHistorySegment(int id, Commit? childCommit, Commit[] commits, ILogger logger)
     {
         _commits.AddRange(commits);
+        if (childCommit != null)
+        {
+            _childCommits.Add(childCommit);
+        }
         _logger = logger;
         Id = id;
     }
 
+    /// <summary>
+    ///     Link to child (younger) commit before this segment.
+    /// </summary>
+    public void AddChild(Commit childCommit)
+    {
+        if (_childCommits.Count == 2)
+        {
+            throw new Git2SemVerInvalidOperationException("A history segment may not have more than 2 child commits.");
+        }
+        _childCommits.Add(childCommit);
+    }
+
+    /// <summary>
+    ///     Child (younger) commits before this segment.
+    /// </summary>
+    /// <remarks>
+    ///     This will be empty if this is the head segment,
+    ///     Have one commit if this is segment is one of two merging segments into a child segment,
+    ///     and two if there is are two child branch segments.
+    /// </remarks>
+    public IReadOnlyList<Commit> ChildCommits => _childCommits;
+
+    /// <summary>
+    ///     Aggregation API change flags in this segment.
+    /// </summary>
     public ApiChanges ApiChanges => GetApiChanges();
 
-    public IReadOnlyList<Commit> Commits => _commits.ToList();
+    /// <summary>
+    ///     Commits in this segment.
+    /// </summary>
+    public IReadOnlyList<Commit> Commits => _commits;
 
     /// <summary>
     ///     An arbitrary but unique segment ID.
@@ -57,7 +90,7 @@ internal sealed class VersionHistorySegment
         if (_commits.Count > 0 && OldestCommit.Parents.All(x => x.Sha != youngerCommit.CommitId.Sha))
         {
             throw new
-                InvalidOperationException($"Cannot append {youngerCommit.CommitId.ShortSha} as it is not connected to segment's first (oldest) commit.");
+                Git2SemVerInvalidOperationException($"Cannot append {youngerCommit.CommitId.ShortSha} as it is not connected to segment's first (oldest) commit.");
         }
 
         _bumps = null;
@@ -122,15 +155,19 @@ internal sealed class VersionHistorySegment
         {
             throw new Git2SemVerInvalidOperationException("Cannot split a segment that does not contain the commit.");
         }
+        if (index == 0)
+        {
+            throw new Git2SemVerInvalidOperationException("Cannot split a segment at its first (youngest) commit.");
+        }
 
         using (_logger.EnterLogScope())
         {
             var keepCommits = _commits.Take(index).ToList();
-            var olderSegmentCommits = _commits.Skip(index).Take(_commits.Count - index).ToList();
+            var olderSegmentCommits = _commits.Skip(index).Take(_commits.Count - index).ToArray();
             _commits.Clear();
             _commits.AddRange(keepCommits);
 
-            var olderSegment = segmentFactory.Create(olderSegmentCommits);
+            var olderSegment = segmentFactory.Create(OldestCommit, olderSegmentCommits);
             _logger.LogTrace("Split out new segment {2} from segment {0} at commit {1}.",
                              Id, commit.CommitId.ShortSha,
                              olderSegment.Id);
