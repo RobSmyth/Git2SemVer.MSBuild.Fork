@@ -15,15 +15,15 @@ internal sealed class VersionHistorySegmentsBuilder
     private readonly IVersionHistorySegmentFactory _segmentFactory;
     private readonly Dictionary<int, VersionHistorySegment> _segments = [];
 
-    private VersionHistorySegmentsBuilder(VersionHistorySegment segment, VersionHistorySegmentsBuilder parent)
+    private VersionHistorySegmentsBuilder(VersionHistorySegmentsBuilder parent)
     {
         _logger = parent._logger;
         _segments = parent._segments;
         _segmentFactory = parent._segmentFactory;
         _gitTool = parent._gitTool;
         _commitsCache = parent._commitsCache;
-        _segment = segment;
-        _segments.Add(segment.Id, segment);
+        _segment = _segmentFactory.Create([]);
+        _segments.Add(_segment.Id, _segment);
     }
 
     public VersionHistorySegmentsBuilder(IGitTool gitTool, ILogger logger)
@@ -116,7 +116,7 @@ internal sealed class VersionHistorySegmentsBuilder
         {
             using (_logger.EnterLogScope())
             {
-                var newSegmentVisitor = new VersionHistorySegmentsBuilder(_segmentFactory.Create([]), this);
+                var newSegmentVisitor = new VersionHistorySegmentsBuilder(this);
                 newSegmentVisitor.FindPathSegmentsReachableFrom(parentCommit);
             }
         }
