@@ -1,5 +1,6 @@
 ﻿using NoeticTools.Git2SemVer.Core.Diagnostics;
 using NoeticTools.Git2SemVer.Core.Logging;
+using System.Text.RegularExpressions;
 
 
 namespace NoeticTools.Git2SemVer.Testing.Core;
@@ -78,7 +79,7 @@ public class NUnitLogger : ILogger
     {
         if (Level >= LoggingLevel.Debug)
         {
-            TestContext.Out.WriteLine(_debugPrefix + MessagePrefix + message);
+            TestContext.Out.WriteLine(_debugPrefix + IndentLines(message));
         }
     }
 
@@ -139,7 +140,7 @@ public class NUnitLogger : ILogger
     {
         if (Level >= LoggingLevel.Info)
         {
-            TestContext.Out.WriteLine(_infoPrefix + MessagePrefix + message);
+            TestContext.Out.WriteLine(_infoPrefix + IndentLines(message));
         }
     }
 
@@ -152,7 +153,7 @@ public class NUnitLogger : ILogger
     {
         if (Level >= LoggingLevel.Trace)
         {
-            TestContext.Out.WriteLine(_tracePrefix + MessagePrefix + message);
+            TestContext.Out.WriteLine(_tracePrefix + IndentLines(message));
         }
     }
 
@@ -180,7 +181,7 @@ public class NUnitLogger : ILogger
     {
         if (Level >= LoggingLevel.Warning)
         {
-            TestContext.Out.WriteLine(_warnPrefix + MessagePrefix + message);
+            TestContext.Out.WriteLine(_warnPrefix + IndentLines(message));
         }
     }
 
@@ -192,5 +193,16 @@ public class NUnitLogger : ILogger
     public void LogWarning(Exception exception)
     {
         LogWarning($"Exception - {exception.Message}");
+    }
+
+    private string IndentLines(string message)
+    {
+        return IndentLines(message, MessagePrefix, MessagePrefix);
+    }
+
+    private string IndentLines(string message, string firstLinePrefix, string followingLinesPrefix)
+    {
+        var lines = Regex.Split(message, "\r\n|\r|\n");
+        return firstLinePrefix + MessagePrefix + string.Join(Environment.NewLine + followingLinesPrefix + MessagePrefix, lines);
     }
 }

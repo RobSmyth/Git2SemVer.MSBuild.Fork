@@ -5,5 +5,5 @@ namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 internal interface IVersionHistorySegmentFactory
 {
-    VersionHistorySegment Create(Commit? childCommit, params Commit[] commits);
+    VersionHistorySegment Create(params Commit[] commits);
 }

@@ -13,8 +13,10 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
         yield return new object[] { "Scenario 02", BuildScenario02() };
         yield return new object[] { "Scenario 03", BuildScenario03() };
         yield return new object[] { "Scenario 04", BuildScenario04() };
+        yield return new object[] { "Scenario 05", BuildScenario05() };
         yield return new object[] { "Scenario 06", BuildScenario06() };
         yield return new object[] { "Scenario 07", BuildScenario07() };
+        yield return new object[] { "Scenario 08", BuildScenario08() };
     }
 
     private static GitTestRepository BuildScenario01()
@@ -81,13 +83,14 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                        - Release 1.2.4 on branch that has been merged to master
 
                                      1.010  | head (1)
-                                     .      |
+                                            |
+                                     1.008  .
                                      .      |\____   branch 2 (merge) - v1.2.2
                                      .      |     \
                                      .      |      | v1.2.4
                                      .      | ____/
                                      .      |/
-                                     .      |
+                                     1.007  .
                                      1.001  | first commit
                                      """,
                                      [
@@ -154,25 +157,49 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                      "0.1.0");
     }
 
+    private static GitTestRepository BuildScenario05()
+    {
+        return new GitTestRepository("""
+                                     Scenario 05:
+                                       - No branches
+                                       - No releases
+                                       - Defect fix
+
+                                     1.003  | head
+                                     1.002  | fix
+                                     1.001  | 
+                                     """,
+                                     [
+                                         new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
+                                         new Commit("1.002.0000", ["1.001.0000"], "fix:bug1", "", "", new CommitMessageMetadata("fix", false, "", "", [])),
+                                         new Commit("1.003.0000", ["1.002.0000"], "head", "", "", new CommitMessageMetadata()),
+                                     ],
+                                     "1.003.0000",
+                                     1,
+                                     "0.1.1");
+    }
+
     private static GitTestRepository BuildScenario06()
     {
         return new GitTestRepository("""
                                      Scenario 06:
                                        - Multiple parallel branches
                                        - Releases in every branch
+                                       - Two branches from one commit
 
                                      1.006  | head
-                                     .      |
-                                     1.005  |\____________________________   branch 3 (merge)
-                                     1.004  |\_______   branch 2 (merge)   \
+                                     1.005  .
+                                     1.004  .\____________________________   branch 3 (merge)
+                                            |\_______   branch 2 (merge)   \
                                      .      |         \                     | v5.6.99  
                                      .      | v5.7.0   | v5.7.1             |
                                      .      | ________/____________________/
                                      .      |/
-                                     .      |
+                                     1.002  .
                                      1.001  | first commit
                                      """,
                                      [
+                                         // left (main) branch
                                          new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
                                          new Commit("1.002.0000", ["1.001.0000"], "Branch from", "", "", new CommitMessageMetadata()),
                                          new Commit("1.003.0000", ["1.002.0000"], "", "", "tag: v5.7.0", new CommitMessageMetadata()),
@@ -180,10 +207,12 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                          new Commit("1.005.0000", ["1.004.0000", "3.003.0000"], "Merge", "", "", new CommitMessageMetadata()),
                                          new Commit("1.006.0000", ["1.005.0000"], "Head commit", "", "", new CommitMessageMetadata()),
 
+                                         // branch 2 (middle)
                                          new Commit("2.001.0000", ["1.002.0000"], "Branch", "", "", new CommitMessageMetadata()),
                                          new Commit("2.002.0000", ["2.001.0000"], "", "", "tag: v5.7.1", new CommitMessageMetadata()),
                                          new Commit("2.003.0000", ["2.002.0000"], "", "", "", new CommitMessageMetadata()),
 
+                                         // branch 3 (right)
                                          new Commit("3.001.0000", ["1.002.0000"], "Branch", "", "", new CommitMessageMetadata()),
                                          new Commit("3.002.0000", ["3.001.0000"], "", "", "tag: v5.6.99", new CommitMessageMetadata()),
                                          new Commit("3.003.0000", ["3.002.0000"], "", "", "", new CommitMessageMetadata())
@@ -192,38 +221,89 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                      3,
                                      "5.7.2");
     }
-
+    
     private static GitTestRepository BuildScenario07()
     {
         return new GitTestRepository("""
-                                     Scenario 02:
-                                       - No releases
-                                       - Head is master branch (1)
-                                       - No commit bump messages
+                                     Scenario 07:
+                                       - Multiple parallel branches
+                                       - one branch has feature added after release tag
+                                       - Releases in every branch
+                                       - Two branches from one commit
 
-                                     1.010  | head (1)
-                                     .      |
-                                     .      |\____   
-                                     .      |     \
-                                     .      |      |
-                                     .      | ____/
+                                     1.007  | head
+                                     1.006  .
+                                     1.005  .\__________________________________   branch 3 (merge)
+                                            |\_____________   branch 2 (merge)  \
+                                     .      |              \                     |
+                                     1.004  | feat: feature |                    |
+                                     1.003  | v5.7.0        | v5.7.1             | v5.6.99
+                                     .      |               |                    |
+                                     .      | _____________/____________________/
                                      .      |/
-                                     .      |
+                                     1.002  .
                                      1.001  | first commit
                                      """,
                                      [
+                                         // left (main) branch
                                          new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.007.0000", ["1.001.0000"], "", "", "Branched from", new CommitMessageMetadata()),
-                                         new Commit("1.008.0000", ["1.007.0000", "2.005.0000"], "Merge commit", "", "",
-                                                    new CommitMessageMetadata()),
-                                         new Commit("1.009.0000", ["1.008.0000"], "", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.010.0000", ["1.009.0000"], "Head commit", "", "", new CommitMessageMetadata()),
+                                         new Commit("1.002.0000", ["1.001.0000"], "Branch from", "", "", new CommitMessageMetadata()),
+                                         new Commit("1.003.0000", ["1.002.0000"], "", "", "tag: v5.7.0", new CommitMessageMetadata()),
+                                         new Commit("1.004.0000", ["1.003.0000"], "added feature", "", "", new CommitMessageMetadata("feat", false, "added feature", "", [])),
+                                         new Commit("1.005.0000", ["1.004.0000", "2.003.0000"], "Merge", "", "", new CommitMessageMetadata()),
+                                         new Commit("1.006.0000", ["1.005.0000", "3.003.0000"], "Merge", "", "", new CommitMessageMetadata()),
+                                         new Commit("1.007.0000", ["1.006.0000"], "Head commit", "", "", new CommitMessageMetadata()),
 
-                                         new Commit("2.001.0000", ["1.007.0000"], "Branch commit", "", "", new CommitMessageMetadata()),
-                                         new Commit("2.003.0000", ["2.001.0000"], "", "", "", new CommitMessageMetadata()),
-                                         new Commit("2.005.0000", ["2.003.0000"], "", "", "", new CommitMessageMetadata())
+                                         // branch 2 (middle)
+                                         new Commit("2.001.0000", ["1.002.0000"], "Branch", "", "", new CommitMessageMetadata()),
+                                         new Commit("2.002.0000", ["2.001.0000"], "", "", "tag: v5.7.1", new CommitMessageMetadata()),
+                                         new Commit("2.003.0000", ["2.002.0000"], "", "", "", new CommitMessageMetadata()),
+
+                                         // branch 3 (right)
+                                         new Commit("3.001.0000", ["1.002.0000"], "Branch", "", "", new CommitMessageMetadata()),
+                                         new Commit("3.002.0000", ["3.001.0000"], "", "", "tag: v5.6.99", new CommitMessageMetadata()),
+                                         new Commit("3.003.0000", ["3.002.0000"], "", "", "", new CommitMessageMetadata())
                                      ],
-                                     "1.010.0000",
+                                     "1.006.0000",
+                                     3,
+                                     "5.8.0");
+    }
+
+    private static GitTestRepository BuildScenario08()
+    {
+        return new GitTestRepository("""
+                                     Scenario 08:
+                                       - No releases
+                                       - Head is master branch (1)
+                                       - No commit bump messages
+                                       - Single commit branches
+
+                                     1.005  | head (1)
+                                     1.004  .
+                                     .      |\____   
+                                     .      |     \
+                                     1.003  |      | 2.001
+                                     .      | ____/
+                                     .      |/
+                                     1.002  .
+                                     1.001  | first commit
+                                     """,
+                                     [
+                                         // bottom segment
+                                         new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
+                                         new Commit("1.002.0000", ["1.001.0000"], "Branch from", "", "", new CommitMessageMetadata()),
+
+                                         // mid right segment
+                                         new Commit("2.001.0000", ["1.002.0000"], "", "", "", new CommitMessageMetadata()),
+
+                                         // mid left segment
+                                         new Commit("1.003.0000", ["1.002.0000"], "", "", "", new CommitMessageMetadata()),
+
+                                         //top segment
+                                         new Commit("1.004.0000", ["1.003.0000", "2.001.0000"], "Merge commit", "", "", new CommitMessageMetadata()),
+                                         new Commit("1.005.0000", ["1.004.0000"], "Head commit", "", "", new CommitMessageMetadata()),
+                                     ],
+                                     "1.005.0000",
                                      2,
                                      "0.1.0");
     }}

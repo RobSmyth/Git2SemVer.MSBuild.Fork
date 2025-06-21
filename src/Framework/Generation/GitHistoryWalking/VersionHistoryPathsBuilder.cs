@@ -1,5 +1,6 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using Spectre.Console.Rendering;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -13,26 +14,24 @@ internal sealed class VersionHistoryPathsBuilder
     private const string LogPathListIndent = "    ";
     private const int LogPathsLimit = 500;
     private readonly ILookup<VersionHistorySegment, VersionHistorySegment> _childSegmentsLookup;
+    private readonly IReadOnlyList<VersionHistorySegment> _segments;
     private readonly ILogger _logger;
-    private readonly IReadOnlyList<VersionHistorySegment> _startSegments;
+    private readonly Dictionary<CommitId, VersionHistorySegment> _segmentsByYoungestCommit;
 
     public VersionHistoryPathsBuilder(IReadOnlyList<VersionHistorySegment> segments, ILogger logger)
     {
+        _segments = segments;
         _logger = logger;
-
-        var segmentsByYoungestCommit = segments.ToDictionary(k => k.YoungestCommit.CommitId, v => v);
-        _childSegmentsLookup = GetChildSegmentsLookup(segments, segmentsByYoungestCommit);
-        _startSegments = segments.Where(x => x.ParentCommits.Count == 0 ||
-                                             x.TaggedReleasedVersion != null).ToList();
+        _segmentsByYoungestCommit = segments.ToDictionary(k => k.YoungestCommit.CommitId, v => v);
+        _childSegmentsLookup = GetChildSegmentsLookup(segments, _segmentsByYoungestCommit);
     }
 
     /// <summary>
     /// Build a collection of commit history paths to preceding releases from found segments.
     /// </summary>
-    public HistoryPaths Build()
+    public HistoryPaths BuildTo()
     {
         var stopwatch = Stopwatch.StartNew();
-        CompactSegments();
         var foundPaths = FindPaths();
         stopwatch.Stop();
         var paths = new HistoryPaths(foundPaths);
@@ -40,20 +39,12 @@ internal sealed class VersionHistoryPathsBuilder
         return paths;
     }
 
-    private void CompactSegments()
-    {
-        // todo - how can we optimise this reduce permutations when there are common segments in paths.
-        // - maybe if two segments, without an end point, share same start and end - merge into one segment - repeat until nothing optimised
-        // - after a loop merge sequential segments
-        // - test on repo with release tag format that does not match any tag
-
-        // walk from head down as segments only know parent commits
-    }
-
     private List<VersionHistoryPath> FindPaths()
     {
+        var releaseSegments = _segments.Where(x => x.ParentCommits.Count == 0 ||
+                                             x.TaggedReleasedVersion != null).ToList();
         var paths = new List<VersionHistoryPath>();
-        foreach (var startSegment in _startSegments)
+        foreach (var startSegment in releaseSegments)
         {
             paths.AddRange(GetChildPaths(startSegment, new VersionHistoryPath(startSegment)));
         }

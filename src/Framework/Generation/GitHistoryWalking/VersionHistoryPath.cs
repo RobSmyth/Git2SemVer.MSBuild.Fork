@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 using Semver;
 
 
@@ -148,9 +149,6 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
         foreach (var segment in _segments)
         {
             bumps.Aggregate(segment.ApiChanges);
-            //bumps.BreakingChange |= segmentBumps.Flags.BreakingChange;
-            //bumps.FunctionalityChange |= segmentBumps.Flags.FunctionalityChange;
-            //bumps.Fix |= segmentBumps.Flags.Fix;
         }
 
         return bumps;
@@ -167,18 +165,11 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
 
         var startingVersion = LastReleasedVersion ?? new SemVersion(0, 1, 0);
 
-        if (_apiChanges.Flags.BreakingChange)
+        if (LastReleasedVersion == null && !_apiChanges.Flags.Any)
         {
-            return new SemVersion(startingVersion.Major + 1, 0, 0);
+            return startingVersion;
         }
 
-        if (_apiChanges.Flags.FunctionalityChange)
-        {
-            return new SemVersion(startingVersion.Major, startingVersion.Minor + 1, 0);
-        }
-
-        return LastReleasedVersion == null
-            ? startingVersion
-            : new SemVersion(startingVersion.Major, startingVersion.Minor, startingVersion.Patch + 1);
+        return startingVersion.Bump(_apiChanges.Flags);
     }
 }

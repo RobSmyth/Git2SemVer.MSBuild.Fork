@@ -11,43 +11,16 @@ namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 internal sealed class VersionHistorySegment
 {
-    private readonly List<Commit> _childCommits = [];
     private readonly List<Commit> _commits = [];
     private readonly ILogger _logger;
     private ApiChanges? _bumps;
 
-    internal VersionHistorySegment(int id, Commit? childCommit, Commit[] commits, ILogger logger)
+    internal VersionHistorySegment(int id, Commit[] commits, ILogger logger)
     {
         _commits.AddRange(commits);
-        if (childCommit != null)
-        {
-            _childCommits.Add(childCommit);
-        }
         _logger = logger;
         Id = id;
     }
-
-    /// <summary>
-    ///     Link to child (younger) commit before this segment.
-    /// </summary>
-    public void AddChild(Commit childCommit)
-    {
-        if (_childCommits.Count == 2)
-        {
-            throw new Git2SemVerInvalidOperationException("A history segment may not have more than 2 child commits.");
-        }
-        _childCommits.Add(childCommit);
-    }
-
-    /// <summary>
-    ///     Child (younger) commits before this segment.
-    /// </summary>
-    /// <remarks>
-    ///     This will be empty if this is the head segment,
-    ///     Have one commit if this is segment is one of two merging segments into a child segment,
-    ///     and two if there is are two child branch segments.
-    /// </remarks>
-    public IReadOnlyList<Commit> ChildCommits => _childCommits;
 
     /// <summary>
     ///     Aggregation API change flags in this segment.
@@ -76,6 +49,8 @@ internal sealed class VersionHistorySegment
     public IReadOnlyList<CommitId> ParentCommits => OldestCommit.Parents.ToList();
 
     public SemVersion? TaggedReleasedVersion => _commits.Count != 0 ? OldestCommit.ReleasedVersion : null;
+
+    public bool IsAReleaseSegment => TaggedReleasedVersion != null || OldestCommit.Parents.Length == 0;
 
     /// <summary>
     ///     Last (youngest) commit in the segment.
@@ -107,12 +82,12 @@ internal sealed class VersionHistorySegment
         {
             if (commit.CommitId.Equals(YoungestCommit.CommitId))
             {
-                _logger.LogTrace("Commit {0} is last (youngest) commit in segment {1}. Link segments.", commit.CommitId.ShortSha, Id);
+                _logger.LogTrace("Commit {0} is last (youngest) commit in segment {1}.", commit.CommitId.ShortSha, Id);
                 return null;
             }
 
             _bumps = null;
-            var fromSegment = SplitSegmentAt(commit, segmentFactory);
+            var fromSegment = SplitAt(commit, segmentFactory);
             return fromSegment;
         }
     }
@@ -121,7 +96,8 @@ internal sealed class VersionHistorySegment
     {
         var commitsCount = $"{_commits.Count}";
 
-        var release = TaggedReleasedVersion != null ? TaggedReleasedVersion.ToString() :
+        var release = TaggedReleasedVersion != null ? 
+            TaggedReleasedVersion.ToString() :
             ParentCommits.Any() ? "" : "0.1.0";
 
         return
@@ -136,19 +112,16 @@ internal sealed class VersionHistorySegment
         }
 
         var bumps = new ApiChanges();
-        foreach (var commit in _commits)
+        foreach (var commit in _commits.Where(commit => !commit.HasReleaseTag))
         {
-            if (!commit.HasReleaseTag)
-            {
-                bumps.Aggregate(commit);
-            }
+            bumps.Aggregate(commit);
         }
 
         _bumps = bumps;
         return bumps;
     }
 
-    private VersionHistorySegment SplitSegmentAt(Commit commit, IVersionHistorySegmentFactory segmentFactory)
+    private VersionHistorySegment SplitAt(Commit commit, IVersionHistorySegmentFactory segmentFactory)
     {
         var index = _commits.IndexOf(commit);
         if (index < 0)
@@ -167,7 +140,7 @@ internal sealed class VersionHistorySegment
             _commits.Clear();
             _commits.AddRange(keepCommits);
 
-            var olderSegment = segmentFactory.Create(OldestCommit, olderSegmentCommits);
+            var olderSegment = segmentFactory.Create(olderSegmentCommits);
             _logger.LogTrace("Split out new segment {2} from segment {0} at commit {1}.",
                              Id, commit.CommitId.ShortSha,
                              olderSegment.Id);

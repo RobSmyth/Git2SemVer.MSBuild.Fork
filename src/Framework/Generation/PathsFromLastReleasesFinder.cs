@@ -23,7 +23,8 @@ internal sealed class PathsFromLastReleasesFinder(IGitTool gitTool, ILogger logg
         {
             var stopwatch = Stopwatch.StartNew();
             var segments = new VersionHistorySegmentsBuilder(gitTool, logger).BuildTo(gitTool.Head);
-            var paths = new VersionHistoryPathsBuilder(segments, logger).Build();
+            new NextReleaseVersionFinder(segments, logger).Find(gitTool.Head); //>>> testing
+            var paths = new VersionHistoryPathsBuilder(segments, logger).BuildTo();
             stopwatch.Stop();
             logger.LogDebug($"Git history walk completed (in {stopwatch.Elapsed.TotalSeconds:F1} seconds).");
             return paths;
