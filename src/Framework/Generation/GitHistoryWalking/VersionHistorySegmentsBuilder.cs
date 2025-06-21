@@ -31,7 +31,7 @@ internal sealed class VersionHistorySegmentsBuilder
         _gitTool = gitTool;
         _logger = logger;
         _segmentFactory = new VersionHistorySegmentFactory(logger);
-        _segment = _segmentFactory.Create();
+        _segment = _segmentFactory.Create([]);
         _segments.Add(_segment.Id, _segment);
     }
 

@@ -14,6 +14,7 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
         yield return new object[] { "Scenario 03", BuildScenario03() };
         yield return new object[] { "Scenario 04", BuildScenario04() };
         yield return new object[] { "Scenario 06", BuildScenario06() };
+        yield return new object[] { "Scenario 07", BuildScenario07() };
     }
 
     private static GitTestRepository BuildScenario01()
@@ -191,4 +192,38 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                      3,
                                      "5.7.2");
     }
-}
+
+    private static GitTestRepository BuildScenario07()
+    {
+        return new GitTestRepository("""
+                                     Scenario 02:
+                                       - No releases
+                                       - Head is master branch (1)
+                                       - No commit bump messages
+
+                                     1.010  | head (1)
+                                     .      |
+                                     .      |\____   
+                                     .      |     \
+                                     .      |      |
+                                     .      | ____/
+                                     .      |/
+                                     .      |
+                                     1.001  | first commit
+                                     """,
+                                     [
+                                         new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
+                                         new Commit("1.007.0000", ["1.001.0000"], "", "", "Branched from", new CommitMessageMetadata()),
+                                         new Commit("1.008.0000", ["1.007.0000", "2.005.0000"], "Merge commit", "", "",
+                                                    new CommitMessageMetadata()),
+                                         new Commit("1.009.0000", ["1.008.0000"], "", "", "", new CommitMessageMetadata()),
+                                         new Commit("1.010.0000", ["1.009.0000"], "Head commit", "", "", new CommitMessageMetadata()),
+
+                                         new Commit("2.001.0000", ["1.007.0000"], "Branch commit", "", "", new CommitMessageMetadata()),
+                                         new Commit("2.003.0000", ["2.001.0000"], "", "", "", new CommitMessageMetadata()),
+                                         new Commit("2.005.0000", ["2.003.0000"], "", "", "", new CommitMessageMetadata())
+                                     ],
+                                     "1.010.0000",
+                                     2,
+                                     "0.1.0");
+    }}

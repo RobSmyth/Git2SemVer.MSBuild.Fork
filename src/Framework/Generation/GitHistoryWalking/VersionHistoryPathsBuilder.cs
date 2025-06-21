@@ -1,7 +1,8 @@
-﻿using System.Diagnostics;
-using System.Text;
-using NoeticTools.Git2SemVer.Core.Logging;
+﻿using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
@@ -9,30 +10,44 @@ namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 #pragma warning disable CS1591
 internal sealed class VersionHistoryPathsBuilder
 {
+    private const string LogPathListIndent = "    ";
+    private const int LogPathsLimit = 500;
     private readonly ILookup<VersionHistorySegment, VersionHistorySegment> _childSegmentsLookup;
     private readonly ILogger _logger;
-    private readonly IReadOnlyList<VersionHistorySegment> _segments;
     private readonly IReadOnlyList<VersionHistorySegment> _startSegments;
 
     public VersionHistoryPathsBuilder(IReadOnlyList<VersionHistorySegment> segments, ILogger logger)
     {
-        _segments = segments;
         _logger = logger;
 
-        var segmentsByYoungestCommit = _segments.ToDictionary(k => k.YoungestCommit.CommitId, v => v);
+        var segmentsByYoungestCommit = segments.ToDictionary(k => k.YoungestCommit.CommitId, v => v);
         _childSegmentsLookup = GetChildSegmentsLookup(segments, segmentsByYoungestCommit);
         _startSegments = segments.Where(x => x.ParentCommits.Count == 0 ||
                                              x.TaggedReleasedVersion != null).ToList();
     }
 
+    /// <summary>
+    /// Build a collection of commit history paths to preceding releases from found segments.
+    /// </summary>
     public HistoryPaths Build()
     {
         var stopwatch = Stopwatch.StartNew();
+        CompactSegments();
         var foundPaths = FindPaths();
         stopwatch.Stop();
         var paths = new HistoryPaths(foundPaths);
         LogFoundPaths(paths, stopwatch.Elapsed);
         return paths;
+    }
+
+    private void CompactSegments()
+    {
+        // todo - how can we optimise this reduce permutations when there are common segments in paths.
+        // - maybe if two segments, without an end point, share same start and end - merge into one segment - repeat until nothing optimised
+        // - after a loop merge sequential segments
+        // - test on repo with release tag format that does not match any tag
+
+        // walk from head down as segments only know parent commits
     }
 
     private List<VersionHistoryPath> FindPaths()
@@ -59,7 +74,7 @@ internal sealed class VersionHistoryPathsBuilder
         {
             return [path];
         }
-
+        
         var pathSegments = new List<VersionHistoryPath>();
         foreach (var childSegment in childSegments)
         {
@@ -93,23 +108,43 @@ internal sealed class VersionHistoryPathsBuilder
     {
         var stringBuilder = new StringBuilder();
 
+        var bestPath = paths.BestPath;
         var pathsCount = paths.Paths.Count;
         stringBuilder.AppendLine($"Found {pathsCount} path{(pathsCount == 1 ? "" : "s")} (in {timeTaken.Milliseconds:F0} ms):");
-        using (_logger.EnterLogScope())
+        if (pathsCount < LogPathsLimit)
         {
-            stringBuilder.AppendLine("    Path #   Segments                                          Commits   Bumps        From -> To");
-            foreach (var path in paths.Paths)
-            {
-                stringBuilder.AppendLine("    " + path.ToString());
-            }
+            LogAllPaths(paths, stringBuilder);
+        }
+        else
+        {
+            LogPath(stringBuilder, bestPath);
         }
 
         _logger.LogDebug(stringBuilder.ToString().TrimEnd());
 
-        var bestPath = paths.BestPath;
-
         _logger.LogDebug($"Path {bestPath.Id} is the shortest path resulting in the highest version {bestPath.Version}.");
 
         _logger.LogDebug(bestPath.GetVersioningReport());
+    }
+
+    private void LogPath(StringBuilder stringBuilder, IVersionHistoryPath bestPath)
+    {
+        using (_logger.EnterLogScope())
+        {
+            stringBuilder.AppendLine(LogPathListIndent + VersionHistoryPath.ListHeader);
+            stringBuilder.AppendLine(LogPathListIndent + bestPath.ToString());
+        }
+    }
+
+    private void LogAllPaths(IHistoryPaths paths, StringBuilder stringBuilder)
+    {
+        using (_logger.EnterLogScope())
+        {
+            stringBuilder.AppendLine(LogPathListIndent + VersionHistoryPath.ListHeader);
+            foreach (var path in paths.Paths)
+            {
+                stringBuilder.AppendLine(LogPathListIndent + path.ToString());
+            }
+        }
     }
 }

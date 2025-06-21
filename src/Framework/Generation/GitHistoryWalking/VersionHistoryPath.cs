@@ -10,6 +10,7 @@ namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 internal sealed class VersionHistoryPath : IVersionHistoryPath
 {
+    public const string ListHeader = "Path #   Segments                                          Commits   Bumps        From -> To";
     private readonly List<VersionHistorySegment> _segments = [];
     private ApiChanges _apiChanges = new();
     private int? _commitsCount;

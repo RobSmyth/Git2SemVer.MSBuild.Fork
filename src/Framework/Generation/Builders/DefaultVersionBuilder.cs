@@ -13,22 +13,21 @@ namespace NoeticTools.Git2SemVer.Framework.Generation.Builders;
 /// <summary>
 ///     Git2SemVer's default outputs builder. This builder sets all MSBuild output properties.
 /// </summary>
-internal sealed class DefaultVersionBuilder : IVersionBuilder
+internal sealed class DefaultVersionBuilder(IHistoryPaths paths, ILogger logger) : IVersionBuilder
 {
-    private readonly ILogger _logger;
-    private readonly IHistoryPaths _paths;
-
-    public DefaultVersionBuilder(IHistoryPaths paths, ILogger logger)
-    {
-        _paths = paths;
-        _logger = logger;
-    }
-
+    /// <summary>
+    ///     Build versioning outputs from found git history path to prior releases.
+    /// </summary>
+    /// <param name="host"></param>
+    /// <param name="gitTool"></param>
+    /// <param name="inputs"></param>
+    /// <param name="outputs"></param>
+    /// <param name="msBuildGlobalProperties"></param>
     public void Build(IBuildHost host, IGitTool gitTool, IVersionGeneratorInputs inputs, IVersionOutputs outputs,
                       IMSBuildGlobalProperties msBuildGlobalProperties)
     {
-        _logger.LogDebug("Running default (built-in) version builder.");
-        using (_logger.EnterLogScope())
+        logger.LogDebug("Running default (built-in) version builder.");
+        using (logger.EnterLogScope())
         {
             var prereleaseLabel = GetPrereleaseLabel(inputs, outputs);
 
@@ -40,9 +39,9 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
 
             outputs.BuildSystemVersion = GetBuildSystemLabel(host, prereleaseLabel, version);
 
-            if (_logger.Level >= LoggingLevel.Trace)
+            if (logger.Level >= LoggingLevel.Trace)
             {
-                _logger.LogTrace(outputs.GetReport());
+                logger.LogTrace(outputs.GetReport());
             }
         }
     }
@@ -71,7 +70,7 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
 
     private string GetPrereleaseLabel(IVersionGeneratorInputs inputs, IVersionOutputs outputs)
     {
-        var versionPrefix = _paths.BestPath.Version;
+        var versionPrefix = paths.BestPath.Version;
         var initialDevSuffix = "";
         if (versionPrefix.Major == 0)
         {
@@ -126,7 +125,7 @@ internal sealed class DefaultVersionBuilder : IVersionBuilder
 
     private SemVersion GetVersion(string prereleaseLabel, IBuildHost host)
     {
-        var versionPrefix = _paths.BestPath.Version;
+        var versionPrefix = paths.BestPath.Version;
         var isARelease = string.IsNullOrWhiteSpace(prereleaseLabel);
         if (isARelease)
         {

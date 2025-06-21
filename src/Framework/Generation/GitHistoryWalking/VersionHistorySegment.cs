@@ -15,13 +15,9 @@ internal sealed class VersionHistorySegment
     private readonly ILogger _logger;
     private ApiChanges? _bumps;
 
-    internal VersionHistorySegment(int id, List<Commit> commits, ILogger logger) : this(id, logger)
+    internal VersionHistorySegment(int id, List<Commit> commits, ILogger logger)
     {
         _commits.AddRange(commits);
-    }
-
-    internal VersionHistorySegment(int id, ILogger logger)
-    {
         _logger = logger;
         Id = id;
     }
