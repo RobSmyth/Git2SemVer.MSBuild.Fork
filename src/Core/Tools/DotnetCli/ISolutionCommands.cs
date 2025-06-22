@@ -19,6 +19,22 @@ public interface ISolutionCommands
     void AddProject(string solutionName, string projectName);
 
     /// <summary>
+    ///     Get list of project in solution in current directory.
+    /// </summary>
+    /// <remarks>
+    ///     See: <see href="https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-sln#commands">dotnet sln list</see>
+    /// </remarks>
+    (int returnCode, IReadOnlyList<string> project) GetProjects();
+
+    /// <summary>
+    ///     Get list of project in named solution in current directory.
+    /// </summary>
+    /// <remarks>
+    ///     See: <see href="https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-sln#commands">dotnet sln list</see>
+    /// </remarks>
+    (int returnCode, IReadOnlyList<string> projects) GetProjects(string solutionName);
+
+    /// <summary>
     ///     Create a new solution (sln) with the same name as the folder.
     /// </summary>
     void New();
@@ -35,22 +51,6 @@ public interface ISolutionCommands
     ///     .
     /// </remarks>
     void New(string solutionName);
-
-    /// <summary>
-    ///     Get list of project in solution in current directory.
-    /// </summary>
-    /// <remarks>
-    ///     See: <see href="https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-sln#commands">dotnet sln list</see>
-    /// </remarks>
-    (int returnCode, IReadOnlyList<string> project) GetProjects();
-
-    /// <summary>
-    ///     Get list of project in named solution in current directory.
-    /// </summary>
-    /// <remarks>
-    ///     See: <see href="https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-sln#commands">dotnet sln list</see>
-    /// </remarks>
-    (int returnCode, IReadOnlyList<string> projects) GetProjects(string solutionName);
 
     (int returnCode, string stdOutput) RemoveProject(string projectName);
     (int returnCode, string stdOutput) RemoveProject(string solutionName, string projectName);

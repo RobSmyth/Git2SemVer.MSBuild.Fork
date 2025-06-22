@@ -11,7 +11,7 @@ public class GitPerformanceTestRepository : GitTestRepository
     {
         var commits = new List<Commit>
         {
-            new Commit("00.0.01.000", [], "First commit in repo", "", "", new CommitMessageMetadata())
+            new("00.0.01.000", [], "First commit in repo", "", "", new CommitMessageMetadata())
         };
 
         var endOfPriorBlockCommitId = "00.0.01.000";
@@ -24,12 +24,16 @@ public class GitPerformanceTestRepository : GitTestRepository
             commits.AddRange(
             [
                 // left (main) branch
-                new Commit(branchPrefix + ".1.01.000", [endOfPriorBlockCommitId], $"bottom (oldest) end of block {blockNumber}", "", "", new CommitMessageMetadata()),
+                new Commit(branchPrefix + ".1.01.000", [endOfPriorBlockCommitId], $"bottom (oldest) end of block {blockNumber}", "", "",
+                           new CommitMessageMetadata()),
                 new Commit(branchPrefix + ".1.02.000", [branchPrefix + ".1.01.000"], "Branch from", "", "", new CommitMessageMetadata()),
                 new Commit(branchPrefix + ".1.03.000", [branchPrefix + ".1.02.000"], "", "", "", new CommitMessageMetadata()),
-                new Commit(branchPrefix + ".1.04.000", [branchPrefix + ".1.03.000", branchPrefix + ".2.03.000"], "Merge", "", "", new CommitMessageMetadata()),
-                new Commit(branchPrefix + ".1.05.000", [branchPrefix + ".1.04.000", branchPrefix + ".3.03.000"], "Merge", "", "", new CommitMessageMetadata()),
-                new Commit(branchPrefix + ".1.06.000", [branchPrefix + ".1.05.000"], $"top (newest) of block {blockNumber}", "", "", new CommitMessageMetadata()),
+                new Commit(branchPrefix + ".1.04.000", [branchPrefix + ".1.03.000", branchPrefix + ".2.03.000"], "Merge", "", "",
+                           new CommitMessageMetadata()),
+                new Commit(branchPrefix + ".1.05.000", [branchPrefix + ".1.04.000", branchPrefix + ".3.03.000"], "Merge", "", "",
+                           new CommitMessageMetadata()),
+                new Commit(branchPrefix + ".1.06.000", [branchPrefix + ".1.05.000"], $"top (newest) of block {blockNumber}", "", "",
+                           new CommitMessageMetadata()),
 
                 // branch 2 (middle)
                 new Commit(branchPrefix + ".2.01.000", [branchPrefix + ".1.02.000"], "Branch", "", "", new CommitMessageMetadata()),

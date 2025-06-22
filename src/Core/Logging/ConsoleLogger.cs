@@ -84,6 +84,11 @@ public sealed class ConsoleLogger : LoggerBase, ILogger
         LogError(message);
     }
 
+    public void LogError(DiagnosticCodeBase code)
+    {
+        LogError(code.MessageWithCode);
+    }
+
     public void LogInfo(string message)
     {
         if (!IsLogging(LoggingLevel.Info))
@@ -165,11 +170,6 @@ public sealed class ConsoleLogger : LoggerBase, ILogger
         }
 
         LogWarning($"Exception - {exception.Message}");
-    }
-
-    public void LogError(DiagnosticCodeBase code)
-    {
-        LogError(code.MessageWithCode);
     }
 
     public void LogWarning(DiagnosticCodeBase code)

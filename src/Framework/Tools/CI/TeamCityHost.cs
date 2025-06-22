@@ -30,6 +30,11 @@ internal sealed class TeamCityHost : BuildHostBase, IDetectableBuildHost
 
     public HostTypeIds HostTypeId => HostTypeIds.TeamCity;
 
+    public void Dispose()
+    {
+        _serviceMessagesWriter.Dispose();
+    }
+
     public bool MatchesHostSignature()
     {
         return TeamCityHostSettings.IsHost();
@@ -54,10 +59,5 @@ internal sealed class TeamCityHost : BuildHostBase, IDetectableBuildHost
         _logger.LogDebug($"Setting TeamCity Build label to '{label}'.");
         using var writer = new TeamCityServiceMessages().CreateWriter(_logger.LogInfo);
         writer.WriteBuildNumber(label);
-    }
-
-    public void Dispose()
-    {
-        _serviceMessagesWriter.Dispose();
     }
 }

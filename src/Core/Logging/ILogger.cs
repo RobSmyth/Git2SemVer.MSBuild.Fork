@@ -81,6 +81,8 @@ public interface ILogger : IDisposable
     /// </summary>
     void LogError(Exception exception);
 
+    void LogError(DiagnosticCodeBase code);
+
     /// <summary>
     ///     Log a message with [high
     ///     importance](https://learn.microsoft.com/en-us/dotnet/api/microsoft.build.framework.messageimportance?view=msbuild-17-netcore).
@@ -123,8 +125,6 @@ public interface ILogger : IDisposable
     ///     Log an exception as a warning.
     /// </summary>
     void LogWarning(Exception exception);
-
-    void LogError(DiagnosticCodeBase code);
 
     void LogWarning(DiagnosticCodeBase code);
 }

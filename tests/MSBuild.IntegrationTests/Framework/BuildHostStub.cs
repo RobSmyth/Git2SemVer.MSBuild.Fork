@@ -32,6 +32,11 @@ internal class BuildHostStub : IBuildHost
         return BuildNumber;
     }
 
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
+
     public void ReportBuildStatistic(string key, int value)
     {
         _logger.LogTrace($"Build statistic {key} = {value}");
@@ -45,10 +50,5 @@ internal class BuildHostStub : IBuildHost
     public void SetBuildLabel(string label)
     {
         _logger.LogInfo($"SetBuildLabel: {label}");
-    }
-
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
     }
 }

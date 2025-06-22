@@ -1,22 +1,21 @@
-﻿using NoeticTools.Git2SemVer.Core.Logging;
+﻿using System.Diagnostics;
+using System.Text;
+using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 using Semver;
-using System.Diagnostics;
-using System.Text;
-using static NoeticTools.Git2SemVer.Framework.Generation.PathsFromLastReleasesFinder;
 
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
-internal sealed class SemverFromSegmentsCalculator
+internal sealed class GitSegmentsWalker
 {
-    private readonly ILogger _logger;
     private readonly Commit _head;
+    private readonly ILogger _logger;
     private readonly IReadOnlyList<GitSegment> _segments;
     private readonly Dictionary<CommitId, GitSegment> _segmentsByYoungestCommit;
 
-    public SemverFromSegmentsCalculator(Commit head, IReadOnlyList<GitSegment> segments, ILogger logger)
+    public GitSegmentsWalker(Commit head, IReadOnlyList<GitSegment> segments, ILogger logger)
     {
         _head = head;
         _segments = segments;
@@ -24,7 +23,7 @@ internal sealed class SemverFromSegmentsCalculator
         _segmentsByYoungestCommit = segments.ToDictionary(k => k.YoungestCommit.CommitId, v => v);
     }
 
-    public SemanticVersionCalcResult Calculate()
+    public SemanticVersionCalcResult CalculateSemVer()
     {
         var stopwatch = Stopwatch.StartNew();
 
@@ -32,16 +31,16 @@ internal sealed class SemverFromSegmentsCalculator
         {
             _logger.LogDebug("Head has a release tag. Tagged version will be used.");
             var headReleaseVersion = _head.ReleasedVersion ?? new SemVersion(0, 1, 0);
-            return new SemanticVersionCalcResult()
+            return new SemanticVersionCalcResult
             {
                 HeadCommitId = _head.CommitId,
                 Version = headReleaseVersion,
                 PriorReleaseCommitId = _head.CommitId,
-                PriorReleaseVersion = headReleaseVersion,
+                PriorReleaseVersion = headReleaseVersion
             };
         }
 
-        var result = new SemanticVersionCalcResult()
+        var result = new SemanticVersionCalcResult
         {
             HeadCommitId = _head.CommitId
         };

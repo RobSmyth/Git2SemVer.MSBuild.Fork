@@ -174,7 +174,7 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                          new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
                                          new Commit("1.002.0000", ["1.001.0000"], "fix:bug1", "", "",
                                                     new CommitMessageMetadata("fix", false, "", "", [])),
-                                         new Commit("1.003.0000", ["1.002.0000"], "head", "", "", new CommitMessageMetadata()),
+                                         new Commit("1.003.0000", ["1.002.0000"], "head", "", "", new CommitMessageMetadata())
                                      ],
                                      "1.003.0000",
                                      1,
@@ -304,7 +304,7 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
 
                                          //top segment
                                          new Commit("1.004.0000", ["1.003.0000", "2.001.0000"], "Merge commit", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.005.0000", ["1.004.0000"], "Head commit", "", "", new CommitMessageMetadata()),
+                                         new Commit("1.005.0000", ["1.004.0000"], "Head commit", "", "", new CommitMessageMetadata())
                                      ],
                                      "1.005.0000",
                                      2,
@@ -314,22 +314,22 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
     private static GitTestRepository BuildScenario100()
     {
         return new GitPerformanceTestRepository("""
-                                     Scenario 100:
-                                       - Performance test - many paths
-                                       - Multiple parallel branches - REPEATED
-                                       - No releases
+                                                Scenario 100:
+                                                  - Performance test - many paths
+                                                  - Multiple parallel branches - REPEATED
+                                                  - No releases
 
-                                     1.006  | head
-                                        < REPEATED BLOCKS >
-                                     011.005  .
-                                     011.004  .\____________________________   branch 3 (merge)
-                                            |\_______   branch 2 (merge)   \
-                                     .      |         \                     |
-                                     .      |          |                    |
-                                     .      | ________/____________________/
-                                     .      |/
-                                     011.002  .
-                                     000.001  | first commit
-                                     """);
+                                                1.006  | head
+                                                   < REPEATED BLOCKS >
+                                                011.005  .
+                                                011.004  .\____________________________   branch 3 (merge)
+                                                       |\_______   branch 2 (merge)   \
+                                                .      |         \                     |
+                                                .      |          |                    |
+                                                .      | ________/____________________/
+                                                .      |/
+                                                011.002  .
+                                                000.001  | first commit
+                                                """);
     }
 }

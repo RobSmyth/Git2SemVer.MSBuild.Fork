@@ -1,5 +1,4 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
-using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using Semver;
 
 

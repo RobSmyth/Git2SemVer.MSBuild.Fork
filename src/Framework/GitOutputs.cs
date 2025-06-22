@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
-using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using Semver;
 
 
@@ -37,9 +36,6 @@ public sealed class GitOutputs : IGitOutputs
     /// </remarks>
     public string BranchName { get; } = "";
 
-    [JsonIgnore]
-    public int CommitsSinceLastRelease = 0;
-
     /// <summary>
     ///     True if there are local changes since the last commit.
     /// </summary>
@@ -73,4 +69,7 @@ public sealed class GitOutputs : IGitOutputs
     /// </summary>
     [JsonPropertyName("LastReleaseVersion")]
     public SemVersion? PriorReleaseVersion { get; }
+
+    [JsonIgnore]
+    public int CommitsSinceLastRelease = 0;
 }

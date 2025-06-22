@@ -12,7 +12,7 @@ internal sealed class GitSegmentsBuilder
     private readonly IGitTool _gitTool;
     private readonly ILogger _logger;
     private readonly GitSegment _segment;
-    private readonly IVersionHistorySegmentFactory _segmentFactory;
+    private readonly IGitSegmentFactory _segmentFactory;
     private readonly Dictionary<int, GitSegment> _segments = [];
 
     private GitSegmentsBuilder(GitSegmentsBuilder parent)
@@ -30,7 +30,7 @@ internal sealed class GitSegmentsBuilder
     {
         _gitTool = gitTool;
         _logger = logger;
-        _segmentFactory = new VersionHistorySegmentFactory(logger);
+        _segmentFactory = new GitSegmentFactory(logger);
         _segment = _segmentFactory.Create();
         _segments.Add(_segment.Id, _segment);
     }
@@ -45,6 +45,7 @@ internal sealed class GitSegmentsBuilder
         {
             _logger.LogDebug(GetFoundSegmentsReport());
         }
+
         return _segments.Values.ToList();
     }
 
@@ -128,10 +129,10 @@ internal sealed class GitSegmentsBuilder
     ///     Found commit which is merge point on existing segment.
     /// </summary>
     /// <remarks>
-    /// <para>
-    ///     Claves off new segment from an existing segment at a given "branched from" commit.
-    /// </para>
-    /// <code>
+    ///     <para>
+    ///         Claves off new segment from an existing segment at a given "branched from" commit.
+    ///     </para>
+    ///     <code>
     ///        merge commit  |   |
     ///                     / \  | intersected segment (existing)
     ///                    /   \ |

@@ -4,7 +4,6 @@ using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
-using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using Semver;
 
 

@@ -7,8 +7,6 @@ namespace NoeticTools.Git2SemVer.Core.Exceptions;
 [ExcludeFromCodeCoverage]
 public class Git2SemVerDiagnosticCodeException : Git2SemverExceptionBase
 {
-    public DiagnosticCodeBase DiagCode { get; }
-
     public Git2SemVerDiagnosticCodeException(DiagnosticCodeBase diagCode) : base(diagCode.MessageWithCode)
     {
         DiagCode = diagCode;
@@ -19,4 +17,6 @@ public class Git2SemVerDiagnosticCodeException : Git2SemverExceptionBase
     {
         DiagCode = diagCode;
     }
+
+    public DiagnosticCodeBase DiagCode { get; }
 }

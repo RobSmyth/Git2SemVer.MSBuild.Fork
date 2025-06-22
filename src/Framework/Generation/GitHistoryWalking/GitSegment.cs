@@ -37,6 +37,8 @@ internal sealed class GitSegment
     /// </summary>
     public int Id { get; }
 
+    public bool IsAReleaseSegment => TaggedReleasedVersion != null || OldestCommit.Parents.Length == 0;
+
     /// <summary>
     ///     First (oldest) commit in the segment.
     /// </summary>
@@ -49,8 +51,6 @@ internal sealed class GitSegment
     public IReadOnlyList<CommitId> ParentCommits => OldestCommit.Parents.ToList();
 
     public SemVersion? TaggedReleasedVersion => _commits.Count != 0 ? OldestCommit.ReleasedVersion : null;
-
-    public bool IsAReleaseSegment => TaggedReleasedVersion != null || OldestCommit.Parents.Length == 0;
 
     /// <summary>
     ///     Last (youngest) commit in the segment.
@@ -75,7 +75,7 @@ internal sealed class GitSegment
     /// <summary>
     ///     A branch has been found from the given commit to the given segment.
     /// </summary>
-    public GitSegment? BranchesFrom(GitSegment branchSegment, Commit commit, IVersionHistorySegmentFactory segmentFactory)
+    public GitSegment? BranchesFrom(GitSegment branchSegment, Commit commit, IGitSegmentFactory segmentFactory)
     {
         _logger.LogTrace("Commit {0} in segment {1} branches to segment {2}:", commit.CommitId.ShortSha, Id, branchSegment.Id);
         using (_logger.EnterLogScope())
@@ -96,8 +96,7 @@ internal sealed class GitSegment
     {
         var commitsCount = $"{_commits.Count}";
 
-        var release = TaggedReleasedVersion != null ? 
-            TaggedReleasedVersion.ToString() :
+        var release = TaggedReleasedVersion != null ? TaggedReleasedVersion.ToString() :
             ParentCommits.Any() ? "" : "0.1.0";
 
         return
@@ -121,13 +120,14 @@ internal sealed class GitSegment
         return bumps;
     }
 
-    private GitSegment SplitAt(Commit commit, IVersionHistorySegmentFactory segmentFactory)
+    private GitSegment SplitAt(Commit commit, IGitSegmentFactory segmentFactory)
     {
         var index = _commits.IndexOf(commit);
         if (index < 0)
         {
             throw new Git2SemVerInvalidOperationException("Cannot split a segment that does not contain the commit.");
         }
+
         if (index == 0)
         {
             throw new Git2SemVerInvalidOperationException("Cannot split a segment at its first (youngest) commit.");

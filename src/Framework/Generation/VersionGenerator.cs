@@ -15,19 +15,19 @@ internal sealed class VersionGenerator : IVersionGenerator
 {
     private readonly IDefaultVersionBuilderFactory _defaultVersionBuilderFactory;
     private readonly IOutputsJsonIO _generatedOutputsJsonFile;
-    private readonly IGitHistoryPathsFinder _gitPathsFinder;
     private readonly IGitTool _gitTool;
+    private readonly IGitHistoryWalker _gitWalker;
     private readonly IBuildHost _host;
     private readonly IVersionGeneratorInputs _inputs;
     private readonly ILogger _logger;
-    private readonly IVersionBuilder _scriptBuilder;
     private readonly IMSBuildGlobalProperties _msBuildGlobalProperties;
+    private readonly IVersionBuilder _scriptBuilder;
 
     public VersionGenerator(IVersionGeneratorInputs inputs,
                             IBuildHost host,
                             IOutputsJsonIO generatedOutputsJsonFile,
                             IGitTool gitTool,
-                            IGitHistoryPathsFinder gitPathsFinder,
+                            IGitHistoryWalker gitWalker,
                             IDefaultVersionBuilderFactory defaultVersionBuilderFactory,
                             IVersionBuilder scriptBuilder,
                             IMSBuildGlobalProperties msBuildGlobalProperties,
@@ -37,7 +37,7 @@ internal sealed class VersionGenerator : IVersionGenerator
         _host = host;
         _generatedOutputsJsonFile = generatedOutputsJsonFile;
         _gitTool = gitTool;
-        _gitPathsFinder = gitPathsFinder;
+        _gitWalker = gitWalker;
         _defaultVersionBuilderFactory = defaultVersionBuilderFactory;
         _scriptBuilder = scriptBuilder;
         _msBuildGlobalProperties = msBuildGlobalProperties;
@@ -55,9 +55,9 @@ internal sealed class VersionGenerator : IVersionGenerator
 
         _host.BumpBuildNumber();
 
-        var result = _gitPathsFinder.CalculateSemanticVersion();
-        var outputs = new VersionOutputs(new GitOutputs(_gitTool, 
-                                                        result.PriorReleaseVersion, 
+        var result = _gitWalker.CalculateSemanticVersion();
+        var outputs = new VersionOutputs(new GitOutputs(_gitTool,
+                                                        result.PriorReleaseVersion,
                                                         result.PriorReleaseCommitId));
         RunBuilders(outputs, result.Version);
         SaveGeneratedVersions(outputs);

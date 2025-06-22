@@ -12,9 +12,10 @@ public sealed class ApiChangeFlags
     {
     }
 
-    private ApiChangeFlags(ApiChangeFlags changeFlags) 
+    private ApiChangeFlags(ApiChangeFlags changeFlags)
         : this(changeFlags.BreakingChange, changeFlags.FunctionalityChange, changeFlags.Fix)
-    {}
+    {
+    }
 
     public ApiChangeFlags(bool breakingChange, bool functionalityChange, bool fix)
     {

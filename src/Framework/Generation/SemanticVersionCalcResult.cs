@@ -8,15 +8,15 @@ namespace NoeticTools.Git2SemVer.Framework.Generation;
 #pragma warning disable CS1591
 public sealed class SemanticVersionCalcResult
 {
-    public SemVersion Version { get; set; } = new SemVersion(0, 0, 0);
+    public ApiChangeFlags ChangeFlags { get; set; } = new();
 
-    public CommitId PriorReleaseCommitId { get; set; } = new CommitId("Null commit");
+    public CommitId HeadCommitId { get; set; } = new("Head commit");
 
-    public SemVersion PriorReleaseVersion { get; set; } = new SemVersion(0, 1, 0);
+    public CommitId PriorReleaseCommitId { get; set; } = new("Null commit");
 
-    public ApiChangeFlags ChangeFlags { get; set; } = new ApiChangeFlags();
+    public SemVersion PriorReleaseVersion { get; set; } = new(0, 1, 0);
 
-    public CommitId HeadCommitId { get; set; } = new CommitId("Head commit");
+    public SemVersion Version { get; set; } = new(0, 0, 0);
 
     public override string ToString()
     {

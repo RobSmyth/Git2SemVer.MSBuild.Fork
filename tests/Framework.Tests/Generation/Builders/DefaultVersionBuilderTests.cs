@@ -6,7 +6,6 @@ using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
-using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using NoeticTools.Git2SemVer.Testing.Core;
 using Semver;
 
@@ -23,9 +22,9 @@ internal class DefaultVersionBuilderTests
     private Mock<IBuildHost> _host;
     private Mock<IVersionGeneratorInputs> _inputs;
     private NUnitLogger _logger;
+    private Mock<IMSBuildGlobalProperties> _msBuildGlobalProperties;
     private Mock<IVersionOutputs> _outputs;
     private SemVersion _version = null!;
-    private Mock<IMSBuildGlobalProperties> _msBuildGlobalProperties;
 
     [SetUp]
     public void SetUp()

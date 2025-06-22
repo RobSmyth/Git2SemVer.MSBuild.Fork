@@ -33,12 +33,12 @@ internal sealed class UncontrolledHost : BuildHostBase, IDetectableBuildHost
         return BuildNumber;
     }
 
+    public void Dispose()
+    {
+    }
+
     public bool MatchesHostSignature()
     {
         return true;
-    }
-
-    public void Dispose()
-    {
     }
 }

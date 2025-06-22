@@ -1,5 +1,4 @@
-﻿using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
-using Semver;
+﻿using Semver;
 
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.Builders;

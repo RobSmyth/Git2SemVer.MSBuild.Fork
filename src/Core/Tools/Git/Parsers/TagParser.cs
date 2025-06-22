@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using System.Xml;
 using LibGit2Sharp;
 using NoeticTools.Git2SemVer.Core.Diagnostics;
 using NoeticTools.Git2SemVer.Core.Exceptions;
@@ -9,24 +8,25 @@ using Semver;
 namespace NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
 /// <summary>
-/// Parse tags to identify release tags and return release version.
+///     Parse tags to identify release tags and return release version.
 /// </summary>
 #pragma warning disable CS1591
 [RegisterSingleton]
 public sealed class TagParser : ITagParser
 {
-    private readonly Regex _tagVersionFromRefsRegex;
-    private readonly Regex _tagVersionRegex;
-    private const string VersionPlaceholder = "%VERSION%";
     private const string DefaultVersionPrefix = "v";
     private const string VersionPattern = @"(?<version>\d+\.\d+\.\d+)";
+    private const string VersionPlaceholder = "%VERSION%";
 
     public static readonly Dictionary<string, string> ReservedPatternPrefixes = new()
     {
-        {"^","Is not permitted as the format is used with prefix such as `tag: `"},
-        {"tag: ","A prefix found in git log reports"},
-        {".gsm","A prefix reserved for future Git2SemVer functionality"}
+        { "^", "Is not permitted as the format is used with prefix such as `tag: `" },
+        { "tag: ", "A prefix found in git log reports" },
+        { ".gsm", "A prefix reserved for future Git2SemVer functionality" }
     };
+
+    private readonly Regex _tagVersionFromRefsRegex;
+    private readonly Regex _tagVersionRegex;
 
     public TagParser(string? releaseTagFormat = null)
     {
@@ -35,36 +35,9 @@ public sealed class TagParser : ITagParser
         _tagVersionRegex = new Regex($"^{parsePattern}", RegexOptions.IgnoreCase);
     }
 
-    private static string GetParsePattern(string? releaseTagFormat)
-    {
-        if (string.IsNullOrWhiteSpace(releaseTagFormat))
-        {
-            return DefaultVersionPrefix + VersionPattern;
-        }
-
-        var reservedPrefix = ReservedPatternPrefixes.Keys.FirstOrDefault(x => releaseTagFormat!.StartsWith(x, StringComparison.InvariantCultureIgnoreCase));
-        if (reservedPrefix != null)
-        {
-            throw new Git2SemVerDiagnosticCodeException(new GSV005(releaseTagFormat!, reservedPrefix));
-        }
-
-        if (!releaseTagFormat!.Contains(VersionPlaceholder))
-        {
-            throw new Git2SemVerDiagnosticCodeException(new GSV006(releaseTagFormat!));
-        }
-
-        return releaseTagFormat!.Replace(VersionPlaceholder, VersionPattern);
-    }
-
     public SemVersion? Parse(Tag tag)
     {
         return ParseTagFriendlyName(tag.FriendlyName);
-    }
-
-    internal SemVersion? ParseTagFriendlyName(string friendlyName)
-    {
-        var match = _tagVersionRegex.Match(friendlyName);
-        return !match.Success ? null : SemVersion.Parse(match.Groups["version"].Value, SemVersionStyles.Strict);
     }
 
     public IReadOnlyList<SemVersion> Parse(string refs)
@@ -89,5 +62,33 @@ public sealed class TagParser : ITagParser
         }
 
         return versions;
+    }
+
+    private static string GetParsePattern(string? releaseTagFormat)
+    {
+        if (string.IsNullOrWhiteSpace(releaseTagFormat))
+        {
+            return DefaultVersionPrefix + VersionPattern;
+        }
+
+        var reservedPrefix =
+            ReservedPatternPrefixes.Keys.FirstOrDefault(x => releaseTagFormat!.StartsWith(x, StringComparison.InvariantCultureIgnoreCase));
+        if (reservedPrefix != null)
+        {
+            throw new Git2SemVerDiagnosticCodeException(new GSV005(releaseTagFormat!, reservedPrefix));
+        }
+
+        if (!releaseTagFormat!.Contains(VersionPlaceholder))
+        {
+            throw new Git2SemVerDiagnosticCodeException(new GSV006(releaseTagFormat!));
+        }
+
+        return releaseTagFormat!.Replace(VersionPlaceholder, VersionPattern);
+    }
+
+    internal SemVersion? ParseTagFriendlyName(string friendlyName)
+    {
+        var match = _tagVersionRegex.Match(friendlyName);
+        return !match.Success ? null : SemVersion.Parse(match.Groups["version"].Value, SemVersionStyles.Strict);
     }
 }

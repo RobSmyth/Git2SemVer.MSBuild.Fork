@@ -10,10 +10,10 @@ namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 [RegisterTransient]
 public sealed class GitTool : IGitTool
 {
-    private readonly ITagParser _tagParser;
     private const int TakeLimit = 300;
     private readonly ICommitsCache? _cache;
     private readonly ConventionalCommitsParser _metadataParser;
+    private readonly ITagParser _tagParser;
     private Commit? _head;
     private bool _initialised;
     private Repository? _repository;

@@ -1,6 +1,6 @@
-﻿using NoeticTools.Git2SemVer.Core.Diagnostics;
+﻿using System.Text.RegularExpressions;
+using NoeticTools.Git2SemVer.Core.Diagnostics;
 using NoeticTools.Git2SemVer.Core.Logging;
-using System.Text.RegularExpressions;
 
 
 namespace NoeticTools.Git2SemVer.Testing.Core;

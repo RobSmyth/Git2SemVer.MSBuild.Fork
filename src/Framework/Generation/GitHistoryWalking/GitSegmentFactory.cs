@@ -7,7 +7,7 @@ namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 #pragma warning disable CS1591
 [ExcludeFromCodeCoverage]
-internal sealed class VersionHistorySegmentFactory(ILogger logger) : IVersionHistorySegmentFactory
+internal sealed class GitSegmentFactory(ILogger logger) : IGitSegmentFactory
 {
     private int _nextId = 1;
 

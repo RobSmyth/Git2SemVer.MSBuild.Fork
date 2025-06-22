@@ -4,7 +4,6 @@ using Microsoft.Build.Framework;
 
 #pragma warning disable CA1507
 
-
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
