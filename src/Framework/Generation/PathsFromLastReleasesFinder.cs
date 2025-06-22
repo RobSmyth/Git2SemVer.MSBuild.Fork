@@ -12,22 +12,23 @@ namespace NoeticTools.Git2SemVer.Framework.Generation;
 
 internal sealed class PathsFromLastReleasesFinder(IGitTool gitTool, ILogger logger) : IGitHistoryPathsFinder
 {
-    /// <summary>
-    /// Find all git history paths from head to preceding releases.
-    /// </summary>
-    /// <returns></returns>
-    public HistoryPaths FindPathsToHead()
+    public SemanticVersionCalcResult CalculateSemanticVersion()
     {
-        logger.LogDebug("Walking git history.");
+        var stopwatch = Stopwatch.StartNew();
+        var head = gitTool.Head;
+        logger.LogDebug("Calculating semantic version for head '{0}'.", head.CommitId.ShortSha);
+        SemanticVersionCalcResult result;
         using (logger.EnterLogScope())
         {
-            var stopwatch = Stopwatch.StartNew();
-            var segments = new VersionHistorySegmentsBuilder(gitTool, logger).BuildTo(gitTool.Head);
-            new NextReleaseVersionFinder(segments, logger).Find(gitTool.Head); //>>> testing
-            var paths = new VersionHistoryPathsBuilder(segments, logger).BuildTo();
-            stopwatch.Stop();
-            logger.LogDebug($"Git history walk completed (in {stopwatch.Elapsed.TotalSeconds:F1} seconds).");
-            return paths;
+            var segments = new GitSegmentsBuilder(gitTool, logger).BuildTo(head);
+            result = new SemverFromSegmentsCalculator(head, segments, logger).Calculate();
         }
+        stopwatch.Stop();
+        logger.LogInfo("Calculated semantic version {0} from released ver {2} from commit '{1}' (in {3:F0} ms).", 
+                       result.Version,
+                       result.PriorReleaseCommitId.ShortSha,
+                       result.PriorReleaseVersion,
+                       stopwatch.Elapsed.TotalMilliseconds);
+        return result;
     }
 }

@@ -6,16 +6,16 @@ using NoeticTools.Git2SemVer.Core.Tools.Git;
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
-internal sealed class VersionHistorySegmentsBuilder
+internal sealed class GitSegmentsBuilder
 {
-    private readonly Dictionary<CommitId, VersionHistorySegment> _commitsCache = new();
+    private readonly Dictionary<CommitId, GitSegment> _commitsCache = new();
     private readonly IGitTool _gitTool;
     private readonly ILogger _logger;
-    private readonly VersionHistorySegment _segment;
+    private readonly GitSegment _segment;
     private readonly IVersionHistorySegmentFactory _segmentFactory;
-    private readonly Dictionary<int, VersionHistorySegment> _segments = [];
+    private readonly Dictionary<int, GitSegment> _segments = [];
 
-    private VersionHistorySegmentsBuilder(VersionHistorySegmentsBuilder parent)
+    private GitSegmentsBuilder(GitSegmentsBuilder parent)
     {
         _logger = parent._logger;
         _segments = parent._segments;
@@ -26,7 +26,7 @@ internal sealed class VersionHistorySegmentsBuilder
         _segments.Add(_segment.Id, _segment);
     }
 
-    public VersionHistorySegmentsBuilder(IGitTool gitTool, ILogger logger)
+    public GitSegmentsBuilder(IGitTool gitTool, ILogger logger)
     {
         _gitTool = gitTool;
         _logger = logger;
@@ -35,7 +35,7 @@ internal sealed class VersionHistorySegmentsBuilder
         _segments.Add(_segment.Id, _segment);
     }
 
-    public IReadOnlyList<VersionHistorySegment> BuildTo(Commit commit)
+    public IReadOnlyList<GitSegment> BuildTo(Commit commit)
     {
         var stopwatch = Stopwatch.StartNew();
         FindPathSegmentsReachableFrom(commit);
@@ -82,7 +82,7 @@ internal sealed class VersionHistorySegmentsBuilder
 
         if (commit.ReleasedVersion != null)
         {
-            _logger.LogTrace("Found release {1} at Commit {0}.",
+            _logger.LogTrace("Found release {1} at commit '{0}'.",
                              commit.CommitId.ShortSha,
                              commit.ReleasedVersion.ToString());
 
@@ -92,7 +92,7 @@ internal sealed class VersionHistorySegmentsBuilder
         var parents = commit.Parents.ToList();
         if (parents.Count == 0)
         {
-            _logger.LogTrace("Found commits path to the repository's first commit ({0}) that is reachable from the head commit without a release.",
+            _logger.LogTrace("Found commits path to the repository's first commit '{0}' that is reachable from the head commit without a release.",
                              commit.CommitId.ShortSha);
             return SegmentWalkResult.FoundStart;
         }
@@ -118,7 +118,7 @@ internal sealed class VersionHistorySegmentsBuilder
         {
             using (_logger.EnterLogScope())
             {
-                var newSegmentVisitor = new VersionHistorySegmentsBuilder(this);
+                var newSegmentVisitor = new GitSegmentsBuilder(this);
                 newSegmentVisitor.FindPathSegmentsReachableFrom(parentCommit);
             }
         }

@@ -16,9 +16,8 @@ internal class PathsFromLastReleasesFinderTests
         context.SetupGitRepository(scenario);
         var target = new PathsFromLastReleasesFinder(context.GitTool.Object, context.Logger);
 
-        var paths = target.FindPathsToHead();
+        var result = target.CalculateSemanticVersion();
 
-        var bestPath = paths.BestPath;
-        Assert.That(bestPath.Version.ToString(), Is.EqualTo(scenario.ExpectedVersion));
+        Assert.That(result.Version.ToString(), Is.EqualTo(scenario.ExpectedVersion));
     }
 }

@@ -9,13 +9,13 @@ using Semver;
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
-internal sealed class VersionHistorySegment
+internal sealed class GitSegment
 {
     private readonly List<Commit> _commits = [];
     private readonly ILogger _logger;
     private ApiChanges? _bumps;
 
-    internal VersionHistorySegment(int id, Commit[] commits, ILogger logger)
+    internal GitSegment(int id, Commit[] commits, ILogger logger)
     {
         _commits.AddRange(commits);
         _logger = logger;
@@ -75,7 +75,7 @@ internal sealed class VersionHistorySegment
     /// <summary>
     ///     A branch has been found from the given commit to the given segment.
     /// </summary>
-    public VersionHistorySegment? BranchesFrom(VersionHistorySegment branchSegment, Commit commit, IVersionHistorySegmentFactory segmentFactory)
+    public GitSegment? BranchesFrom(GitSegment branchSegment, Commit commit, IVersionHistorySegmentFactory segmentFactory)
     {
         _logger.LogTrace("Commit {0} in segment {1} branches to segment {2}:", commit.CommitId.ShortSha, Id, branchSegment.Id);
         using (_logger.EnterLogScope())
@@ -121,7 +121,7 @@ internal sealed class VersionHistorySegment
         return bumps;
     }
 
-    private VersionHistorySegment SplitAt(Commit commit, IVersionHistorySegmentFactory segmentFactory)
+    private GitSegment SplitAt(Commit commit, IVersionHistorySegmentFactory segmentFactory)
     {
         var index = _commits.IndexOf(commit);
         if (index < 0)

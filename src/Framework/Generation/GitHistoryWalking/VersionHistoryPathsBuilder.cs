@@ -13,12 +13,12 @@ internal sealed class VersionHistoryPathsBuilder
 {
     private const string LogPathListIndent = "    ";
     private const int LogPathsLimit = 500;
-    private readonly ILookup<VersionHistorySegment, VersionHistorySegment> _childSegmentsLookup;
-    private readonly IReadOnlyList<VersionHistorySegment> _segments;
+    private readonly ILookup<GitSegment, GitSegment> _childSegmentsLookup;
+    private readonly IReadOnlyList<GitSegment> _segments;
     private readonly ILogger _logger;
-    private readonly Dictionary<CommitId, VersionHistorySegment> _segmentsByYoungestCommit;
+    private readonly Dictionary<CommitId, GitSegment> _segmentsByYoungestCommit;
 
-    public VersionHistoryPathsBuilder(IReadOnlyList<VersionHistorySegment> segments, ILogger logger)
+    public VersionHistoryPathsBuilder(IReadOnlyList<GitSegment> segments, ILogger logger)
     {
         _segments = segments;
         _logger = logger;
@@ -58,7 +58,7 @@ internal sealed class VersionHistoryPathsBuilder
         return paths;
     }
 
-    private List<VersionHistoryPath> GetChildPaths(VersionHistorySegment parentSegment, VersionHistoryPath path)
+    private List<VersionHistoryPath> GetChildPaths(GitSegment parentSegment, VersionHistoryPath path)
     {
         var childSegments = _childSegmentsLookup[parentSegment].ToList();
         if (childSegments.Count == 0)
@@ -75,11 +75,11 @@ internal sealed class VersionHistoryPathsBuilder
         return pathSegments;
     }
 
-    private static ILookup<VersionHistorySegment, VersionHistorySegment> GetChildSegmentsLookup(IReadOnlyList<VersionHistorySegment> segments,
-                                                                                                Dictionary<CommitId, VersionHistorySegment>
+    private static ILookup<GitSegment, GitSegment> GetChildSegmentsLookup(IReadOnlyList<GitSegment> segments,
+                                                                                                Dictionary<CommitId, GitSegment>
                                                                                                     segmentsByYoungestCommit)
     {
-        var childLinks = new List<(VersionHistorySegment parent, VersionHistorySegment child)>();
+        var childLinks = new List<(GitSegment parent, GitSegment child)>();
         foreach (var segment in segments)
         {
             foreach (var parentCommit in segment.ParentCommits)

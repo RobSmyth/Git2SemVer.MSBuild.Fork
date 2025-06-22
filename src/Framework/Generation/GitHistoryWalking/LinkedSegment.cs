@@ -6,7 +6,7 @@ using NoeticTools.Git2SemVer.Core.Tools.Git;
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 #pragma warning disable CS1591
-internal sealed class LinkedSegment(VersionHistorySegment segment)
+internal sealed class LinkedSegment(GitSegment segment)
 {
     private readonly List<LinkedSegment> _linkedChildSegments = [];
 

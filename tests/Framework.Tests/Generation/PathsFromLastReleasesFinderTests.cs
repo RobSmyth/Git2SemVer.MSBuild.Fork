@@ -47,10 +47,9 @@ internal class PathsFromLastReleasesFinderTests
         LoadRepository(scenario.Commits, scenario.HeadCommitId);
         var target = new PathsFromLastReleasesFinder(_gitTool.Object, _logger);
 
-        var historyPaths = target.FindPathsToHead();
+        var result = target.CalculateSemanticVersion();
 
-        Assert.That(historyPaths.Paths.Count, Is.EqualTo(scenario.ExpectedPathCount));
-        Assert.That(historyPaths.BestPath.Version.ToString(), Is.EqualTo(scenario.ExpectedVersion));
+        Assert.That(result.Version.ToString(), Is.EqualTo(scenario.ExpectedVersion));
     }
 
     private void LoadRepository(IEnumerable<Commit> commits, string headCommitId)

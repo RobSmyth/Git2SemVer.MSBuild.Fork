@@ -12,11 +12,11 @@ namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 internal sealed class VersionHistoryPath : IVersionHistoryPath
 {
     public const string ListHeader = "Path #   Segments                                          Commits   Bumps        From -> To";
-    private readonly List<VersionHistorySegment> _segments = [];
+    private readonly List<GitSegment> _segments = [];
     private ApiChanges _apiChanges = new();
     private int? _commitsCount;
 
-    public VersionHistoryPath(params VersionHistorySegment[] segments)
+    public VersionHistoryPath(params GitSegment[] segments)
     {
         _segments.AddRange(segments);
         LastReleasedVersion = segments.First().TaggedReleasedVersion;
@@ -61,7 +61,7 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
         else
         {
             stringBuilder.AppendLine($"""
-                                        - Starts at Commit {firstCommitSha} version 0.1.0. This is the first commit in the repository.
+                                        - Starts at commit '{firstCommitSha}' version 0.1.0. This is the first commit in the repository.
                                           No releases found on this path. Project is in initial development phase.
                                           See:
                                             - https://semver.org/#spec-item-4
@@ -137,9 +137,9 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
             $"Path {Id,-3} {segmentIdsString,-50}  {commitsCount,5}     {_apiChanges.Flags}    {LastReleasedVersion?.ToString() ?? " none",8} -> {GetNextReleaseVersion(),-8}";
     }
 
-    public VersionHistoryPath With(VersionHistorySegment segment)
+    public VersionHistoryPath With(GitSegment segment)
     {
-        var segmentIds = new List<VersionHistorySegment>(_segments) { segment };
+        var segmentIds = new List<GitSegment>(_segments) { segment };
         return new VersionHistoryPath(segmentIds.ToArray());
     }
 

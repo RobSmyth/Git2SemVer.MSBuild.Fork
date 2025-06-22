@@ -17,6 +17,7 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
         yield return new object[] { "Scenario 06", BuildScenario06() };
         yield return new object[] { "Scenario 07", BuildScenario07() };
         yield return new object[] { "Scenario 08", BuildScenario08() };
+        yield return new object[] { "Scenario 100", BuildScenario100() };
     }
 
     private static GitTestRepository BuildScenario01()
@@ -171,7 +172,8 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                      """,
                                      [
                                          new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.002.0000", ["1.001.0000"], "fix:bug1", "", "", new CommitMessageMetadata("fix", false, "", "", [])),
+                                         new Commit("1.002.0000", ["1.001.0000"], "fix:bug1", "", "",
+                                                    new CommitMessageMetadata("fix", false, "", "", [])),
                                          new Commit("1.003.0000", ["1.002.0000"], "head", "", "", new CommitMessageMetadata()),
                                      ],
                                      "1.003.0000",
@@ -221,7 +223,7 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                      3,
                                      "5.7.2");
     }
-    
+
     private static GitTestRepository BuildScenario07()
     {
         return new GitTestRepository("""
@@ -249,7 +251,8 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                          new Commit("1.001.0000", [], "First commit in repo", "", "", new CommitMessageMetadata()),
                                          new Commit("1.002.0000", ["1.001.0000"], "Branch from", "", "", new CommitMessageMetadata()),
                                          new Commit("1.003.0000", ["1.002.0000"], "", "", "tag: v5.7.0", new CommitMessageMetadata()),
-                                         new Commit("1.004.0000", ["1.003.0000"], "added feature", "", "", new CommitMessageMetadata("feat", false, "added feature", "", [])),
+                                         new Commit("1.004.0000", ["1.003.0000"], "added feature", "", "",
+                                                    new CommitMessageMetadata("feat", false, "added feature", "", [])),
                                          new Commit("1.005.0000", ["1.004.0000", "2.003.0000"], "Merge", "", "", new CommitMessageMetadata()),
                                          new Commit("1.006.0000", ["1.005.0000", "3.003.0000"], "Merge", "", "", new CommitMessageMetadata()),
                                          new Commit("1.007.0000", ["1.006.0000"], "Head commit", "", "", new CommitMessageMetadata()),
@@ -306,4 +309,27 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                      "1.005.0000",
                                      2,
                                      "0.1.0");
-    }}
+    }
+
+    private static GitTestRepository BuildScenario100()
+    {
+        return new GitPerformanceTestRepository("""
+                                     Scenario 100:
+                                       - Performance test - many paths
+                                       - Multiple parallel branches - REPEATED
+                                       - No releases
+
+                                     1.006  | head
+                                        < REPEATED BLOCKS >
+                                     011.005  .
+                                     011.004  .\____________________________   branch 3 (merge)
+                                            |\_______   branch 2 (merge)   \
+                                     .      |         \                     |
+                                     .      |          |                    |
+                                     .      | ________/____________________/
+                                     .      |/
+                                     011.002  .
+                                     000.001  | first commit
+                                     """);
+    }
+}

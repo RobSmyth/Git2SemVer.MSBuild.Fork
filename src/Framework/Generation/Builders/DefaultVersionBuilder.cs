@@ -13,7 +13,7 @@ namespace NoeticTools.Git2SemVer.Framework.Generation.Builders;
 /// <summary>
 ///     Git2SemVer's default outputs builder. This builder sets all MSBuild output properties.
 /// </summary>
-internal sealed class DefaultVersionBuilder(IHistoryPaths paths, ILogger logger) : IVersionBuilder
+internal sealed class DefaultVersionBuilder(SemVersion semanticVersion, ILogger logger) : IVersionBuilder
 {
     /// <summary>
     ///     Build versioning outputs from found git history path to prior releases.
@@ -70,9 +70,8 @@ internal sealed class DefaultVersionBuilder(IHistoryPaths paths, ILogger logger)
 
     private string GetPrereleaseLabel(IVersionGeneratorInputs inputs, IVersionOutputs outputs)
     {
-        var versionPrefix = paths.BestPath.Version;
         var initialDevSuffix = "";
-        if (versionPrefix.Major == 0)
+        if (semanticVersion.Major == 0)
         {
             initialDevSuffix = VersioningConstants.InitialDevelopmentLabel;
         }
@@ -125,15 +124,14 @@ internal sealed class DefaultVersionBuilder(IHistoryPaths paths, ILogger logger)
 
     private SemVersion GetVersion(string prereleaseLabel, IBuildHost host)
     {
-        var versionPrefix = paths.BestPath.Version;
         var isARelease = string.IsNullOrWhiteSpace(prereleaseLabel);
         if (isARelease)
         {
-            return versionPrefix;
+            return semanticVersion;
         }
 
         var prereleaseIdentifiers = new List<string> { prereleaseLabel };
         prereleaseIdentifiers.AddRange(host.BuildId);
-        return versionPrefix.WithPrerelease(prereleaseIdentifiers.ToArray());
+        return semanticVersion.WithPrerelease(prereleaseIdentifiers.ToArray());
     }
 }
