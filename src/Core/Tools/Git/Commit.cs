@@ -31,7 +31,8 @@ public class Commit : ICommit
     /// <summary>
     ///     Construct commit from git log information.
     /// </summary>
-    public Commit(string sha, string[] parents, string summary, string messageBody, string refs, CommitMessageMetadata metadata, ITagParser? tagParser = null)
+    public Commit(string sha, string[] parents, string summary, string messageBody, string refs, CommitMessageMetadata metadata,
+                  ITagParser? tagParser = null)
         : this(sha, parents, summary, messageBody, metadata, tagParser ?? new TagParser())
     {
         ReleasedVersion = GetReleaseTag(refs);

@@ -1,7 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
-using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
-using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using Semver;
 
 
@@ -17,13 +15,12 @@ public sealed class GitOutputs : IGitOutputs
     {
     }
 
-    internal GitOutputs(IGitTool gitTool, HistoryPaths paths)
+    internal GitOutputs(IGitTool gitTool, SemVersion priorReleaseVersion, CommitId priorReleaseCommitId)
     {
-        LastReleaseVersion = paths.BestPath.LastReleasedVersion;
-        LastReleaseCommit = paths.BestPath.LastReleasedVersion == null ? null : paths.BestPath.FirstCommit;
-        HeadCommit = paths.BestPath.HeadCommit;
+        PriorReleaseVersion = priorReleaseVersion;
+        PriorReleaseCommit = gitTool.Get(priorReleaseCommitId);
+        HeadCommit = gitTool.Head;
         BranchName = gitTool.BranchName;
-        CommitsSinceLastRelease = paths.BestPath.CommitsSinceLastRelease;
         HasLocalChanges = gitTool.HasLocalChanges;
     }
 
@@ -38,22 +35,6 @@ public sealed class GitOutputs : IGitOutputs
     ///     </para>
     /// </remarks>
     public string BranchName { get; } = "";
-
-    /// <summary>
-    ///     The commit count (height) from the last release's commit to the head's last commit.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         Not used by Git2SemVer. Provided for C# script use.
-    ///     </para>
-    ///     <para>
-    ///         Using commit height is a popular practice in leu of a build number.
-    ///         It is not always unique, does not increment on each build, and may not be reproducible.
-    ///         Consider using the
-    ///         <see cref="IBuildHost.BuildNumber">build host's BuildNumber</see> instead.
-    ///     </para>
-    /// </remarks>
-    public int CommitsSinceLastRelease { get; }
 
     /// <summary>
     ///     True if there are local changes since the last commit.
@@ -80,10 +61,15 @@ public sealed class GitOutputs : IGitOutputs
     /// <summary>
     ///     The last release's commit. Null if no prior release found.
     /// </summary>
-    public ICommit? LastReleaseCommit { get; }
+    [JsonPropertyName("LastReleaseCommit")]
+    public ICommit? PriorReleaseCommit { get; }
 
     /// <summary>
     ///     The last release's version. Null if no prior release.
     /// </summary>
-    public SemVersion? LastReleaseVersion { get; }
+    [JsonPropertyName("LastReleaseVersion")]
+    public SemVersion? PriorReleaseVersion { get; }
+
+    [JsonIgnore]
+    public int CommitsSinceLastRelease = 0;
 }

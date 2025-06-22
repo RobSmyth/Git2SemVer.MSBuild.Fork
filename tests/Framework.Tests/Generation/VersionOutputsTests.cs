@@ -41,7 +41,6 @@ internal class VersionOutputsTests
                                     "Git": {
                                       "$type": "GitOutputs",
                                       "BranchName": "",
-                                      "CommitsSinceLastRelease": 0,
                                       "HasLocalChanges": false,
                                       "HeadCommit": {
                                         "$type": "Commit",

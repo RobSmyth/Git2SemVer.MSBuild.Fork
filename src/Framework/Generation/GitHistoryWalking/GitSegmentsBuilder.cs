@@ -6,62 +6,65 @@ using NoeticTools.Git2SemVer.Core.Tools.Git;
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
-internal sealed class VersionHistorySegmentsBuilder
+internal sealed class GitSegmentsBuilder
 {
-    private readonly Dictionary<CommitId, VersionHistorySegment> _commitsCache = new();
+    private readonly Dictionary<CommitId, GitSegment> _commitsCache = new();
     private readonly IGitTool _gitTool;
     private readonly ILogger _logger;
-    private readonly VersionHistorySegment _segment;
-    private readonly IVersionHistorySegmentFactory _segmentFactory;
-    private readonly Dictionary<int, VersionHistorySegment> _segments = [];
+    private readonly GitSegment _segment;
+    private readonly IGitSegmentFactory _segmentFactory;
+    private readonly Dictionary<int, GitSegment> _segments = [];
 
-    private VersionHistorySegmentsBuilder(VersionHistorySegment segment, VersionHistorySegmentsBuilder parent)
+    private GitSegmentsBuilder(GitSegmentsBuilder parent)
     {
         _logger = parent._logger;
         _segments = parent._segments;
         _segmentFactory = parent._segmentFactory;
         _gitTool = parent._gitTool;
         _commitsCache = parent._commitsCache;
-        _segment = segment;
-        _segments.Add(segment.Id, segment);
-    }
-
-    public VersionHistorySegmentsBuilder(IGitTool gitTool, ILogger logger)
-    {
-        _gitTool = gitTool;
-        _logger = logger;
-        _segmentFactory = new VersionHistorySegmentFactory(logger);
         _segment = _segmentFactory.Create();
         _segments.Add(_segment.Id, _segment);
     }
 
-    public IReadOnlyList<VersionHistorySegment> BuildTo(Commit commit)
+    public GitSegmentsBuilder(IGitTool gitTool, ILogger logger)
     {
+        _gitTool = gitTool;
+        _logger = logger;
+        _segmentFactory = new GitSegmentFactory(logger);
+        _segment = _segmentFactory.Create();
+        _segments.Add(_segment.Id, _segment);
+    }
+
+    public IReadOnlyList<GitSegment> BuildTo(Commit commit)
+    {
+        var stopwatch = Stopwatch.StartNew();
         FindPathSegmentsReachableFrom(commit);
+        stopwatch.Stop();
+        _logger.LogDebug($"Found {_segments.Count} segment{(_segments.Count == 1 ? "" : "s")} (in {stopwatch.Elapsed.TotalMilliseconds:F0} ms):");
+        using (_logger.EnterLogScope())
+        {
+            _logger.LogDebug(GetFoundSegmentsReport());
+        }
+
         return _segments.Values.ToList();
     }
 
     private void FindPathSegmentsReachableFrom(Commit commit)
     {
-        var stopwatch = Stopwatch.StartNew();
         while (NextCommit(commit) == SegmentWalkResult.Continue)
         {
             commit = _gitTool.Get(commit.Parents.First());
         }
-
-        stopwatch.Stop();
-        _logger.LogDebug(GetFoundSegmentsReport(stopwatch.Elapsed));
     }
 
-    private string GetFoundSegmentsReport(TimeSpan timeTaken)
+    private string GetFoundSegmentsReport()
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine($"Found {_segments.Count} segment{(_segments.Count == 1 ? "" : "s")} (in {timeTaken.TotalMilliseconds:F0} ms):");
 
-        stringBuilder.AppendLine("  Segment #      From -> To      Commits    Bumps  Release");
+        stringBuilder.AppendLine("Segment #      From -> To      Commits    Bumps  Release");
         foreach (var segment in _segments)
         {
-            stringBuilder.AppendLine("  " + segment.Value);
+            stringBuilder.AppendLine(segment.Value.ToString());
         }
 
         return stringBuilder.ToString().TrimEnd();
@@ -80,7 +83,7 @@ internal sealed class VersionHistorySegmentsBuilder
 
         if (commit.ReleasedVersion != null)
         {
-            _logger.LogTrace("Found release {1} at Commit {0}.",
+            _logger.LogTrace("Found release {1} at commit '{0}'.",
                              commit.CommitId.ShortSha,
                              commit.ReleasedVersion.ToString());
 
@@ -90,7 +93,7 @@ internal sealed class VersionHistorySegmentsBuilder
         var parents = commit.Parents.ToList();
         if (parents.Count == 0)
         {
-            _logger.LogTrace("Found commits path to the repository's first commit ({0}) that is reachable from the head commit without a release.",
+            _logger.LogTrace("Found commits path to the repository's first commit '{0}' that is reachable from the head commit without a release.",
                              commit.CommitId.ShortSha);
             return SegmentWalkResult.FoundStart;
         }
@@ -104,7 +107,7 @@ internal sealed class VersionHistorySegmentsBuilder
         return SegmentWalkResult.FoundStart;
     }
 
-    private void NextCommitBeforeMerge(CommitId branchCommitId)
+    private void NextCommitBeforeMerge(Commit childCommit, CommitId branchCommitId)
     {
         var parentCommit = _gitTool.Get(branchCommitId);
 
@@ -116,25 +119,42 @@ internal sealed class VersionHistorySegmentsBuilder
         {
             using (_logger.EnterLogScope())
             {
-                var newSegmentVisitor = new VersionHistorySegmentsBuilder(_segmentFactory.Create([]), this);
+                var newSegmentVisitor = new GitSegmentsBuilder(this);
                 newSegmentVisitor.FindPathSegmentsReachableFrom(parentCommit);
             }
         }
     }
 
-    private void OnBranchFromExistingSegment(Commit commit)
+    /// <summary>
+    ///     Found commit which is merge point on existing segment.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         Claves off new segment from an existing segment at a given "branched from" commit.
+    ///     </para>
+    ///     <code>
+    ///        merge commit  |   |
+    ///                     / \  | intersected segment (existing)
+    ///                    /   \ |
+    ///                   /     \|
+    ///                  |       | branched from commit
+    ///                  |       |
+    /// segment 2 (new)  |       | split segment (split from intersected segment)
+    /// </code>
+    /// </remarks>
+    private void OnBranchFromExistingSegment(Commit branchedFromCommit)
     {
-        var intersectingSegment = _commitsCache[commit.CommitId];
-        var branchedFromSegment = intersectingSegment.BranchesFrom(_segment, commit, _segmentFactory);
-        if (branchedFromSegment == null)
+        var intersectedSegment = _commitsCache[branchedFromCommit.CommitId];
+        var splitSegment = intersectedSegment.BranchesFrom(_segment, branchedFromCommit, _segmentFactory);
+        if (splitSegment == null)
         {
             return;
         }
 
-        _segments.Add(branchedFromSegment.Id, branchedFromSegment);
-        foreach (var segmentCommit in branchedFromSegment.Commits)
+        _segments.Add(splitSegment.Id, splitSegment);
+        foreach (var segmentCommit in splitSegment.Commits)
         {
-            _commitsCache[segmentCommit.CommitId] = branchedFromSegment;
+            _commitsCache[segmentCommit.CommitId] = splitSegment;
         }
     }
 
@@ -148,12 +168,12 @@ internal sealed class VersionHistorySegmentsBuilder
         }
 
         _logger.LogTrace("Continuing branch:");
-        NextCommitBeforeMerge(continuingBranchCommit);
+        NextCommitBeforeMerge(mergeCommit, continuingBranchCommit);
 
         _logger.LogTrace($"Commit {mergeCommit.CommitId.ShortSha} is a merge commit from branch commit {mergedBranchCommit.ShortSha}:");
         using (_logger.EnterLogScope())
         {
-            NextCommitBeforeMerge(mergedBranchCommit);
+            NextCommitBeforeMerge(mergeCommit, mergedBranchCommit);
         }
     }
 

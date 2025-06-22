@@ -1,8 +1,8 @@
-﻿using Microsoft.Build.Framework;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
-using NoeticTools.Git2SemVer.Core.Logging;
-using System.Diagnostics.CodeAnalysis;
 using NoeticTools.Git2SemVer.Core.Diagnostics;
+using NoeticTools.Git2SemVer.Core.Logging;
 
 
 namespace NoeticTools.Git2SemVer.MSBuild.Tasks;
@@ -41,15 +41,15 @@ public class MSBuildTaskLogger : TaskLoggerBase
 
         public void LogError(DiagnosticCodeBase code)
         {
-            _inner.LogError(subcategory: code.SubCategory, 
+            _inner.LogError(subcategory: code.SubCategory,
                             errorCode: code.Code,
-                            helpKeyword: null, 
-                            helpLink: code.HelpLink, 
-                            file: null, 
-                            lineNumber: 0, 
-                            columnNumber: 0, 
-                            endLineNumber: 0, 
-                            endColumnNumber: 0, 
+                            helpKeyword: null,
+                            helpLink: code.HelpLink,
+                            file: null,
+                            lineNumber: 0,
+                            columnNumber: 0,
+                            endLineNumber: 0,
+                            endColumnNumber: 0,
                             message: code.Message);
         }
 
@@ -75,16 +75,16 @@ public class MSBuildTaskLogger : TaskLoggerBase
 
         public void LogWarning(DiagnosticCodeBase code)
         {
-            _inner.LogWarning(subcategory: code.SubCategory, 
-                            warningCode: code.Code,
-                            helpKeyword: null, 
-                            helpLink: code.HelpLink, 
-                            file: null, 
-                            lineNumber: 0, 
-                            columnNumber: 0, 
-                            endLineNumber: 0, 
-                            endColumnNumber: 0, 
-                            message: code.Message);
+            _inner.LogWarning(subcategory: code.SubCategory,
+                              warningCode: code.Code,
+                              helpKeyword: null,
+                              helpLink: code.HelpLink,
+                              file: null,
+                              lineNumber: 0,
+                              columnNumber: 0,
+                              endLineNumber: 0,
+                              endColumnNumber: 0,
+                              message: code.Message);
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
+﻿using Semver;
 
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.Builders;
 
 internal interface IDefaultVersionBuilderFactory
 {
-    IVersionBuilder Create(HistoryPaths historyPaths);
+    IVersionBuilder Create(SemVersion semanticVersion);
 }

@@ -23,8 +23,8 @@ public abstract class GitLogCommitParserBase
         """;
 
     private readonly ICommitsCache _cache;
-    private readonly TagParser _tagParser;
     private readonly IConventionalCommitsParser _conventionalCommitParser;
+    private readonly TagParser _tagParser;
 
     protected GitLogCommitParserBase(ICommitsCache cache,
                                      TagParser tagParser,

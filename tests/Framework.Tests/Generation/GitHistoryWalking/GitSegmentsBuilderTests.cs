@@ -7,7 +7,7 @@ namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.GitHistoryWalking;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
-internal class VersionHistorySegmentsBuilderTests
+internal class GitSegmentsBuilderTests
 {
     [TestCaseSource(typeof(ScenariosFromBuildLogsTestSource))]
     public void BasicScenariosTest(string name, LoggedScenario scenario)
@@ -15,7 +15,7 @@ internal class VersionHistorySegmentsBuilderTests
         using var context = new GitHistoryWalkingTestsContext();
         context.SetupGitRepository(scenario);
 
-        var target = new VersionHistorySegmentsBuilder(context.GitTool.Object, context.Logger);
+        var target = new GitSegmentsBuilder(context.GitTool.Object, context.Logger);
 
         var segments = target.BuildTo(context.GitTool.Object.Head);
 
@@ -29,7 +29,7 @@ internal class VersionHistorySegmentsBuilderTests
         var scenario = new ScenariosFromBuildLogsTestSource().Scenario01;
         context.SetupGitRepository(scenario);
 
-        var target = new VersionHistorySegmentsBuilder(context.GitTool.Object, context.Logger);
+        var target = new GitSegmentsBuilder(context.GitTool.Object, context.Logger);
 
         var segments = target.BuildTo(context.GitTool.Object.Head);
 

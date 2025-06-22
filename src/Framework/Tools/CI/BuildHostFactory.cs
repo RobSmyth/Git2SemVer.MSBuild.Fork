@@ -7,8 +7,8 @@ namespace NoeticTools.Git2SemVer.Framework.Tools.CI;
 
 internal sealed class BuildHostFactory
 {
-    private readonly IConfiguration _config;
     private readonly Action<string> _buildOutput;
+    private readonly IConfiguration _config;
     private readonly ILogger _logger;
 
     public BuildHostFactory(IConfiguration config, Action<string> buildOutput, ILogger logger)

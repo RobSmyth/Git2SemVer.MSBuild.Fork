@@ -55,6 +55,11 @@ internal sealed class BuildHost : IBuildHost
         return _inner.BumpBuildNumber();
     }
 
+    public void Dispose()
+    {
+        _inner.Dispose();
+    }
+
     public void ReportBuildStatistic(string key, int value)
     {
         _inner.ReportBuildStatistic(key, value);
@@ -68,10 +73,5 @@ internal sealed class BuildHost : IBuildHost
     public void SetBuildLabel(string label)
     {
         _inner.SetBuildLabel(label);
-    }
-
-    public void Dispose()
-    {
-        _inner.Dispose();
     }
 }

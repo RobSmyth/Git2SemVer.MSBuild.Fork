@@ -99,7 +99,6 @@
                                    ReleaseTagFormat="$(Git2SemVer_ReleaseTagFormat)">
 
       <Output TaskParameter="AssemblyVersion" PropertyName="Git2SemVer_AssemblyVersion" />
-      <Output TaskParameter="CommitsSinceLastRelease" PropertyName="Git2SemVer_CommitsSinceLastRelease" />
       <Output TaskParameter="FileVersion" PropertyName="Git2SemVer_FileVersion" />
       <Output TaskParameter="InformationalVersion" PropertyName="Git2SemVer_InformationalVersion" />
       <Output TaskParameter="PackageVersion" PropertyName="Git2SemVer_PackageVersion" />
@@ -139,7 +138,6 @@
     <Git2SemVerRestoreVersionPropertiesTask VersionCacheDirectory="$(Git2SemVer_VersionCacheDirectory)">
 
       <Output TaskParameter="AssemblyVersion" PropertyName="Git2SemVer_AssemblyVersion" />
-      <Output TaskParameter="CommitsSinceLastRelease" PropertyName="Git2SemVer_CommitsSinceLastRelease" />
       <Output TaskParameter="FileVersion" PropertyName="Git2SemVer_FileVersion" />
       <Output TaskParameter="InformationalVersion" PropertyName="Git2SemVer_InformationalVersion" />
       <Output TaskParameter="PackageVersion" PropertyName="Git2SemVer_PackageVersion" />
