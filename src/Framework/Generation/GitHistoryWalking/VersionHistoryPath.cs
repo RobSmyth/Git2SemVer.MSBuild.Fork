@@ -148,7 +148,7 @@ internal sealed class VersionHistoryPath : IVersionHistoryPath
         var bumps = new ApiChanges();
         foreach (var segment in _segments)
         {
-            bumps.Flags.Aggregate(segment.ApiChanges.Flags);
+            bumps.Aggregate(segment.ApiChanges.Flags);
         }
 
         return bumps;

@@ -8,6 +8,21 @@ namespace NoeticTools.Git2SemVer.Core.ConventionCommits;
 /// </summary>
 public sealed class ApiChangeFlags
 {
+    public ApiChangeFlags() : this(false, false, false)
+    {
+    }
+
+    private ApiChangeFlags(ApiChangeFlags changeFlags) 
+        : this(changeFlags.BreakingChange, changeFlags.FunctionalityChange, changeFlags.Fix)
+    {}
+
+    public ApiChangeFlags(bool breakingChange, bool functionalityChange, bool fix)
+    {
+        BreakingChange = breakingChange;
+        Fix = fix;
+        FunctionalityChange = functionalityChange;
+    }
+
     /// <summary>
     ///     A change has been made since last release.
     /// </summary>
@@ -26,7 +41,7 @@ public sealed class ApiChangeFlags
     ///         version is incremented."
     ///     </para>
     /// </remarks>
-    public bool BreakingChange { get; set; }
+    public bool BreakingChange { get; private set; }
 
     /// <summary>
     ///     A backward compatible bug fix has been made since last release.
@@ -38,7 +53,7 @@ public sealed class ApiChangeFlags
     ///         A bug fix is defined as an internal change that fixes incorrect behavior."
     ///     </para>
     /// </remarks>
-    public bool Fix { get; set; }
+    public bool Fix { get; private set; }
 
     /// <summary>
     ///     A backward compatible functional change has been made since last release.
@@ -56,16 +71,19 @@ public sealed class ApiChangeFlags
     /// </remarks>
     public bool FunctionalityChange { get; set; }
 
-    public void Aggregate(ApiChangeFlags changeFlags)
+    public ApiChangeFlags Aggregate(ApiChangeFlags changeFlags)
     {
+        var result = new ApiChangeFlags(this);
         if (!changeFlags.Any)
         {
-            return;
+            return result;
         }
 
-        BreakingChange |= changeFlags.BreakingChange;
-        FunctionalityChange |= changeFlags.FunctionalityChange;
-        Fix |= changeFlags.Fix;
+        result.BreakingChange |= changeFlags.BreakingChange;
+        result.FunctionalityChange |= changeFlags.FunctionalityChange;
+        result.Fix |= changeFlags.Fix;
+
+        return result;
     }
 
     public override string ToString()

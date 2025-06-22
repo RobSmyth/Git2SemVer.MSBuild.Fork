@@ -10,18 +10,16 @@ internal sealed class LinkedSegment(VersionHistorySegment segment)
 {
     private readonly List<LinkedSegment> _linkedChildSegments = [];
 
-    public bool IsAReleaseSegment => segment.IsAReleaseSegment;
-
-    public IReadOnlyList<LinkedSegment> LinkedChildSegments => _linkedChildSegments;
-
     /// <summary>
     ///     Aggregated API changes from this segment up to all younger segments.
     /// </summary>
     public ApiChangeFlags ChangeFlags => segment.ApiChanges.Flags;
 
-    public CommitId YoungestCommitId => segment.YoungestCommit.CommitId;
+    public IReadOnlyList<LinkedSegment> LinkedChildSegments => _linkedChildSegments;
 
     public CommitId OldestCommitId => segment.OldestCommit.CommitId;
+
+    public CommitId YoungestCommitId => segment.YoungestCommit.CommitId;
 
     /// <summary>
     ///     Link to child (younger) segment.

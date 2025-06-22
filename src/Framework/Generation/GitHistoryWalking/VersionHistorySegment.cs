@@ -114,7 +114,7 @@ internal sealed class VersionHistorySegment
         var bumps = new ApiChanges();
         foreach (var commit in _commits.Where(commit => !commit.HasReleaseTag))
         {
-            bumps.Flags.Aggregate(commit.Metadata.ApiChangeFlags);
+            bumps.Aggregate(commit.Metadata.ApiChangeFlags);
         }
 
         _bumps = bumps;
