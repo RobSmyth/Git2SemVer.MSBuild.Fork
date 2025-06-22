@@ -58,6 +58,11 @@ public sealed class ApiChangeFlags
 
     public void Aggregate(ApiChangeFlags changeFlags)
     {
+        if (!changeFlags.Any)
+        {
+            return;
+        }
+
         BreakingChange |= changeFlags.BreakingChange;
         FunctionalityChange |= changeFlags.FunctionalityChange;
         Fix |= changeFlags.Fix;
