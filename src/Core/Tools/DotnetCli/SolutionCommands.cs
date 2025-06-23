@@ -19,16 +19,6 @@ public sealed class SolutionCommands : ISolutionCommands
         _inner.Run($"sln {solutionName} add {projectName}");
     }
 
-    public void New(string solutionName)
-    {
-        _inner.Run($"new sln --name \"{solutionName}\"");
-    }
-
-    public void New()
-    {
-        _inner.Run("new sln");
-    }
-
     public (int returnCode, IReadOnlyList<string> project) GetProjects()
     {
         throw new NotImplementedException(); // >>> need to resolve CS0121 error
@@ -41,6 +31,16 @@ public sealed class SolutionCommands : ISolutionCommands
         throw new NotImplementedException(); // >>> need to resolve CS0121 error
         //var returnCode = _inner.RunReturningStdOut($"sln {solutionName} list", out var standardOutput);
         //return (returnCode, standardOutput.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries));
+    }
+
+    public void New(string solutionName)
+    {
+        _inner.Run($"new sln --name \"{solutionName}\"");
+    }
+
+    public void New()
+    {
+        _inner.Run("new sln");
     }
 
     public (int returnCode, string stdOutput) RemoveProject(string projectName)

@@ -121,11 +121,6 @@ public sealed class CompositeLogger : ILogger
         _loggers.ForEach(logger => logger.LogError(code));
     }
 
-    public void LogWarning(DiagnosticCodeBase code)
-    {
-        _loggers.ForEach(logger => logger.LogWarning(code));
-    }
-
     public void LogInfo(string message)
     {
         if (Level < LoggingLevel.Info)
@@ -176,6 +171,11 @@ public sealed class CompositeLogger : ILogger
 
         var formattedMessage = string.Format(message, messageArgs);
         _loggers.ForEach(logger => logger.LogTrace(formattedMessage));
+    }
+
+    public void LogWarning(DiagnosticCodeBase code)
+    {
+        _loggers.ForEach(logger => logger.LogWarning(code));
     }
 
     public void LogWarning(string message)

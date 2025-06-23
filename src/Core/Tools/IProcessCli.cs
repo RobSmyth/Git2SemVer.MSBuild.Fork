@@ -27,6 +27,8 @@ public interface IProcessCli
     int Run(string application, string commandLineArguments,
             TextWriter standardOut, TextWriter? errorOut = null);
 
+    int Run(string application, string commandLineArguments, out string standardOutput);
+
     Task<(int returnCode, string stdOutput)> RunAsync(string application, string commandLineArguments);
 
     /// <summary>
@@ -34,6 +36,4 @@ public interface IProcessCli
     /// </summary>
     Task<int> RunAsync(string application, string commandLineArguments,
                        TextWriter standardOut, TextWriter? errorOut = null);
-
-    int Run(string application, string commandLineArguments, out string standardOutput);
 }

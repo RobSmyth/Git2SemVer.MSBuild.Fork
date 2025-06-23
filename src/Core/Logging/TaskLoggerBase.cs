@@ -86,6 +86,11 @@ public abstract class TaskLoggerBase : LoggerBase, ILogger
         _adapter.LogError(exception);
     }
 
+    public void LogError(DiagnosticCodeBase code)
+    {
+        _adapter.LogError(code);
+    }
+
     public void LogInfo(string message)
     {
         _adapter.LogInfo(MessagePrefix + message);
@@ -129,11 +134,6 @@ public abstract class TaskLoggerBase : LoggerBase, ILogger
     public void LogWarning(Exception exception)
     {
         _adapter.LogWarning(exception);
-    }
-
-    public void LogError(DiagnosticCodeBase code)
-    {
-        _adapter.LogError(code);
     }
 
     public void LogWarning(DiagnosticCodeBase code)
