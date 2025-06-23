@@ -9,31 +9,35 @@ using Semver;
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
-internal sealed class VersionHistorySegment
+internal sealed class GitSegment
 {
     private readonly List<Commit> _commits = [];
     private readonly ILogger _logger;
     private ApiChanges? _bumps;
 
-    internal VersionHistorySegment(int id, List<Commit> commits, ILogger logger) : this(id, logger)
+    internal GitSegment(int id, Commit[] commits, ILogger logger)
     {
         _commits.AddRange(commits);
-    }
-
-    internal VersionHistorySegment(int id, ILogger logger)
-    {
         _logger = logger;
         Id = id;
     }
 
+    /// <summary>
+    ///     Aggregation API change flags in this segment.
+    /// </summary>
     public ApiChanges ApiChanges => GetApiChanges();
 
-    public IReadOnlyList<Commit> Commits => _commits.ToList();
+    /// <summary>
+    ///     Commits in this segment.
+    /// </summary>
+    public IReadOnlyList<Commit> Commits => _commits;
 
     /// <summary>
     ///     An arbitrary but unique segment ID.
     /// </summary>
     public int Id { get; }
+
+    public bool IsAReleaseSegment => TaggedReleasedVersion != null || OldestCommit.Parents.Length == 0;
 
     /// <summary>
     ///     First (oldest) commit in the segment.
@@ -61,7 +65,7 @@ internal sealed class VersionHistorySegment
         if (_commits.Count > 0 && OldestCommit.Parents.All(x => x.Sha != youngerCommit.CommitId.Sha))
         {
             throw new
-                InvalidOperationException($"Cannot append {youngerCommit.CommitId.ShortSha} as it is not connected to segment's first (oldest) commit.");
+                Git2SemVerInvalidOperationException($"Cannot append {youngerCommit.CommitId.ShortSha} as it is not connected to segment's first (oldest) commit.");
         }
 
         _bumps = null;
@@ -71,19 +75,19 @@ internal sealed class VersionHistorySegment
     /// <summary>
     ///     A branch has been found from the given commit to the given segment.
     /// </summary>
-    public VersionHistorySegment? BranchesFrom(VersionHistorySegment branchSegment, Commit commit, IVersionHistorySegmentFactory segmentFactory)
+    public GitSegment? BranchesFrom(GitSegment branchSegment, Commit commit, IGitSegmentFactory segmentFactory)
     {
         _logger.LogTrace("Commit {0} in segment {1} branches to segment {2}:", commit.CommitId.ShortSha, Id, branchSegment.Id);
         using (_logger.EnterLogScope())
         {
             if (commit.CommitId.Equals(YoungestCommit.CommitId))
             {
-                _logger.LogTrace("Commit {0} is last (youngest) commit in segment {1}. Link segments.", commit.CommitId.ShortSha, Id);
+                _logger.LogTrace("Commit {0} is last (youngest) commit in segment {1}.", commit.CommitId.ShortSha, Id);
                 return null;
             }
 
             _bumps = null;
-            var fromSegment = SplitSegmentAt(commit, segmentFactory);
+            var fromSegment = SplitAt(commit, segmentFactory);
             return fromSegment;
         }
     }
@@ -107,19 +111,16 @@ internal sealed class VersionHistorySegment
         }
 
         var bumps = new ApiChanges();
-        foreach (var commit in _commits)
+        foreach (var commit in _commits.Where(commit => !commit.HasReleaseTag))
         {
-            if (!commit.HasReleaseTag)
-            {
-                bumps.Aggregate(commit);
-            }
+            bumps.Aggregate(commit.Metadata.ApiChangeFlags);
         }
 
         _bumps = bumps;
         return bumps;
     }
 
-    private VersionHistorySegment SplitSegmentAt(Commit commit, IVersionHistorySegmentFactory segmentFactory)
+    private GitSegment SplitAt(Commit commit, IGitSegmentFactory segmentFactory)
     {
         var index = _commits.IndexOf(commit);
         if (index < 0)
@@ -127,10 +128,15 @@ internal sealed class VersionHistorySegment
             throw new Git2SemVerInvalidOperationException("Cannot split a segment that does not contain the commit.");
         }
 
+        if (index == 0)
+        {
+            throw new Git2SemVerInvalidOperationException("Cannot split a segment at its first (youngest) commit.");
+        }
+
         using (_logger.EnterLogScope())
         {
             var keepCommits = _commits.Take(index).ToList();
-            var olderSegmentCommits = _commits.Skip(index).Take(_commits.Count - index).ToList();
+            var olderSegmentCommits = _commits.Skip(index).Take(_commits.Count - index).ToArray();
             _commits.Clear();
             _commits.AddRange(keepCommits);
 

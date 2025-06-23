@@ -6,6 +6,7 @@ using NoeticTools.Git2SemVer.Framework.Framework.Config;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
+using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using NoeticTools.Git2SemVer.Framework.Persistence;
 using NoeticTools.Git2SemVer.Framework.Tools.CI;
 
@@ -40,7 +41,7 @@ public sealed class ProjectVersioningFactory
                                                                               inputs.BuildContext,
                                                                               inputs.BuildIdFormat);
         var gitTool = new GitTool(new TagParser(inputs.ReleaseTagFormat)) { RepositoryDirectory = inputs.WorkingDirectory };
-        var gitPathsFinder = new PathsFromLastReleasesFinder(gitTool, _logger);
+        var gitPathsFinder = new GitHistoryWalker(gitTool, _logger);
 
         var defaultBuilderFactory = new DefaultVersionBuilderFactory(_logger);
         var scriptBuilder = new ScriptVersionBuilder(_logger);

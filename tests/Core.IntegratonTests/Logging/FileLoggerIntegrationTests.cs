@@ -25,33 +25,6 @@ internal class FileLoggerIntegrationTests
     }
 
     [Test]
-    public void LoggerThrowsIOExceptionAfter3SecondsIfFileInUse()
-    {
-        using (File.OpenWrite(_outputFilePath))
-        {
-            var stopwatch = Stopwatch.StartNew();
-            // ReSharper disable once ObjectCreationAsStatement
-            Assert.Throws<IOException>(() => new FileLogger(_outputFilePath));
-            stopwatch.Stop();
-            Assert.That(stopwatch.Elapsed, Is.GreaterThanOrEqualTo(TimeSpan.FromSeconds(3)));
-        }
-    }
-
-    [Test]
-    public void LogMessageGeneratorWithInfoThresholdTest()
-    {
-        using (var logger = new FileLogger(_outputFilePath) { Level = LoggingLevel.Info })
-        {
-            logger.LogDebug(() => "Line 1");
-            logger.LogTrace(() => "Line 2");
-        }
-
-        ValidateFileContents("""
-
-                             """);
-    }
-
-    [Test]
     public void LogErrorException()
     {
         using (var logger = new FileLogger(_outputFilePath) { Level = LoggingLevel.Debug })
@@ -67,28 +40,16 @@ internal class FileLoggerIntegrationTests
     }
 
     [Test]
-    public void LogWarningExceptionWithWarnThresholdTest()
+    public void LoggerThrowsIOExceptionAfter3SecondsIfFileInUse()
     {
-        using (var logger = new FileLogger(_outputFilePath) { Level = LoggingLevel.Warning })
+        using (File.OpenWrite(_outputFilePath))
         {
-            logger.LogWarning(new InvalidOperationException("Exception 1"));
+            var stopwatch = Stopwatch.StartNew();
+            // ReSharper disable once ObjectCreationAsStatement
+            Assert.Throws<IOException>(() => new FileLogger(_outputFilePath));
+            stopwatch.Stop();
+            Assert.That(stopwatch.Elapsed, Is.GreaterThanOrEqualTo(TimeSpan.FromSeconds(3)));
         }
-
-        ValidateFileContents("""
-                             WARN  | Exception - Exception 1
-
-                             """);
-    }
-
-    [Test]
-    public void LogWarningExceptionWithErrorThresholdTest()
-    {
-        using (var logger = new FileLogger(_outputFilePath) { Level = LoggingLevel.Error })
-        {
-            logger.LogWarning(new InvalidOperationException("Exception 1"));
-        }
-
-        ValidateFileContents("");
     }
 
     [Test]
@@ -107,6 +68,20 @@ internal class FileLoggerIntegrationTests
     }
 
     [Test]
+    public void LogMessageGeneratorWithInfoThresholdTest()
+    {
+        using (var logger = new FileLogger(_outputFilePath) { Level = LoggingLevel.Info })
+        {
+            logger.LogDebug(() => "Line 1");
+            logger.LogTrace(() => "Line 2");
+        }
+
+        ValidateFileContents("""
+
+                             """);
+    }
+
+    [Test]
     public void LogMessageGeneratorWithTraceThresholdTest()
     {
         using (var logger = new FileLogger(_outputFilePath) { Level = LoggingLevel.Trace })
@@ -118,6 +93,31 @@ internal class FileLoggerIntegrationTests
         ValidateFileContents("""
                              DEBUG | Line 1
                              TRACE | Line 2
+
+                             """);
+    }
+
+    [Test]
+    public void LogWarningExceptionWithErrorThresholdTest()
+    {
+        using (var logger = new FileLogger(_outputFilePath) { Level = LoggingLevel.Error })
+        {
+            logger.LogWarning(new InvalidOperationException("Exception 1"));
+        }
+
+        ValidateFileContents("");
+    }
+
+    [Test]
+    public void LogWarningExceptionWithWarnThresholdTest()
+    {
+        using (var logger = new FileLogger(_outputFilePath) { Level = LoggingLevel.Warning })
+        {
+            logger.LogWarning(new InvalidOperationException("Exception 1"));
+        }
+
+        ValidateFileContents("""
+                             WARN  | Exception - Exception 1
 
                              """);
     }

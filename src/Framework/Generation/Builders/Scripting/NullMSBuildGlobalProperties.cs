@@ -1,7 +1,7 @@
 ﻿namespace NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
 
 /// <summary>
-/// MSBuild properties used when running outside a MSBuild build. 
+///     MSBuild properties used when running outside a MSBuild build.
 /// </summary>
 #pragma warning disable CS1591
 public class NullMSBuildGlobalProperties : IMSBuildGlobalProperties
@@ -12,7 +12,7 @@ public class NullMSBuildGlobalProperties : IMSBuildGlobalProperties
 
     public string Configuration { get; } = string.Empty;
 
-    public string LangId { get; }= string.Empty;
+    public string LangId { get; } = string.Empty;
 
     public string Language { get; } = string.Empty;
 

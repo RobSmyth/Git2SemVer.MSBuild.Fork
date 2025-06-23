@@ -3,28 +3,20 @@
 
 namespace NoeticTools.Git2SemVer.Framework.Tests.TestScenarios;
 
-public sealed class GitTestRepository
+public class GitTestRepository(
+    string description,
+    Commit[] commits,
+    string headCommitId,
+    int expectedPathCount,
+    string expectedVersion)
 {
-    public GitTestRepository(string description,
-                             Commit[] commits,
-                             string headCommitId,
-                             int expectedPathCount,
-                             string expectedVersion)
-    {
-        Description = description;
-        Commits = commits;
-        HeadCommitId = headCommitId;
-        ExpectedPathCount = expectedPathCount;
-        ExpectedVersion = expectedVersion;
-    }
+    public Commit[] Commits { get; protected set; } = commits;
 
-    public Commit[] Commits { get; }
+    public string Description { get; } = description;
 
-    public string Description { get; }
+    public int ExpectedPathCount { get; protected set; } = expectedPathCount;
 
-    public int ExpectedPathCount { get; }
+    public string ExpectedVersion { get; } = expectedVersion;
 
-    public string ExpectedVersion { get; }
-
-    public string HeadCommitId { get; }
+    public string HeadCommitId { get; protected set; } = headCommitId;
 }

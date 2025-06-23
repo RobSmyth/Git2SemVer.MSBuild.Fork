@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
-using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using Semver;
 
 
@@ -20,22 +19,6 @@ public interface IGitOutputs
     ///     </para>
     /// </remarks>
     string BranchName { get; }
-
-    /// <summary>
-    ///     The commit count (height) from the last release's commit to the head's last commit.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         Not used by Git2SemVer. Provided for C# script use.
-    ///     </para>
-    ///     <para>
-    ///         Using commit height is a popular practice in leu of a build number.
-    ///         It is not always unique, does not increment on each build, and may not be reproducible.
-    ///         Consider using the
-    ///         <see cref="IBuildHost.BuildNumber">build host's BuildNumber</see> instead.
-    ///     </para>
-    /// </remarks>
-    int CommitsSinceLastRelease { get; }
 
     /// <summary>
     ///     True if there are local changes since the last commit.
@@ -62,10 +45,10 @@ public interface IGitOutputs
     /// <summary>
     ///     The last release's commit. Null if no prior release found.
     /// </summary>
-    ICommit? LastReleaseCommit { get; }
+    ICommit? PriorReleaseCommit { get; }
 
     /// <summary>
     ///     The last release's version. Null if no prior release.
     /// </summary>
-    SemVersion? LastReleaseVersion { get; }
+    SemVersion? PriorReleaseVersion { get; }
 }
