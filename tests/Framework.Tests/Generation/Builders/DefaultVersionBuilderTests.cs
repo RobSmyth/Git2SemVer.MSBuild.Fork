@@ -6,7 +6,6 @@ using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
-using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using NoeticTools.Git2SemVer.Testing.Core;
 using Semver;
 
@@ -17,18 +16,15 @@ namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.Builders;
 internal class DefaultVersionBuilderTests
 {
     private const string BuildNumber = "23456";
-    private Mock<IVersionHistoryPath> _bestPath;
     private Mock<IGitTool> _git;
     private Mock<IGitOutputs> _gitOutputs;
     private Mock<ICommit> _headCommit;
     private Mock<IBuildHost> _host;
     private Mock<IVersionGeneratorInputs> _inputs;
     private NUnitLogger _logger;
-    private Mock<IVersionOutputs> _outputs;
-    private Mock<IHistoryPaths> _paths;
-    private DefaultVersionBuilder _target;
-    private SemVersion _version = null!;
     private Mock<IMSBuildGlobalProperties> _msBuildGlobalProperties;
+    private Mock<IVersionOutputs> _outputs;
+    private SemVersion _version = null!;
 
     [SetUp]
     public void SetUp()
@@ -37,11 +33,6 @@ internal class DefaultVersionBuilderTests
         {
             Level = LoggingLevel.Debug
         };
-        _bestPath = new Mock<IVersionHistoryPath>();
-        _paths = new Mock<IHistoryPaths>();
-        _paths.Setup(x => x.BestPath).Returns(_bestPath.Object);
-
-        _target = new DefaultVersionBuilder(_paths.Object, _logger);
 
         _host = new Mock<IBuildHost>();
         _inputs = new Mock<IVersionGeneratorInputs>();
@@ -83,9 +74,9 @@ internal class DefaultVersionBuilderTests
     [TestCase("1.0.0", "release/gold/rc_one", "rc")]
     public void PrereleaseBuildTest(string version, string branchName, string expectedPrereleaseLabel)
     {
-        SetupInputs(version, branchName);
+        var target = SetupInputs(version, branchName);
 
-        _target.Build(_host.Object, _git.Object, _inputs.Object, _outputs.Object, _msBuildGlobalProperties.Object);
+        target.Build(_host.Object, _git.Object, _inputs.Object, _outputs.Object, _msBuildGlobalProperties.Object);
 
         var expectedVersion = _version.WithPrerelease(expectedPrereleaseLabel, "77")
                                       .WithMetadata(branchName.ToNormalisedSemVerIdentifier(), "001");
@@ -101,18 +92,18 @@ internal class DefaultVersionBuilderTests
     [TestCase("1.2.3", "Release/anything")]
     public void ReleaseBuildTest(string version, string branchName)
     {
-        SetupInputs(version, branchName);
+        var target = SetupInputs(version, branchName);
 
-        _target.Build(_host.Object, _git.Object, _inputs.Object, _outputs.Object, _msBuildGlobalProperties.Object);
+        target.Build(_host.Object, _git.Object, _inputs.Object, _outputs.Object, _msBuildGlobalProperties.Object);
 
         _outputs.VerifySet(x => x.BuildSystemVersion = _version.WithMetadata(BuildNumber), Times.Once);
         _outputs.VerifySet(x => x.BuildSystemVersion = _version.WithoutMetadata(), Times.Never);
     }
 
-    private void SetupInputs(string version, string branchName)
+    private DefaultVersionBuilder SetupInputs(string version, string branchName)
     {
         _version = SemVersion.Parse(version, SemVersionStyles.Strict);
-        _bestPath.Setup(x => x.Version).Returns(_version);
         _gitOutputs.Setup(x => x.BranchName).Returns(branchName);
+        return new DefaultVersionBuilder(_version, _logger);
     }
 }

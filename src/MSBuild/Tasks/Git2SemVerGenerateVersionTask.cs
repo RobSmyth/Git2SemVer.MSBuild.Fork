@@ -1,12 +1,12 @@
-﻿using Microsoft.Build.Framework;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using Microsoft.Build.Framework;
+using NoeticTools.Git2SemVer.Core.Diagnostics;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Framework;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Generation;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
-using NoeticTools.Git2SemVer.Core.Diagnostics;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
 using ILogger = NoeticTools.Git2SemVer.Core.Logging.ILogger;
 
@@ -30,24 +30,6 @@ namespace NoeticTools.Git2SemVer.MSBuild.Tasks;
 [ExcludeFromCodeCoverage]
 public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGeneratorInputs
 {
-    /// <summary>
-    ///     MSBuild's IncludeSourceRevisionInInformationalVersion property.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    ///     As of .NET SDK 8.0 Source Link appends the git SHA to the informational version
-    ///     regardless if it has already been appended.
-    ///     This property gives the value of the `IncludeSourceRevisionInInformationalVersion`
-    ///     property to allow Git2SemVer to handle this.
-    /// </para>
-    /// <para>
-    ///     The value is an empty string if using an earlier .NET SDK, otherwise true or false.
-    /// </para>
-    /// </remarks>
-    /// <seealso href="https://learn.microsoft.com/en-us/dotnet/core/compatibility/sdk/8.0/source-link"/>
-    [Required]
-    public string SourceLinkAppendingSha { get; set; } = "";
-
     /// <summary>
     ///     Optional case-insensitive regular expression that maps branch name to build maturity such as "release" or "beta".
     /// </summary>
@@ -189,6 +171,16 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     public string Mode { get; set; } = "";
 
     /// <summary>
+    ///     Optional MSBuild <c>Git2SemVer_ReleaseTagFormat</c> property.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         MSBuild task input.
+    ///     </para>
+    /// </remarks>
+    public string ReleaseTagFormat { get; set; } = "";
+
+    /// <summary>
     ///     Optional MSBuild <c>Git2SemVer_RunScript</c> property.
     /// </summary>
     /// <remarks>
@@ -203,16 +195,6 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     ///     </para>
     /// </remarks>
     public bool? RunScript { get; set; }
-
-    /// <summary>
-    ///     Optional MSBuild <c>Git2SemVer_ReleaseTagFormat</c> property.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         MSBuild task input.
-    ///     </para>
-    /// </remarks>
-    public string ReleaseTagFormat { get; set; } = "";
 
     /// <summary>
     ///     The optional MSBuild <c>Git2SemVer_ScriptArg</c> property.
@@ -254,6 +236,24 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
     ///     </para>
     /// </remarks>
     public string SolutionSharedVersioningPropsFile { get; set; } = "";
+
+    /// <summary>
+    ///     MSBuild's IncludeSourceRevisionInInformationalVersion property.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         As of .NET SDK 8.0 Source Link appends the git SHA to the informational version
+    ///         regardless if it has already been appended.
+    ///         This property gives the value of the `IncludeSourceRevisionInInformationalVersion`
+    ///         property to allow Git2SemVer to handle this.
+    ///     </para>
+    ///     <para>
+    ///         The value is an empty string if using an earlier .NET SDK, otherwise true or false.
+    ///     </para>
+    /// </remarks>
+    /// <seealso href="https://learn.microsoft.com/en-us/dotnet/core/compatibility/sdk/8.0/source-link" />
+    [Required]
+    public string SourceLinkAppendingSha { get; set; } = "";
 
     /// <summary>
     ///     The optional MSBuild <c>Git2SemVer_UpdateHostBuildLabel</c> property.

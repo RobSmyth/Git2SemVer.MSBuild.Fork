@@ -1,4 +1,4 @@
-﻿using NoeticTools.Git2SemVer.Framework.Generation;
+﻿using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 
 //#pragma warning disable NUnit2045
@@ -7,18 +7,17 @@ namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.GitHistoryWalking;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
-internal class PathsFromLastReleasesFinderTests
+internal class GitHistoryWalkerTests
 {
     [TestCaseSource(typeof(ScenariosFromBuildLogsTestSource))]
     public void BasicScenariosTest(string name, LoggedScenario scenario)
     {
         using var context = new GitHistoryWalkingTestsContext();
         context.SetupGitRepository(scenario);
-        var target = new PathsFromLastReleasesFinder(context.GitTool.Object, context.Logger);
+        var target = new GitHistoryWalker(context.GitTool.Object, context.Logger);
 
-        var paths = target.FindPathsToHead();
+        var result = target.CalculateSemanticVersion();
 
-        var bestPath = paths.BestPath;
-        Assert.That(bestPath.Version.ToString(), Is.EqualTo(scenario.ExpectedVersion));
+        Assert.That(result.Version.ToString(), Is.EqualTo(scenario.ExpectedVersion));
     }
 }

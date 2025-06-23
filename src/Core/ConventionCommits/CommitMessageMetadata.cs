@@ -24,15 +24,13 @@ public sealed class CommitMessageMetadata
         Body = body;
         FooterKeyValues = footerKeyValues.ToLookup(k => k.key, v => v.value);
 
-        var apiChanges = new ApiChangeFlags
-        {
-            FunctionalityChange = ChangeType == CommitChangeTypeId.Feature,
-            Fix = ChangeType == CommitChangeTypeId.Fix,
-            BreakingChange = breakingChangeFlagged ||
+        var functionalityChange = ChangeType == CommitChangeTypeId.Feature;
+        var fix = ChangeType == CommitChangeTypeId.Fix;
+        var breakingChange = breakingChangeFlagged ||
                              FooterKeyValues.Contains("BREAKING-CHANGE") ||
-                             FooterKeyValues.Contains("BREAKING CHANGE")
-        };
-        ApiChangeFlags = apiChanges;
+                             FooterKeyValues.Contains("BREAKING CHANGE");
+
+        ApiChangeFlags = new ApiChangeFlags(breakingChange, functionalityChange, fix);
     }
 
     public CommitMessageMetadata() : this("", false, "", "", [])

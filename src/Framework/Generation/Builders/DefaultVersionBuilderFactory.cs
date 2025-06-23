@@ -1,5 +1,5 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
-using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
+using Semver;
 
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.Builders;
@@ -13,8 +13,8 @@ internal sealed class DefaultVersionBuilderFactory : IDefaultVersionBuilderFacto
         _logger = logger;
     }
 
-    public IVersionBuilder Create(HistoryPaths historyPaths)
+    public IVersionBuilder Create(SemVersion semanticVersion)
     {
-        return new DefaultVersionBuilder(historyPaths, _logger);
+        return new DefaultVersionBuilder(semanticVersion, _logger);
     }
 }

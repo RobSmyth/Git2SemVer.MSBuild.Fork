@@ -16,13 +16,13 @@ internal class CustomHost : BuildHostBase, IDetectableBuildHost
 
     public HostTypeIds HostTypeId => HostTypeIds.Custom;
 
+    public void Dispose()
+    {
+    }
+
     public bool MatchesHostSignature()
     {
         // Not detectable
         return false;
-    }
-
-    public void Dispose()
-    {
     }
 }

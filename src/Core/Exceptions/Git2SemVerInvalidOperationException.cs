@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+
 namespace NoeticTools.Git2SemVer.Core.Exceptions;
 
 [ExcludeFromCodeCoverage]

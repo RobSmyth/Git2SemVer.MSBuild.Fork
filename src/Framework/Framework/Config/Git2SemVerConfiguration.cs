@@ -94,6 +94,11 @@ public sealed class Git2SemVerConfiguration : IConfiguration
         return instance;
     }
 
+    public static Git2SemVerConfiguration Load(string json)
+    {
+        return JsonSerializer.Deserialize<Git2SemVerConfiguration>(json)!;
+    }
+
     /// <summary>
     ///     Save configuration to file.
     /// </summary>
@@ -140,10 +145,5 @@ public sealed class Git2SemVerConfiguration : IConfiguration
         }
 
         return Path.Combine(folderPath, "Configuration.json");
-    }
-
-    public static Git2SemVerConfiguration Load(string json)
-    {
-        return JsonSerializer.Deserialize<Git2SemVerConfiguration>(json)!;
     }
 }

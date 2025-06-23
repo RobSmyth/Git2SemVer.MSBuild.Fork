@@ -307,26 +307,6 @@ Custom properties set for use by other scripts are:
   <tr>
     <td>
         <div class="propertyCol">
-            Git2SemVer_CommitsSinceLastRelease
-        </div>
-    </td>
-    <td>
-      <div class="descriptionCol">
-        <p>
-            The count of commits from head to the last release used for versioning.
-            Also known as "commit height".
-        </p><p>
-            Commit height is very widely used but not reliable. 
-            Consider using Git2SemVer's build number for better traceability.
-        </p><p>
-            Not used by Git2SemVer.
-        </p>
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-        <div class="propertyCol">
             Git2SemVer_Output1
         </div>
     </td>

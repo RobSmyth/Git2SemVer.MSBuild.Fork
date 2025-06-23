@@ -27,21 +27,6 @@ public abstract class Git2SemVerTaskBase : Task
     public string AssemblyVersion { get; set; } = "";
 
     /// <summary>
-    ///     The commits count (commit height) from the last release.
-    /// </summary>
-    /// <remarks>
-    ///     <para>
-    ///         MSBuild task output.
-    ///         Made available to MSBuild for use by third party MSBuild tasks.
-    ///     </para>
-    ///     <para>
-    ///         Git2SemVer does not use this value in versions generated.
-    ///     </para>
-    /// </remarks>
-    [Output]
-    public int CommitsSinceLastRelease { get; set; }
-
-    /// <summary>
     ///     MSBuild's
     ///     <see href="https://gist.github.com/jonlabelle/34993ee032c26420a0943b1c9d106cdc#fileversion">FileVersion</see>
     ///     property.
@@ -207,10 +192,9 @@ public abstract class Git2SemVerTaskBase : Task
         PackageVersion = outputs.PackageVersion?.ToString() ?? "";
         Output1 = outputs.Output1;
         Output2 = outputs.Output2;
-        CommitsSinceLastRelease = outputs.Git.CommitsSinceLastRelease;
         IsRelease = outputs.Version?.IsRelease ?? false;
 
-        LastReleaseCommitId = outputs.Git.LastReleaseCommit?.CommitId.Sha ?? "";
-        LastReleaseVersion = outputs.Git.LastReleaseVersion?.ToString() ?? "";
+        LastReleaseCommitId = outputs.Git.PriorReleaseCommit?.CommitId.Sha ?? "";
+        LastReleaseVersion = outputs.Git.PriorReleaseVersion?.ToString() ?? "";
     }
 }

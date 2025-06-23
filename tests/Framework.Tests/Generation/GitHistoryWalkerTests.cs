@@ -1,7 +1,7 @@
 ﻿using Moq;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
-using NoeticTools.Git2SemVer.Framework.Generation;
+using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using NoeticTools.Git2SemVer.Framework.Tests.TestScenarios;
 using NoeticTools.Git2SemVer.Testing.Core;
 
@@ -11,7 +11,7 @@ using NoeticTools.Git2SemVer.Testing.Core;
 namespace NoeticTools.Git2SemVer.Framework.Tests.Generation;
 
 [TestFixture]
-internal class PathsFromLastReleasesFinderTests
+internal class GitHistoryWalkerTests
 {
     private Dictionary<string, Commit> _commitsLookup;
     private Mock<IGitTool> _gitTool;
@@ -45,13 +45,11 @@ internal class PathsFromLastReleasesFinderTests
     {
         _logger.LogInfo(scenario.Description + "\n");
         LoadRepository(scenario.Commits, scenario.HeadCommitId);
-        var target = new PathsFromLastReleasesFinder(_gitTool.Object,
-                                                     _logger);
+        var target = new GitHistoryWalker(_gitTool.Object, _logger);
 
-        var historyPaths = target.FindPathsToHead();
+        var result = target.CalculateSemanticVersion();
 
-        Assert.That(historyPaths.Paths.Count, Is.EqualTo(scenario.ExpectedPathCount));
-        Assert.That(historyPaths.BestPath.Version.ToString(), Is.EqualTo(scenario.ExpectedVersion));
+        Assert.That(result.Version.ToString(), Is.EqualTo(scenario.ExpectedVersion));
     }
 
     private void LoadRepository(IEnumerable<Commit> commits, string headCommitId)

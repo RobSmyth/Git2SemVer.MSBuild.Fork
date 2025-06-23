@@ -6,6 +6,7 @@ using NoeticTools.Git2SemVer.Framework.Generation.Builders;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using NoeticTools.Git2SemVer.Framework.Persistence;
+using Semver;
 
 
 namespace NoeticTools.Git2SemVer.Framework.Generation;
@@ -14,19 +15,19 @@ internal sealed class VersionGenerator : IVersionGenerator
 {
     private readonly IDefaultVersionBuilderFactory _defaultVersionBuilderFactory;
     private readonly IOutputsJsonIO _generatedOutputsJsonFile;
-    private readonly IGitHistoryPathsFinder _gitPathsFinder;
     private readonly IGitTool _gitTool;
+    private readonly IGitHistoryWalker _gitWalker;
     private readonly IBuildHost _host;
     private readonly IVersionGeneratorInputs _inputs;
     private readonly ILogger _logger;
-    private readonly IVersionBuilder _scriptBuilder;
     private readonly IMSBuildGlobalProperties _msBuildGlobalProperties;
+    private readonly IVersionBuilder _scriptBuilder;
 
     public VersionGenerator(IVersionGeneratorInputs inputs,
                             IBuildHost host,
                             IOutputsJsonIO generatedOutputsJsonFile,
                             IGitTool gitTool,
-                            IGitHistoryPathsFinder gitPathsFinder,
+                            IGitHistoryWalker gitWalker,
                             IDefaultVersionBuilderFactory defaultVersionBuilderFactory,
                             IVersionBuilder scriptBuilder,
                             IMSBuildGlobalProperties msBuildGlobalProperties,
@@ -36,7 +37,7 @@ internal sealed class VersionGenerator : IVersionGenerator
         _host = host;
         _generatedOutputsJsonFile = generatedOutputsJsonFile;
         _gitTool = gitTool;
-        _gitPathsFinder = gitPathsFinder;
+        _gitWalker = gitWalker;
         _defaultVersionBuilderFactory = defaultVersionBuilderFactory;
         _scriptBuilder = scriptBuilder;
         _msBuildGlobalProperties = msBuildGlobalProperties;
@@ -54,10 +55,11 @@ internal sealed class VersionGenerator : IVersionGenerator
 
         _host.BumpBuildNumber();
 
-        var historyPaths = _gitPathsFinder.FindPathsToHead();
-
-        var outputs = new VersionOutputs(new GitOutputs(_gitTool, historyPaths));
-        RunBuilders(outputs, historyPaths);
+        var result = _gitWalker.CalculateSemanticVersion();
+        var outputs = new VersionOutputs(new GitOutputs(_gitTool,
+                                                        result.PriorReleaseVersion,
+                                                        result.PriorReleaseCommitId));
+        RunBuilders(outputs, result.Version);
         SaveGeneratedVersions(outputs);
 
         stopwatch.Stop();
@@ -70,14 +72,14 @@ internal sealed class VersionGenerator : IVersionGenerator
         return outputs;
     }
 
-    private void RunBuilders(VersionOutputs outputs, HistoryPaths historyPaths)
+    private void RunBuilders(VersionOutputs outputs, SemVersion version)
     {
         _logger.LogDebug("Running version builders.");
         using (_logger.EnterLogScope())
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var defaultBuilder = _defaultVersionBuilderFactory.Create(historyPaths);
+            var defaultBuilder = _defaultVersionBuilderFactory.Create(version);
             defaultBuilder.Build(_host, _gitTool, _inputs, outputs, _msBuildGlobalProperties);
 
             _scriptBuilder.Build(_host, _gitTool, _inputs, outputs, _msBuildGlobalProperties);
