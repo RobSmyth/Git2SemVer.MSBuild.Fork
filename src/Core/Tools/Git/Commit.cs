@@ -14,7 +14,7 @@ public class Commit : ICommit
     private readonly ITagParser _tagParser;
 
     /// <summary>
-    ///     /Construct commit from LibGit2Sharp objects.
+    ///     Git commit.
     /// </summary>
     public Commit(string sha, string[] parents, string summary, string messageBody,
                   CommitMessageMetadata metadata, ITagParser tagParser, IReadOnlyList<Tag>? tags)
@@ -25,7 +25,9 @@ public class Commit : ICommit
             Tags = tags;
         }
 
-        ReleasedVersion = GetReleaseTag(tags);
+        var releaseInfo = GetReleasedVersion(tags);
+        ReleasedVersion = releaseInfo.ReleasedVersion;
+        ReleaseState = releaseInfo;
     }
 
     /// <summary>
@@ -35,7 +37,10 @@ public class Commit : ICommit
                   ITagParser? tagParser = null)
         : this(sha, parents, summary, messageBody, metadata, tagParser ?? new TagParser())
     {
-        ReleasedVersion = GetReleaseTag(refs);
+        ReleasedVersion = GetReleasedVersion(refs);
+        ReleaseState = new ReleaseState(ReleasedVersion == null ? ReleaseStateId.NotReleased : ReleaseStateId.Released,
+                                       ReleasedVersion,
+                                       new ApiChangeFlags());
     }
 
     private Commit(string sha, string[] parents, string summary, string messageBody, CommitMessageMetadata metadata, ITagParser tagParser)
@@ -75,8 +80,12 @@ public class Commit : ICommit
     [JsonPropertyOrder(31)]
     public CommitId[] Parents { get; }
 
+    //[JsonPropertyOrder(12)]
+    [JsonIgnore]
+    public SemVersion? ReleasedVersion { get; } // being depreciated
+
     [JsonPropertyOrder(12)]
-    public SemVersion? ReleasedVersion { get; }
+    public ReleaseState ReleaseState { get; } = null!;
 
     [JsonPropertyOrder(21)]
     public string Summary { get; }
@@ -84,38 +93,44 @@ public class Commit : ICommit
     [JsonIgnore]
     public IReadOnlyList<Tag> Tags { get; } = [];
 
-    private SemVersion? GetReleaseTag(IReadOnlyList<Tag>? tags)
+    private ReleaseState GetReleasedVersion(IReadOnlyList<Tag>? tags)
     {
         if (tags == null || tags.Count == 0)
         {
-            return null;
+            return new ReleaseState();
         }
 
-        var versions = new List<SemVersion>();
+        var releaseInfos = new Dictionary<SemVersion, ReleaseState>();
         // ReSharper disable once LoopCanBeConvertedToQuery
         foreach (var tag in tags)
         {
-            var version = _tagParser.Parse(tag);
-            if (version != null)
+            var tagReleaseInfo = _tagParser.ParseVersion(tag.FriendlyName);
+            if (tagReleaseInfo.ReleasedVersion != null)
             {
-                versions.Add(version);
+                releaseInfos.Add(tagReleaseInfo.ReleasedVersion, tagReleaseInfo);
             }
         }
 
-        return versions.OrderByDescending(x => x, new SemverSortOrderComparer()).FirstOrDefault();
+        if (releaseInfos.Count == 0)
+        {
+            return new ReleaseState();
+        }
+
+        var releaseInfo = releaseInfos.OrderByDescending(x => x.Key, new SemverSortOrderComparer()).FirstOrDefault();
+
+        return releaseInfo.Value;
     }
 
     /// <summary>
     ///     Legacy use to get release tag by parsing refs text from git log output.
     /// </summary>
-    private SemVersion? GetReleaseTag(string refs)
+    private SemVersion? GetReleasedVersion(string refs)
     {
         if (refs.Length == 0)
         {
             return null;
         }
 
-        var versions = _tagParser.Parse(refs);
-        return versions.Count == 0 ? null : versions.OrderByDescending(x => x, new SemverSortOrderComparer()).FirstOrDefault();
+        return _tagParser.ParseGitLogRefs(refs);
     }
 }

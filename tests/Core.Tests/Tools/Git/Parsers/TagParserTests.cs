@@ -62,12 +62,12 @@ internal class TagParserTests
     [TestCase("v%VERSION%", "12.34.56")]
     public void ParseTagFriendlyNameWithInvalidReleaseTag(string tagFormat, string tagText)
     {
-        var expected = new SemVersion(12, 34, 56);
         var tagParser = new TagParser(tagFormat);
 
-        var foundReleaseSemVersion = tagParser.ParseTagFriendlyName(tagText);
+        var result = tagParser.ParseVersion(tagText);
 
-        Assert.That(foundReleaseSemVersion, Is.Null);
+        Assert.That(result.State, Is.EqualTo(ReleaseStateId.NotReleased));
+        Assert.That(result.ReleasedVersion, Is.EqualTo(new SemVersion(0,0,0)));
     }
 
     [TestCase("", "v12.34.56")]
@@ -81,9 +81,29 @@ internal class TagParserTests
         var expected = new SemVersion(12, 34, 56);
         var tagParser = new TagParser(tagFormat);
 
-        var foundReleaseSemVersion = tagParser.ParseTagFriendlyName(tagText);
+        var result = tagParser.ParseVersion(tagText);
 
-        Assert.That(foundReleaseSemVersion, Is.Not.Null);
-        Assert.That(foundReleaseSemVersion, Is.EqualTo(expected));
+        Assert.That(result.State, Is.EqualTo(ReleaseStateId.Released));
+        Assert.That(result.ReleasedVersion, Is.EqualTo(expected));
+    }
+
+    [TestCase("", "v12.34.56")]
+    [TestCase(@"\d+ abc %VERSION%", "77 abc 12.34.56")]
+    [TestCase("release: %VERSION%", "release: 12.34.56")]
+    [TestCase("release tag: %VERSION% abc", "release tag: 12.34.56 abc")]
+    [TestCase("%VERSION%", "12.34.56")]
+    [TestCase("v%VERSION%", "v12.34.56")]
+    public void ParseTagFriendlyNameWithValidWaypointTag(string tagFormat, string tagText)
+    {
+        var expected = new SemVersion(12, 34, 56);
+        var tagParser = new TagParser(tagFormat);
+
+        var result = tagParser.ParseVersion($".git2semver.waypoint_{tagText}_feat");
+
+        Assert.That(result.State, Is.EqualTo(ReleaseStateId.ReleaseWaypoint));
+        Assert.That(result.ReleasedVersion, Is.EqualTo(expected));
+        Assert.That(result.WaypointChangeFlags.BreakingChange, Is.False);
+        Assert.That(result.WaypointChangeFlags.FunctionalityChange, Is.True);
+        Assert.That(result.WaypointChangeFlags.Fix, Is.False);
     }
 }

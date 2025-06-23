@@ -99,6 +99,6 @@ public class OutputsJsonFileIO : IOutputsJsonIO
         ///     </para>
         /// </remarks>
         [JsonPropertyOrder(1)]
-        public int Rev { get; set; } = 2;
+        public int Rev { get; set; } = 3;
     }
 }

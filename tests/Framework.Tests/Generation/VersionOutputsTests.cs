@@ -15,6 +15,65 @@ internal class VersionOutputsTests
     }
 
     [Test]
+    public void CanDeserialiseRev2()
+    {
+        const string content = """
+                               {
+                                 "Rev": 2,
+                                 "Git2SemVerVersionInfo": {
+                                   "AssemblyVersion": "10.11.12",
+                                   "BuildContext": "CONTEXT",
+                                   "BuildNumber": "777",
+                                   "BuildSystemVersion": "5.6.7-TEST",
+                                   "FileVersion": null,
+                                   "Git": {
+                                     "$type": "GitOutputs",
+                                     "BranchName": "",
+                                     "HasLocalChanges": false,
+                                     "HeadCommit": {
+                                       "$type": "Commit",
+                                       "CommitId": {
+                                         "Sha": "00000000",
+                                         "ShortSha": "0000000"
+                                       },
+                                       "ReleasedVersion": null,
+                                       "Summary": "null commit",
+                                       "MessageBody": "",
+                                       "Parents": [],
+                                       "Metadata": {
+                                         "ApiChangeFlags": {
+                                           "BreakingChange": false,
+                                           "Fix": false,
+                                           "FunctionalityChange": false
+                                         },
+                                         "Body": "",
+                                         "ChangeDescription": "",
+                                         "ChangeType": 1,
+                                         "FooterKeyValues": []
+                                       }
+                                     },
+                                     "LastReleaseCommit": null,
+                                     "LastReleaseVersion": null
+                                   },
+                                   "InformationalVersion": null,
+                                   "IsInInitialDevelopment": false,
+                                   "Output1": "",
+                                   "Output2": "",
+                                   "PackageVersion": null,
+                                   "PrereleaseLabel": "",
+                                   "Version": null
+                                 }
+                               }
+                               """;
+
+        var result = OutputsJsonFileIO.FromJson(content);
+
+        Assert.That(result.AssemblyVersion!.ToString(), Is.EqualTo("10.11.12"));
+        Assert.That(result.BuildContext, Is.EqualTo("CONTEXT"));
+        Assert.That(result.BuildNumber, Is.EqualTo("777"));
+    }
+
+    [Test]
     public void CanSerialise()
     {
         var target = new VersionOutputs
@@ -31,7 +90,7 @@ internal class VersionOutputsTests
 
         const string expected = """
                                 {
-                                  "Rev": 2,
+                                  "Rev": 3,
                                   "Git2SemVerVersionInfo": {
                                     "AssemblyVersion": "10.11.12",
                                     "BuildContext": "CONTEXT",
@@ -48,7 +107,15 @@ internal class VersionOutputsTests
                                           "Sha": "00000000",
                                           "ShortSha": "0000000"
                                         },
-                                        "ReleasedVersion": null,
+                                        "ReleaseState": {
+                                          "State": 0,
+                                          "ReleasedVersion": null,
+                                          "WaypointChangeFlags": {
+                                            "BreakingChange": false,
+                                            "Fix": false,
+                                            "FunctionalityChange": false
+                                          }
+                                        },
                                         "Summary": "null commit",
                                         "MessageBody": "",
                                         "Parents": [],
