@@ -19,7 +19,6 @@ None.
 
 None.
 
-
 ## 3.1.0 - _June 18, 2025_
 
 ### Added
