@@ -93,12 +93,12 @@ public sealed class TagParser : ITagParser
         return releaseTagFormat!.Replace(VersionPlaceholder, VersionPattern);
     }
 
-    public ReleaseState ParseVersion(string friendlyName)
+    public ReleaseState ParseTagName(string friendlyName)
     {
         var match = _tagVersionRegex.Match(friendlyName);
         if (!match.Success)
         {
-            return new ReleaseState();
+            return ReleaseState.NotReleased;
         }
         else if (match.Groups["waypoint"].Success)
         {

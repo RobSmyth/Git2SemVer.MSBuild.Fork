@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Dynamic;
+using System.Text.Json.Serialization;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using Semver;
 
@@ -11,7 +12,9 @@ namespace NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 /// </summary>
 public sealed class ReleaseState
 {
-    public ReleaseState() : this(ReleaseStateId.NotReleased, new SemVersion(0, 0, 0), new ApiChangeFlags())
+    public static ReleaseState NotReleased { get; } = new ReleaseState();
+
+    private ReleaseState() : this(ReleaseStateId.NotReleased, new SemVersion(0, 0, 0), new ApiChangeFlags())
     {
     }
 

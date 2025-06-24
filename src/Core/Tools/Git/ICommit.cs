@@ -27,6 +27,7 @@ public interface ICommit
     /// <summary>
     ///     The released version parsed from an associated release tag or null if no release tag found.
     /// </summary>
+    [Obsolete("Depreciated and will be removed in a future release. Use ReleaseState property instead.")]
     SemVersion? ReleasedVersion { get; }
 
     /// <summary>
@@ -37,7 +38,7 @@ public interface ICommit
     /// <summary>
     ///     Tags associated with this commit.
     /// </summary>
-    IReadOnlyList<Tag>? Tags { get; }
+    IReadOnlyList<IGitTag> Tags { get; }
 
     ReleaseState ReleaseState { get; }
 }

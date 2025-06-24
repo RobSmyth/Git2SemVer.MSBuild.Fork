@@ -1,6 +1,7 @@
 ﻿using LibGit2Sharp;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Exceptions;
+using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
 
 #pragma warning disable CS1591
@@ -95,10 +96,9 @@ public sealed class GitTool : IGitTool
         {
             var parents = rawCommit.Parents.Select(x => x.Sha).ToArray();
             var metadata = _metadataParser.Parse(rawCommit.MessageShort, rawCommit.Message);
-            var tags = Repository.Tags.Where(x => x.Target.Equals(rawCommit)).ToList();
+            var tags = Repository.Tags.Where(x => x.Target.Equals(rawCommit)).Select(x => new GitTag(x)).ToList();
 
-            commit = new Commit(
-                                rawCommit.Sha,
+            commit = new Commit(rawCommit.Sha,
                                 parents, rawCommit.MessageShort,
                                 rawCommit.Message,
                                 metadata, _tagParser,

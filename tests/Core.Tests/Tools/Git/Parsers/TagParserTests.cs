@@ -64,7 +64,7 @@ internal class TagParserTests
     {
         var tagParser = new TagParser(tagFormat);
 
-        var result = tagParser.ParseVersion(tagText);
+        var result = tagParser.ParseTagName(tagText);
 
         Assert.That(result.State, Is.EqualTo(ReleaseStateId.NotReleased));
         Assert.That(result.ReleasedVersion, Is.EqualTo(new SemVersion(0,0,0)));
@@ -81,7 +81,7 @@ internal class TagParserTests
         var expected = new SemVersion(12, 34, 56);
         var tagParser = new TagParser(tagFormat);
 
-        var result = tagParser.ParseVersion(tagText);
+        var result = tagParser.ParseTagName(tagText);
 
         Assert.That(result.State, Is.EqualTo(ReleaseStateId.Released));
         Assert.That(result.ReleasedVersion, Is.EqualTo(expected));
@@ -98,7 +98,7 @@ internal class TagParserTests
         var expected = new SemVersion(12, 34, 56);
         var tagParser = new TagParser(tagFormat);
 
-        var result = tagParser.ParseVersion($".git2semver.waypoint_{tagText}_feat");
+        var result = tagParser.ParseTagName($".git2semver.waypoint_{tagText}_feat");
 
         Assert.That(result.State, Is.EqualTo(ReleaseStateId.ReleaseWaypoint));
         Assert.That(result.ReleasedVersion, Is.EqualTo(expected));
