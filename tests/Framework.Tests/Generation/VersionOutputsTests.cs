@@ -110,10 +110,10 @@ internal class VersionOutputsTests
                                         "ReleaseState": {
                                           "State": 0,
                                           "ReleasedVersion": null,
-                                          "WaypointChangeFlags": {
+                                          "ChangeFlags": {
                                             "BreakingChange": false,
-                                            "Fix": false,
-                                            "FunctionalityChange": false
+                                            "FunctionalityChange": false,
+                                            "Fix": false
                                           }
                                         },
                                         "Summary": "null commit",
@@ -122,8 +122,8 @@ internal class VersionOutputsTests
                                         "Metadata": {
                                           "ApiChangeFlags": {
                                             "BreakingChange": false,
-                                            "Fix": false,
-                                            "FunctionalityChange": false
+                                            "FunctionalityChange": false,
+                                            "Fix": false
                                           },
                                           "Body": "",
                                           "ChangeDescription": "",

@@ -1,4 +1,5 @@
-﻿using NoeticTools.Git2SemVer.Core.ConventionCommits;
+﻿using System.Text.RegularExpressions;
+using NoeticTools.Git2SemVer.Core.ConventionCommits;
 
 
 #pragma warning disable NUnit2045
@@ -15,6 +16,83 @@ internal class ConventionalCommitsParserTests
     public void SetUp()
     {
         _target = new ConventionalCommitsParser();
+    }
+
+    //[TestCase("""
+    //          fail body ddd
+
+    //          dd
+
+    //          """)]
+    [TestCase("""
+              body1 ddd
+
+              dd
+
+              token1(scope1): value1
+              token2: value2
+              """)]
+    [TestCase("""
+              body2 ddd
+
+              dd
+
+              token1(scope1): value1
+              token2: value2
+              """)]
+    [TestCase("""
+
+              token1: value1
+              token2: value2
+              """)]
+    [TestCase("""
+
+              token1: value1
+                aaa
+              token2: value2
+              """)]
+    public void RegexExperimentalTest(string input)
+    {
+        var regex = new Regex("""
+                              \A
+                              (
+                                (?<body>\S ((\n|\r\n)|.)*? )
+                                (\Z | (?: (\n|\r\n) ) )
+                              )?
+                              (
+                              
+                                (?<footer>
+                                  (
+                                    (?: (\n|\r\n) )
+                                    (?<token> (BREAKING\sCHANGE) | ( \w[\w-]+ ) )
+                                    ( \( (?<scope>\w[\w-]+) \) )?
+                                    :\s
+                                    (?<value>
+                                      \S.*
+                                      (?:
+                                        (\n|\r\n) \s\s \S.*
+                                      )*
+                                    )
+                                  )+
+                                )?
+                              
+                                \Z
+                              )
+                              """,
+                              RegexOptions.IgnorePatternWhitespace | 
+                              RegexOptions.Multiline);
+
+        var match = regex.Match(input);
+
+        var body = match.Groups["body"].Value;
+        Console.WriteLine($"|{body}|");
+
+        var keywords = match.Groups["token"].Captures;
+        var values = match.Groups["value"].Captures;
+        Assert.That(keywords[0].Value, Is.EqualTo("token1"));
+        Assert.That(values[0].Value.Trim().StartsWith("value1"), Is.True);
+        Assert.That(keywords[1].Value, Is.EqualTo("token2"));
+        Assert.That(values[1].Value, Is.EqualTo("value2"));
     }
 
     [TestCase(
@@ -131,24 +209,39 @@ internal class ConventionalCommitsParserTests
     }
 
     [TestCase(
-                 "BREAKING CHANGE: Oops very sorry",
+                 """
+                 
+                 BREAKING CHANGE: Oops very sorry
+                 """,
                  "BREAKING CHANGE|Oops very sorry",
                  true)]
     [TestCase(
                  """
+                 
                  BREAKING CHANGE: Oops very sorry
-                 refs: 12345
+                 refs: #12345
                  """,
                  """
                  BREAKING CHANGE|Oops very sorry
-                 refs|12345
+                 refs|#12345
+                 """,
+                 true)]
+    [TestCase(
+                 """
+                 
+                 BREAKING CHANGE: Oops very sorry
+                 refs: username/projectName#12345
+                 """,
+                 """
+                 BREAKING CHANGE|Oops very sorry
+                 refs|username/projectName#12345
                  """,
                  true)]
     public void FooterWithoutBodyTest(string messageBody,
                                       string expectedFooter,
                                       bool hasBreakingChange)
     {
-        var result = _target.Parse("feat: Added a real nice feature", messageBody);
+        var result = _target.Parse("feat: Added a real nice feature", "\n" + messageBody);
 
         Assert.That(result.ChangeType, Is.EqualTo(CommitChangeTypeId.Feature));
         Assert.That(result.ApiChangeFlags.BreakingChange, Is.EqualTo(hasBreakingChange));

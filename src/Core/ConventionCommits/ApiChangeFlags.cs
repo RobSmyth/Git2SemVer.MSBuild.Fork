@@ -6,7 +6,7 @@ namespace NoeticTools.Git2SemVer.Core.ConventionCommits;
 /// <summary>
 ///     Flags indicating breaking changes, new features, or fixes are present.
 /// </summary>
-public sealed class ApiChangeFlags
+public sealed class ApiChangeFlags : IEquatable<ApiChangeFlags>
 {
     public ApiChangeFlags() : this(false, false, false)
     {
@@ -42,6 +42,7 @@ public sealed class ApiChangeFlags
     ///         version is incremented."
     ///     </para>
     /// </remarks>
+    [JsonPropertyOrder(1)]
     public bool BreakingChange { get; private set; }
 
     /// <summary>
@@ -54,6 +55,7 @@ public sealed class ApiChangeFlags
     ///         A bug fix is defined as an internal change that fixes incorrect behavior."
     ///     </para>
     /// </remarks>
+    [JsonPropertyOrder(3)]
     public bool Fix { get; private set; }
 
     /// <summary>
@@ -70,7 +72,8 @@ public sealed class ApiChangeFlags
     ///         It MAY include patch level changes. Patch version MUST be reset to 0 when minor version is incremented."
     ///     </para>
     /// </remarks>
-    public bool FunctionalityChange { get; set; }
+    [JsonPropertyOrder(2)]
+    public bool FunctionalityChange { get; private set; }
 
     public ApiChangeFlags Aggregate(ApiChangeFlags changeFlags)
     {
@@ -90,5 +93,36 @@ public sealed class ApiChangeFlags
     public override string ToString()
     {
         return $"{(BreakingChange ? "B" : "-")}{(FunctionalityChange ? "F" : "-")}{(Fix ? "P" : "-")}";
+    }
+
+    public bool Equals(ApiChangeFlags? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return BreakingChange == other.BreakingChange && Fix == other.Fix && FunctionalityChange == other.FunctionalityChange;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return ReferenceEquals(this, obj) || obj is ApiChangeFlags other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            var hashCode = BreakingChange.GetHashCode();
+            hashCode = (hashCode * 397) ^ Fix.GetHashCode();
+            hashCode = (hashCode * 397) ^ FunctionalityChange.GetHashCode();
+            return hashCode;
+        }
     }
 }

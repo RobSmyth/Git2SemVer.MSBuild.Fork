@@ -102,8 +102,8 @@ internal class TagParserTests
 
         Assert.That(result.State, Is.EqualTo(ReleaseStateId.ReleaseWaypoint));
         Assert.That(result.ReleasedVersion, Is.EqualTo(expected));
-        Assert.That(result.WaypointChangeFlags.BreakingChange, Is.False);
-        Assert.That(result.WaypointChangeFlags.FunctionalityChange, Is.True);
-        Assert.That(result.WaypointChangeFlags.Fix, Is.False);
+        Assert.That(result.ChangeFlags.BreakingChange, Is.False);
+        Assert.That(result.ChangeFlags.FunctionalityChange, Is.True);
+        Assert.That(result.ChangeFlags.Fix, Is.False);
     }
 }

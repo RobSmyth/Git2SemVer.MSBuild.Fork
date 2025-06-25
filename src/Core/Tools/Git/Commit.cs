@@ -19,7 +19,7 @@ public class Commit : ICommit
     ///     Git commit.
     /// </summary>
     public Commit(string sha, string[] parents, string summary, string messageBody,
-                  CommitMessageMetadata metadata, ITagParser tagParser, IReadOnlyList<IGitTag>? tags)
+                  ICommitMessageMetadata metadata, ITagParser tagParser, IReadOnlyList<IGitTag>? tags)
         : this(sha, parents, summary, messageBody, metadata, tagParser)
     {
         if (tags != null)
@@ -36,7 +36,7 @@ public class Commit : ICommit
     ///     Construct commit from git log information.
     /// </summary>
     public Commit(string sha, string[] parents, string summary, string messageBody, string refs, 
-                  CommitMessageMetadata metadata,
+                  ICommitMessageMetadata metadata,
                   ITagParser? tagParser = null)
         : this(sha, parents, summary, messageBody, metadata, tagParser ?? new TagParser())
     {
@@ -47,7 +47,7 @@ public class Commit : ICommit
     }
 
     private Commit(string sha, string[] parents, string summary, string messageBody, 
-                   CommitMessageMetadata metadata, 
+                   ICommitMessageMetadata metadata, 
                    ITagParser tagParser)
     {
         _tagParser = tagParser;
@@ -77,8 +77,11 @@ public class Commit : ICommit
     public string MessageBody { get; }
 
     [JsonPropertyOrder(90)]
-    public CommitMessageMetadata Metadata { get; }
+    public ICommitMessageMetadata Metadata { get; }
 
+    /// <summary>
+    ///     A null commit.
+    /// </summary>
     [JsonIgnore]
     public static Commit Null => new("00000000", [], "null commit", "", "", new CommitMessageMetadata());
 
@@ -86,7 +89,7 @@ public class Commit : ICommit
     public CommitId[] Parents { get; }
 
     [JsonIgnore]
-    public SemVersion? ReleasedVersion { get; } // being depreciated
+    public SemVersion? ReleasedVersion { get; } // depreciated
 
     [JsonPropertyOrder(12)]
     public ReleaseState ReleaseState { get; } = null!;
@@ -99,7 +102,7 @@ public class Commit : ICommit
 
     private ReleaseState GetReleaseState(IReadOnlyList<IGitTag>? tags)
     {
-        var releaseState = ParseTagsForReleaseState(tags);
+        var releaseState = ParseTagsForReleaseStates(tags);
 
         if (releaseState.State == ReleaseStateId.NotReleased && Parents.Length == 0)
         {
@@ -119,26 +122,26 @@ public class Commit : ICommit
         return refs.Length == 0 ? null : _tagParser.ParseGitLogRefs(refs);
     }
 
-    private ReleaseState ParseTagsForReleaseState(IReadOnlyList<IGitTag>? tags)
+    private ReleaseState ParseTagsForReleaseStates(IReadOnlyList<IGitTag>? tags)
     {
         if (tags == null || tags.Count == 0)
         {
-            return ReleaseState.NotReleased;
+            return new ReleaseState(ReleaseStateId.NotReleased, Metadata.ApiChangeFlags);
         }
 
         var releaseStates = new Dictionary<SemVersion, ReleaseState>();
         // ReSharper disable once LoopCanBeConvertedToQuery
         foreach (var tag in tags)
         {
-            var tagReleaseInfo = _tagParser.ParseTagName(tag.FriendlyName);
-            if (tagReleaseInfo.ReleasedVersion != null)
+            var tagReleaseState = _tagParser.ParseTagName(tag.FriendlyName);
+            if (tagReleaseState.State != ReleaseStateId.NotReleased)
             {
-                releaseStates.Add(tagReleaseInfo.ReleasedVersion, tagReleaseInfo);
+                releaseStates.Add(tagReleaseState.ReleasedVersion!, tagReleaseState);
             }
         }
 
         return releaseStates.Count > 0
             ? releaseStates.OrderByDescending(x => x.Key, new SemverSortOrderComparer()).First().Value
-            : ReleaseState.NotReleased;
+            : new ReleaseState(ReleaseStateId.NotReleased, Metadata.ApiChangeFlags);
     }
 }

@@ -1,6 +1,10 @@
-﻿namespace NoeticTools.Git2SemVer.Core.ConventionCommits;
+﻿using System.Text.Json.Serialization;
 
-public sealed class CommitMessageMetadata
+
+namespace NoeticTools.Git2SemVer.Core.ConventionCommits;
+
+[JsonDerivedType(typeof(ICommitMessageMetadata))]
+public sealed class CommitMessageMetadata : ICommitMessageMetadata
 {
     private static readonly Dictionary<string, CommitChangeTypeId> ChangeTypeIdLookup = new()
     {
@@ -20,6 +24,7 @@ public sealed class CommitMessageMetadata
                                  List<(string key, string value)> footerKeyValues)
     {
         ChangeType = ToChangeTypeId(changeType.ToLower());
+        ChangeTypeText = changeType;
         ChangeDescription = changeDescription;
         Body = body;
         FooterKeyValues = footerKeyValues.ToLookup(k => k.key, v => v.value);
@@ -37,14 +42,22 @@ public sealed class CommitMessageMetadata
     {
     }
 
+    [JsonPropertyOrder(1)]
     public ApiChangeFlags ApiChangeFlags { get; }
 
+    [JsonPropertyOrder(2)]
     public string Body { get; }
 
+    [JsonPropertyOrder(3)]
     public string ChangeDescription { get; }
 
+    [JsonPropertyOrder(4)]
     public CommitChangeTypeId ChangeType { get; }
 
+    [JsonPropertyOrder(5)]
+    public string ChangeTypeText { get; }
+
+    [JsonPropertyOrder(6)]
     public ILookup<string, string> FooterKeyValues { get; }
 
     private static CommitChangeTypeId ToChangeTypeId(string value)
@@ -55,6 +68,6 @@ public sealed class CommitMessageMetadata
             return changeTypeId;
         }
 
-        return CommitChangeTypeId.None;
+        return string.IsNullOrWhiteSpace(value) ? CommitChangeTypeId.None : CommitChangeTypeId.Custom;
     }
 }
