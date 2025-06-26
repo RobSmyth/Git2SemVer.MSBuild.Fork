@@ -2,9 +2,9 @@
 
 #pragma warning disable CS1591
 /// <summary>
-/// A commit's release state.
+/// A commit's release type.
 /// </summary>
-public enum ReleaseStateId
+public enum ReleaseTypeId
 {
     /// <summary>
     /// Commit not released.

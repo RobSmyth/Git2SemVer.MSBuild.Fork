@@ -40,5 +40,5 @@ public interface ICommit
     /// </summary>
     IReadOnlyList<IGitTag> Tags { get; }
 
-    ReleaseState ReleaseState { get; }
+    CommitMetadata Metadata { get; }
 }

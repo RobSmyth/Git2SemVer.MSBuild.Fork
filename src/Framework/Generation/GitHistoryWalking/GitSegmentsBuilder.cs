@@ -82,23 +82,23 @@ internal sealed class GitSegmentsBuilder
         _segment.Append(commit);
         _commitsCache.Add(commit.CommitId, _segment);
 
-        if (commit.ReleaseState.State == ReleaseStateId.Released)
+        if (commit.Metadata.IsARelease)
         {
             _logger.LogTrace("Found release {1} at commit '{0}'.",
                              commit.CommitId.ShortSha,
-                             commit.ReleaseState.ReleasedVersion!.ToString());
+                             commit.Metadata.Version!.ToString());
 
             return SegmentWalkResult.FoundStart;
         }
 
-        if (commit.ReleaseState.State == ReleaseStateId.ReleaseWaypoint)
+        if (commit.Metadata.ReleaseType == ReleaseTypeId.ReleaseWaypoint)
         {
             _logger.LogTrace("Found release waypoint at commit '{0}'.",
                              commit.CommitId.ShortSha);
             return SegmentWalkResult.FoundStart;
         }
 
-        if (commit.ReleaseState.State == ReleaseStateId.RootCommit)
+        if (commit.Metadata.ReleaseType == ReleaseTypeId.RootCommit)
         {
             _logger.LogTrace("Found that the repository's first commit '{0}' is reachable from the head commit without a released commit.",
                              commit.CommitId.ShortSha);

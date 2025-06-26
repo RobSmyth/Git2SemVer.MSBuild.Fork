@@ -62,12 +62,12 @@ public sealed class TagParser : ITagParser
         return versions.OrderByDescending(x => x, new SemverSortOrderComparer()).FirstOrDefault();
     }
 
-    public ReleaseState ParseTagName(string friendlyName)
+    public CommitMetadata ParseTagName(string friendlyName)
     {
         var match = _tagVersionRegex.Match(friendlyName);
         if (!match.Success)
         {
-            return new ReleaseState(ReleaseStateId.NotReleased);
+            return new CommitMetadata(ReleaseTypeId.NotReleased);
         }
 
         if (match.Groups["waypoint"].Success)
@@ -75,19 +75,19 @@ public sealed class TagParser : ITagParser
             return CreateWaypointReleaseState(match);
         }
 
-        return new ReleaseState(ReleaseStateId.Released,
+        return new CommitMetadata(ReleaseTypeId.Released,
                                 SemVersion.Parse(match.Groups["version"].Value, SemVersionStyles.Strict),
                                 new ApiChangeFlags());
     }
 
-    private static ReleaseState CreateWaypointReleaseState(Match match)
+    private static CommitMetadata CreateWaypointReleaseState(Match match)
     {
         var breakingChange = match.Groups["breaking"].Success;
         var featureAdded = match.Groups["feat"].Success;
         var fix = match.Groups["fix"].Success;
         var changes = new ApiChangeFlags(breakingChange, featureAdded, fix);
         var version = SemVersion.Parse(match.Groups["priorVersion"].Value, SemVersionStyles.Strict);
-        return new ReleaseState(ReleaseStateId.ReleaseWaypoint, version, changes);
+        return new CommitMetadata(ReleaseTypeId.ReleaseWaypoint, version, changes);
     }
 
     private static string GetParsePattern(string? releaseTagFormat)

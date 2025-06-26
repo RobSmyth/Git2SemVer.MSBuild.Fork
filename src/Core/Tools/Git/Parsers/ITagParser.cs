@@ -9,7 +9,7 @@ public interface ITagParser
     /// <summary>
     ///     Parse tags to identify release and waypoint tags.
     /// </summary>
-    ReleaseState ParseTagName(string friendlyName);
+    CommitMetadata ParseTagName(string friendlyName);
 
     /// <summary>
     ///     Parse git refs text, from a git log command, to identify release tags and return release version.

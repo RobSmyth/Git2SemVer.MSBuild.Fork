@@ -107,9 +107,9 @@ internal class VersionOutputsTests
                                           "Sha": "00000000",
                                           "ShortSha": "0000000"
                                         },
-                                        "ReleaseState": {
-                                          "State": 1,
-                                          "ReleasedVersion": null,
+                                        "Metadata": {
+                                          "ReleaseType": 1,
+                                          "Version": null,
                                           "ChangeFlags": {
                                             "BreakingChange": false,
                                             "FunctionalityChange": false,
@@ -119,7 +119,7 @@ internal class VersionOutputsTests
                                         "Summary": "null commit",
                                         "MessageBody": "",
                                         "Parents": [],
-                                        "Metadata": {
+                                        "MessageMetadata": {
                                           "ApiChangeFlags": {
                                             "BreakingChange": false,
                                             "FunctionalityChange": false,

@@ -26,11 +26,11 @@ internal class CommitTests
 
         var target = new Commit("SHA00002", ["SHA00001"], "summary", "body", messageMetadata, _tagParser.Object, []);
 
-        Assert.That(target.ReleaseState.State, Is.EqualTo(ReleaseStateId.NotReleased));
-        Assert.That(target.ReleaseState.ReleasedVersion, Is.Null);
-        Assert.That(target.ReleaseState.ChangeFlags.BreakingChange, Is.False);
-        Assert.That(target.ReleaseState.ChangeFlags.FunctionalityChange, Is.True);
-        Assert.That(target.ReleaseState.ChangeFlags.Fix, Is.False);
+        Assert.That(target.Metadata.ReleaseType, Is.EqualTo(ReleaseTypeId.NotReleased));
+        Assert.That(target.Metadata.Version, Is.Null);
+        Assert.That(target.Metadata.ChangeFlags.BreakingChange, Is.False);
+        Assert.That(target.Metadata.ChangeFlags.FunctionalityChange, Is.True);
+        Assert.That(target.Metadata.ChangeFlags.Fix, Is.False);
     }
 
     [Test]
@@ -38,16 +38,16 @@ internal class CommitTests
     {
         var tag = new Mock<IGitTag>();
         tag.Setup(x => x.FriendlyName).Returns("my tag");
-        _tagParser.Setup(x => x.ParseTagName("my tag")).Returns(new ReleaseState(ReleaseStateId.Released, new SemVersion(1, 2, 3)));
+        _tagParser.Setup(x => x.ParseTagName("my tag")).Returns(new CommitMetadata(ReleaseTypeId.Released, new SemVersion(1, 2, 3)));
         var messageMetadata = new CommitMessageMetadata("feat", false, "", "", []);
 
         var target = new Commit("SHA00002", ["SHA00001"], "summary", "body", messageMetadata, _tagParser.Object, [tag.Object]);
 
-        Assert.That(target.ReleaseState.State, Is.EqualTo(ReleaseStateId.Released));
-        Assert.That(target.ReleaseState.ReleasedVersion, Is.EqualTo(new SemVersion(1, 2, 3)));
-        Assert.That(target.ReleaseState.ChangeFlags.BreakingChange, Is.False);
-        Assert.That(target.ReleaseState.ChangeFlags.FunctionalityChange, Is.False);
-        Assert.That(target.ReleaseState.ChangeFlags.Fix, Is.False);
+        Assert.That(target.Metadata.ReleaseType, Is.EqualTo(ReleaseTypeId.Released));
+        Assert.That(target.Metadata.Version, Is.EqualTo(new SemVersion(1, 2, 3)));
+        Assert.That(target.Metadata.ChangeFlags.BreakingChange, Is.False);
+        Assert.That(target.Metadata.ChangeFlags.FunctionalityChange, Is.False);
+        Assert.That(target.Metadata.ChangeFlags.Fix, Is.False);
     }
 
     [Test]
@@ -57,9 +57,9 @@ internal class CommitTests
 
         var target = new Commit("SHA00002", ["SHA00001"], "summary", "body", messageMetadata, _tagParser.Object, []);
 
-        Assert.That(target.ReleaseState.State, Is.EqualTo(ReleaseStateId.NotReleased));
-        Assert.That(target.ReleaseState.ReleasedVersion, Is.Null);
-        Assert.That(target.ReleaseState.ChangeFlags, Is.EqualTo(new ApiChangeFlags()));
+        Assert.That(target.Metadata.ReleaseType, Is.EqualTo(ReleaseTypeId.NotReleased));
+        Assert.That(target.Metadata.Version, Is.Null);
+        Assert.That(target.Metadata.ChangeFlags, Is.EqualTo(new ApiChangeFlags()));
     }
 
     [Test]
@@ -69,9 +69,9 @@ internal class CommitTests
 
         var target = new Commit("SHA00001", [], "summary", "body", messageMetadata, _tagParser.Object, []);
 
-        Assert.That(target.ReleaseState.State, Is.EqualTo(ReleaseStateId.RootCommit));
-        Assert.That(target.ReleaseState.ReleasedVersion, Is.Null);
-        Assert.That(target.ReleaseState.ChangeFlags, Is.EqualTo(new ApiChangeFlags()));
+        Assert.That(target.Metadata.ReleaseType, Is.EqualTo(ReleaseTypeId.RootCommit));
+        Assert.That(target.Metadata.Version, Is.Null);
+        Assert.That(target.Metadata.ChangeFlags, Is.EqualTo(new ApiChangeFlags()));
     }
 
     [Test]
@@ -81,11 +81,11 @@ internal class CommitTests
 
         var target = new Commit("SHA00001", [], "summary", "body", messageMetadata, _tagParser.Object, []);
 
-        Assert.That(target.ReleaseState.State, Is.EqualTo(ReleaseStateId.RootCommit));
-        Assert.That(target.ReleaseState.ReleasedVersion, Is.Null);
-        Assert.That(target.ReleaseState.ChangeFlags.BreakingChange, Is.False);
-        Assert.That(target.ReleaseState.ChangeFlags.FunctionalityChange, Is.True);
-        Assert.That(target.ReleaseState.ChangeFlags.Fix, Is.False);
+        Assert.That(target.Metadata.ReleaseType, Is.EqualTo(ReleaseTypeId.RootCommit));
+        Assert.That(target.Metadata.Version, Is.Null);
+        Assert.That(target.Metadata.ChangeFlags.BreakingChange, Is.False);
+        Assert.That(target.Metadata.ChangeFlags.FunctionalityChange, Is.True);
+        Assert.That(target.Metadata.ChangeFlags.Fix, Is.False);
     }
 
     [Test]
@@ -93,15 +93,15 @@ internal class CommitTests
     {
         var tag = new Mock<IGitTag>();
         tag.Setup(x => x.FriendlyName).Returns("my tag");
-        _tagParser.Setup(x => x.ParseTagName("my tag")).Returns(new ReleaseState(ReleaseStateId.Released, new SemVersion(1, 2, 3)));
+        _tagParser.Setup(x => x.ParseTagName("my tag")).Returns(new CommitMetadata(ReleaseTypeId.Released, new SemVersion(1, 2, 3)));
         var messageMetadata = new CommitMessageMetadata("feat", false, "", "", []);
 
         var target = new Commit("SHA00001", [], "summary", "body", messageMetadata, _tagParser.Object, [tag.Object]);
 
-        Assert.That(target.ReleaseState.State, Is.EqualTo(ReleaseStateId.Released));
-        Assert.That(target.ReleaseState.ReleasedVersion, Is.EqualTo(new SemVersion(1, 2, 3)));
-        Assert.That(target.ReleaseState.ChangeFlags.BreakingChange, Is.False);
-        Assert.That(target.ReleaseState.ChangeFlags.FunctionalityChange, Is.False);
-        Assert.That(target.ReleaseState.ChangeFlags.Fix, Is.False);
+        Assert.That(target.Metadata.ReleaseType, Is.EqualTo(ReleaseTypeId.Released));
+        Assert.That(target.Metadata.Version, Is.EqualTo(new SemVersion(1, 2, 3)));
+        Assert.That(target.Metadata.ChangeFlags.BreakingChange, Is.False);
+        Assert.That(target.Metadata.ChangeFlags.FunctionalityChange, Is.False);
+        Assert.That(target.Metadata.ChangeFlags.Fix, Is.False);
     }
 }

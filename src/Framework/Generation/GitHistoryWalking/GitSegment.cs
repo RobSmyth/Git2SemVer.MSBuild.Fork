@@ -38,8 +38,8 @@ internal sealed class GitSegment
     /// </summary>
     public int Id { get; }
 
-    public bool IsAReleaseSegment => TaggedReleasedVersion != null || 
-                                     (_commits.Count != 0 && OldestCommit.Parents.Length == 0);
+    public bool IsAReleaseSegment => Version != null || 
+                                     (_commits.Count != 0 && OldestCommit.Metadata.IsRootCommit);
 
     /// <summary>
     ///     First (oldest) commit in the segment.
@@ -52,7 +52,7 @@ internal sealed class GitSegment
     /// </summary>
     public IReadOnlyList<CommitId> ParentCommits => OldestCommit.Parents.ToList();
 
-    public SemVersion? TaggedReleasedVersion => _commits.Count != 0 ? OldestCommit.ReleaseState.ReleasedVersion : null;
+    public SemVersion? Version => _commits.Count != 0 ? OldestCommit.Metadata.Version : null;
 
     /// <summary>
     ///     Last (youngest) commit in the segment.
@@ -98,7 +98,7 @@ internal sealed class GitSegment
     {
         var commitsCount = $"{_commits.Count}";
 
-        var release = TaggedReleasedVersion != null ? TaggedReleasedVersion.ToString() :
+        var release = Version != null ? Version.ToString() :
             ParentCommits.Any() ? "" : "0.1.0";
 
         return
@@ -113,9 +113,9 @@ internal sealed class GitSegment
         }
 
         var bumps = new ApiChanges();
-        foreach (var commit in _commits.Where(commit => !commit.HasReleaseTag))
+        foreach (var commit in _commits.Where(commit => !commit.IsARelease))
         {
-            bumps.Aggregate(commit.Metadata.ApiChangeFlags);
+            bumps.Aggregate(commit.MessageMetadata.ApiChangeFlags);
         }
 
         _bumps = bumps;

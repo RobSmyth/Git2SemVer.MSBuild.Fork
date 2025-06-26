@@ -28,28 +28,28 @@ public class Commit : ICommit
         }
 
         var releaseState = GetReleaseState(tags);
-        ReleasedVersion = releaseState.ReleasedVersion;
-        ReleaseState = releaseState;
+        ReleasedVersion = releaseState.Version;
+        Metadata = releaseState;
     }
 
     /// <summary>
     ///     Construct commit from git log information.
     /// </summary>
     public Commit(string sha, string[] parents, string summary, string messageBody, string refs,
-                  ICommitMessageMetadata metadata,
+                  ICommitMessageMetadata messageMetadata,
                   ITagParser? tagParser = null)
-        : this(sha, parents, summary, messageBody, metadata, tagParser ?? new TagParser())
+        : this(sha, parents, summary, messageBody, messageMetadata, tagParser ?? new TagParser())
     {
-        ReleasedVersion = ParseGitLogRefsForReleasedVersion(refs);
-        var state = Parents.Length == 0 ? ReleaseStateId.RootCommit :
-            ReleasedVersion == null ? ReleaseStateId.NotReleased : ReleaseStateId.Released;
-        ReleaseState = new ReleaseState(state,
+        ReleasedVersion = _tagParser.ParseGitLogRefs(refs);
+        var state = Parents.Length == 0 ? ReleaseTypeId.RootCommit :
+            ReleasedVersion == null ? ReleaseTypeId.NotReleased : ReleaseTypeId.Released;
+        Metadata = new CommitMetadata(state,
                                         ReleasedVersion,
                                         new ApiChangeFlags());
     }
 
     private Commit(string sha, string[] parents, string summary, string messageBody,
-                   ICommitMessageMetadata metadata,
+                   ICommitMessageMetadata messageMetadata,
                    ITagParser tagParser)
     {
         _tagParser = tagParser;
@@ -66,20 +66,29 @@ public class Commit : ICommit
 
         Summary = summary;
         MessageBody = messageBody;
-        Metadata = metadata;
+        MessageMetadata = messageMetadata;
     }
 
     [JsonPropertyOrder(11)]
     public CommitId CommitId { get; }
 
+    /// <summary>
+    ///     Indicates if this commit has been released.
+    /// </summary>
     [JsonIgnore]
-    public bool HasReleaseTag => ReleasedVersion != null;
+    public bool IsARelease => Metadata.IsARelease;
+
+    [JsonIgnore]
+    public bool IsRootCommit => Metadata.IsRootCommit;
 
     [JsonPropertyOrder(22)]
     public string MessageBody { get; }
 
+    /// <summary>
+    ///  Commit message metadata.
+    /// </summary>
     [JsonPropertyOrder(90)]
-    public ICommitMessageMetadata Metadata { get; }
+    public ICommitMessageMetadata MessageMetadata { get; }
 
     /// <summary>
     ///     A null commit.
@@ -94,7 +103,7 @@ public class Commit : ICommit
     public SemVersion? ReleasedVersion { get; } // depreciated
 
     [JsonPropertyOrder(12)]
-    public ReleaseState ReleaseState { get; } = null!;
+    public CommitMetadata Metadata { get; } = null!;
 
     [JsonPropertyOrder(21)]
     public string Summary { get; }
@@ -102,35 +111,27 @@ public class Commit : ICommit
     [JsonIgnore]
     public IReadOnlyList<IGitTag> Tags { get; } = [];
 
-    private ReleaseState GetReleaseState(IReadOnlyList<IGitTag>? tags)
+    private CommitMetadata GetReleaseState(IReadOnlyList<IGitTag>? tags)
     {
-        var defaultState = Parents.Length == 0 ? ReleaseStateId.RootCommit : ReleaseStateId.NotReleased;
+        var defaultState = Parents.Length == 0 ? ReleaseTypeId.RootCommit : ReleaseTypeId.NotReleased;
         if (tags == null || tags.Count == 0)
         {
-            return new ReleaseState(defaultState, Metadata.ApiChangeFlags);
+            return new CommitMetadata(defaultState, MessageMetadata.ApiChangeFlags);
         }
 
-        var releaseStates = new Dictionary<SemVersion, ReleaseState>();
+        var releaseStates = new Dictionary<SemVersion, CommitMetadata>();
         // ReSharper disable once LoopCanBeConvertedToQuery
         foreach (var tag in tags)
         {
             var tagReleaseState = _tagParser.ParseTagName(tag.FriendlyName);
-            if (tagReleaseState.State != ReleaseStateId.NotReleased)
+            if (tagReleaseState.ReleaseType != ReleaseTypeId.NotReleased)
             {
-                releaseStates.Add(tagReleaseState.ReleasedVersion!, tagReleaseState);
+                releaseStates.Add(tagReleaseState.Version!, tagReleaseState);
             }
         }
 
         return releaseStates.Count > 0
             ? releaseStates.OrderByDescending(x => x.Key, new SemverSortOrderComparer()).First().Value
-            : new ReleaseState(defaultState, Metadata.ApiChangeFlags);
-    }
-
-    /// <summary>
-    ///     Used to generate commits from git log history. Used by tests.
-    /// </summary>
-    private SemVersion? ParseGitLogRefsForReleasedVersion(string refs)
-    {
-        return refs.Length == 0 ? null : _tagParser.ParseGitLogRefs(refs);
+            : new CommitMetadata(defaultState, MessageMetadata.ApiChangeFlags);
     }
 }

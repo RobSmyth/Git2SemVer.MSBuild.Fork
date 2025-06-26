@@ -11,58 +11,66 @@ namespace NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 /// <summary>
 ///     Information about a commit's release state.
 /// </summary>
-public sealed class ReleaseState
+public sealed class CommitMetadata
 {
-    public ReleaseState(ReleaseStateId state) 
+    public CommitMetadata(ReleaseTypeId state) 
         : this(state,
                null, 
                new ApiChangeFlags())
     {
     }
 
-    public ReleaseState(ReleaseStateId state, ApiChangeFlags changeFlags)
+    public CommitMetadata(ReleaseTypeId state, ApiChangeFlags changeFlags)
         : this(state, 
                null, 
                changeFlags)
     {
     }
 
-    public ReleaseState(ReleaseStateId state, SemVersion releasedVersion)
-        : this(state, releasedVersion, new ApiChangeFlags())
+    public CommitMetadata(ReleaseTypeId state, SemVersion version)
+        : this(state, version, new ApiChangeFlags())
     {
     }
 
     /// <summary>
     ///     Information about a commit's release state.
     /// </summary>
-    public ReleaseState(ReleaseStateId state, SemVersion? releasedVersion, ApiChangeFlags changeFlags)
+    public CommitMetadata(ReleaseTypeId state, SemVersion? version, ApiChangeFlags changeFlags)
     {
-        ReleasedVersion = releasedVersion;
-        State = state;
+        Version = version;
+        ReleaseType = state;
         ChangeFlags = changeFlags;
 
-        if ((state == ReleaseStateId.NotReleased && ReleasedVersion != null) || 
-            (state == ReleaseStateId.Released && ReleasedVersion == null))
+        if ((state == ReleaseTypeId.NotReleased && Version != null) || 
+            (state == ReleaseTypeId.Released && Version == null))
         {
-            throw new Git2SemVerInvalidOperationException($"Property {nameof(ReleasedVersion)} and the state {nameof(ReleaseStateId.NotReleased)} are mutually exclusive.");
+            throw new Git2SemVerInvalidOperationException($"Property {nameof(Version)} and the state {nameof(ReleaseTypeId.NotReleased)} are mutually exclusive.");
         }
     }
 
+    [JsonIgnore]
+    public bool IsRootCommit => ReleaseType == ReleaseTypeId.RootCommit;
+
+    [JsonIgnore]
+    public bool IsARelease => ReleaseType == ReleaseTypeId.Released;
+
     /// <summary>
+    /// Version to be used in the context of the State (ReleaseStateId).
+    /// </summary>
+    /// <remarks>
     /// If <c>State</c> is <c>Released</c>, the released version.
     /// If <c>State</c> is <c>ReleaseWaypoint</c>, the prior released version.
     /// If <c>State</c> is <c>RootCommit</c>, then null.
     /// If <c>State</c> is <c>NoReleased</c>, then null.
-    /// Otherwise, null.
-    /// </summary>
+    /// </remarks>
     [JsonPropertyOrder(2)]
-    public SemVersion? ReleasedVersion { get; }
+    public SemVersion? Version { get; }
 
     /// <summary>
     /// The commit's versioning release state. Indicates if this is a release commit and what type of release commit.
     /// </summary>
     [JsonPropertyOrder(1)]
-    public ReleaseStateId State { get; }
+    public ReleaseTypeId ReleaseType { get; }
 
     /// <summary>
     ///     Changes (breaking, features, or fixes).
@@ -73,8 +81,12 @@ public sealed class ReleaseState
     [JsonPropertyOrder(3)]
     public ApiChangeFlags ChangeFlags { get; }
 
-    public ReleaseState Aggregate(ApiChangeFlags changeFlags)
-    {
-        return new ReleaseState(State, ReleasedVersion, ChangeFlags.Aggregate(changeFlags));
-    }
+    //public CommitMetadata Aggregate(CommitMetadata changeFlags)
+    //{
+    //    if (State == ReleaseStateId.Released)
+    //    {
+    //        return new CommitMetadata(State, Version, new ApiChangeFlags());
+    //    }
+    //    return new CommitMetadata(State, Version, ChangeFlags.Aggregate(changeFlags));
+    //}
 }

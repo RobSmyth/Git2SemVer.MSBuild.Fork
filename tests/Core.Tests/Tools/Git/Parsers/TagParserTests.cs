@@ -66,8 +66,8 @@ internal class TagParserTests
 
         var result = tagParser.ParseTagName(tagText);
 
-        Assert.That(result.State, Is.EqualTo(ReleaseStateId.NotReleased));
-        Assert.That(result.ReleasedVersion, Is.Null);
+        Assert.That(result.ReleaseType, Is.EqualTo(ReleaseTypeId.NotReleased));
+        Assert.That(result.Version, Is.Null);
     }
 
     [TestCase("", "v12.34.56")]
@@ -83,8 +83,8 @@ internal class TagParserTests
 
         var result = tagParser.ParseTagName(tagText);
 
-        Assert.That(result.State, Is.EqualTo(ReleaseStateId.Released));
-        Assert.That(result.ReleasedVersion, Is.EqualTo(expected));
+        Assert.That(result.ReleaseType, Is.EqualTo(ReleaseTypeId.Released));
+        Assert.That(result.Version, Is.EqualTo(expected));
     }
 
     [TestCase("", "v12.34.56")]
@@ -100,8 +100,8 @@ internal class TagParserTests
 
         var result = tagParser.ParseTagName($".git2semver.waypoint({tagText}).feat");
 
-        Assert.That(result.State, Is.EqualTo(ReleaseStateId.ReleaseWaypoint));
-        Assert.That(result.ReleasedVersion, Is.EqualTo(expected));
+        Assert.That(result.ReleaseType, Is.EqualTo(ReleaseTypeId.ReleaseWaypoint));
+        Assert.That(result.Version, Is.EqualTo(expected));
         Assert.That(result.ChangeFlags.BreakingChange, Is.False);
         Assert.That(result.ChangeFlags.FunctionalityChange, Is.True);
         Assert.That(result.ChangeFlags.Fix, Is.False);
