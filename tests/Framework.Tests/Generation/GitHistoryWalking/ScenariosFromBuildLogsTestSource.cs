@@ -11,9 +11,9 @@ namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.GitHistoryWalking;
 internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
 {
     private const char ETX = CharacterConstants.ETX;
-
     private const char STX = CharacterConstants.STX;
     private const char US = CharacterConstants.US;
+    private const char NL = CharacterConstants.GS; // manual replacement for new line
 
     public LoggedScenario Scenario01 { get; } =
         new("0.3.2", "0001", $"""
@@ -225,7 +225,7 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
     /// </summary>
     public LoggedScenario Scenario08 { get; } =
         new("2.0.0", "0002", $"""
-                              *               {US}.|0002|0001|{STX}feat: add great feature{ETX}|{STX}BREAKING CHANGE: sorry{ETX}| (HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH)|
+                              *               {US}.|0002|0001|{STX}feat: add great feature{ETX}|{STX}{NL}BREAKING CHANGE: sorry{ETX}| (HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH)|
                               *               {US}.|0001|0003|{STX}REDACTED{ETX}|{STX}{ETX}| (tag: v1.2.3)|
                               *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
                               """);

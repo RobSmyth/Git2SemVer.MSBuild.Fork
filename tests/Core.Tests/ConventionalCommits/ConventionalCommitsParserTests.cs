@@ -110,14 +110,14 @@ internal class ConventionalCommitsParserTests
 
                  Body - paragraph2
                  """,
-                 "",
+                 new string[0],
                  false)]
     [TestCase(
                  """
                  Body - paragraph1
                  """,
                  "Body - paragraph1",
-                 "",
+                 new string[0],
                  false)]
     [TestCase(
                  """
@@ -126,7 +126,7 @@ internal class ConventionalCommitsParserTests
                  BREAKING CHANGE: Oops
                  """,
                  "Body - paragraph1",
-                 "BREAKING CHANGE|Oops",
+                 new [] {"BREAKING CHANGE|Oops"},
                  true)]
     [TestCase(
                  """
@@ -136,7 +136,7 @@ internal class ConventionalCommitsParserTests
 
                  """,
                  "Body - paragraph1",
-                 "BREAKING CHANGE|Oops very sorry",
+                 new[] {"BREAKING CHANGE|Oops very sorry"},
                  true)]
     [TestCase(
                  """
@@ -146,21 +146,20 @@ internal class ConventionalCommitsParserTests
                  ref: 1234
                  """,
                  "Body - paragraph1",
-                 """
-                 BREAKING CHANGE|Oops very sorry
-                 ref|1234
-                 """,
+                 new[]
+                 {
+                 "BREAKING CHANGE|Oops very sorry",
+                 "ref|1234"
+                 },
                  true)]
     [TestCase(
-                 """
-                 Body - paragraph1
-                 """,
                  "Body - paragraph1",
-                 "",
+                 "Body - paragraph1",
+                 new string[0],
                  false)]
     public void BodyMultiLineBodyAndFooterTest(string messageBody,
                                                string expectedBody,
-                                               string expectedFooter,
+                                               string[] expectedTopicValues,
                                                bool hasBreakingChange)
     {
         var result = _target.Parse("feat: Added a real nice feature", messageBody);
@@ -169,7 +168,7 @@ internal class ConventionalCommitsParserTests
         Assert.That(result.ApiChangeFlags.BreakingChange, Is.EqualTo(hasBreakingChange));
         Assert.That(result.ChangeDescription, Is.EqualTo("Added a real nice feature"));
         Assert.That(result.Body, Is.EqualTo(expectedBody));
-        var keyValuePairs = GetExpectedKeyValuePairs(expectedFooter);
+        var keyValuePairs = GetExpectedKeyValuePairs(expectedTopicValues);
 
         Assert.That(result.FooterKeyValues, Is.EquivalentTo(keyValuePairs.ToLookup(k => k.key, v => v.value)));
     }
@@ -211,34 +210,67 @@ internal class ConventionalCommitsParserTests
     [TestCase(
                  """
                  
-                 BREAKING CHANGE: Oops very sorry
+                 BREAKING CHANGE: Oops1 very sorry
+                 issue #35
                  """,
-                 "BREAKING CHANGE|Oops very sorry",
+                 new []
+                 {
+                     "BREAKING CHANGE|Oops1 very sorry",
+                     "issue|35"
+                 },
                  true)]
     [TestCase(
                  """
                  
-                 BREAKING CHANGE: Oops very sorry
+                 BREAKING CHANGE: Oops2 very sorry
                  refs: #12345
                  """,
-                 """
-                 BREAKING CHANGE|Oops very sorry
-                 refs|#12345
-                 """,
+                 new[]
+                 {
+                     "BREAKING CHANGE|Oops2 very sorry",
+                     "refs|#12345"
+                 },
                  true)]
     [TestCase(
                  """
                  
-                 BREAKING CHANGE: Oops very sorry
+                 BREAKING CHANGE: Oops3
+                   very sorry
                  refs: username/projectName#12345
                  """,
+                 new[]
+                 {
+                     """
+                     BREAKING CHANGE|Oops3
+                       very sorry
+                     """,
+                     "refs|username/projectName#12345"
+                 },
+                 true)]
+    [TestCase(
                  """
-                 BREAKING CHANGE|Oops very sorry
-                 refs|username/projectName#12345
+
+                 BREAKING CHANGE #
+                 Oops4
+                 very sorry
+                 
+                 really
+                 refs: username/projectName#12345
                  """,
+                 new[]
+                 {
+                     """
+                     BREAKING CHANGE|
+                     Oops4
+                     very sorry
+                     
+                     really
+                     """,
+                     "refs|username/projectName#12345"
+                 },
                  true)]
     public void FooterWithoutBodyTest(string messageBody,
-                                      string expectedFooter,
+                                      string[] expectedTopicValues,
                                       bool hasBreakingChange)
     {
         var result = _target.Parse("feat: Added a real nice feature", "\n" + messageBody);
@@ -247,7 +279,7 @@ internal class ConventionalCommitsParserTests
         Assert.That(result.ApiChangeFlags.BreakingChange, Is.EqualTo(hasBreakingChange));
         Assert.That(result.ChangeDescription, Is.EqualTo("Added a real nice feature"));
         Assert.That(result.Body, Is.EqualTo(""));
-        var keyValuePairs = GetExpectedKeyValuePairs(expectedFooter);
+        var keyValuePairs = GetExpectedKeyValuePairs(expectedTopicValues);
 
         Assert.That(result.FooterKeyValues, Is.EquivalentTo(keyValuePairs.ToLookup(k => k.key, v => v.value)));
     }
@@ -282,15 +314,11 @@ internal class ConventionalCommitsParserTests
     [TestCase("feat: Added a real nice feature", CommitChangeTypeId.Feature, "Added a real nice feature", false)]
     [TestCase("feat: Added a real nice feature (#24)", CommitChangeTypeId.Feature, "Added a real nice feature (#24)", false)]
     [TestCase("feat!: Added a real nice feature", CommitChangeTypeId.Feature, "Added a real nice feature", true)]
+    [TestCase("feat(apples)!: Added a real nice feature", CommitChangeTypeId.Feature, "Added a real nice feature", true)]
     [TestCase("fix: Fixed nasty bug", CommitChangeTypeId.Fix, "Fixed nasty bug", false)]
-    [TestCase("build: Build work", CommitChangeTypeId.Build, "Build work", false)]
-    [TestCase("chore: Did something", CommitChangeTypeId.Chore, "Did something", false)]
-    [TestCase("ci: Did something", CommitChangeTypeId.ContinuousIntegration, "Did something", false)]
-    [TestCase("docs: Did something", CommitChangeTypeId.Documentation, "Did something", false)]
-    [TestCase("style: Did something", CommitChangeTypeId.Style, "Did something", false)]
-    [TestCase("refactor: Did something", CommitChangeTypeId.Refactoring, "Did something", false)]
-    [TestCase("perf: Did something ", CommitChangeTypeId.Performance, "Did something ", false)]
-    [TestCase("test: Did something", CommitChangeTypeId.Testing, "Did something", false)]
+    [TestCase("build: Build work", CommitChangeTypeId.Custom, "Build work", false)]
+    [TestCase("build(my-scope): Build work", CommitChangeTypeId.Custom, "Build work", false)]
+    [TestCase("custom-type: Build work", CommitChangeTypeId.Custom, "Build work", false)]
     public void SubjectWithConventionalCommitInfoTest(string messageSubject,
                                                       CommitChangeTypeId expectedChangeTypeId,
                                                       string expectedChangeDescription,
@@ -305,11 +333,10 @@ internal class ConventionalCommitsParserTests
         Assert.That(result.FooterKeyValues, Is.Empty);
     }
 
-    private static List<(string key, string value)> GetExpectedKeyValuePairs(string expectedFooter)
+    private static List<(string key, string value)> GetExpectedKeyValuePairs(string[] expectedTopicValues)
     {
-        var expectedFooterLines = expectedFooter.Split('\n');
         var keyValuePairs = new List<(string key, string value)>();
-        foreach (var line in expectedFooterLines)
+        foreach (var line in expectedTopicValues)
         {
             if (line.Length == 0)
             {
@@ -317,7 +344,7 @@ internal class ConventionalCommitsParserTests
             }
 
             var elements = line.Split('|');
-            keyValuePairs.Add((key: elements[0], value: elements[1].Trim()));
+            keyValuePairs.Add((key: elements[0], value: elements[1]));
         }
 
         return keyValuePairs;

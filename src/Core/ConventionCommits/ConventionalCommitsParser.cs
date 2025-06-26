@@ -28,19 +28,18 @@ public sealed class ConventionalCommitsParser : IConventionalCommitsParser
 
                                               (?<footer>
                                                 (
-                                                  (?: (\n|\r\n) )
+                                                  (?: (\n|\r\n)+ )
                                                   (?<token> (BREAKING\sCHANGE) | ( \w[\w-]+ ) )
                                                   ( \( (?<scope>\w[\w-]+) \) )?
-                                                  :\s
+                                                  ( \:\s|\s\# )
                                                   (?<value>
-                                                    \S.*
+                                                    .*
                                                     (?:
-                                                      (\n|\r\n) \s\s \S.*
-                                                    )*
+                                                      (\n|\r\n).*
+                                                    )*?
                                                   )
                                                 )+
                                               )?
-
                                               \Z
                                             )
                                             """,
@@ -49,7 +48,7 @@ public sealed class ConventionalCommitsParser : IConventionalCommitsParser
 
     private readonly Regex _summaryRegex = new("""
                                                \A
-                                                 (?<ChangeType>\w+)
+                                                 (?<ChangeType>\w[\w\-]*)
                                                    (\((?<scope>[\w\-\.]+)\))?(?<breakFlag>!)?: \s+(?<desc>\S.*?)
                                                \Z
                                                """,
@@ -78,7 +77,7 @@ public sealed class ConventionalCommitsParser : IConventionalCommitsParser
                 {
                     continue;
                 }
-                Console.WriteLine($"{match.Groups["token"].Value} | {match.Groups["description"].Value}");
+                Console.WriteLine($"[{match.Groups["token"].Value} | {match.Groups["description"].Value}]");
             }
         }
         var body = bodyMatch.GetGroupValue("body");
@@ -98,7 +97,7 @@ public sealed class ConventionalCommitsParser : IConventionalCommitsParser
         for (var captureIndex = 0; captureIndex < keywords.Count; captureIndex++)
         {
             var keyword = keywords[captureIndex].Value;
-            var value = values[captureIndex].Value;
+            var value = values[captureIndex].Value.TrimEnd();
 
             // todo - scope AND !
 

@@ -43,7 +43,7 @@ So if the start release is, say, `1.2.3` then the next release will be one of:
 
 The patch number is automatically bumped after a release to keep the version unique ([Semver spec, item 3](https://semver.org/#spec-item-3)).
 
-The version is bumped by either [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/) messages indicating that a feature or breaking change has been added.
+The version is bumped by either [Conventionial Commits](https://www.conventionalcommits.org/en/v1.0.0/) messages indicating that a feature or breaking change has been added.
 In exceptional cirumstances, such as to correct an error, a release's version can be manipulated by a release tag and then rebuilding the commit.
 
 ### Guava example

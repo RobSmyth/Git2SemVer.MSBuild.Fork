@@ -38,8 +38,6 @@ public abstract class GitLogCommitParserBase
 
     public string FormatArgs { get; }
 
-    public static char RecordSeparator => CharacterConstants.RS;
-
     protected (Commit? commit, string graph) ParseCommitAndGraph(string line)
     {
         line = line.Trim();
@@ -55,7 +53,7 @@ public abstract class GitLogCommitParserBase
         var refs = match.GetGroupValue("refs");
         var parents = match.GetGroupValue("parents").Split(' ');
         var summary = match.GetGroupValue("summary");
-        var body = match.GetGroupValue("body");
+        var body = match.GetGroupValue("body").Replace($"{CharacterConstants.GS}", "\n");
 
         if (_cache.TryGet(sha, out var commit))
         {

@@ -10,14 +10,6 @@ public sealed class CommitMessageMetadata : ICommitMessageMetadata
     {
         { "feat", CommitChangeTypeId.Feature },
         { "fix", CommitChangeTypeId.Fix },
-        { "build", CommitChangeTypeId.Build },
-        { "chore", CommitChangeTypeId.Chore },
-        { "ci", CommitChangeTypeId.ContinuousIntegration },
-        { "docs", CommitChangeTypeId.Documentation },
-        { "style", CommitChangeTypeId.Style },
-        { "refactor", CommitChangeTypeId.Refactoring },
-        { "perf", CommitChangeTypeId.Performance },
-        { "test", CommitChangeTypeId.Testing }
     };
 
     public CommitMessageMetadata(string changeType, bool breakingChangeFlagged, string changeDescription, string body,
@@ -42,22 +34,16 @@ public sealed class CommitMessageMetadata : ICommitMessageMetadata
     {
     }
 
-    [JsonPropertyOrder(1)]
     public ApiChangeFlags ApiChangeFlags { get; }
 
-    [JsonPropertyOrder(2)]
     public string Body { get; }
 
-    [JsonPropertyOrder(3)]
     public string ChangeDescription { get; }
 
-    [JsonPropertyOrder(4)]
     public CommitChangeTypeId ChangeType { get; }
 
-    [JsonPropertyOrder(5)]
     public string ChangeTypeText { get; }
 
-    [JsonPropertyOrder(6)]
     public ILookup<string, string> FooterKeyValues { get; }
 
     private static CommitChangeTypeId ToChangeTypeId(string value)
