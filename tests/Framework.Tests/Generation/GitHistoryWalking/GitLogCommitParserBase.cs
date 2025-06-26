@@ -52,6 +52,10 @@ public abstract class GitLogCommitParserBase
         var sha = match.GetGroupValue("sha");
         var refs = match.GetGroupValue("refs");
         var parents = match.GetGroupValue("parents").Split(' ');
+        if (parents.All(x => x.Length == 0))
+        {
+            parents = [];
+        }
         var summary = match.GetGroupValue("summary");
         var body = match.GetGroupValue("body").Replace($"{CharacterConstants.GS}", "\n");
 

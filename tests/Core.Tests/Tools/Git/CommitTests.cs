@@ -27,7 +27,7 @@ internal class CommitTests
         var target = new Commit("SHA00002", ["SHA00001"], "summary", "body", messageMetadata, _tagParser.Object, []);
 
         Assert.That(target.ReleaseState.State, Is.EqualTo(ReleaseStateId.NotReleased));
-        Assert.That(target.ReleaseState.ReleasedVersion, Is.EqualTo(new SemVersion(0, 0, 0)));
+        Assert.That(target.ReleaseState.ReleasedVersion, Is.Null);
         Assert.That(target.ReleaseState.ChangeFlags.BreakingChange, Is.False);
         Assert.That(target.ReleaseState.ChangeFlags.FunctionalityChange, Is.True);
         Assert.That(target.ReleaseState.ChangeFlags.Fix, Is.False);
@@ -58,7 +58,7 @@ internal class CommitTests
         var target = new Commit("SHA00002", ["SHA00001"], "summary", "body", messageMetadata, _tagParser.Object, []);
 
         Assert.That(target.ReleaseState.State, Is.EqualTo(ReleaseStateId.NotReleased));
-        Assert.That(target.ReleaseState.ReleasedVersion, Is.EqualTo(new SemVersion(0, 0, 0)));
+        Assert.That(target.ReleaseState.ReleasedVersion, Is.Null);
         Assert.That(target.ReleaseState.ChangeFlags, Is.EqualTo(new ApiChangeFlags()));
     }
 
@@ -70,7 +70,7 @@ internal class CommitTests
         var target = new Commit("SHA00001", [], "summary", "body", messageMetadata, _tagParser.Object, []);
 
         Assert.That(target.ReleaseState.State, Is.EqualTo(ReleaseStateId.RootCommit));
-        Assert.That(target.ReleaseState.ReleasedVersion, Is.EqualTo(new SemVersion(0, 1, 0)));
+        Assert.That(target.ReleaseState.ReleasedVersion, Is.Null);
         Assert.That(target.ReleaseState.ChangeFlags, Is.EqualTo(new ApiChangeFlags()));
     }
 
@@ -82,7 +82,7 @@ internal class CommitTests
         var target = new Commit("SHA00001", [], "summary", "body", messageMetadata, _tagParser.Object, []);
 
         Assert.That(target.ReleaseState.State, Is.EqualTo(ReleaseStateId.RootCommit));
-        Assert.That(target.ReleaseState.ReleasedVersion, Is.EqualTo(new SemVersion(0, 1, 0)));
+        Assert.That(target.ReleaseState.ReleasedVersion, Is.Null);
         Assert.That(target.ReleaseState.ChangeFlags.BreakingChange, Is.False);
         Assert.That(target.ReleaseState.ChangeFlags.FunctionalityChange, Is.True);
         Assert.That(target.ReleaseState.ChangeFlags.Fix, Is.False);

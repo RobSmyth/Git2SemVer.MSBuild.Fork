@@ -108,7 +108,7 @@ internal class VersionOutputsTests
                                           "ShortSha": "0000000"
                                         },
                                         "ReleaseState": {
-                                          "State": 0,
+                                          "State": 1,
                                           "ReleasedVersion": null,
                                           "ChangeFlags": {
                                             "BreakingChange": false,

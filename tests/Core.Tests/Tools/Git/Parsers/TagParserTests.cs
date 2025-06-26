@@ -67,7 +67,7 @@ internal class TagParserTests
         var result = tagParser.ParseTagName(tagText);
 
         Assert.That(result.State, Is.EqualTo(ReleaseStateId.NotReleased));
-        Assert.That(result.ReleasedVersion, Is.EqualTo(new SemVersion(0,0,0)));
+        Assert.That(result.ReleasedVersion, Is.Null);
     }
 
     [TestCase("", "v12.34.56")]

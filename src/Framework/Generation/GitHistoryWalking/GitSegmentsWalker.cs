@@ -31,7 +31,7 @@ internal sealed class GitSegmentsWalker
 
         if (_head.ReleaseState.State == ReleaseStateId.Released)
         {
-            _logger.LogDebug("Head has a release tag. Tagged version will be used.");
+            _logger.LogDebug("Head has been released. Tagged version will be used.");
             var headReleaseVersion = _head.ReleaseState.ReleasedVersion!;
             return new SemanticVersionCalcResult
             {

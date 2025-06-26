@@ -1,11 +1,11 @@
 ﻿using System.Text.Json.Serialization;
-using LibGit2Sharp;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 using Semver;
+
+
 #pragma warning disable CS0618 // Type or member is obsolete
 #pragma warning disable CS0612 // Type or member is obsolete
-
 
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 
@@ -35,19 +35,21 @@ public class Commit : ICommit
     /// <summary>
     ///     Construct commit from git log information.
     /// </summary>
-    public Commit(string sha, string[] parents, string summary, string messageBody, string refs, 
+    public Commit(string sha, string[] parents, string summary, string messageBody, string refs,
                   ICommitMessageMetadata metadata,
                   ITagParser? tagParser = null)
         : this(sha, parents, summary, messageBody, metadata, tagParser ?? new TagParser())
     {
         ReleasedVersion = ParseGitLogRefsForReleasedVersion(refs);
-        ReleaseState = new ReleaseState(ReleasedVersion == null ? ReleaseStateId.NotReleased : ReleaseStateId.Released,
+        var state = Parents.Length == 0 ? ReleaseStateId.RootCommit :
+            ReleasedVersion == null ? ReleaseStateId.NotReleased : ReleaseStateId.Released;
+        ReleaseState = new ReleaseState(state,
                                         ReleasedVersion,
                                         new ApiChangeFlags());
     }
 
-    private Commit(string sha, string[] parents, string summary, string messageBody, 
-                   ICommitMessageMetadata metadata, 
+    private Commit(string sha, string[] parents, string summary, string messageBody,
+                   ICommitMessageMetadata metadata,
                    ITagParser tagParser)
     {
         _tagParser = tagParser;
@@ -102,31 +104,10 @@ public class Commit : ICommit
 
     private ReleaseState GetReleaseState(IReadOnlyList<IGitTag>? tags)
     {
-        var releaseState = ParseTagsForReleaseStates(tags);
-
-        if (releaseState.State == ReleaseStateId.NotReleased && Parents.Length == 0)
-        {
-            releaseState = new ReleaseState(ReleaseStateId.RootCommit,
-                                            new SemVersion(0, 1, 0),
-                                            Metadata.ApiChangeFlags);
-        }
-
-        return releaseState;
-    }
-
-    /// <summary>
-    ///     Used to generate commits from git log history. Used by tests.
-    /// </summary>
-    private SemVersion? ParseGitLogRefsForReleasedVersion(string refs)
-    {
-        return refs.Length == 0 ? null : _tagParser.ParseGitLogRefs(refs);
-    }
-
-    private ReleaseState ParseTagsForReleaseStates(IReadOnlyList<IGitTag>? tags)
-    {
+        var defaultState = Parents.Length == 0 ? ReleaseStateId.RootCommit : ReleaseStateId.NotReleased;
         if (tags == null || tags.Count == 0)
         {
-            return new ReleaseState(ReleaseStateId.NotReleased, Metadata.ApiChangeFlags);
+            return new ReleaseState(defaultState, Metadata.ApiChangeFlags);
         }
 
         var releaseStates = new Dictionary<SemVersion, ReleaseState>();
@@ -142,6 +123,14 @@ public class Commit : ICommit
 
         return releaseStates.Count > 0
             ? releaseStates.OrderByDescending(x => x.Key, new SemverSortOrderComparer()).First().Value
-            : new ReleaseState(ReleaseStateId.NotReleased, Metadata.ApiChangeFlags);
+            : new ReleaseState(defaultState, Metadata.ApiChangeFlags);
+    }
+
+    /// <summary>
+    ///     Used to generate commits from git log history. Used by tests.
+    /// </summary>
+    private SemVersion? ParseGitLogRefsForReleasedVersion(string refs)
+    {
+        return refs.Length == 0 ? null : _tagParser.ParseGitLogRefs(refs);
     }
 }

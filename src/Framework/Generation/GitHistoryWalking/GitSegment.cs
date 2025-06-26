@@ -2,6 +2,7 @@
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 using Semver;
 
 
@@ -37,7 +38,8 @@ internal sealed class GitSegment
     /// </summary>
     public int Id { get; }
 
-    public bool IsAReleaseSegment => TaggedReleasedVersion != null || OldestCommit.Parents.Length == 0;
+    public bool IsAReleaseSegment => TaggedReleasedVersion != null || 
+                                     (_commits.Count != 0 && OldestCommit.Parents.Length == 0);
 
     /// <summary>
     ///     First (oldest) commit in the segment.
@@ -50,7 +52,7 @@ internal sealed class GitSegment
     /// </summary>
     public IReadOnlyList<CommitId> ParentCommits => OldestCommit.Parents.ToList();
 
-    public SemVersion? TaggedReleasedVersion => _commits.Count != 0 ? OldestCommit.ReleasedVersion : null;
+    public SemVersion? TaggedReleasedVersion => _commits.Count != 0 ? OldestCommit.ReleaseState.ReleasedVersion : null;
 
     /// <summary>
     ///     Last (youngest) commit in the segment.
