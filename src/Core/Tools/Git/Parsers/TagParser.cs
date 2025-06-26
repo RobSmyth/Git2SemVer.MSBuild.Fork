@@ -15,29 +15,27 @@ namespace NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 public sealed class TagParser : ITagParser
 {
     private const string DefaultVersionPrefix = "v";
-    private const string VersionPattern = @"(?<version>\d+\.\d+\.\d+)";
     private const string PriorVersionPattern = @"(?<priorVersion>\d+\.\d+\.\d+)";
+    private const string VersionPattern = @"(?<version>\d+\.\d+\.\d+)";
     private const string VersionPlaceholder = "%VERSION%";
-    private const string WaypointTagPrefix = @"(?<waypoint>.git2semver\.waypoint_)";
-    private const string WaypointTagSuffix = @"_((?<breaking>break(ing)?)|(?<feat>feat(ure)?)|(?<fix>fix))";
+    private const string WaypointTagPrefix = @"(?<waypoint>.git2semver\.waypoint\()";
+    private const string WaypointTagSuffix = @"\)\.((?<breaking>break(ing)?)|(?<feat>feat(ure)?)|(?<fix>fix)|none)";
 
     public static readonly Dictionary<string, string> ReservedPatternPrefixes = new()
     {
         { "^", "Is not permitted as the format is used with prefix such as `tag: `" },
         { "tag: ", "A prefix found in git log reports" },
-        { ".gsm", "A prefix reserved for future Git2SemVer functionality" }
+        { ".git2semver", "A prefix reserved for future Git2SemVer functionality" }
     };
 
     private readonly Regex _tagVersionFromRefsRegex;
     private readonly Regex _tagVersionRegex;
-    //private readonly Regex _tagWaypointRegex;
 
     public TagParser(string? releaseTagFormat = null)
     {
         var parsePattern = GetParsePattern(releaseTagFormat);
         _tagVersionFromRefsRegex = new Regex($"tag: {parsePattern}", RegexOptions.IgnoreCase);
         _tagVersionRegex = new Regex($"^{parsePattern}", RegexOptions.IgnoreCase);
-        //_tagWaypointRegex = new Regex(GetWaypointPattern(releaseTagFormat), RegexOptions.IgnoreCase);
     }
 
     public SemVersion? ParseGitLogRefs(string refs)
@@ -62,6 +60,34 @@ public sealed class TagParser : ITagParser
         }
 
         return versions.OrderByDescending(x => x, new SemverSortOrderComparer()).FirstOrDefault();
+    }
+
+    public ReleaseState ParseTagName(string friendlyName)
+    {
+        var match = _tagVersionRegex.Match(friendlyName);
+        if (!match.Success)
+        {
+            return new ReleaseState(ReleaseStateId.NotReleased);
+        }
+
+        if (match.Groups["waypoint"].Success)
+        {
+            return CreateWaypointReleaseState(match);
+        }
+
+        return new ReleaseState(ReleaseStateId.Released,
+                                SemVersion.Parse(match.Groups["version"].Value, SemVersionStyles.Strict),
+                                new ApiChangeFlags());
+    }
+
+    private static ReleaseState CreateWaypointReleaseState(Match match)
+    {
+        var breakingChange = match.Groups["breaking"].Success;
+        var featureAdded = match.Groups["feat"].Success;
+        var fix = match.Groups["fix"].Success;
+        var changes = new ApiChangeFlags(breakingChange, featureAdded, fix);
+        var version = SemVersion.Parse(match.Groups["priorVersion"].Value, SemVersionStyles.Strict);
+        return new ReleaseState(ReleaseStateId.ReleaseWaypoint, version, changes);
     }
 
     private static string GetParsePattern(string? releaseTagFormat)
@@ -91,26 +117,5 @@ public sealed class TagParser : ITagParser
         }
 
         return releaseTagFormat!.Replace(VersionPlaceholder, VersionPattern);
-    }
-
-    public ReleaseState ParseTagName(string friendlyName)
-    {
-        var match = _tagVersionRegex.Match(friendlyName);
-        if (!match.Success)
-        {
-            return new ReleaseState(ReleaseStateId.NotReleased);
-        }
-        else if (match.Groups["waypoint"].Success)
-        {
-            var breakingChange = match.Groups["breaking"].Success;
-            var featureAdded = match.Groups["feat"].Success;
-            var fix = match.Groups["fix"].Success;
-            var changes = new ApiChangeFlags(breakingChange, featureAdded, fix);
-            var version = SemVersion.Parse(match.Groups["priorVersion"].Value, SemVersionStyles.Strict);
-            return new ReleaseState(ReleaseStateId.ReleaseWaypoint, version, changes);
-        }
-        return new ReleaseState(ReleaseStateId.Released,
-                               SemVersion.Parse(match.Groups["version"].Value, SemVersionStyles.Strict),
-                               new ApiChangeFlags());
     }
 }

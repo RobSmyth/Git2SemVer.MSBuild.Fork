@@ -189,12 +189,8 @@ internal class ConventionalCommitsParserTests
                  Body - paragraph2
                  """)]
     [TestCase(
-                 """
-                 Body - paragraph1
-                 """,
-                 """
-                 Body - paragraph1
-                 """)]
+                 "Body - paragraph1",
+                 "Body - paragraph1")]
     public void BodyWithFooterTest(string messageBody,
                                    string expectedBody)
     {
@@ -231,6 +227,8 @@ internal class ConventionalCommitsParserTests
                      "refs|#12345"
                  },
                  true)]
+    // Test extra footer topic value lines can start with <space><space>.
+    // to ensure compatible with git footer features.
     [TestCase(
                  """
                  
@@ -247,6 +245,10 @@ internal class ConventionalCommitsParserTests
                      "refs|username/projectName#12345"
                  },
                  true)]
+    // Test
+    //  - footer topic <space># delimiter
+    //  - Return after topic delimiter.
+    //  - Empty line in topic value.
     [TestCase(
                  """
 

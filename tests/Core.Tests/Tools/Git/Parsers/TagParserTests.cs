@@ -41,9 +41,9 @@ internal class TagParserTests
     [TestCase("^ ")]
     [TestCase("tag: ")]
     [TestCase("TAG: ")]
-    [TestCase(".gsm")]
-    [TestCase(".GSM")]
-    [TestCase(".gsm.something")]
+    [TestCase(".git2semver")]
+    [TestCase(".Git2SemVer")]
+    [TestCase(".git2semver.something")]
     public void ConstructorThrowsExceptionWhenFormatPrefixInvalid(string tagFormatPrefix)
     {
         Assert.Throws(Is.TypeOf<Git2SemVerDiagnosticCodeException>()
@@ -98,7 +98,7 @@ internal class TagParserTests
         var expected = new SemVersion(12, 34, 56);
         var tagParser = new TagParser(tagFormat);
 
-        var result = tagParser.ParseTagName($".git2semver.waypoint_{tagText}_feat");
+        var result = tagParser.ParseTagName($".git2semver.waypoint({tagText}).feat");
 
         Assert.That(result.State, Is.EqualTo(ReleaseStateId.ReleaseWaypoint));
         Assert.That(result.ReleasedVersion, Is.EqualTo(expected));

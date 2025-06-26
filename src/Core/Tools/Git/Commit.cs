@@ -19,8 +19,8 @@ public class Commit : ICommit
     ///     Git commit.
     /// </summary>
     public Commit(string sha, string[] parents, string summary, string messageBody,
-                  ICommitMessageMetadata metadata, ITagParser tagParser, IReadOnlyList<IGitTag>? tags)
-        : this(sha, parents, summary, messageBody, metadata, tagParser)
+                  ICommitMessageMetadata messageMetadata, ITagParser tagParser, IReadOnlyList<IGitTag>? tags)
+        : this(sha, parents, summary, messageBody, messageMetadata, tagParser)
     {
         if (tags != null)
         {

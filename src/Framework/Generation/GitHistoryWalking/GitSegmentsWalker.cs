@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using System.Xml;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 using NoeticTools.Git2SemVer.Framework.Framework.Semver;
 using Semver;
 
@@ -27,10 +29,10 @@ internal sealed class GitSegmentsWalker
     {
         var stopwatch = Stopwatch.StartNew();
 
-        if (_head.HasReleaseTag)
+        if (_head.ReleaseState.State == ReleaseStateId.Released)
         {
             _logger.LogDebug("Head has a release tag. Tagged version will be used.");
-            var headReleaseVersion = _head.ReleasedVersion ?? new SemVersion(0, 1, 0);
+            var headReleaseVersion = _head.ReleaseState.ReleasedVersion!;
             return new SemanticVersionCalcResult
             {
                 HeadCommitId = _head.CommitId,
