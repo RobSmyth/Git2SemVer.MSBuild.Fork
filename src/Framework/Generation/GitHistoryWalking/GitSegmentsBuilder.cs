@@ -2,6 +2,7 @@
 using System.Text;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
@@ -81,24 +82,30 @@ internal sealed class GitSegmentsBuilder
         _segment.Append(commit);
         _commitsCache.Add(commit.CommitId, _segment);
 
-        if (commit.ReleasedVersion != null)
+        if (commit.TagMetadata.IsARelease)
         {
             _logger.LogTrace("Found release {1} at commit '{0}'.",
                              commit.CommitId.ShortSha,
-                             commit.ReleasedVersion.ToString());
+                             commit.TagMetadata.Version!.ToString());
 
             return SegmentWalkResult.FoundStart;
         }
 
-        var parents = commit.Parents.ToList();
-        if (parents.Count == 0)
+        if (commit.TagMetadata.ReleaseType == ReleaseTypeId.ReleaseWaypoint)
         {
-            _logger.LogTrace("Found commits path to the repository's first commit '{0}' that is reachable from the head commit without a release.",
+            _logger.LogTrace("Found release waypoint at commit '{0}'.",
                              commit.CommitId.ShortSha);
             return SegmentWalkResult.FoundStart;
         }
 
-        if (parents.Count != 2)
+        if (commit.TagMetadata.ReleaseType == ReleaseTypeId.RootCommit)
+        {
+            _logger.LogTrace("Found that the repository's first commit '{0}' is reachable from the head commit without a released commit.",
+                             commit.CommitId.ShortSha);
+            return SegmentWalkResult.FoundStart;
+        }
+
+        if (commit.Parents.Length != 2)
         {
             return SegmentWalkResult.Continue;
         }
@@ -107,7 +114,7 @@ internal sealed class GitSegmentsBuilder
         return SegmentWalkResult.FoundStart;
     }
 
-    private void NextCommitBeforeMerge(Commit childCommit, CommitId branchCommitId)
+    private void NextCommitBeforeMerge(CommitId branchCommitId)
     {
         var parentCommit = _gitTool.Get(branchCommitId);
 
@@ -168,12 +175,12 @@ internal sealed class GitSegmentsBuilder
         }
 
         _logger.LogTrace("Continuing branch:");
-        NextCommitBeforeMerge(mergeCommit, continuingBranchCommit);
+        NextCommitBeforeMerge(continuingBranchCommit);
 
         _logger.LogTrace($"Commit {mergeCommit.CommitId.ShortSha} is a merge commit from branch commit {mergedBranchCommit.ShortSha}:");
         using (_logger.EnterLogScope())
         {
-            NextCommitBeforeMerge(mergeCommit, mergedBranchCommit);
+            NextCommitBeforeMerge(mergedBranchCommit);
         }
     }
 

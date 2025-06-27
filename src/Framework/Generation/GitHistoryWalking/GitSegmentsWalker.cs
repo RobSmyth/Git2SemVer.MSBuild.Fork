@@ -2,8 +2,6 @@
 using System.Text;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
-using NoeticTools.Git2SemVer.Framework.Framework.Semver;
-using Semver;
 
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
@@ -27,55 +25,40 @@ internal sealed class GitSegmentsWalker
     {
         var stopwatch = Stopwatch.StartNew();
 
-        if (_head.HasReleaseTag)
-        {
-            _logger.LogDebug("Head has a release tag. Tagged version will be used.");
-            var headReleaseVersion = _head.ReleasedVersion ?? new SemVersion(0, 1, 0);
-            return new SemanticVersionCalcResult
-            {
-                HeadCommitId = _head.CommitId,
-                Version = headReleaseVersion,
-                PriorReleaseCommitId = _head.CommitId,
-                PriorReleaseVersion = headReleaseVersion
-            };
-        }
+        var linkedSegments = BuildLinkedSegments(_head);
 
         var result = new SemanticVersionCalcResult
         {
             HeadCommitId = _head.CommitId
         };
 
-        var linkedSegments = BuildLinkedSegments(_head);
-
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine("    Commit      Bumps       From -> To");
-        var releaseSegments = _segments.Where(x => x.IsAReleaseSegment).ToList();
-        foreach (var releaseSegment in releaseSegments)
+        var releasedSegments = _segments.Where(x => x.IsAReleaseSegment).ToList();
+        foreach (var releaseSegment in releasedSegments)
         {
-            var changesAggregator = new ChangeFlagsAggregator();
+            var youngestLinkedSegment = linkedSegments[releaseSegment.YoungestCommit.CommitId];
+            var aggregatedResult = new SegmentsAggregator().Aggregate(_head, youngestLinkedSegment);
 
-            var linkedReleaseSegment = linkedSegments[releaseSegment.YoungestCommit.CommitId];
-            var changeFlags = changesAggregator.Aggregate(linkedReleaseSegment);
-
-            var priorReleaseVersion = releaseSegment.TaggedReleasedVersion ?? new SemVersion(0, 1, 0);
-            var nextRelease = releaseSegment.TaggedReleasedVersion == null && !changeFlags.Any
-                ? priorReleaseVersion
-                : priorReleaseVersion.Bump(changeFlags);
-
-            stringBuilder.AppendLine($"    {linkedReleaseSegment.OldestCommitId.ShortSha,-12} {changeFlags}  {priorReleaseVersion,10} -> {nextRelease,-10}");
-
-            if (nextRelease.ComparePrecedenceTo(result.Version) > 0)
+            if (_logger.IsLogging(LoggingLevel.Debug))
             {
-                result.Version = nextRelease;
-                result.PriorReleaseCommitId = releaseSegment.OldestCommit.CommitId;
-                result.PriorReleaseVersion = priorReleaseVersion;
-                result.ChangeFlags = changeFlags;
+                stringBuilder.AppendLine($"    {youngestLinkedSegment.OldestCommitId.ShortSha,-12} {aggregatedResult.ChangeFlags}  {aggregatedResult.PriorVersion,10} -> {aggregatedResult.Version,-10}");
             }
+
+            if (aggregatedResult.Version.ComparePrecedenceTo(result.Version) <= 0)
+            {
+                continue;
+            }
+
+            result.Version = aggregatedResult.Version;
+            result.PriorReleaseCommitId = releaseSegment.OldestCommit.CommitId;
+            result.PriorReleaseVersion = aggregatedResult.PriorVersion;
+            result.ChangeFlags = aggregatedResult.ChangeFlags;
         }
 
         stopwatch.Stop();
-        _logger.LogDebug("Found {0} prior released commits reachable from head {1} ((in {2:F0} ms):\n{3}",
-                         releaseSegments.Count.ToString(),
+        _logger.LogDebug("Found {0} prior releases reachable from head {1} (in {2:F0} ms):\n{3}",
+                         releasedSegments.Count.ToString(),
                          _head.CommitId.ShortSha,
                          stopwatch.ElapsedMilliseconds,
                          stringBuilder.ToString().TrimEnd());

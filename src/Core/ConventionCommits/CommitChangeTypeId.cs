@@ -6,12 +6,5 @@ public enum CommitChangeTypeId
     None,
     Feature,
     Fix,
-    Build,
-    Chore,
-    ContinuousIntegration,
-    Documentation,
-    Style,
-    Refactoring,
-    Performance,
-    Testing
+    Custom
 }

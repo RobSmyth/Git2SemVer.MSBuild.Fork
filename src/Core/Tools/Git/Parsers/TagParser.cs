@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using LibGit2Sharp;
+using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Diagnostics;
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using Semver;
@@ -15,64 +15,71 @@ namespace NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 public sealed class TagParser : ITagParser
 {
     private const string DefaultVersionPrefix = "v";
+    private const string PriorVersionPattern = @"(?<priorVersion>\d+\.\d+\.\d+)";
     private const string VersionPattern = @"(?<version>\d+\.\d+\.\d+)";
     private const string VersionPlaceholder = "%VERSION%";
+    private const string WaypointTagPrefix = @"(?<waypoint>.git2semver\.waypoint\()";
+    private const string WaypointTagSuffix = @"\)\.((?<breaking>break(ing)?)|(?<feat>feat(ure)?)|(?<fix>fix)|none)";
 
     public static readonly Dictionary<string, string> ReservedPatternPrefixes = new()
     {
         { "^", "Is not permitted as the format is used with prefix such as `tag: `" },
         { "tag: ", "A prefix found in git log reports" },
-        { ".gsm", "A prefix reserved for future Git2SemVer functionality" }
+        { ".git2semver", "A prefix reserved for future Git2SemVer functionality" }
     };
 
-    private readonly Regex _tagVersionFromRefsRegex;
     private readonly Regex _tagVersionRegex;
 
     public TagParser(string? releaseTagFormat = null)
     {
         var parsePattern = GetParsePattern(releaseTagFormat);
-        _tagVersionFromRefsRegex = new Regex($"tag: {parsePattern}", RegexOptions.IgnoreCase);
         _tagVersionRegex = new Regex($"^{parsePattern}", RegexOptions.IgnoreCase);
     }
 
-    public SemVersion? Parse(Tag tag)
+    public TagMetadata ParseTagName(string friendlyName)
     {
-        return ParseTagFriendlyName(tag.FriendlyName);
+        var match = _tagVersionRegex.Match(friendlyName);
+        if (!match.Success)
+        {
+            return new TagMetadata();
+        }
+
+        if (match.Groups["waypoint"].Success)
+        {
+            return CreateWaypointReleaseState(match);
+        }
+
+        return new TagMetadata(ReleaseTypeId.Released,
+                                  SemVersion.Parse(match.Groups["version"].Value, SemVersionStyles.Strict),
+                                  new ApiChangeFlags());
     }
 
-    public IReadOnlyList<SemVersion> Parse(string refs)
+    private static TagMetadata CreateWaypointReleaseState(Match match)
     {
-        if (refs.Length == 0)
-        {
-            return [];
-        }
-
-        var matches = _tagVersionFromRefsRegex.Matches(refs);
-        if (matches.Count == 0)
-        {
-            return [];
-        }
-
-        var versions = new List<SemVersion>();
-        foreach (Match match in matches)
-        {
-            var value = match.Groups["version"].Value;
-            var version = SemVersion.Parse(value, SemVersionStyles.Strict);
-            versions.Add(version);
-        }
-
-        return versions;
+        var breakingChange = match.Groups["breaking"].Success;
+        var featureAdded = match.Groups["feat"].Success;
+        var fix = match.Groups["fix"].Success;
+        var changes = new ApiChangeFlags(breakingChange, featureAdded, fix);
+        var version = SemVersion.Parse(match.Groups["priorVersion"].Value, SemVersionStyles.Strict);
+        return new TagMetadata(ReleaseTypeId.ReleaseWaypoint, version, changes);
     }
 
     private static string GetParsePattern(string? releaseTagFormat)
     {
         if (string.IsNullOrWhiteSpace(releaseTagFormat))
         {
-            return DefaultVersionPrefix + VersionPattern;
+            return $"(({DefaultVersionPrefix}{VersionPattern})|({WaypointTagPrefix}{DefaultVersionPrefix}{PriorVersionPattern}{WaypointTagSuffix}))";
         }
 
+        var versionPattern = ReplacePlaceholderInPattern(releaseTagFormat!);
+        var priorVersionPattern = releaseTagFormat!.Replace(VersionPlaceholder, PriorVersionPattern);
+        return $"({versionPattern}|({WaypointTagPrefix}{priorVersionPattern}{WaypointTagSuffix}))";
+    }
+
+    private static string ReplacePlaceholderInPattern(string releaseTagFormat)
+    {
         var reservedPrefix =
-            ReservedPatternPrefixes.Keys.FirstOrDefault(x => releaseTagFormat!.StartsWith(x, StringComparison.InvariantCultureIgnoreCase));
+            ReservedPatternPrefixes.Keys.FirstOrDefault(x => releaseTagFormat.StartsWith(x, StringComparison.InvariantCultureIgnoreCase));
         if (reservedPrefix != null)
         {
             throw new Git2SemVerDiagnosticCodeException(new GSV005(releaseTagFormat!, reservedPrefix));
@@ -84,11 +91,5 @@ public sealed class TagParser : ITagParser
         }
 
         return releaseTagFormat!.Replace(VersionPlaceholder, VersionPattern);
-    }
-
-    internal SemVersion? ParseTagFriendlyName(string friendlyName)
-    {
-        var match = _tagVersionRegex.Match(friendlyName);
-        return !match.Success ? null : SemVersion.Parse(match.Groups["version"].Value, SemVersionStyles.Strict);
     }
 }

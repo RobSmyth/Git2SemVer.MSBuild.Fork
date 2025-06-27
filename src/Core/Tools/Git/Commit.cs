@@ -1,9 +1,12 @@
 ﻿using System.Text.Json.Serialization;
-using LibGit2Sharp;
+using System.Text.RegularExpressions;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 using Semver;
 
+
+#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0612 // Type or member is obsolete
 
 namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 
@@ -11,34 +14,42 @@ namespace NoeticTools.Git2SemVer.Core.Tools.Git;
 // ReSharper disable MergeIntoPattern
 public class Commit : ICommit
 {
+    private readonly Regex _tagFromRefsRegex;
     private readonly ITagParser _tagParser;
 
     /// <summary>
-    ///     /Construct commit from LibGit2Sharp objects.
+    ///     Git commit.
     /// </summary>
     public Commit(string sha, string[] parents, string summary, string messageBody,
-                  CommitMessageMetadata metadata, ITagParser tagParser, IReadOnlyList<Tag>? tags)
-        : this(sha, parents, summary, messageBody, metadata, tagParser)
+                  ICommitMessageMetadata messageMetadata, ITagParser tagParser, IReadOnlyList<IGitTag>? tags)
+        : this(sha, parents, summary, messageBody, messageMetadata, tagParser)
     {
         if (tags != null)
         {
             Tags = tags;
         }
 
-        ReleasedVersion = GetReleaseTag(tags);
+        var metadata = GetReleaseMetadata(tags);
+        ReleasedVersion = metadata.Version;
+        TagMetadata = metadata;
     }
 
     /// <summary>
     ///     Construct commit from git log information.
     /// </summary>
-    public Commit(string sha, string[] parents, string summary, string messageBody, string refs, CommitMessageMetadata metadata,
+    public Commit(string sha, string[] parents, string summary, string messageBody, string refs,
+                  ICommitMessageMetadata messageMetadata,
                   ITagParser? tagParser = null)
-        : this(sha, parents, summary, messageBody, metadata, tagParser ?? new TagParser())
+        : this(sha, parents, summary, messageBody, messageMetadata, tagParser ?? new TagParser())
     {
-        ReleasedVersion = GetReleaseTag(refs);
+        var metadata = GetReleaseMetadata(refs);
+        ReleasedVersion = metadata.Version;
+        TagMetadata = metadata;
     }
 
-    private Commit(string sha, string[] parents, string summary, string messageBody, CommitMessageMetadata metadata, ITagParser tagParser)
+    private Commit(string sha, string[] parents, string summary, string messageBody,
+                   ICommitMessageMetadata messageMetadata,
+                   ITagParser tagParser)
     {
         _tagParser = tagParser;
         CommitId = new CommitId(sha);
@@ -54,68 +65,104 @@ public class Commit : ICommit
 
         Summary = summary;
         MessageBody = messageBody;
-        Metadata = metadata;
+        MessageMetadata = messageMetadata;
+        _tagFromRefsRegex = new Regex(@"tag: (?<name>[^,]+)", RegexOptions.IgnoreCase);
     }
 
     [JsonPropertyOrder(11)]
     public CommitId CommitId { get; }
 
+    /// <summary>
+    ///     Indicates if this commit has been released.
+    /// </summary>
     [JsonIgnore]
-    public bool HasReleaseTag => ReleasedVersion != null;
+    public bool IsARelease => TagMetadata.IsARelease;
+
+    [JsonIgnore]
+    public bool IsAWaypoint => TagMetadata.IsAWaypoint;
+
+    [JsonIgnore]
+    public bool IsRootCommit => TagMetadata.IsRootCommit;
 
     [JsonPropertyOrder(22)]
     public string MessageBody { get; }
 
+    /// <summary>
+    ///     Commit message metadata.
+    /// </summary>
     [JsonPropertyOrder(90)]
-    public CommitMessageMetadata Metadata { get; }
+    public ICommitMessageMetadata MessageMetadata { get; }
 
+    [JsonPropertyOrder(12)]
+    public TagMetadata TagMetadata { get; } = null!;
+
+    /// <summary>
+    ///     A null commit.
+    /// </summary>
     [JsonIgnore]
     public static Commit Null => new("00000000", [], "null commit", "", "", new CommitMessageMetadata());
 
     [JsonPropertyOrder(31)]
     public CommitId[] Parents { get; }
 
-    [JsonPropertyOrder(12)]
-    public SemVersion? ReleasedVersion { get; }
+    [JsonIgnore]
+    public SemVersion? ReleasedVersion { get; } // depreciated
 
     [JsonPropertyOrder(21)]
     public string Summary { get; }
 
     [JsonIgnore]
-    public IReadOnlyList<Tag> Tags { get; } = [];
+    public IReadOnlyList<IGitTag> Tags { get; } = [];
 
-    private SemVersion? GetReleaseTag(IReadOnlyList<Tag>? tags)
+    private TagMetadata GetReleaseMetadata(string gitRefs)
     {
-        if (tags == null || tags.Count == 0)
+        var defaultState = Parents.Length == 0 ? ReleaseTypeId.RootCommit : ReleaseTypeId.NotReleased;
+        if (gitRefs.Length == 0)
         {
-            return null;
+            return new TagMetadata(defaultState, MessageMetadata.ApiChangeFlags);
         }
 
-        var versions = new List<SemVersion>();
-        // ReSharper disable once LoopCanBeConvertedToQuery
-        foreach (var tag in tags)
+        var tagMatches = _tagFromRefsRegex.Matches(gitRefs);
+        if (tagMatches.Count == 0)
         {
-            var version = _tagParser.Parse(tag);
-            if (version != null)
+            return new TagMetadata(defaultState, MessageMetadata.ApiChangeFlags);
+        }
+
+        var tagNames = new List<string>();
+        foreach (Match match in tagMatches)
+        {
+            tagNames.Add(match.Groups["name"].Value);
+        }
+
+        return ParseTagNames(tagNames, defaultState);
+    }
+
+    private TagMetadata GetReleaseMetadata(IReadOnlyList<IGitTag>? tags)
+    {
+        var defaultState = Parents.Length == 0 ? ReleaseTypeId.RootCommit : ReleaseTypeId.NotReleased;
+        if (tags == null || tags.Count == 0)
+        {
+            return new TagMetadata(defaultState, MessageMetadata.ApiChangeFlags);
+        }
+
+        var tagNames = tags.Select(x => x.FriendlyName).ToList();
+        return ParseTagNames(tagNames, defaultState);
+    }
+
+    private TagMetadata ParseTagNames(List<string> tagNames, ReleaseTypeId defaultState)
+    {
+        var tagMetadata = new Dictionary<SemVersion, TagMetadata>();
+        foreach (var tagName in tagNames)
+        {
+            var metadata = _tagParser.ParseTagName(tagName);
+            if (metadata.ReleaseType != ReleaseTypeId.NotReleased)
             {
-                versions.Add(version);
+                tagMetadata.Add(metadata.Version!, metadata);
             }
         }
 
-        return versions.OrderByDescending(x => x, new SemverSortOrderComparer()).FirstOrDefault();
-    }
-
-    /// <summary>
-    ///     Legacy use to get release tag by parsing refs text from git log output.
-    /// </summary>
-    private SemVersion? GetReleaseTag(string refs)
-    {
-        if (refs.Length == 0)
-        {
-            return null;
-        }
-
-        var versions = _tagParser.Parse(refs);
-        return versions.Count == 0 ? null : versions.OrderByDescending(x => x, new SemverSortOrderComparer()).FirstOrDefault();
+        return tagMetadata.Count > 0
+            ? tagMetadata.OrderByDescending(x => x.Key, new SemverSortOrderComparer()).First().Value
+            : new TagMetadata(defaultState, MessageMetadata.ApiChangeFlags);
     }
 }

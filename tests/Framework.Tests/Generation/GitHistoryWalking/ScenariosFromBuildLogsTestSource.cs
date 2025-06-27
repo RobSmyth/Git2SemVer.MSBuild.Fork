@@ -11,7 +11,7 @@ namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.GitHistoryWalking;
 internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
 {
     private const char ETX = CharacterConstants.ETX;
-
+    private const char NL = CharacterConstants.GS; // manual replacement for new line
     private const char STX = CharacterConstants.STX;
     private const char US = CharacterConstants.US;
 
@@ -225,7 +225,7 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
     /// </summary>
     public LoggedScenario Scenario08 { get; } =
         new("2.0.0", "0002", $"""
-                              *               {US}.|0002|0001|{STX}feat: add great feature{ETX}|{STX}BREAKING CHANGE: sorry{ETX}| (HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH)|
+                              *               {US}.|0002|0001|{STX}feat: add great feature{ETX}|{STX}{NL}BREAKING CHANGE: sorry{ETX}| (HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH)|
                               *               {US}.|0001|0003|{STX}REDACTED{ETX}|{STX}{ETX}| (tag: v1.2.3)|
                               *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
                               """);
@@ -346,6 +346,24 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
                              *               .|0019|0020|build: REDACTED|||
                              *               .|0020||REDACTED|||
                              """);
+    
+    /// <summary>
+    ///     Tests waypoint tag with feature bump.
+    /// </summary>
+    public LoggedScenario Scenario14 { get; } =
+        //new("1.0.0", "0002", $"""
+        //                      *               {US}.|0002|0001|{STX}fix!: REDACTED{ETX}|{STX}{ETX}| (HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH, origin/REDACTED_BRANCH)|
+        //                      *               {US}.|0001|0003|{STX}REDACTED{ETX}|{STX}{ETX}||
+        //                      *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
+        //                      *               {US}.|0004||{STX}REDACTED{ETX}|{STX}{ETX}||
+        //                      """);
+
+        new("1.3.0", "0002", $"""
+                              *               {US}.|0002|0001|{STX}REDACTED{ETX}|{STX}{ETX}| (HEAD -> REDACTED_BRANCH, origin/main)|
+                              *               {US}.|0001|0003|{STX}REDACTED{ETX}|{STX}{ETX}| (tag: .git2semver.waypoint(v1.2.3).feat)|
+                              *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
+                              *               {US}.|0004||{STX}REDACTED{ETX}|{STX}{ETX}||
+                              """);
 
     public IEnumerator GetEnumerator()
     {
@@ -355,12 +373,13 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
         yield return new object[] { "Scenario 04", Scenario04 };
         yield return new object[] { "Scenario 05", Scenario05 };
         yield return new object[] { "Scenario 06 - feature", Scenario06 };
-        yield return new object[] { "Scenario 07 - !", Scenario07 };
+        yield return new object[] { "Scenario 07 - braking change (!)", Scenario07 };
         yield return new object[] { "Scenario 08 - breaking change", Scenario08 };
         yield return new object[] { "Scenario 09 - tag trumps bump on same commit", Scenario09 };
         yield return new object[] { "Scenario 10", Scenario10 };
         yield return new object[] { "Scenario 11", Scenario11 };
         yield return new object[] { "Scenario 12", Scenario12 };
         yield return new object[] { "Scenario 13", Scenario13 };
+        yield return new object[] { "Scenario 14 - waypoint with feat", Scenario14 };
     }
 }

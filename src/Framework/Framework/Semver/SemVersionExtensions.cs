@@ -6,6 +6,9 @@ namespace NoeticTools.Git2SemVer.Framework.Framework.Semver;
 
 public static class SemVersionExtensions
 {
+    /// <summary>
+    ///     Bump version according to Semantic Versioning specification.
+    /// </summary>
     public static SemVersion Bump(this SemVersion lastReleased, ApiChangeFlags changeFlags)
     {
         if (changeFlags.BreakingChange)

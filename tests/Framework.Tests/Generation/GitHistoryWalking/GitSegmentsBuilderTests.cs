@@ -44,7 +44,7 @@ internal class GitSegmentsBuilderTests
             Assert.That(segment.YoungestCommit.CommitId.Sha, Is.EqualTo("0001"));
             //Assert.That(segment.ChildCommits, Has.Count.EqualTo(0));
             Assert.That(segment.ParentCommits, Has.Count.EqualTo(2));
-            Assert.That(segment.TaggedReleasedVersion, Is.Null);
+            Assert.That(segment.Version, Is.Null);
         });
         Assert.That(segments[1].Commits, Has.Count.EqualTo(1));
         Assert.That(segments[2].Commits, Has.Count.EqualTo(2));
@@ -58,7 +58,7 @@ internal class GitSegmentsBuilderTests
             //Assert.That(segment.ChildCommits, Has.Count.EqualTo(2));
             //Assert.That(segment.ChildCommits[0].Id, Is.EqualTo(5));
             //Assert.That(segment.ChildCommits[1].Id, Is.EqualTo(6));
-            Assert.That(segment.TaggedReleasedVersion!.ToString(), Is.EqualTo("0.3.1"));
+            Assert.That(segment.Version!.ToString(), Is.EqualTo("0.3.1"));
         });
         Assert.That(segments[7].Commits, Has.Count.EqualTo(1));
     }

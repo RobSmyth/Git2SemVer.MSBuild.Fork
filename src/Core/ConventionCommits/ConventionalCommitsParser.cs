@@ -8,39 +8,34 @@ public sealed class ConventionalCommitsParser : IConventionalCommitsParser
     private readonly Regex _bodyRegex = new("""
                                             \A
                                             (
-                                              (
-                                                (?<footer> 
-                                                  (BREAKING(\s|-)CHANGE | \w(\w|-)* )
-                                                  :\s+ 
-                                                  (\w|\#)(\w|\s)*?
-                                                  (\n|\r\n)?
-                                                )*
-                                              )
-                                              |
-                                              ( 
-                                                (?<body>.*?)
-                                                ( 
-                                                  (\n|\r\n) 
-                                                  ( 
-                                                    (\n|\r\n) 
-                                                    (?<footer> 
-                                                      (BREAKING(\s|-)CHANGE | \w(\w|-)* )
-                                                      :\s+ 
-                                                      (\w|\#)(\w|\s)*?
-                                                      (\n|\r\n)?
-                                                    )*
-                                                  )?
-                                                )?
-                                                (\n|\r\n)?
-                                              )
+                                              (?<body>\S ((\n|\r\n)|.)*? )
+                                              (\Z | (?: (\n|\r\n) ) )
+                                            )?
+                                            (
+
+                                              (?<footer>
+                                                (
+                                                  (?: (\n|\r\n)+ )
+                                                  (?<token> (BREAKING\sCHANGE) | ( \w[\w-]+ ) )
+                                                  ( \( (?<scope>\w[\w-]+) \) )?
+                                                  ( \:\s|\s\# )
+                                                  (?<value>
+                                                    .*
+                                                    (?:
+                                                      (\n|\r\n).*
+                                                    )*?
+                                                  )
+                                                )+
+                                              )?
+                                              \Z
                                             )
-                                            \Z 
                                             """,
-                                            RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.CultureInvariant);
+                                            RegexOptions.IgnorePatternWhitespace |
+                                            RegexOptions.Multiline);
 
     private readonly Regex _summaryRegex = new("""
                                                \A
-                                                 (?<ChangeType>(fix|feat|build|chore|ci|docs|style|refactor|perf|test))
+                                                 (?<ChangeType>\w[\w\-]*)
                                                    (\((?<scope>[\w\-\.]+)\))?(?<breakFlag>!)?: \s+(?<desc>\S.*?)
                                                \Z
                                                """,
@@ -59,27 +54,57 @@ public sealed class ConventionalCommitsParser : IConventionalCommitsParser
         var changeDescription = summaryMatch.GetGroupValue("desc");
 
         var bodyMatch = _bodyRegex.Match(commitMessageBody);
+        var bodyMatches = _bodyRegex.Matches(commitMessageBody);
+        foreach (Match match in bodyMatches)
+        {
+            if (match.Success)
+            {
+                var group = match.Groups["footer"];
+                if (!group.Success)
+                {
+                    continue;
+                }
+
+                Console.WriteLine($"[{match.Groups["token"].Value} | {match.Groups["description"].Value}]");
+            }
+        }
+
         var body = bodyMatch.GetGroupValue("body");
-        var footerGroup = bodyMatch.Groups["footer"];
-        var keyValuePairs = GetFooterKeyValuePairs(footerGroup);
+
+        var keyValuePairs = GetFooterKeyValuePairs(bodyMatch);
 
         return new CommitMessageMetadata(changeType, breakingChangeFlagged, changeDescription, body, keyValuePairs);
     }
 
-    private static List<(string key, string value)> GetFooterKeyValuePairs(Group footerGroup)
+    private static List<(string key, string value)> GetFooterKeyValuePairs(Match match)
     {
         var keyValuePairs = new List<(string key, string value)>();
-        if (!footerGroup.Success)
-        {
-            return keyValuePairs;
-        }
 
-        foreach (Capture capture in footerGroup.Captures)
+        var keywords = match.Groups["token"].Captures;
+        var values = match.Groups["value"].Captures;
+
+        for (var captureIndex = 0; captureIndex < keywords.Count; captureIndex++)
         {
-            var line = capture.Value;
-            var elements = line.Split(':');
-            keyValuePairs.Add((key: elements[0], value: elements[1].Trim()));
+            var keyword = keywords[captureIndex].Value;
+            var value = values[captureIndex].Value.TrimEnd();
+
+            // todo - scope AND !
+
+            Console.WriteLine($"{keyword} | {value}");
+            keyValuePairs.Add((keyword, value));
         }
+        //foreach (Match keywordMatch in keywords)
+        //{
+        //    if (!keywordMatch.Success)
+        //    {
+        //        continue;
+        //    }
+
+        //    var keyword = match.Groups["keyword"].Value;
+        //    var description = match.Groups["description"].Value;
+        //    Console.WriteLine($"{keyword} | {description}");
+        //    keyValuePairs.Add((keyword, description));
+        //}
 
         return keyValuePairs;
     }
