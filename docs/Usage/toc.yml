@@ -24,3 +24,5 @@
   uid: git2semver-msbuild
 - name: Git2SemVer.Tool
   uid: git2semver-tool
+- name: Waypoint tagging
+  uid: waypoint-tagging
