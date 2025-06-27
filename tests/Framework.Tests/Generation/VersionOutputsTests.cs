@@ -107,7 +107,7 @@ internal class VersionOutputsTests
                                           "Sha": "00000000",
                                           "ShortSha": "0000000"
                                         },
-                                        "Metadata": {
+                                        "TagMetadata": {
                                           "ReleaseType": 1,
                                           "Version": null,
                                           "ChangeFlags": {

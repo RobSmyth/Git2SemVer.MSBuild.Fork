@@ -38,7 +38,7 @@ internal sealed class GitSegment
     public int Id { get; }
 
     public bool IsAReleaseSegment => Version != null ||
-                                     (_commits.Count != 0 && OldestCommit.Metadata.IsRootCommit);
+                                     (_commits.Count != 0 && OldestCommit.TagMetadata.IsRootCommit);
 
     /// <summary>
     ///     First (oldest) commit in the segment.
@@ -51,7 +51,7 @@ internal sealed class GitSegment
     /// </summary>
     public IReadOnlyList<CommitId> ParentCommits => OldestCommit.Parents.ToList();
 
-    public SemVersion? Version => _commits.Count != 0 ? OldestCommit.Metadata.Version : null;
+    public SemVersion? Version => _commits.Count != 0 ? OldestCommit.TagMetadata.Version : null;
 
     /// <summary>
     ///     Last (youngest) commit in the segment.
@@ -112,9 +112,10 @@ internal sealed class GitSegment
         }
 
         var bumps = new ApiChanges();
-        foreach (var commit in _commits.Where(commit => !commit.IsARelease))
+        foreach (var commit in _commits.Where(commit => !commit.IsARelease || commit.IsAWaypoint))
         {
             bumps.Aggregate(commit.MessageMetadata.ApiChangeFlags);
+            bumps.Aggregate(commit.TagMetadata.ChangeFlags);
         }
 
         _bumps = bumps;

@@ -44,8 +44,7 @@ internal sealed class SegmentsAggregator
         var oldestCommit = releaseSegment.OldestCommit;
         var priorVersion = oldestCommit.IsRootCommit ? new SemVersion(0, 1, 0) : oldestCommit.ReleasedVersion!;
 
-        var version = (oldestCommit.IsRootCommit && !_changeFlags.Any) ||
-                      oldestCommit.Equals(head)
+        var version = (oldestCommit.IsRootCommit && !_changeFlags.Any) || oldestCommit.Equals(head)
             ? priorVersion
             : priorVersion.Bump(_changeFlags);
 

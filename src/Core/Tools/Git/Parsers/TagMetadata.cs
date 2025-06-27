@@ -10,23 +10,23 @@ namespace NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 /// <summary>
 ///     Information about a commit's release state.
 /// </summary>
-public sealed class CommitMetadata
+public sealed class TagMetadata
 {
-    public CommitMetadata(ReleaseTypeId state)
+    public TagMetadata(ReleaseTypeId state)
         : this(state,
                null,
                new ApiChangeFlags())
     {
     }
 
-    public CommitMetadata(ReleaseTypeId state, ApiChangeFlags changeFlags)
+    public TagMetadata(ReleaseTypeId state, ApiChangeFlags changeFlags)
         : this(state,
                null,
                changeFlags)
     {
     }
 
-    public CommitMetadata(ReleaseTypeId state, SemVersion version)
+    public TagMetadata(ReleaseTypeId state, SemVersion version)
         : this(state, version, new ApiChangeFlags())
     {
     }
@@ -34,7 +34,7 @@ public sealed class CommitMetadata
     /// <summary>
     ///     Information about a commit's release state.
     /// </summary>
-    public CommitMetadata(ReleaseTypeId state, SemVersion? version, ApiChangeFlags changeFlags)
+    public TagMetadata(ReleaseTypeId state, SemVersion? version, ApiChangeFlags changeFlags)
     {
         Version = version;
         ReleaseType = state;
@@ -61,6 +61,9 @@ public sealed class CommitMetadata
     public bool IsARelease => ReleaseType == ReleaseTypeId.Released;
 
     [JsonIgnore]
+    public bool IsAWaypoint => ReleaseType == ReleaseTypeId.ReleaseWaypoint;
+
+    [JsonIgnore]
     public bool IsRootCommit => ReleaseType == ReleaseTypeId.RootCommit;
 
     /// <summary>
@@ -80,13 +83,4 @@ public sealed class CommitMetadata
     /// </remarks>
     [JsonPropertyOrder(2)]
     public SemVersion? Version { get; }
-
-    //public CommitMetadata Aggregate(CommitMetadata changeFlags)
-    //{
-    //    if (State == ReleaseStateId.Released)
-    //    {
-    //        return new CommitMetadata(State, Version, new ApiChangeFlags());
-    //    }
-    //    return new CommitMetadata(State, Version, ChangeFlags.Aggregate(changeFlags));
-    //}
 }

@@ -60,7 +60,7 @@ internal class TagParserTests
     [TestCase("release tag: %VERSION% abc", "release tag: 12.34.56 ab")]
     [TestCase("%VERSION%", "v12.34.56")]
     [TestCase("v%VERSION%", "12.34.56")]
-    public void ParseTagFriendlyNameWithInvalidReleaseTag(string tagFormat, string tagText)
+    public void ParseTagNameWithInvalidReleaseTag(string tagFormat, string tagText)
     {
         var tagParser = new TagParser(tagFormat);
 
@@ -76,7 +76,7 @@ internal class TagParserTests
     [TestCase("release tag: %VERSION% abc", "release tag: 12.34.56 abc")]
     [TestCase("%VERSION%", "12.34.56")]
     [TestCase("v%VERSION%", "v12.34.56")]
-    public void ParseTagFriendlyNameWithValidReleaseTag(string tagFormat, string tagText)
+    public void ParseTagNameWithValidReleaseTag(string tagFormat, string tagText)
     {
         var expected = new SemVersion(12, 34, 56);
         var tagParser = new TagParser(tagFormat);
@@ -93,7 +93,7 @@ internal class TagParserTests
     [TestCase("release tag: %VERSION% abc", "release tag: 12.34.56 abc")]
     [TestCase("%VERSION%", "12.34.56")]
     [TestCase("v%VERSION%", "v12.34.56")]
-    public void ParseTagFriendlyNameWithValidWaypointTag(string tagFormat, string tagText)
+    public void ParseTagNameWithValidWaypointTag(string tagFormat, string tagText)
     {
         var expected = new SemVersion(12, 34, 56);
         var tagParser = new TagParser(tagFormat);
@@ -105,5 +105,24 @@ internal class TagParserTests
         Assert.That(result.ChangeFlags.BreakingChange, Is.False);
         Assert.That(result.ChangeFlags.FunctionalityChange, Is.True);
         Assert.That(result.ChangeFlags.Fix, Is.False);
+    }
+
+    [TestCase("feat", false, true, false)]
+    [TestCase("feature", false, true, false)]
+    [TestCase("break", true, false, false)]
+    [TestCase("breaking", true, false, false)]
+    [TestCase("fix", false, false, true)]
+    [TestCase("none", false, false, false)]
+    public void ParseTagNameWithValidWaypointTagWithBump(string suffix, bool expectBreak, bool expectFeat, bool expectFix)
+    {
+        var tagParser = new TagParser();
+
+        var result = tagParser.ParseTagName($".git2semver.waypoint(v1.2.3).{suffix}");
+
+        Assert.That(result.ReleaseType, Is.EqualTo(ReleaseTypeId.ReleaseWaypoint));
+        Assert.That(result.Version, Is.EqualTo(new SemVersion(1, 2, 3)));
+        Assert.That(result.ChangeFlags.BreakingChange, Is.EqualTo(expectBreak));
+        Assert.That(result.ChangeFlags.FunctionalityChange, Is.EqualTo(expectFeat));
+        Assert.That(result.ChangeFlags.Fix, Is.EqualTo(expectFix));
     }
 }

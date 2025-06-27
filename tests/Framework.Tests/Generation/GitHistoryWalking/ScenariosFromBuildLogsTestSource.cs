@@ -346,6 +346,24 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
                              *               .|0019|0020|build: REDACTED|||
                              *               .|0020||REDACTED|||
                              """);
+    
+    /// <summary>
+    ///     Tests waypoint tag with feature bump.
+    /// </summary>
+    public LoggedScenario Scenario14 { get; } =
+        //new("1.0.0", "0002", $"""
+        //                      *               {US}.|0002|0001|{STX}fix!: REDACTED{ETX}|{STX}{ETX}| (HEAD -> REDACTED_BRANCH, origin/REDACTED_BRANCH, origin/REDACTED_BRANCH)|
+        //                      *               {US}.|0001|0003|{STX}REDACTED{ETX}|{STX}{ETX}||
+        //                      *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
+        //                      *               {US}.|0004||{STX}REDACTED{ETX}|{STX}{ETX}||
+        //                      """);
+
+        new("1.3.0", "0002", $"""
+                              *               {US}.|0002|0001|{STX}REDACTED{ETX}|{STX}{ETX}| (HEAD -> REDACTED_BRANCH, origin/main)|
+                              *               {US}.|0001|0003|{STX}REDACTED{ETX}|{STX}{ETX}| (tag: .git2semver.waypoint(v1.2.3).feat)|
+                              *               {US}.|0003|0004|{STX}REDACTED{ETX}|{STX}{ETX}||
+                              *               {US}.|0004||{STX}REDACTED{ETX}|{STX}{ETX}||
+                              """);
 
     public IEnumerator GetEnumerator()
     {
@@ -362,5 +380,6 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
         yield return new object[] { "Scenario 11", Scenario11 };
         yield return new object[] { "Scenario 12", Scenario12 };
         yield return new object[] { "Scenario 13", Scenario13 };
+        yield return new object[] { "Scenario 14 - waypoint with feat", Scenario14 };
     }
 }

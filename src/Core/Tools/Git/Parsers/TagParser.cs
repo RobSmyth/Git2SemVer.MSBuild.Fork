@@ -28,46 +28,20 @@ public sealed class TagParser : ITagParser
         { ".git2semver", "A prefix reserved for future Git2SemVer functionality" }
     };
 
-    private readonly Regex _tagVersionFromRefsRegex;
     private readonly Regex _tagVersionRegex;
 
     public TagParser(string? releaseTagFormat = null)
     {
         var parsePattern = GetParsePattern(releaseTagFormat);
-        _tagVersionFromRefsRegex = new Regex($"tag: {parsePattern}", RegexOptions.IgnoreCase);
         _tagVersionRegex = new Regex($"^{parsePattern}", RegexOptions.IgnoreCase);
     }
 
-    public SemVersion? ParseGitLogRefs(string refs)
-    {
-        if (refs.Length == 0)
-        {
-            return null;
-        }
-
-        var matches = _tagVersionFromRefsRegex.Matches(refs);
-        if (matches.Count == 0)
-        {
-            return null;
-        }
-
-        var versions = new List<SemVersion>();
-        foreach (Match match in matches)
-        {
-            var value = match.Groups["version"].Value;
-            var version = SemVersion.Parse(value, SemVersionStyles.Strict);
-            versions.Add(version);
-        }
-
-        return versions.OrderByDescending(x => x, new SemverSortOrderComparer()).FirstOrDefault();
-    }
-
-    public CommitMetadata ParseTagName(string friendlyName)
+    public TagMetadata ParseTagName(string friendlyName)
     {
         var match = _tagVersionRegex.Match(friendlyName);
         if (!match.Success)
         {
-            return new CommitMetadata(ReleaseTypeId.NotReleased);
+            return new TagMetadata(ReleaseTypeId.NotReleased);
         }
 
         if (match.Groups["waypoint"].Success)
@@ -75,19 +49,19 @@ public sealed class TagParser : ITagParser
             return CreateWaypointReleaseState(match);
         }
 
-        return new CommitMetadata(ReleaseTypeId.Released,
+        return new TagMetadata(ReleaseTypeId.Released,
                                   SemVersion.Parse(match.Groups["version"].Value, SemVersionStyles.Strict),
                                   new ApiChangeFlags());
     }
 
-    private static CommitMetadata CreateWaypointReleaseState(Match match)
+    private static TagMetadata CreateWaypointReleaseState(Match match)
     {
         var breakingChange = match.Groups["breaking"].Success;
         var featureAdded = match.Groups["feat"].Success;
         var fix = match.Groups["fix"].Success;
         var changes = new ApiChangeFlags(breakingChange, featureAdded, fix);
         var version = SemVersion.Parse(match.Groups["priorVersion"].Value, SemVersionStyles.Strict);
-        return new CommitMetadata(ReleaseTypeId.ReleaseWaypoint, version, changes);
+        return new TagMetadata(ReleaseTypeId.ReleaseWaypoint, version, changes);
     }
 
     private static string GetParsePattern(string? releaseTagFormat)

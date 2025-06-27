@@ -18,7 +18,7 @@ public interface ICommit
     /// </summary>
     string MessageBody { get; }
 
-    CommitMetadata Metadata { get; }
+    TagMetadata TagMetadata { get; }
 
     /// <summary>
     ///     This commit's parent commits.
