@@ -11,12 +11,12 @@ internal sealed class LinkedSegment(GitSegment segment)
     private readonly List<LinkedSegment> _linkedChildSegments = [];
     private readonly GitSegment _segment = segment;
 
-    public GitSegment Inner { get; } = segment;
-
     /// <summary>
     ///     Aggregated API changes from this segment up to all younger segments.
     /// </summary>
     public ApiChangeFlags ChangeFlags => _segment.ApiChanges.Flags;
+
+    public GitSegment Inner { get; } = segment;
 
     public IReadOnlyList<LinkedSegment> LinkedChildSegments => _linkedChildSegments;
 

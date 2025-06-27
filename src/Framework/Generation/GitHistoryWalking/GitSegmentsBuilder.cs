@@ -105,7 +105,7 @@ internal sealed class GitSegmentsBuilder
             return SegmentWalkResult.FoundStart;
         }
 
-        if ( commit.Parents.Length != 2)
+        if (commit.Parents.Length != 2)
         {
             return SegmentWalkResult.Continue;
         }

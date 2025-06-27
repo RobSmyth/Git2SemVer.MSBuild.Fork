@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
+
 namespace NoeticTools.Git2SemVer.Core.ConventionCommits;
 
 public interface ICommitMessageMetadata
@@ -17,8 +18,8 @@ public interface ICommitMessageMetadata
     CommitChangeTypeId ChangeType { get; }
 
     /// <summary>
-    /// The raw change type text found in the commit message.
-    /// Useful if the <c>ChangeType</c> is <c>CommitChangeTypeId.Custom</c>.
+    ///     The raw change type text found in the commit message.
+    ///     Useful if the <c>ChangeType</c> is <c>CommitChangeTypeId.Custom</c>.
     /// </summary>
     [JsonPropertyOrder(5)]
     string ChangeTypeText { get; }

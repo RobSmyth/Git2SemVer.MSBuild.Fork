@@ -18,83 +18,6 @@ internal class ConventionalCommitsParserTests
         _target = new ConventionalCommitsParser();
     }
 
-    //[TestCase("""
-    //          fail body ddd
-
-    //          dd
-
-    //          """)]
-    [TestCase("""
-              body1 ddd
-
-              dd
-
-              token1(scope1): value1
-              token2: value2
-              """)]
-    [TestCase("""
-              body2 ddd
-
-              dd
-
-              token1(scope1): value1
-              token2: value2
-              """)]
-    [TestCase("""
-
-              token1: value1
-              token2: value2
-              """)]
-    [TestCase("""
-
-              token1: value1
-                aaa
-              token2: value2
-              """)]
-    public void RegexExperimentalTest(string input)
-    {
-        var regex = new Regex("""
-                              \A
-                              (
-                                (?<body>\S ((\n|\r\n)|.)*? )
-                                (\Z | (?: (\n|\r\n) ) )
-                              )?
-                              (
-                              
-                                (?<footer>
-                                  (
-                                    (?: (\n|\r\n) )
-                                    (?<token> (BREAKING\sCHANGE) | ( \w[\w-]+ ) )
-                                    ( \( (?<scope>\w[\w-]+) \) )?
-                                    :\s
-                                    (?<value>
-                                      \S.*
-                                      (?:
-                                        (\n|\r\n) \s\s \S.*
-                                      )*
-                                    )
-                                  )+
-                                )?
-                              
-                                \Z
-                              )
-                              """,
-                              RegexOptions.IgnorePatternWhitespace | 
-                              RegexOptions.Multiline);
-
-        var match = regex.Match(input);
-
-        var body = match.Groups["body"].Value;
-        Console.WriteLine($"|{body}|");
-
-        var keywords = match.Groups["token"].Captures;
-        var values = match.Groups["value"].Captures;
-        Assert.That(keywords[0].Value, Is.EqualTo("token1"));
-        Assert.That(values[0].Value.Trim().StartsWith("value1"), Is.True);
-        Assert.That(keywords[1].Value, Is.EqualTo("token2"));
-        Assert.That(values[1].Value, Is.EqualTo("value2"));
-    }
-
     [TestCase(
                  """
                  Body - paragraph1
@@ -126,7 +49,7 @@ internal class ConventionalCommitsParserTests
                  BREAKING CHANGE: Oops
                  """,
                  "Body - paragraph1",
-                 new [] {"BREAKING CHANGE|Oops"},
+                 new[] { "BREAKING CHANGE|Oops" },
                  true)]
     [TestCase(
                  """
@@ -136,7 +59,7 @@ internal class ConventionalCommitsParserTests
 
                  """,
                  "Body - paragraph1",
-                 new[] {"BREAKING CHANGE|Oops very sorry"},
+                 new[] { "BREAKING CHANGE|Oops very sorry" },
                  true)]
     [TestCase(
                  """
@@ -148,8 +71,8 @@ internal class ConventionalCommitsParserTests
                  "Body - paragraph1",
                  new[]
                  {
-                 "BREAKING CHANGE|Oops very sorry",
-                 "ref|1234"
+                     "BREAKING CHANGE|Oops very sorry",
+                     "ref|1234"
                  },
                  true)]
     [TestCase(
@@ -205,11 +128,11 @@ internal class ConventionalCommitsParserTests
 
     [TestCase(
                  """
-                 
+
                  BREAKING CHANGE: Oops1 very sorry
                  issue #35
                  """,
-                 new []
+                 new[]
                  {
                      "BREAKING CHANGE|Oops1 very sorry",
                      "issue|35"
@@ -217,7 +140,7 @@ internal class ConventionalCommitsParserTests
                  true)]
     [TestCase(
                  """
-                 
+
                  BREAKING CHANGE: Oops2 very sorry
                  refs: #12345
                  """,
@@ -231,7 +154,7 @@ internal class ConventionalCommitsParserTests
     // to ensure compatible with git footer features.
     [TestCase(
                  """
-                 
+
                  BREAKING CHANGE: Oops3
                    very sorry
                  refs: username/projectName#12345
@@ -255,7 +178,7 @@ internal class ConventionalCommitsParserTests
                  BREAKING CHANGE #
                  Oops4
                  very sorry
-                 
+
                  really
                  refs: username/projectName#12345
                  """,
@@ -265,7 +188,7 @@ internal class ConventionalCommitsParserTests
                      BREAKING CHANGE|
                      Oops4
                      very sorry
-                     
+
                      really
                      """,
                      "refs|username/projectName#12345"
@@ -299,6 +222,83 @@ internal class ConventionalCommitsParserTests
         var result = _target.Parse(commitSubject, "");
 
         Assert.That(result.ChangeType, Is.EqualTo(CommitChangeTypeId.None));
+    }
+
+    //[TestCase("""
+    //          fail body ddd
+
+    //          dd
+
+    //          """)]
+    [TestCase("""
+              body1 ddd
+
+              dd
+
+              token1(scope1): value1
+              token2: value2
+              """)]
+    [TestCase("""
+              body2 ddd
+
+              dd
+
+              token1(scope1): value1
+              token2: value2
+              """)]
+    [TestCase("""
+
+              token1: value1
+              token2: value2
+              """)]
+    [TestCase("""
+
+              token1: value1
+                aaa
+              token2: value2
+              """)]
+    public void RegexExperimentalTest(string input)
+    {
+        var regex = new Regex("""
+                              \A
+                              (
+                                (?<body>\S ((\n|\r\n)|.)*? )
+                                (\Z | (?: (\n|\r\n) ) )
+                              )?
+                              (
+
+                                (?<footer>
+                                  (
+                                    (?: (\n|\r\n) )
+                                    (?<token> (BREAKING\sCHANGE) | ( \w[\w-]+ ) )
+                                    ( \( (?<scope>\w[\w-]+) \) )?
+                                    :\s
+                                    (?<value>
+                                      \S.*
+                                      (?:
+                                        (\n|\r\n) \s\s \S.*
+                                      )*
+                                    )
+                                  )+
+                                )?
+
+                                \Z
+                              )
+                              """,
+                              RegexOptions.IgnorePatternWhitespace |
+                              RegexOptions.Multiline);
+
+        var match = regex.Match(input);
+
+        var body = match.Groups["body"].Value;
+        Console.WriteLine($"|{body}|");
+
+        var keywords = match.Groups["token"].Captures;
+        var values = match.Groups["value"].Captures;
+        Assert.That(keywords[0].Value, Is.EqualTo("token1"));
+        Assert.That(values[0].Value.Trim().StartsWith("value1"), Is.True);
+        Assert.That(keywords[1].Value, Is.EqualTo("token2"));
+        Assert.That(values[1].Value, Is.EqualTo("value2"));
     }
 
     [TestCase("")]

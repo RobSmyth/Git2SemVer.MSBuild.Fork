@@ -5,19 +5,6 @@ namespace NoeticTools.Git2SemVer.Core.ConventionCommits;
 
 public sealed class ConventionalCommitsParser : IConventionalCommitsParser
 {
-    //private readonly Regex _bodyRegex = new("""
-    //                                        (
-    //                                          (?<footer>
-    //                                            (?<keyword>(BREAKING\sCHANGE)|(\w[\w-]+))
-    //                                            :\s
-    //                                            (?<description>
-    //                                              [^\r\n]*
-    //                                            )
-    //                                          )
-    //                                        )
-    //                                        """,
-    //                                        RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline | RegexOptions.CultureInvariant);
-
     private readonly Regex _bodyRegex = new("""
                                             \A
                                             (
@@ -43,7 +30,7 @@ public sealed class ConventionalCommitsParser : IConventionalCommitsParser
                                               \Z
                                             )
                                             """,
-                                            RegexOptions.IgnorePatternWhitespace | 
+                                            RegexOptions.IgnorePatternWhitespace |
                                             RegexOptions.Multiline);
 
     private readonly Regex _summaryRegex = new("""
@@ -77,9 +64,11 @@ public sealed class ConventionalCommitsParser : IConventionalCommitsParser
                 {
                     continue;
                 }
+
                 Console.WriteLine($"[{match.Groups["token"].Value} | {match.Groups["description"].Value}]");
             }
         }
+
         var body = bodyMatch.GetGroupValue("body");
 
         var keyValuePairs = GetFooterKeyValuePairs(bodyMatch);

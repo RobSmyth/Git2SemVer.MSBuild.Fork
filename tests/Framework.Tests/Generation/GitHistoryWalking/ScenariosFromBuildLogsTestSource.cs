@@ -11,9 +11,9 @@ namespace NoeticTools.Git2SemVer.Framework.Tests.Generation.GitHistoryWalking;
 internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
 {
     private const char ETX = CharacterConstants.ETX;
+    private const char NL = CharacterConstants.GS; // manual replacement for new line
     private const char STX = CharacterConstants.STX;
     private const char US = CharacterConstants.US;
-    private const char NL = CharacterConstants.GS; // manual replacement for new line
 
     public LoggedScenario Scenario01 { get; } =
         new("0.3.2", "0001", $"""
@@ -355,7 +355,7 @@ internal sealed class ScenariosFromBuildLogsTestSource : IEnumerable
         yield return new object[] { "Scenario 04", Scenario04 };
         yield return new object[] { "Scenario 05", Scenario05 };
         yield return new object[] { "Scenario 06 - feature", Scenario06 };
-        yield return new object[] { "Scenario 07 - !", Scenario07 };
+        yield return new object[] { "Scenario 07 - braking change (!)", Scenario07 };
         yield return new object[] { "Scenario 08 - breaking change", Scenario08 };
         yield return new object[] { "Scenario 09 - tag trumps bump on same commit", Scenario09 };
         yield return new object[] { "Scenario 10", Scenario10 };

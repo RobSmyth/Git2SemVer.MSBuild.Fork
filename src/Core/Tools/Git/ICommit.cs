@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using LibGit2Sharp;
 using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 using Semver;
 
@@ -18,6 +17,8 @@ public interface ICommit
     ///     Commit message body or description.
     /// </summary>
     string MessageBody { get; }
+
+    CommitMetadata Metadata { get; }
 
     /// <summary>
     ///     This commit's parent commits.
@@ -39,6 +40,4 @@ public interface ICommit
     ///     Tags associated with this commit.
     /// </summary>
     IReadOnlyList<IGitTag> Tags { get; }
-
-    CommitMetadata Metadata { get; }
 }

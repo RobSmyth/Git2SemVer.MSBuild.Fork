@@ -56,6 +56,7 @@ public abstract class GitLogCommitParserBase
         {
             parents = [];
         }
+
         var summary = match.GetGroupValue("summary");
         var body = match.GetGroupValue("body").Replace($"{CharacterConstants.GS}", "\n");
 

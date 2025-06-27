@@ -1,7 +1,7 @@
 ﻿namespace NoeticTools.Git2SemVer.Core.ConventionCommits;
 
 /// <summary>
-/// Conventional Commits parser.
+///     Conventional Commits parser.
 /// </summary>
 public interface IConventionalCommitsParser
 {

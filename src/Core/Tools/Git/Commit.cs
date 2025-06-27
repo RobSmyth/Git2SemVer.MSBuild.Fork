@@ -44,8 +44,8 @@ public class Commit : ICommit
         var state = Parents.Length == 0 ? ReleaseTypeId.RootCommit :
             ReleasedVersion == null ? ReleaseTypeId.NotReleased : ReleaseTypeId.Released;
         Metadata = new CommitMetadata(state,
-                                        ReleasedVersion,
-                                        new ApiChangeFlags());
+                                      ReleasedVersion,
+                                      new ApiChangeFlags());
     }
 
     private Commit(string sha, string[] parents, string summary, string messageBody,
@@ -85,10 +85,13 @@ public class Commit : ICommit
     public string MessageBody { get; }
 
     /// <summary>
-    ///  Commit message metadata.
+    ///     Commit message metadata.
     /// </summary>
     [JsonPropertyOrder(90)]
     public ICommitMessageMetadata MessageMetadata { get; }
+
+    [JsonPropertyOrder(12)]
+    public CommitMetadata Metadata { get; } = null!;
 
     /// <summary>
     ///     A null commit.
@@ -101,9 +104,6 @@ public class Commit : ICommit
 
     [JsonIgnore]
     public SemVersion? ReleasedVersion { get; } // depreciated
-
-    [JsonPropertyOrder(12)]
-    public CommitMetadata Metadata { get; } = null!;
 
     [JsonPropertyOrder(21)]
     public string Summary { get; }

@@ -90,11 +90,6 @@ public sealed class ApiChangeFlags : IEquatable<ApiChangeFlags>
         return result;
     }
 
-    public override string ToString()
-    {
-        return $"{(BreakingChange ? "B" : "-")}{(FunctionalityChange ? "F" : "-")}{(Fix ? "P" : "-")}";
-    }
-
     public bool Equals(ApiChangeFlags? other)
     {
         if (other is null)
@@ -112,7 +107,7 @@ public sealed class ApiChangeFlags : IEquatable<ApiChangeFlags>
 
     public override bool Equals(object? obj)
     {
-        return ReferenceEquals(this, obj) || obj is ApiChangeFlags other && Equals(other);
+        return ReferenceEquals(this, obj) || (obj is ApiChangeFlags other && Equals(other));
     }
 
     public override int GetHashCode()
@@ -124,5 +119,10 @@ public sealed class ApiChangeFlags : IEquatable<ApiChangeFlags>
             hashCode = (hashCode * 397) ^ FunctionalityChange.GetHashCode();
             return hashCode;
         }
+    }
+
+    public override string ToString()
+    {
+        return $"{(BreakingChange ? "B" : "-")}{(FunctionalityChange ? "F" : "-")}{(Fix ? "P" : "-")}";
     }
 }

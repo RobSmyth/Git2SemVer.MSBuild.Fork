@@ -2,7 +2,6 @@
 using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
-using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 using Semver;
 
 
@@ -38,7 +37,7 @@ internal sealed class GitSegment
     /// </summary>
     public int Id { get; }
 
-    public bool IsAReleaseSegment => Version != null || 
+    public bool IsAReleaseSegment => Version != null ||
                                      (_commits.Count != 0 && OldestCommit.Metadata.IsRootCommit);
 
     /// <summary>

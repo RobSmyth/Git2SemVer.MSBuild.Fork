@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Moq;
+﻿using Moq;
 using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
@@ -17,6 +16,18 @@ internal class CommitTests
     public void SetUp()
     {
         _tagParser = new Mock<ITagParser>();
+    }
+
+    [Test]
+    public void CommitTest()
+    {
+        var messageMetadata = new CommitMessageMetadata("", false, "", "", []);
+
+        var target = new Commit("SHA00002", ["SHA00001"], "summary", "body", messageMetadata, _tagParser.Object, []);
+
+        Assert.That(target.Metadata.ReleaseType, Is.EqualTo(ReleaseTypeId.NotReleased));
+        Assert.That(target.Metadata.Version, Is.Null);
+        Assert.That(target.Metadata.ChangeFlags, Is.EqualTo(new ApiChangeFlags()));
     }
 
     [Test]
@@ -48,18 +59,6 @@ internal class CommitTests
         Assert.That(target.Metadata.ChangeFlags.BreakingChange, Is.False);
         Assert.That(target.Metadata.ChangeFlags.FunctionalityChange, Is.False);
         Assert.That(target.Metadata.ChangeFlags.Fix, Is.False);
-    }
-
-    [Test]
-    public void CommitTest()
-    {
-        var messageMetadata = new CommitMessageMetadata("", false, "", "", []);
-
-        var target = new Commit("SHA00002", ["SHA00001"], "summary", "body", messageMetadata, _tagParser.Object, []);
-
-        Assert.That(target.Metadata.ReleaseType, Is.EqualTo(ReleaseTypeId.NotReleased));
-        Assert.That(target.Metadata.Version, Is.Null);
-        Assert.That(target.Metadata.ChangeFlags, Is.EqualTo(new ApiChangeFlags()));
     }
 
     [Test]

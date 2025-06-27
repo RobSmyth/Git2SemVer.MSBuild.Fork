@@ -76,8 +76,8 @@ public sealed class TagParser : ITagParser
         }
 
         return new CommitMetadata(ReleaseTypeId.Released,
-                                SemVersion.Parse(match.Groups["version"].Value, SemVersionStyles.Strict),
-                                new ApiChangeFlags());
+                                  SemVersion.Parse(match.Groups["version"].Value, SemVersionStyles.Strict),
+                                  new ApiChangeFlags());
     }
 
     private static CommitMetadata CreateWaypointReleaseState(Match match)

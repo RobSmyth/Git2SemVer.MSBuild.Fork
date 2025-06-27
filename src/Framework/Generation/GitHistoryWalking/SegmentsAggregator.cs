@@ -16,19 +16,19 @@ internal class SegmentsAggregatorResult
     }
 
     /// <summary>
-    /// The prior released version or 0.1.0 if starting from the repository root commit.
+    ///     Aggregated change flags.
+    /// </summary>
+    public ApiChangeFlags ChangeFlags { get; }
+
+    /// <summary>
+    ///     The prior released version or 0.1.0 if starting from the repository root commit.
     /// </summary>
     public SemVersion PriorVersion { get; }
 
     /// <summary>
-    /// Calculated version.
+    ///     Calculated version.
     /// </summary>
     public SemVersion Version { get; }
-
-    /// <summary>
-    /// Aggregated change flags.
-    /// </summary>
-    public ApiChangeFlags ChangeFlags { get; }
 }
 
 internal sealed class SegmentsAggregator
@@ -45,7 +45,7 @@ internal sealed class SegmentsAggregator
         var priorVersion = oldestCommit.IsRootCommit ? new SemVersion(0, 1, 0) : oldestCommit.ReleasedVersion!;
 
         var version = (oldestCommit.IsRootCommit && !_changeFlags.Any) ||
-                  oldestCommit.Equals(head)
+                      oldestCommit.Equals(head)
             ? priorVersion
             : priorVersion.Bump(_changeFlags);
 
