@@ -41,7 +41,7 @@ public sealed class TagParser : ITagParser
         var match = _tagVersionRegex.Match(friendlyName);
         if (!match.Success)
         {
-            return new TagMetadata(ReleaseTypeId.NotReleased);
+            return new TagMetadata();
         }
 
         if (match.Groups["waypoint"].Success)
