@@ -22,9 +22,8 @@ internal sealed class GitHistoryWalker(IGitTool gitTool, ILogger logger) : IGitH
         using (logger.EnterLogScope())
         {
             var contributingCommits = new GitSegmentsBuilder(gitTool, logger).GetContributingCommits(head);
-            result = new GitSegmentsWalker(head, contributingCommits, logger).CalculateSemVer();
-
-            GenerateChangelog(head, contributingCommits, result);
+            result = new GitSegmentsWalker(contributingCommits, logger).CalculateSemVer();
+            GenerateChangelog(contributingCommits, result);
         }
 
         stopwatch.Stop();
@@ -36,20 +35,16 @@ internal sealed class GitHistoryWalker(IGitTool gitTool, ILogger logger) : IGitH
         return result;
     }
 
-    private void GenerateChangelog(Commit head, ContributingCommits contributingCommits, SemanticVersionCalcResult result)
+    private void GenerateChangelog(ContributingCommits contributingCommits, SemanticVersionCalcResult result)
     {
         // WIP
         var stringBuilder = new StringBuilder();
         using var writer = new StringWriter(stringBuilder);
         writer.WriteLine();
 
-        new ChangelogGenerator().Build(result.Version,
-                                       gitTool.Head,
-                                       gitTool.BranchName,
-                                       contributingCommits.Segments.SelectMany(x => x.Commits).ToList(),
-                                       writer);
+        ChangelogWriter.Write(writer, result, contributingCommits);
 
         writer.WriteLine();
-        logger.LogInfo(stringBuilder.ToString()); // >>> temp
+        Console.WriteLine(stringBuilder.ToString()); // >>> temp
     }
 }
