@@ -18,11 +18,13 @@ internal sealed class LinkedSegment(GitSegment segment)
 
     public GitSegment Inner { get; } = segment;
 
+    public IReadOnlyList<Commit> Commits => _segment.Commits;
+
     public IReadOnlyList<LinkedSegment> LinkedChildSegments => _linkedChildSegments;
 
-    public CommitId OldestCommitId => _segment.OldestCommit.CommitId;
+    public Commit OldestCommit => _segment.OldestCommit;
 
-    public CommitId YoungestCommitId => _segment.YoungestCommit.CommitId;
+    public Commit YoungestCommit => _segment.YoungestCommit;
 
     /// <summary>
     ///     Link to child (younger) segment.

@@ -23,8 +23,7 @@ internal sealed class GitHistoryWalker(IGitTool gitTool, ILogger logger) : IGitH
         {
             var contributingCommits = new GitSegmentsBuilder(gitTool, logger).GetContributingCommits(head);
             result = new GitSegmentsWalker(head, contributingCommits, logger).CalculateSemVer();
-
-            GenerateChangelog(head, contributingCommits, result);
+            //GenerateChangelog(head, contributingCommits, result);
         }
 
         stopwatch.Stop();
@@ -36,20 +35,20 @@ internal sealed class GitHistoryWalker(IGitTool gitTool, ILogger logger) : IGitH
         return result;
     }
 
-    private void GenerateChangelog(Commit head, ContributingCommits contributingCommits, SemanticVersionCalcResult result)
-    {
-        // WIP
-        var stringBuilder = new StringBuilder();
-        using var writer = new StringWriter(stringBuilder);
-        writer.WriteLine();
+    //private void GenerateChangelog(Commit head, ContributingCommits contributingCommits, SemanticVersionCalcResult result)
+    //{
+    //    // WIP
+    //    var stringBuilder = new StringBuilder();
+    //    using var writer = new StringWriter(stringBuilder);
+    //    writer.WriteLine();
 
-        new ChangelogGenerator().Build(result.Version,
-                                       gitTool.Head,
-                                       gitTool.BranchName,
-                                       contributingCommits.Segments.SelectMany(x => x.Commits).ToList(),
-                                       writer);
+    //    new ChangelogGenerator().Build(result.Version,
+    //                                   gitTool.Head,
+    //                                   gitTool.BranchName,
+    //                                   contributingCommits.Commits,
+    //                                   writer);
 
-        writer.WriteLine();
-        logger.LogInfo(stringBuilder.ToString()); // >>> temp
-    }
+    //    writer.WriteLine();
+    //    logger.LogInfo(stringBuilder.ToString()); // >>> temp
+    //}
 }

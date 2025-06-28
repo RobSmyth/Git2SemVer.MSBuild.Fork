@@ -8,5 +8,5 @@ internal interface IGitSegmentsBuilder
     /// <summary>
     ///     Get all commits from releases reachable from the given commit as git segments.
     /// </summary>
-    ContributingCommits GetContributingCommits(Commit commit);
+    ContributingCommits GetContributingCommits(Commit headCommit);
 }

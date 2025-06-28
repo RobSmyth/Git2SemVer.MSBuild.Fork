@@ -36,10 +36,10 @@ internal sealed class GitSegmentsBuilder : IGitSegmentsBuilder
         _segments.Add(_segment.Id, _segment);
     }
 
-    public ContributingCommits GetContributingCommits(Commit commit)
+    public ContributingCommits GetContributingCommits(Commit headCommit)
     {
         var stopwatch = Stopwatch.StartNew();
-        FindSegmentsReachableFrom(commit);
+        FindSegmentsReachableFrom(headCommit);
         stopwatch.Stop();
         _logger.LogDebug($"Found {_segments.Count} segment{(_segments.Count == 1 ? "" : "s")} (in {stopwatch.Elapsed.TotalMilliseconds:F0} ms):");
         using (_logger.EnterLogScope())
@@ -47,7 +47,7 @@ internal sealed class GitSegmentsBuilder : IGitSegmentsBuilder
             _logger.LogDebug(GetFoundSegmentsReport());
         }
 
-        return new ContributingCommits(_segments.Values.ToList());
+        return new ContributingCommits(_segments.Values.ToList(), headCommit);
     }
 
     private void FindSegmentsReachableFrom(Commit commit)
