@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.Framework.ChangeLogging;
 
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -19,8 +21,10 @@ internal sealed class GitHistoryWalker(IGitTool gitTool, ILogger logger) : IGitH
         SemanticVersionCalcResult result;
         using (logger.EnterLogScope())
         {
-            var segments = new GitSegmentsBuilder(gitTool, logger).BuildTo(head);
-            result = new GitSegmentsWalker(head, segments, logger).CalculateSemVer();
+            var contributingCommits = new GitSegmentsBuilder(gitTool, logger).GetContributingCommits(head);
+            result = new GitSegmentsWalker(head, contributingCommits, logger).CalculateSemVer();
+
+            GenerateChangelog(head, contributingCommits, result);
         }
 
         stopwatch.Stop();
@@ -30,5 +34,22 @@ internal sealed class GitHistoryWalker(IGitTool gitTool, ILogger logger) : IGitH
                        result.PriorReleaseVersion,
                        stopwatch.Elapsed.TotalMilliseconds);
         return result;
+    }
+
+    private void GenerateChangelog(Commit head, ContributingCommits contributingCommits, SemanticVersionCalcResult result)
+    {
+        // WIP
+        var stringBuilder = new StringBuilder();
+        using var writer = new StringWriter(stringBuilder);
+        writer.WriteLine();
+
+        new ChangelogGenerator().Build(result.Version,
+                                       gitTool.Head,
+                                       gitTool.BranchName,
+                                       contributingCommits.Segments.SelectMany(x => x.Commits).ToList(),
+                                       writer);
+
+        writer.WriteLine();
+        logger.LogInfo(stringBuilder.ToString()); // >>> temp
     }
 }

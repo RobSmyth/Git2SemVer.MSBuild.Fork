@@ -234,7 +234,7 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                        - Two branches from one commit
 
                                      1.007  | head
-                                     1.006  .
+                                     1.006  . fix: fixed bug
                                      1.005  .\__________________________________   branch 3 (merge)
                                             |\_____________   branch 2 (merge)  \
                                      .      |              \                     |
@@ -254,7 +254,8 @@ public sealed class ManufacturedGitRepositoriesTestSource : IEnumerable
                                          new Commit("1.004.0000", ["1.003.0000"], "added feature", "", "",
                                                     new CommitMessageMetadata("feat", false, "added feature", "", [])),
                                          new Commit("1.005.0000", ["1.004.0000", "2.003.0000"], "Merge", "", "", new CommitMessageMetadata()),
-                                         new Commit("1.006.0000", ["1.005.0000", "3.003.0000"], "Merge", "", "", new CommitMessageMetadata()),
+                                         new Commit("1.006.0000", ["1.005.0000", "3.003.0000"], "Merge", "", "", 
+                                                    new CommitMessageMetadata("fix", false, "fixed bug", "", [])),
                                          new Commit("1.007.0000", ["1.006.0000"], "Head commit", "", "", new CommitMessageMetadata()),
 
                                          // branch 2 (middle)

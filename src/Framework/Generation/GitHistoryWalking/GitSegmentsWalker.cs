@@ -10,15 +10,15 @@ internal sealed class GitSegmentsWalker
 {
     private readonly Commit _head;
     private readonly ILogger _logger;
-    private readonly IReadOnlyList<GitSegment> _segments;
+    private readonly IReadOnlyList<GitSegment> _contributingCommits;
     private readonly Dictionary<CommitId, GitSegment> _segmentsByYoungestCommit;
 
-    public GitSegmentsWalker(Commit head, IReadOnlyList<GitSegment> segments, ILogger logger)
+    public GitSegmentsWalker(Commit head, ContributingCommits contributingCommits, ILogger logger)
     {
         _head = head;
-        _segments = segments;
+        _contributingCommits = contributingCommits.Segments;
         _logger = logger;
-        _segmentsByYoungestCommit = segments.ToDictionary(k => k.YoungestCommit.CommitId, v => v);
+        _segmentsByYoungestCommit = contributingCommits.Segments.ToDictionary(k => k.YoungestCommit.CommitId, v => v);
     }
 
     public SemanticVersionCalcResult CalculateSemVer()
@@ -34,7 +34,7 @@ internal sealed class GitSegmentsWalker
 
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine("    Commit      Bumps       From -> To");
-        var releasedSegments = _segments.Where(x => x.IsAReleaseSegment).ToList();
+        var releasedSegments = _contributingCommits.Where(x => x.IsAReleaseSegment).ToList();
         foreach (var releaseSegment in releasedSegments)
         {
             var youngestLinkedSegment = linkedSegments[releaseSegment.YoungestCommit.CommitId];

@@ -17,7 +17,7 @@ internal class GitSegmentsBuilderTests
 
         var target = new GitSegmentsBuilder(context.GitTool.Object, context.Logger);
 
-        var segments = target.BuildTo(context.GitTool.Object.Head);
+        var segments = target.GetContributingCommits(context.GitTool.Object.Head);
 
         Assert.That(segments, Is.Not.Null);
     }
@@ -31,7 +31,7 @@ internal class GitSegmentsBuilderTests
 
         var target = new GitSegmentsBuilder(context.GitTool.Object, context.Logger);
 
-        var segments = target.BuildTo(context.GitTool.Object.Head);
+        var segments = target.GetContributingCommits(context.GitTool.Object.Head).Segments;
 
         Assert.That(segments, Is.Not.Null);
         Assert.That(segments, Has.Count.EqualTo(8));
@@ -42,7 +42,6 @@ internal class GitSegmentsBuilderTests
             Assert.That(segment.Commits, Has.Count.EqualTo(1));
             Assert.That(segment.OldestCommit.CommitId.Sha, Is.EqualTo("0001"));
             Assert.That(segment.YoungestCommit.CommitId.Sha, Is.EqualTo("0001"));
-            //Assert.That(segment.ChildCommits, Has.Count.EqualTo(0));
             Assert.That(segment.ParentCommits, Has.Count.EqualTo(2));
             Assert.That(segment.Version, Is.Null);
         });
@@ -55,9 +54,6 @@ internal class GitSegmentsBuilderTests
         {
             var segment = segments[6];
             Assert.That(segment.Commits, Has.Count.EqualTo(3));
-            //Assert.That(segment.ChildCommits, Has.Count.EqualTo(2));
-            //Assert.That(segment.ChildCommits[0].Id, Is.EqualTo(5));
-            //Assert.That(segment.ChildCommits[1].Id, Is.EqualTo(6));
             Assert.That(segment.Version!.ToString(), Is.EqualTo("0.3.1"));
         });
         Assert.That(segments[7].Commits, Has.Count.EqualTo(1));

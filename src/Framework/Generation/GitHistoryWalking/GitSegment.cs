@@ -9,6 +9,37 @@ using Semver;
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
+/// <summary>
+///     A git segment is a collection of continuous commits between commit merges and commits that are branched or are
+///     released.
+/// </summary>
+/// <remarks>
+///     <p>
+///         The segments newest commit is one of:
+///     </p>
+///     <list type="bullet">
+///         <item>
+///             A branched commit.
+///         </item>
+///         <item>
+///             Repository head or target commit.
+///         </item>
+///     </list>
+///     <p>
+///         The segments oldest commit is one of:
+///     </p>
+///     <list type="bullet">
+///         <item>
+///             A merge commit.
+///         </item>
+///         <item>
+///             Release commit.
+///         </item>
+///         <item>
+///             Repository root commit.
+///         </item>
+///     </list>
+/// </remarks>
 internal sealed class GitSegment
 {
     private readonly List<Commit> _commits = [];
@@ -37,6 +68,9 @@ internal sealed class GitSegment
     /// </summary>
     public int Id { get; }
 
+    /// <summary>
+    /// Indicates if this commit commit is a release or root commit.
+    /// </summary>
     public bool IsAReleaseSegment => Version != null ||
                                      (_commits.Count != 0 && OldestCommit.TagMetadata.IsRootCommit);
 
@@ -51,6 +85,10 @@ internal sealed class GitSegment
     /// </summary>
     public IReadOnlyList<CommitId> ParentCommits => OldestCommit.Parents.ToList();
 
+    /// <summary>
+    /// If the oldest commit has a release tag or a waypoint tag this is the version read from that tag,
+    /// otherwise null.
+    /// </summary>
     public SemVersion? Version => _commits.Count != 0 ? OldestCommit.TagMetadata.Version : null;
 
     /// <summary>
