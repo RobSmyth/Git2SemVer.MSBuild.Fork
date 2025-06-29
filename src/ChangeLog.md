@@ -1,36 +1,4 @@
 
-## NOT RELEASED: 5.8.0
-
-    Generated metadata - do not edit. This metadata will not appear on a release build.
-    
-    Head commit:           1.006.0
-    Branch:                master
-    Contributing commits:  8
-    
-    Prior releases contributing to this changelog:
-      * 5.7.0
-      * 5.7.1
-      * 5.6.99
-    
-    Generated metadata is used as part of incrementally updating this changelog.
-    Edits made below will be preserved and changes from new commits will be added
-    to this file. Delete this file to force it to be regenerated.
-
-## Added
-
-* added feature.
-
-## Changed
-
-None.
-
-## Fixed
-
-* fixed bug.
-
-
-
-
 # Changelog
 
 All notable changes to this project will be documented in this file.
