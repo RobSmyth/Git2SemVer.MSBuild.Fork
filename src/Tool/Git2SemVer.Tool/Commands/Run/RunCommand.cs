@@ -10,23 +10,16 @@ using NoeticTools.Git2SemVer.Tool.Framework;
 namespace NoeticTools.Git2SemVer.Tool.Commands.Run;
 
 [RegisterSingleton]
-internal sealed class RunCommand : IRunCommand
+internal sealed class RunCommand(IConsoleIO console) : IRunCommand
 {
-    private readonly IConsoleIO _console;
-
-    public RunCommand(IConsoleIO console)
-    {
-        _console = console;
-    }
-
-    public bool HasError => _console.HasError;
+    public bool HasError => console.HasError;
 
     public void Execute(RunCommandSettings settings)
     {
         try
         {
-            _console.WriteInfoLine($"Running Git2SemVer version generator{(settings.Unattended ? " (unattended)" : "")}.");
-            _console.WriteLine();
+            console.WriteInfoLine($"Running Git2SemVer version generator{(settings.Unattended ? " (unattended)" : "")}.");
+            console.WriteLine();
 
             var inputs = new GeneratorInputs
             {
@@ -47,15 +40,17 @@ internal sealed class RunCommand : IRunCommand
             logger.Level = GetVerbosity(settings.Verbosity);
 
             IOutputsJsonIO outputJsonIO = settings.EnableJsonFileWrite ? new OutputsJsonFileIO() : new ReadOnlyOutputJsonIO();
-            var versionGenerator = new ProjectVersioningFactory(msg => logger.LogInfo(msg), logger).Create(inputs, new NullMSBuildGlobalProperties(), outputJsonIO);
-            versionGenerator.Run();
+            var versionGeneratorFactory = new VersionGeneratorFactory(logger);
+            var projectVersioning = new ProjectVersioningFactory(msg => logger.LogInfo(msg),versionGeneratorFactory, logger)
+                .Create(inputs, new NullMSBuildGlobalProperties(), outputJsonIO);
+            projectVersioning.Run();
 
-            _console.WriteInfoLine("");
-            _console.WriteInfoLine("Completed");
+            console.WriteInfoLine("");
+            console.WriteInfoLine("Completed");
         }
         catch (Exception exception)
         {
-            _console.WriteErrorLine(exception);
+            console.WriteErrorLine(exception);
             throw;
         }
     }
@@ -67,7 +62,7 @@ internal sealed class RunCommand : IRunCommand
             return level;
         }
 
-        _console.WriteErrorLine($"Verbosity {verbosity} is not valid. Must be 'Trace', 'Debug', 'Info', 'Warning', or 'Error'.");
+        console.WriteErrorLine($"Verbosity {verbosity} is not valid. Must be 'Trace', 'Debug', 'Info', 'Warning', or 'Error'.");
         return LoggingLevel.Info;
     }
 }

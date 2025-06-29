@@ -321,10 +321,11 @@ public class Git2SemVerGenerateVersionTask : Git2SemVerTaskBase, IVersionGenerat
                 throw new Git2SemVerConfigurationException($"Invalid Git2SemVer_Mode value '{Mode}'.", exception);
             }
 
-            using var versionGenerator =
-                new ProjectVersioningFactory(msg => Log.LogMessage(MessageImportance.High, msg), logger)
+            var versionGeneratorFactory = new VersionGeneratorFactory(logger);
+            using var projectVersioning =
+                new ProjectVersioningFactory(msg => Log.LogMessage(MessageImportance.High, msg), versionGeneratorFactory, logger)
                     .Create(this, new MSBuildGlobalProperties(BuildEngine6));
-            SetOutputs(versionGenerator.Run());
+            SetOutputs(projectVersioning.Run());
             return !Log.HasLoggedErrors;
         }
         catch (Git2SemVerDiagnosticCodeException diagnosticException)

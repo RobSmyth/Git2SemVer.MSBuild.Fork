@@ -77,7 +77,7 @@ public sealed class ProjectVersioning : IDisposable
         var lastBuildNumber = GetClientLastBuildNumber();
         if (lastBuildNumber == _host.BuildNumber)
         {
-            return _versionGenerator.Run();
+            return _versionGenerator.PrebuildRun();
         }
 
         var output = _outputsCacheJsonFile.Load(_inputs.SolutionSharedDirectory);
@@ -89,13 +89,13 @@ public sealed class ProjectVersioning : IDisposable
     {
         _logger.LogTrace("Versioning mode: Solution");
         var output = _outputsCacheJsonFile.Load(_inputs.SolutionSharedDirectory);
-        return !output.IsValid ? _versionGenerator.Run() : output;
+        return !output.IsValid ? _versionGenerator.PrebuildRun() : output;
     }
 
     private IVersionOutputs PerformStandAloneProjectVersioning()
     {
         _logger.LogTrace("Versioning mode: Stand-alone project");
-        return _versionGenerator.Run();
+        return _versionGenerator.PrebuildRun();
     }
 
     private void UpdateHostBuildLabel(IVersionOutputs output)

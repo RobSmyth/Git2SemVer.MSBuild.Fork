@@ -11,91 +11,74 @@ using Semver;
 
 namespace NoeticTools.Git2SemVer.Framework.Generation;
 
-internal sealed class VersionGenerator : IVersionGenerator
+internal sealed class VersionGenerator(
+    IVersionGeneratorInputs inputs,
+    IBuildHost host,
+    IOutputsJsonIO generatedOutputsJsonFile,
+    IGitTool gitTool,
+    IGitHistoryWalker gitWalker,
+    IDefaultVersionBuilderFactory defaultVersionBuilderFactory,
+    IVersionBuilder scriptBuilder,
+    IMSBuildGlobalProperties msBuildGlobalProperties,
+    ILogger logger)
+    : IVersionGenerator
 {
-    private readonly IDefaultVersionBuilderFactory _defaultVersionBuilderFactory;
-    private readonly IOutputsJsonIO _generatedOutputsJsonFile;
-    private readonly IGitTool _gitTool;
-    private readonly IGitHistoryWalker _gitWalker;
-    private readonly IBuildHost _host;
-    private readonly IVersionGeneratorInputs _inputs;
-    private readonly ILogger _logger;
-    private readonly IMSBuildGlobalProperties _msBuildGlobalProperties;
-    private readonly IVersionBuilder _scriptBuilder;
-
-    public VersionGenerator(IVersionGeneratorInputs inputs,
-                            IBuildHost host,
-                            IOutputsJsonIO generatedOutputsJsonFile,
-                            IGitTool gitTool,
-                            IGitHistoryWalker gitWalker,
-                            IDefaultVersionBuilderFactory defaultVersionBuilderFactory,
-                            IVersionBuilder scriptBuilder,
-                            IMSBuildGlobalProperties msBuildGlobalProperties,
-                            ILogger logger)
-    {
-        _inputs = inputs;
-        _host = host;
-        _generatedOutputsJsonFile = generatedOutputsJsonFile;
-        _gitTool = gitTool;
-        _gitWalker = gitWalker;
-        _defaultVersionBuilderFactory = defaultVersionBuilderFactory;
-        _scriptBuilder = scriptBuilder;
-        _msBuildGlobalProperties = msBuildGlobalProperties;
-        _logger = logger;
-    }
-
     public void Dispose()
     {
-        _gitTool.Dispose();
+        gitTool.Dispose();
     }
 
-    public IVersionOutputs Run()
+    public IVersionOutputs PrebuildRun()
     {
         var stopwatch = Stopwatch.StartNew();
 
-        _host.BumpBuildNumber();
-
-        var result = _gitWalker.CalculateSemanticVersion();
-        var outputs = new VersionOutputs(new GitOutputs(_gitTool,
-                                                        result.PriorReleaseVersion,
-                                                        result.PriorReleaseCommitId),
-                                         result.Version);
-        RunBuilders(outputs);
+        host.BumpBuildNumber();
+        var outputs = GenerateVersionOutputs().Outputs;
         SaveGeneratedVersions(outputs);
 
         stopwatch.Stop();
 
-        _logger.LogInfo($"Informational version: {outputs.InformationalVersion}");
-        _logger.LogDebug($"Version generation completed (in {stopwatch.Elapsed.TotalSeconds:F1} seconds).");
-
-        _host.ReportBuildStatistic("git2semver.runtime.seconds", stopwatch.Elapsed.TotalSeconds);
+        logger.LogInfo($"Informational version: {outputs.InformationalVersion}");
+        logger.LogDebug($"Version generation completed (in {stopwatch.Elapsed.TotalSeconds:F1} seconds).");
+        host.ReportBuildStatistic("git2semver.runtime.seconds", stopwatch.Elapsed.TotalSeconds);
 
         return outputs;
     }
 
+    public (VersionOutputs Outputs, ContributingCommits Contributing) GenerateVersionOutputs()
+    {
+        var results = gitWalker.CalculateSemanticVersion();
+        var outputs = new VersionOutputs(new GitOutputs(gitTool,
+                                                        results.PriorReleaseVersion,
+                                                        results.PriorReleaseCommitId),
+                                         results.Version);
+        RunBuilders(outputs);
+        return (outputs, results.Contributing);
+    }
+
     private void RunBuilders(VersionOutputs outputs)
     {
-        _logger.LogDebug("Running version builders.");
-        using (_logger.EnterLogScope())
+        logger.LogDebug("Running version builders.");
+        using (logger.EnterLogScope())
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var defaultBuilder = _defaultVersionBuilderFactory.Create(outputs.Version!);
-            defaultBuilder.Build(_host, _gitTool, _inputs, outputs, _msBuildGlobalProperties);
+            var defaultBuilder = defaultVersionBuilderFactory.Create(outputs.Version!);
+            defaultBuilder.Build(host, gitTool, inputs, outputs, msBuildGlobalProperties);
 
-            _scriptBuilder.Build(_host, _gitTool, _inputs, outputs, _msBuildGlobalProperties);
+            scriptBuilder.Build(host, gitTool, inputs, outputs, msBuildGlobalProperties);
 
             stopwatch.Stop();
-            _logger.LogDebug($"Version building completed (in {stopwatch.Elapsed.TotalSeconds:F1} sec).");
+            logger.LogDebug($"Version building completed (in {stopwatch.Elapsed.TotalSeconds:F1} sec).");
         }
     }
 
     private void SaveGeneratedVersions(VersionOutputs outputs)
     {
-        _generatedOutputsJsonFile.Write(_inputs.IntermediateOutputDirectory, outputs);
-        if (_inputs.VersioningMode != VersioningMode.StandAloneProject)
+        generatedOutputsJsonFile.Write(inputs.IntermediateOutputDirectory, outputs);
+        if (inputs.VersioningMode != VersioningMode.StandAloneProject)
         {
-            _generatedOutputsJsonFile.Write(_inputs.SolutionSharedDirectory, outputs);
+            generatedOutputsJsonFile.Write(inputs.SolutionSharedDirectory, outputs);
         }
     }
 }
