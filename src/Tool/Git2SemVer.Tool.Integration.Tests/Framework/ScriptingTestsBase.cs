@@ -3,6 +3,7 @@ using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Core.Tools;
 using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.Core.Tools.Git.Parsers;
 using NoeticTools.Git2SemVer.Testing.Core;
 
 
@@ -69,7 +70,7 @@ internal abstract class ScriptingTestsBase
     {
         Logger = new NUnitLogger();
         DotNetCli = new DotNetTool(new ProcessCli(Logger));
-        Git = new GitTool();
+        Git = new GitTool(new TagParser());
     }
 
     protected GitTool Git { get; private set; } = null!;

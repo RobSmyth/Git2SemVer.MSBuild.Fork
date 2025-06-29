@@ -14,7 +14,7 @@ internal sealed class GitSegmentsWalker(ContributingCommits contributing, ILogge
 
         var result = new SemanticVersionCalcResult
         {
-            HeadCommitId = contributing.Head.CommitId
+            Contributing = contributing,
         };
 
         var stringBuilder = new StringBuilder();

@@ -18,12 +18,13 @@ internal sealed class GitHistoryWalker(IGitTool gitTool, ILogger logger) : IGitH
         var stopwatch = Stopwatch.StartNew();
         var head = gitTool.Head;
         logger.LogDebug("Calculating semantic version for head '{0}'.", head.CommitId.ShortSha);
+
         SemanticVersionCalcResult result;
+
         using (logger.EnterLogScope())
         {
-            var contributingCommits = new GitSegmentsBuilder(gitTool, logger).GetContributingCommits(head);
-            result = new GitSegmentsWalker(contributingCommits, logger).CalculateSemVer();
-            GenerateChangelog(contributingCommits, result);
+            var contributing = new GitSegmentsBuilder(gitTool, logger).GetContributingCommits(head);
+            result = new GitSegmentsWalker(contributing, logger).CalculateSemVer();
         }
 
         stopwatch.Stop();
@@ -32,19 +33,7 @@ internal sealed class GitHistoryWalker(IGitTool gitTool, ILogger logger) : IGitH
                        result.PriorReleaseCommitId.ShortSha,
                        result.PriorReleaseVersion,
                        stopwatch.Elapsed.TotalMilliseconds);
+
         return result;
-    }
-
-    private void GenerateChangelog(ContributingCommits contributingCommits, SemanticVersionCalcResult result)
-    {
-        // WIP
-        var stringBuilder = new StringBuilder();
-        using var writer = new StringWriter(stringBuilder);
-        writer.WriteLine();
-
-        ChangelogWriter.Write(writer, result, contributingCommits);
-
-        writer.WriteLine();
-        Console.WriteLine(stringBuilder.ToString()); // >>> temp
     }
 }

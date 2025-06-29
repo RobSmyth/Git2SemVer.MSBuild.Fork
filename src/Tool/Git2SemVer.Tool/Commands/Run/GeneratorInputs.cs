@@ -20,6 +20,8 @@ internal sealed class GeneratorInputs : IVersionGeneratorInputs
 
     public string IntermediateOutputDirectory { get; set; } = "";
 
+    public string ReleaseTagFormat { get; } = "";
+
     public bool? RunScript { get; set; }
 
     public string ScriptArgs { get; set; } = "";

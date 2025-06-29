@@ -58,8 +58,9 @@ internal sealed class VersionGenerator : IVersionGenerator
         var result = _gitWalker.CalculateSemanticVersion();
         var outputs = new VersionOutputs(new GitOutputs(_gitTool,
                                                         result.PriorReleaseVersion,
-                                                        result.PriorReleaseCommitId));
-        RunBuilders(outputs, result.Version);
+                                                        result.PriorReleaseCommitId),
+                                         result.Version);
+        RunBuilders(outputs);
         SaveGeneratedVersions(outputs);
 
         stopwatch.Stop();
@@ -72,14 +73,14 @@ internal sealed class VersionGenerator : IVersionGenerator
         return outputs;
     }
 
-    private void RunBuilders(VersionOutputs outputs, SemVersion version)
+    private void RunBuilders(VersionOutputs outputs)
     {
         _logger.LogDebug("Running version builders.");
         using (_logger.EnterLogScope())
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var defaultBuilder = _defaultVersionBuilderFactory.Create(version);
+            var defaultBuilder = _defaultVersionBuilderFactory.Create(outputs.Version!);
             defaultBuilder.Build(_host, _gitTool, _inputs, outputs, _msBuildGlobalProperties);
 
             _scriptBuilder.Build(_host, _gitTool, _inputs, outputs, _msBuildGlobalProperties);

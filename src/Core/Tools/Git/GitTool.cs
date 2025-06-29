@@ -102,7 +102,8 @@ public sealed class GitTool : IGitTool
                                 parents, rawCommit.MessageShort,
                                 rawCommit.Message,
                                 metadata, _tagParser,
-                                tags);
+                                tags,
+                                rawCommit.Author.When);
 
             Cache.Add(commit);
         }

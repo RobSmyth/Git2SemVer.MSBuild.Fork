@@ -96,7 +96,7 @@ internal class VersionOutputsTests
                                     "BuildContext": "CONTEXT",
                                     "BuildNumber": "777",
                                     "BuildSystemVersion": "5.6.7-TEST",
-                                    "FileVersion": null,
+                                    "FileVersion": "0.0.0",
                                     "Git": {
                                       "$type": "GitOutputs",
                                       "BranchName": "",
@@ -135,13 +135,13 @@ internal class VersionOutputsTests
                                       "LastReleaseCommit": null,
                                       "LastReleaseVersion": null
                                     },
-                                    "InformationalVersion": null,
+                                    "InformationalVersion": "0.0.0",
                                     "IsInInitialDevelopment": false,
                                     "Output1": "",
                                     "Output2": "",
-                                    "PackageVersion": null,
+                                    "PackageVersion": "0.0.0",
                                     "PrereleaseLabel": "",
-                                    "Version": null
+                                    "Version": "0.0.0"
                                   }
                                 }
                                 """;

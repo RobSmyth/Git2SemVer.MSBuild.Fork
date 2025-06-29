@@ -10,7 +10,7 @@ internal sealed class ContributingCommits
     private readonly LoadOnDemand<IReadOnlyList<LinkedSegment>> _leafSegments;
     private readonly LoadOnDemand<IReadOnlyList<LinkedSegment>> _segments;
 
-    public ContributingCommits(IReadOnlyList<GitSegment> gitSegments, Commit head, string branchName)
+    internal ContributingCommits(IReadOnlyList<GitSegment> gitSegments, Commit head, string branchName)
     {
         Head = head;
         BranchName = branchName;
@@ -37,12 +37,14 @@ internal sealed class ContributingCommits
     /// <summary>
     ///     Segments where the oldest commit is a prior release (or root commit).
     /// </summary>
-    public IReadOnlyList<LinkedSegment> LeafSegments => _leafSegments.Value;
+    internal IReadOnlyList<LinkedSegment> LeafSegments => _leafSegments.Value;
 
     /// <summary>
     ///     Linked git segments containing the commits. Use for navigating to prior releases.
     /// </summary>
-    public IReadOnlyList<LinkedSegment> Segments => _segments.Value;
+    internal IReadOnlyList<LinkedSegment> Segments => _segments.Value;
+
+    public static ContributingCommits Null { get; } = new ContributingCommits([], Commit.Null, "");
 
     private static IReadOnlyList<LinkedSegment> BuildLinkedSegments(Commit head, IReadOnlyList<GitSegment> gitSegments)
     {

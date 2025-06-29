@@ -9,13 +9,18 @@ namespace NoeticTools.Git2SemVer.Framework.Generation;
 public sealed class VersionOutputs : IVersionOutputs
 {
     [JsonConstructor]
-    public VersionOutputs() : this(new GitOutputs())
+    public VersionOutputs() : this(new GitOutputs(), new SemVersion(0,0,0))
     {
     }
 
-    public VersionOutputs(GitOutputs gitOutputs)
+    public VersionOutputs(GitOutputs gitOutputs, SemVersion version)
     {
         Git = gitOutputs;
+        Version = version;
+        InformationalVersion = version;
+        PackageVersion = version;
+        AssemblyVersion = version.ToVersion();
+        FileVersion = AssemblyVersion;
     }
 
     public Version? AssemblyVersion { get; set; }
