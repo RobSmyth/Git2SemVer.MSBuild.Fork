@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NoeticTools.Git2SemVer.Tool.Commands.Add;
+using NoeticTools.Git2SemVer.Tool.Commands.Changelog;
 using NoeticTools.Git2SemVer.Tool.Commands.Remove;
 using NoeticTools.Git2SemVer.Tool.Commands.Run;
 
@@ -31,5 +32,10 @@ internal class CommandFactory : ICommandFactory
     public IRunCommand CreateRunCommand()
     {
         return _servicesProvider.GetService<IRunCommand>()!;
+    }
+
+    public IChangelogCommand CreateChangelogCommand()
+    {
+        return _servicesProvider.GetService<IChangelogCommand>()!;
     }
 }

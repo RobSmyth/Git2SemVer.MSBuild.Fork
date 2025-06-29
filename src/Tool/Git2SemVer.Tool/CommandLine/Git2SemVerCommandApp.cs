@@ -1,4 +1,5 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
+using NoeticTools.Git2SemVer.Tool.Commands.Changelog;
 using Spectre.Console.Cli;
 
 
@@ -30,6 +31,10 @@ internal class Git2SemVerCommandApp
 
             config.AddCommand<RunCliCommand>("run")
                   .WithDescription("Run version generator.")
+                  .WithData(servicesProvider);
+
+            config.AddCommand<ChangelogCliCommand>("changelog")
+                  .WithDescription("Generate changelog.")
                   .WithData(servicesProvider);
         });
 

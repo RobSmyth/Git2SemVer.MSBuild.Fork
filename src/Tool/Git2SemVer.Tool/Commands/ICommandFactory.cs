@@ -1,4 +1,5 @@
 ﻿using NoeticTools.Git2SemVer.Tool.Commands.Add;
+using NoeticTools.Git2SemVer.Tool.Commands.Changelog;
 using NoeticTools.Git2SemVer.Tool.Commands.Remove;
 using NoeticTools.Git2SemVer.Tool.Commands.Run;
 
@@ -12,4 +13,6 @@ internal interface ICommandFactory
     IRemoveCommand CreateRemoveCommand();
 
     IRunCommand CreateRunCommand();
+
+    IChangelogCommand CreateChangelogCommand();
 }

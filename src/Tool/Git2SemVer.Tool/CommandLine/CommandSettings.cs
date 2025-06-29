@@ -44,3 +44,20 @@ public class RunCommandSettings : CommonCommandSettings
     [Description("Sets output verbosity. Valid values are 'trace', 'debug', 'info', 'warning', or 'error'.")]
     public string Verbosity { get; set; } = "";
 }
+
+public class ChangelogCommandSettings : CommonCommandSettings
+{
+    [CommandOption("--host-type <TYPE>")]
+    [Description("Force the host type. Use for testing expected behaviour on other hosts. Valid values are 'Custom', 'Uncontrolled', 'TeamCity', or 'GitHub'.")]
+    public string? HostType { get; set; } = null;
+
+    [CommandOption("-o|--output <DIRECTORY>")]
+    [DefaultValue("")]
+    [Description("Directory in which to place the generated changelog file.")]
+    public string OutputDirectory { get; set; } = "";
+
+    [CommandOption("-v|--verbosity <LEVEL>")]
+    [DefaultValue("info")]
+    [Description("Sets output verbosity. Valid values are 'trace', 'debug', 'info', 'warning', or 'error'.")]
+    public string Verbosity { get; set; } = "";
+}

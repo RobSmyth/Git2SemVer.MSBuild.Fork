@@ -69,6 +69,9 @@ internal static class ChangelogWriter
         var changesByDescription = new Dictionary<string, Commit>();
         foreach (var commit in commits)
         {
+            // todo - duplicate must include change type - return result type
+            // todo - collect issue number(s) from commits with duplicate ==change type== and description
+
             var description = commit.MessageMetadata.ChangeDescription;
             // ReSharper disable once CanSimplifyDictionaryLookupWithTryAdd
             if (!changesByDescription.ContainsKey(description))
@@ -93,6 +96,7 @@ internal static class ChangelogWriter
         var changesByDescription = GetUniqueChangeCommits(commits.ToList());
         foreach (var description in changesByDescription.Keys)
         {
+
             writer.WriteLine($"* {description}.");
         }
 

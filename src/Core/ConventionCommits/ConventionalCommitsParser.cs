@@ -65,7 +65,7 @@ public sealed class ConventionalCommitsParser : IConventionalCommitsParser
                     continue;
                 }
 
-                Console.WriteLine($"[{match.Groups["token"].Value} | {match.Groups["description"].Value}]");
+                //Console.WriteLine($"[{match.Groups["token"].Value} | {match.Groups["description"].Value}]");
             }
         }
 
@@ -90,7 +90,7 @@ public sealed class ConventionalCommitsParser : IConventionalCommitsParser
 
             // todo - scope AND !
 
-            Console.WriteLine($"{keyword} | {value}");
+            //Console.WriteLine($"{keyword} | {value}");
             keyValuePairs.Add((keyword, value));
         }
         //foreach (Match keywordMatch in keywords)

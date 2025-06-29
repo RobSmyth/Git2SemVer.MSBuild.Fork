@@ -3,7 +3,7 @@
 
 namespace NoeticTools.Git2SemVer.Framework.Generation;
 
-internal interface IVersionGenerator : IDisposable
+public interface IVersionGenerator : IDisposable
 {
     /// <summary>
     /// Perform a prebuild versioning run. Depending on the host may bump the build number.

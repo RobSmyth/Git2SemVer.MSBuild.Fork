@@ -9,9 +9,10 @@ using Semver;
 
 
 namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
-internal sealed class ChangelogGenerator
+
+public sealed class ChangelogGenerator
 {
-    private void GenerateChangelog(IVersionOutputs versioning, ContributingCommits contributing)
+    public void GenerateChangelog(IVersionOutputs versioning, ContributingCommits contributing)
     {
         // WIP
         var stringBuilder = new StringBuilder();

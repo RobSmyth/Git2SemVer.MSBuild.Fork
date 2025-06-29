@@ -5,7 +5,7 @@ using NoeticTools.Git2SemVer.Core.Tools.Git;
 
 namespace NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
-internal sealed class ContributingCommits
+public sealed class ContributingCommits
 {
     private readonly LoadOnDemand<IReadOnlyList<LinkedSegment>> _leafSegments;
     private readonly LoadOnDemand<IReadOnlyList<LinkedSegment>> _segments;

@@ -14,10 +14,10 @@ namespace NoeticTools.Git2SemVer.Framework.Generation;
 [ExcludeFromCodeCoverage]
 public sealed class VersionGeneratorFactory(ILogger logger)
 {
-    internal VersionGenerator Create(IVersionGeneratorInputs inputs, 
-                                     IMSBuildGlobalProperties msBuildGlobalProperties,
-                                     IOutputsJsonIO outputsJsonIO, 
-                                     IBuildHost host)
+    public IVersionGenerator Create(IVersionGeneratorInputs inputs, 
+                                    IMSBuildGlobalProperties msBuildGlobalProperties,
+                                    IOutputsJsonIO outputsJsonIO, 
+                                    IBuildHost host)
     {
         var gitTool = new GitTool(new TagParser(inputs.ReleaseTagFormat)) { RepositoryDirectory = inputs.WorkingDirectory };
         var gitPathsFinder = new GitHistoryWalker(gitTool, logger);

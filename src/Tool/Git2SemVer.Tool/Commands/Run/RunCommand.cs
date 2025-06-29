@@ -10,16 +10,14 @@ using NoeticTools.Git2SemVer.Tool.Framework;
 namespace NoeticTools.Git2SemVer.Tool.Commands.Run;
 
 [RegisterSingleton]
-internal sealed class RunCommand(IConsoleIO console) : IRunCommand
+internal sealed class RunCommand(IConsoleIO console) : CommandBase(console), IRunCommand
 {
-    public bool HasError => console.HasError;
-
     public void Execute(RunCommandSettings settings)
     {
         try
         {
-            console.WriteInfoLine($"Running Git2SemVer version generator{(settings.Unattended ? " (unattended)" : "")}.");
-            console.WriteLine();
+            Console.WriteInfoLine($"Running Git2SemVer version generator{(settings.Unattended ? " (unattended)" : "")}.");
+            Console.WriteLine();
 
             var inputs = new GeneratorInputs
             {
@@ -45,24 +43,13 @@ internal sealed class RunCommand(IConsoleIO console) : IRunCommand
                 .Create(inputs, new NullMSBuildGlobalProperties(), outputJsonIO);
             projectVersioning.Run();
 
-            console.WriteInfoLine("");
-            console.WriteInfoLine("Completed");
+            Console.WriteInfoLine("");
+            Console.WriteInfoLine("Completed");
         }
         catch (Exception exception)
         {
-            console.WriteErrorLine(exception);
+            Console.WriteErrorLine(exception);
             throw;
         }
-    }
-
-    private LoggingLevel GetVerbosity(string verbosity)
-    {
-        if (Enum.TryParse(verbosity, true, out LoggingLevel level))
-        {
-            return level;
-        }
-
-        console.WriteErrorLine($"Verbosity {verbosity} is not valid. Must be 'Trace', 'Debug', 'Info', 'Warning', or 'Error'.");
-        return LoggingLevel.Info;
     }
 }
