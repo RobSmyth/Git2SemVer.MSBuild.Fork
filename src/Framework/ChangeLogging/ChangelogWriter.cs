@@ -3,12 +3,24 @@ using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using Semver;
+using System.Globalization;
+using NoeticTools.Git2SemVer.Core;
 
 
 namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
 
 internal static class ChangelogWriter
 {
+    private static readonly string[] FeatureChangeVerbs =
+    [
+        "change",
+        "optimise",
+        "optimize",
+        "reduce",
+        "remove",
+        "improve"
+    ];
+
     public static void Write(TextWriter writer, IVersionOutputs versioning, ContributingCommits contributing)
     {
         writer.WriteLine("""
@@ -40,52 +52,68 @@ internal static class ChangelogWriter
 
                                 """);
 
-        var commitsByChangeType = contributing.Commits.Where(x => x.MessageMetadata.ApiChangeFlags.Any)
-                                              .ToLookup(k => k.MessageMetadata.ChangeType);
+        var remainingCommits = new List<Commit>(contributing.Commits.Where(x => x.MessageMetadata.ApiChangeFlags.Any));
 
-        WriteChanges(writer, "Added", commitsByChangeType[CommitChangeTypeId.Feature].ToList());
-        WriteChanges(writer, "Changed", []);
-        WriteChanges(writer, "Fixed", commitsByChangeType[CommitChangeTypeId.Fix].ToList());
+        var changeCommits = remainingCommits.Where(x => x.MessageMetadata.ChangeType == CommitChangeTypeId.Feature &&
+                                                        StartsWithChangeVerb(x.MessageMetadata.ChangeDescription)).ToList();
+        remainingCommits.RemoveAll(x => changeCommits.Contains(x));
 
-        var customCommits = commitsByChangeType[CommitChangeTypeId.Custom].ToList();
-        if (customCommits.Count <= 0)
+        var addCommits = remainingCommits.Where(x => x.MessageMetadata.ChangeType == CommitChangeTypeId.Feature).ToList();
+        remainingCommits.RemoveAll(x => addCommits.Contains(x));
+
+        var fixCommits = remainingCommits.Where(x => x.MessageMetadata.ChangeType == CommitChangeTypeId.Fix).ToList();
+        remainingCommits.RemoveAll(x => fixCommits.Contains(x));
+
+        WriteChanges(writer, "Added", addCommits);
+        WriteChanges(writer, "Changed", changeCommits);
+        WriteChanges(writer, "Fixed", fixCommits);
+
+        if (remainingCommits.Count == 0)
         {
             return;
         }
-
+        if (versioning.Version.IsPrerelease)
+        {
+            writer.WriteLine("""
+                                 The following categories may need to further grouped.
+                             """);
+        }
         writer.WriteLine();
-        WriteChanges(writer, 
-                     """
-                     === TO SORT ===
-                     
-                         These changes use custom change types and cannot automatically
-                         be added to the conventional Added, Changed, or Fixed lists.
-                     """, 
-                     commitsByChangeType[CommitChangeTypeId.Custom].ToList());
+        var categories = remainingCommits.ToLookup(k => k.MessageMetadata.ChangeTypeText.ToSentenceCase());
+        foreach (var category in categories)
+        {
+            WriteChanges(writer, category.Key, category.ToList());
+        }
     }
 
-    private static Dictionary<string, Commit> GetUniqueChangeCommits(List<Commit> commits)
+    private static bool StartsWithChangeVerb(string description)
     {
-        var changesByDescription = new Dictionary<string, Commit>();
+        return FeatureChangeVerbs.Any(x => description.StartsWith(x, StringComparison.CurrentCultureIgnoreCase));
+    }
+
+    private static IReadOnlyList<ChangeLogEntry> GetUniqueChangelogEntries(IReadOnlyList<Commit> commits)
+    {
+        var changeEntries = new List<ChangeLogEntry>();
         foreach (var commit in commits)
         {
-            // todo - duplicate must include change type - return result type
-            // todo - collect issue number(s) from commits with duplicate ==change type== and description
-
-            var description = commit.MessageMetadata.ChangeDescription;
-            // ReSharper disable once CanSimplifyDictionaryLookupWithTryAdd
-            if (!changesByDescription.ContainsKey(description))
+            var entry = changeEntries.SingleOrDefault(x => x.Equals(commit.MessageMetadata));
+            if (entry == null)
             {
-                changesByDescription.Add(description, commit);
+                entry = new ChangeLogEntry(commit.MessageMetadata);
+                changeEntries.Add(entry);
+            }
+            else
+            {
+                entry.AddIssues(commit.MessageMetadata.FooterKeyValues["issues"]);
             }
         }
 
-        return changesByDescription;
+        return changeEntries;
     }
 
-    private static void WriteChanges(TextWriter writer, string groupName, List<Commit> commits)
+    private static void WriteChanges(TextWriter writer, string category, IReadOnlyList<Commit> commits)
     {
-        writer.WriteLine($"## {groupName}");
+        writer.WriteLine($"## {category}");
         writer.WriteLine();
 
         if (commits.Count == 0)
@@ -93,11 +121,11 @@ internal static class ChangelogWriter
             writer.WriteLine("None.");
         }
 
-        var changesByDescription = GetUniqueChangeCommits(commits.ToList());
-        foreach (var description in changesByDescription.Keys)
+        var changeEntries = GetUniqueChangelogEntries(commits);
+        foreach (var change in changeEntries)
         {
-
-            writer.WriteLine($"* {description}.");
+            var issuesSuffix = change.Issues.Count == 0 ? "" : $" ({string.Join(", ", change.Issues)})";
+            writer.WriteLine($"* {change.Description.ToSentenceCase()}{issuesSuffix}.");
         }
 
         writer.WriteLine();

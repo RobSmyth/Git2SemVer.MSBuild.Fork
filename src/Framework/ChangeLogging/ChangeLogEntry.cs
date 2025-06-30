@@ -1,0 +1,57 @@
+﻿using NoeticTools.Git2SemVer.Core.ConventionCommits;
+
+
+namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
+
+public sealed class ChangeLogEntry : IEquatable<ICommitMessageMetadata>
+{
+    private readonly ICommitMessageMetadata _messageMetadata;
+    private readonly List<string> _issues = [];
+
+    public ChangeLogEntry(ICommitMessageMetadata messageMetadata)
+    {
+        _messageMetadata = messageMetadata;
+        AddIssues(messageMetadata.FooterKeyValues["issue"]);
+        AddIssues(messageMetadata.FooterKeyValues["refs"]);
+    }
+
+    public string Description => _messageMetadata.ChangeDescription;
+
+    public IReadOnlyList<string> Issues => _issues;
+
+    public bool Equals(ICommitMessageMetadata? other)
+    {
+        if (other == null)
+        {
+            return false;
+        }
+        return _messageMetadata.ChangeTypeText.Equals(other.ChangeTypeText) &&
+               _messageMetadata.ChangeDescription.Equals(other.ChangeDescription);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return ReferenceEquals(this, obj) || obj is ChangeLogEntry other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return _messageMetadata.GetHashCode();
+    }
+
+    public void AddIssues(IEnumerable<string> issueIds)
+    {
+        foreach (var issueId in issueIds)
+        {
+            AddIssue(issueId);
+        }
+    }
+
+    public void AddIssue(string issueId)
+    {
+        if (!_issues.Contains(issueId))
+        {
+            _issues.Add(issueId);
+        }
+    }
+}
