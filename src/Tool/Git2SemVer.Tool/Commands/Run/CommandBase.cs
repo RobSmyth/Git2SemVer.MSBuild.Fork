@@ -25,4 +25,22 @@ internal abstract class CommandBase
         Console.WriteErrorLine($"Verbosity {verbosity} is not valid. Must be 'Trace', 'Debug', 'Info', 'Warning', or 'Error'.");
         return LoggingLevel.Info;
     }
+
+    protected CompositeLogger CreateLogger(string verbosity = "info")
+    {
+        CompositeLogger? logger = null;
+        try
+        {
+            logger = new CompositeLogger();
+            //logger.Add(new NoDisposeLoggerDecorator(_logger));
+            logger.Add(new ConsoleLogger());
+            logger.Level = GetVerbosity(verbosity);
+            return logger;
+        }
+        catch
+        {
+            logger?.Dispose();
+            throw;
+        }
+    }
 }

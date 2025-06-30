@@ -9,7 +9,11 @@ public sealed class CommitMessageMetadata : ICommitMessageMetadata
     private static readonly Dictionary<string, CommitChangeTypeId> ChangeTypeIdLookup = new()
     {
         { "feat", CommitChangeTypeId.Feature },
-        { "fix", CommitChangeTypeId.Fix }
+        { "fix", CommitChangeTypeId.Fix },
+        { "change", CommitChangeTypeId.Change },
+        { "deprecate", CommitChangeTypeId.Deprecate },
+        { "remove", CommitChangeTypeId.Remove },
+        { "security", CommitChangeTypeId.Security },
     };
 
     public CommitMessageMetadata(string changeType, bool breakingChangeFlagged, string changeDescription, string body,

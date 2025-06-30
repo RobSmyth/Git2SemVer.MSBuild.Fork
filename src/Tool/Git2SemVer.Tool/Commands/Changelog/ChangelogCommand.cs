@@ -30,14 +30,14 @@ internal sealed class ChangelogCommand(IConsoleIO console)
             Console.WriteInfoLine($"Generating Changelog {(settings.Unattended ? " (unattended)" : "")}.");
             Console.WriteLine();
 
-            Console.WriteLine("""
-
-                              Ready to generate Changelog from current working directory's Git repository.
-
-
-                              """);
             if (!settings.Unattended)
             {
+                Console.WriteLine("""
+
+                                  Ready to generate Changelog from current working directory's Git repository.
+
+
+                                  """);
                 var proceed = Console.PromptYesNo("Proceed?");
                 Console.WriteLine();
                 if (!proceed)
@@ -51,15 +51,12 @@ internal sealed class ChangelogCommand(IConsoleIO console)
             var inputs = new GeneratorInputs
             {
                 VersioningMode = VersioningMode.StandAloneProject,
-                IntermediateOutputDirectory = "." // settings.OutputDirectory
+                IntermediateOutputDirectory = settings.OutputDirectory
             };
 
 #pragma warning disable CA2000
-            using var logger = new CompositeLogger();
-            //logger.Add(new NoDisposeLoggerDecorator(_logger));
-            logger.Add(new ConsoleLogger());
+            using var logger = CreateLogger(settings.Verbosity);
 #pragma warning restore CA2000
-            logger.Level = GetVerbosity(settings.Verbosity);
 
             var config = Git2SemVerConfiguration.Load();
 
@@ -75,7 +72,10 @@ internal sealed class ChangelogCommand(IConsoleIO console)
                                                                               host);
 
             var result = versionGenerator.GenerateVersionOutputs();
-            new ChangelogGenerator().GenerateChangelog(result.Outputs, result.Contributing);
+            new ChangelogMarkdown(logger).Generate(settings.WriteToConsole,
+                                                             settings.OutputFilePath,
+                                                       result.Outputs, 
+                                                       result.Contributing);
 
             stopwatch.Stop();
 

@@ -2,9 +2,12 @@
 
 public enum CommitChangeTypeId
 {
-    Unknown = 0,
-    None,
+    None = 0,
     Feature,
     Fix,
-    Custom
+    Custom,
+    Change,
+    Deprecate,
+    Remove,
+    Security,
 }
