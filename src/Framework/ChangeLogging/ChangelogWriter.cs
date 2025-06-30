@@ -1,25 +1,28 @@
-﻿using NoeticTools.Git2SemVer.Core.ConventionCommits;
+﻿using NoeticTools.Git2SemVer.Core;
+using NoeticTools.Git2SemVer.Core.ConventionCommits;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
-using Semver;
-using System.Globalization;
-using NoeticTools.Git2SemVer.Core;
+using System.Text.RegularExpressions;
 
 
 namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
 
 internal static class ChangelogWriter
 {
-    private static readonly string[] FeatureChangeVerbs =
-    [
-        "change",
-        "optimise",
-        "optimize",
-        "reduce",
-        "remove",
-        "improve"
-    ];
+    private const string VersionPlaceholder = "%VERSION%";
+    private static readonly string ReleaseUrl = $@"https://www.nuget.org/packages/NoeticTools.Git2SemVer.MSBuild/{VersionPlaceholder}";
+    private static readonly Dictionary<CommitChangeTypeId, string> CategoryNameLookup = new()
+    {
+        { CommitChangeTypeId.None, ""},
+        { CommitChangeTypeId.Feature, "Added" },
+        { CommitChangeTypeId.Fix, "Fixed" },
+        { CommitChangeTypeId.Change, "Changed" },
+        { CommitChangeTypeId.Deprecate, "Depreciated" },
+        { CommitChangeTypeId.Remove, "Removed" },
+        { CommitChangeTypeId.Security, "Security"},
+        { CommitChangeTypeId.Custom, "Other"},
+    };
 
     public static void Write(TextWriter writer, IVersionOutputs versioning, ContributingCommits contributing)
     {
@@ -35,11 +38,13 @@ internal static class ChangelogWriter
                          """);
 
         writer.WriteLine(versioning.Version!.IsRelease
-                             ? $"## {versioning.Version} - _{DateTime.Now:MMMM d, yyyy}_"
+                             ? $"## [{versioning.Version}]({ReleaseUrl.Replace(VersionPlaceholder, versioning.Version!.ToString())}) - _{DateTime.Now:yyyy-mm-dd}_"
                              : $"""
 
-                                ## {versioning.Version}
+                                ## Unreleased
 
+                                    {versioning.Version} - _{DateTime.Now:yyyy-mm-dd}_
+                                    
                                     Generated metadata - do not edit. This metadata will not appear on a release build.
                                     
                                     Head commit:           {contributing.Head.CommitId.ShortSha}
@@ -49,46 +54,41 @@ internal static class ChangelogWriter
                                     The above metadata is used to incrementally generated the changelog.
                                     Edits made below will be preserved and changes from new commits
                                     will be added to this file. Delete this file to force it to be regenerated.
+                                    
+                                    A pre-release's changelog includes changes since last release.
+                                    On a release all pre-release changes are rolled into the release changelog
+                                    and no pre-release versions will be shown.
 
                                 """);
 
         var remainingCommits = new List<Commit>(contributing.Commits.Where(x => x.MessageMetadata.ApiChangeFlags.Any));
 
-        var changeCommits = remainingCommits.Where(x => x.MessageMetadata.ChangeType == CommitChangeTypeId.Feature &&
-                                                        StartsWithChangeVerb(x.MessageMetadata.ChangeDescription)).ToList();
-        remainingCommits.RemoveAll(x => changeCommits.Contains(x));
+        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Feature);
+        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Change);
 
-        var addCommits = remainingCommits.Where(x => x.MessageMetadata.ChangeType == CommitChangeTypeId.Feature).ToList();
-        remainingCommits.RemoveAll(x => addCommits.Contains(x));
+        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Deprecate, skipIfNone: true);
+        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Remove, skipIfNone: true);
 
-        var fixCommits = remainingCommits.Where(x => x.MessageMetadata.ChangeType == CommitChangeTypeId.Fix).ToList();
-        remainingCommits.RemoveAll(x => fixCommits.Contains(x));
+        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Fix);
 
-        WriteChanges(writer, "Added", addCommits);
-        WriteChanges(writer, "Changed", changeCommits);
-        WriteChanges(writer, "Fixed", fixCommits);
+        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Security, skipIfNone: true);
+        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Custom, skipIfNone: true);
+    }
 
-        if (remainingCommits.Count == 0)
+    private static void WriteChanges(TextWriter writer, List<Commit> remainingCommits, CommitChangeTypeId changeType, bool skipIfNone = false)
+    {
+        var extracted = Extract(remainingCommits, changeType);
+        if (!skipIfNone || extracted.Count > 0)
         {
-            return;
-        }
-        if (versioning.Version.IsPrerelease)
-        {
-            writer.WriteLine("""
-                                 The following categories may need to further grouped.
-                             """);
-        }
-        writer.WriteLine();
-        var categories = remainingCommits.ToLookup(k => k.MessageMetadata.ChangeTypeText.ToSentenceCase());
-        foreach (var category in categories)
-        {
-            WriteChanges(writer, category.Key, category.ToList());
+            WriteChanges(writer, CategoryNameLookup[changeType], extracted);
         }
     }
 
-    private static bool StartsWithChangeVerb(string description)
+    private static List<Commit> Extract(List<Commit> remainingCommits, CommitChangeTypeId changeType)
     {
-        return FeatureChangeVerbs.Any(x => description.StartsWith(x, StringComparison.CurrentCultureIgnoreCase));
+        var extracted = remainingCommits.Where(x => x.MessageMetadata.ChangeType == changeType).ToList();
+        extracted.ForEach(x => remainingCommits.Remove(x));
+        return extracted;
     }
 
     private static IReadOnlyList<ChangeLogEntry> GetUniqueChangelogEntries(IReadOnlyList<Commit> commits)
