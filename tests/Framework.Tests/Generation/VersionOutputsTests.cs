@@ -127,7 +127,7 @@ internal class VersionOutputsTests
                                           },
                                           "Body": "",
                                           "ChangeDescription": "",
-                                          "ChangeType": 1,
+                                          "ChangeType": 0,
                                           "ChangeTypeText": "",
                                           "FooterKeyValues": []
                                         }
