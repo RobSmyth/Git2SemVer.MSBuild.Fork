@@ -1,22 +1,28 @@
 ﻿using System.ComponentModel;
+using NoeticTools.Git2SemVer.Tool.CommandLine;
 using Spectre.Console.Cli;
 
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace NoeticTools.Git2SemVer.Tool.CommandLine;
+namespace NoeticTools.Git2SemVer.Tool.Commands.Changelog;
 
 public class ChangelogCommandSettings : CommonCommandSettings
 {
+    [CommandOption("-a|--artifact-url <URL>")]
+    [DefaultValue("https://www.nuget.org/packages/user.project/%VERSION%")]
+    [Description("Optional url to a version's artifacts. Must contain version placeholder '%VERSION%'.")]
+    public string ArtifactUrl { get; set; } = "";
+
     [CommandOption("--host-type <TYPE>")]
     [Description("Force the host type. Use for testing expected behaviour on other hosts. Valid values are 'Custom', 'Uncontrolled', 'TeamCity', or 'GitHub'.")]
     public string? HostType { get; set; } = null;
 
     [CommandOption("-m|--meta-directory <DIRECTORY>")]
-    [DefaultValue("")]
+    [DefaultValue(".changelog")]
     [Description("Directory in which to place the generators metadata file.")]
-    public string OutputDirectory { get; set; } = "";
+    public string DataDirectory { get; set; } = "";
 
     [CommandOption("-o|--output <FILEPATH>")]
     [DefaultValue("CHANGELOG.md")]
@@ -27,11 +33,6 @@ public class ChangelogCommandSettings : CommonCommandSettings
     [DefaultValue("info")]
     [Description("Sets output verbosity. Valid values are 'trace', 'debug', 'info', 'warning', or 'error'.")]
     public string Verbosity { get; set; } = "";
-
-    [CommandOption("-a|--artifact-url <URL>")]
-    [DefaultValue("")]
-    [Description("Optional url to a verions's artifacts. Must contain version placeholder '%VERSION%'. e.g: https://www.nuget.org/packages/user.project/%VERSION%")]
-    public string ArtifactUrl { get; set; } = "";
 
     [CommandOption("-c|--console-out")]
     [DefaultValue(true)]

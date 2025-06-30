@@ -10,9 +10,9 @@ internal interface ICommandFactory
 {
     ISetupCommand CreateAddCommand();
 
+    IChangelogCommand CreateChangelogCommand();
+
     IRemoveCommand CreateRemoveCommand();
 
     IRunCommand CreateRunCommand();
-
-    IChangelogCommand CreateChangelogCommand();
 }

@@ -9,28 +9,29 @@ using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
 
-public class MarkdownChangelog(ILogger logger)
+public class MarkdownChangelog(ILogger logger, ChangelogConfiguration config)
 {
-    private const string ReleaseUrl = $"https://www.nuget.org/packages/NoeticTools.Git2SemVer.MSBuild/{VersionPlaceholder}";
+    private string _releaseUrl = "";
     private const string VersionPlaceholder = "%VERSION%";
 
-    private static readonly Dictionary<CommitChangeTypeId, string> CategoryNameLookup = new()
-    {
-        { CommitChangeTypeId.None, "" },
-        { CommitChangeTypeId.Feature, "Added" },
-        { CommitChangeTypeId.Fix, "Fixed" },
-        { CommitChangeTypeId.Change, "Changed" },
-        { CommitChangeTypeId.Deprecate, "Depreciated" },
-        { CommitChangeTypeId.Remove, "Removed" },
-        { CommitChangeTypeId.Security, "Security" },
-        { CommitChangeTypeId.Custom, "Other" }
-    };
+    public static readonly ChangelogCategory[] DefaultCategories =
+    [
+        new(1, "Added", CommitChangeTypeId.Feature, false),
+        new(2, "Changed", CommitChangeTypeId.Change, false),
+        new(3, "Depreciated", CommitChangeTypeId.Deprecate, true),
+        new(4, "Removed", CommitChangeTypeId.Remove, true),
+        new(5, "Fixed", CommitChangeTypeId.Fix, false),
+        new(6, "Security", CommitChangeTypeId.Security, true),
+        new(7, "Other", CommitChangeTypeId.Custom, true)
+    ];
 
-    public void Generate(bool writeToConsole,
+    public void Generate(string releaseUrl, bool writeToConsole,
                          string outputFilePath,
                          IVersionOutputs versioning,
                          ContributingCommits contributing)
     {
+        _releaseUrl = releaseUrl;
+
         var stringBuilder = new StringBuilder();
         using var writer = new StringWriter(stringBuilder);
         writer.WriteLine();
@@ -81,7 +82,7 @@ public class MarkdownChangelog(ILogger logger)
         return changeEntries;
     }
 
-    private static void Write(TextWriter writer,
+    private void Write(TextWriter writer,
                               IVersionOutputs versioning,
                               ContributingCommits contributing)
     {
@@ -96,8 +97,9 @@ public class MarkdownChangelog(ILogger logger)
 
                          """);
 
+        var releaseUrl = _releaseUrl.Replace(VersionPlaceholder, versioning.Version!.ToString());
         writer.WriteLine(versioning.Version!.IsRelease
-                             ? $"## [{versioning.Version}]({ReleaseUrl.Replace(VersionPlaceholder, versioning.Version!.ToString())}) - _{DateTime.Now:yyyy-MM-dd}_"
+                             ? $"## [{versioning.Version}]({releaseUrl}) - _{DateTime.Now:yyyy-MM-dd}_"
                              : $"""
 
                                 ## Unreleased
@@ -122,21 +124,20 @@ public class MarkdownChangelog(ILogger logger)
 
         var remainingCommits = new List<Commit>(contributing.Commits.Where(x => x.MessageMetadata.ApiChangeFlags.Any));
 
-        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Feature);
-        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Change);
-        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Deprecate, true);
-        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Remove, true);
-        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Fix);
-        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Security, true);
-        WriteChanges(writer, remainingCommits, CommitChangeTypeId.Custom, true);
+        var orderedCategories = config.Categories.OrderBy(x => x.Order);
+        foreach (var category in orderedCategories)
+        {
+            WriteChanges(writer, remainingCommits, category);
+        }
     }
 
-    private static void WriteChanges(TextWriter writer, List<Commit> remainingCommits, CommitChangeTypeId changeType, bool skipIfNone = false)
+    private static void WriteChanges(TextWriter writer, List<Commit> remainingCommits, ChangelogCategory category)
     {
+        var changeType = (CommitChangeTypeId)category.ChangeType;
         var extracted = Extract(remainingCommits, changeType);
-        if (!skipIfNone || extracted.Count > 0)
+        if (!category.SkipIfNone || extracted.Count > 0)
         {
-            WriteChanges(writer, CategoryNameLookup[changeType], extracted);
+            WriteChanges(writer, category.Name, extracted);
         }
     }
 

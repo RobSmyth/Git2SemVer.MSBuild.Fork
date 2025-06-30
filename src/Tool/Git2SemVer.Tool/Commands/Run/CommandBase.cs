@@ -6,14 +6,14 @@ namespace NoeticTools.Git2SemVer.Tool.Commands.Run;
 
 internal abstract class CommandBase
 {
-    protected readonly IConsoleIO Console;
-
     protected CommandBase(IConsoleIO console)
     {
         Console = console;
     }
 
     public bool HasError => Console.HasError;
+
+    protected readonly IConsoleIO Console;
 
     protected LoggingLevel GetVerbosity(string verbosity)
     {

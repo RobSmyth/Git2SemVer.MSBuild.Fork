@@ -24,6 +24,11 @@ internal class CommandFactory : ICommandFactory
         return _servicesProvider.GetService<ISetupCommand>()!;
     }
 
+    public IChangelogCommand CreateChangelogCommand()
+    {
+        return _servicesProvider.GetService<IChangelogCommand>()!;
+    }
+
     public IRemoveCommand CreateRemoveCommand()
     {
         return _servicesProvider.GetService<IRemoveCommand>()!;
@@ -32,10 +37,5 @@ internal class CommandFactory : ICommandFactory
     public IRunCommand CreateRunCommand()
     {
         return _servicesProvider.GetService<IRunCommand>()!;
-    }
-
-    public IChangelogCommand CreateChangelogCommand()
-    {
-        return _servicesProvider.GetService<IChangelogCommand>()!;
     }
 }

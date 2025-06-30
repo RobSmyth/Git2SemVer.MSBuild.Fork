@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using NoeticTools.Git2SemVer.Tool.Commands;
+using NoeticTools.Git2SemVer.Tool.CommandLine;
 using NoeticTools.Git2SemVer.Tool.Framework;
 using Spectre.Console.Cli;
 
 
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace NoeticTools.Git2SemVer.Tool.CommandLine;
+namespace NoeticTools.Git2SemVer.Tool.Commands.Remove;
 
 internal class RemoveCliCommand : Command<SolutionCommandSettings>
 {

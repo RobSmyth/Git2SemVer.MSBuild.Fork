@@ -1,20 +1,15 @@
 ﻿using System.Diagnostics;
-using NoeticTools.Git2SemVer.Core;
+using JetBrains.Annotations;
 using NoeticTools.Git2SemVer.Core.Logging;
-using NoeticTools.Git2SemVer.Core.Tools;
-using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
-using NoeticTools.Git2SemVer.Framework;
 using NoeticTools.Git2SemVer.Framework.ChangeLogging;
+using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Framework.Config;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
 using NoeticTools.Git2SemVer.Framework.Persistence;
 using NoeticTools.Git2SemVer.Framework.Tools.CI;
-using NoeticTools.Git2SemVer.Tool.CommandLine;
 using NoeticTools.Git2SemVer.Tool.Commands.Run;
 using NoeticTools.Git2SemVer.Tool.Framework;
-using NoeticTools.Git2SemVer.Tool.MSBuild;
-using System.Text;
 
 
 namespace NoeticTools.Git2SemVer.Tool.Commands.Changelog;
@@ -23,6 +18,8 @@ namespace NoeticTools.Git2SemVer.Tool.Commands.Changelog;
 internal sealed class ChangelogCommand(IConsoleIO console)
     : CommandBase(console), IChangelogCommand
 {
+    private const string ConfigurationFilename = "changelog.conf.json";
+
     public void Execute(ChangelogCommandSettings settings)
     {
         try
@@ -51,31 +48,27 @@ internal sealed class ChangelogCommand(IConsoleIO console)
             var inputs = new GeneratorInputs
             {
                 VersioningMode = VersioningMode.StandAloneProject,
-                IntermediateOutputDirectory = settings.OutputDirectory
+                IntermediateOutputDirectory = settings.DataDirectory
             };
 
-#pragma warning disable CA2000
             using var logger = CreateLogger(settings.Verbosity);
-#pragma warning restore CA2000
 
-            var config = Git2SemVerConfiguration.Load();
-
-            var host = new BuildHostFactory(config, msg => logger.LogInfo(msg), logger).Create(inputs.HostType,
-                                                                                               inputs.BuildNumber,
-                                                                                               inputs.BuildContext,
-                                                                                               inputs.BuildIdFormat);
+            var host = GetBuildHost(logger, inputs);
 
             var outputsJsonIO = new NullJsonFileIO(); // todo - why is this here?
-            var versionGenerator = new VersionGeneratorFactory(logger).Create(inputs, 
+            var versionGenerator = new VersionGeneratorFactory(logger).Create(inputs,
                                                                               new NullMSBuildGlobalProperties(),
                                                                               outputsJsonIO,
                                                                               host);
 
             var result = versionGenerator.GenerateVersionOutputs();
-            new MarkdownChangelog(logger).Generate(settings.WriteToConsole,
-                                                             settings.OutputFilePath,
-                                                       result.Outputs, 
-                                                       result.Contributing);
+            var config = GetConfiguration(settings);
+            var releaseUrl = settings.ArtifactUrl;
+            new MarkdownChangelog(logger, config).Generate(releaseUrl,
+                                                           settings.WriteToConsole,
+                                                   settings.OutputFilePath,
+                                                   result.Outputs,
+                                                   result.Contributing);
 
             stopwatch.Stop();
 
@@ -87,5 +80,41 @@ internal sealed class ChangelogCommand(IConsoleIO console)
             Console.WriteErrorLine(exception);
             throw;
         }
+    }
+
+    private static IBuildHost GetBuildHost(CompositeLogger logger, GeneratorInputs inputs)
+    {
+        var config = Git2SemVerConfiguration.Load();
+
+        var host = new BuildHostFactory(config, logger.LogInfo, logger).Create(inputs.HostType,
+                                                                               inputs.BuildNumber,
+                                                                               inputs.BuildContext,
+                                                                               inputs.BuildIdFormat);
+        return host;
+    }
+
+    private static ChangelogConfiguration GetConfiguration(ChangelogCommandSettings settings)
+    {
+        var dataDirectory = settings.DataDirectory;
+        if (dataDirectory.Length > 0)
+        {
+            if (!Directory.Exists(dataDirectory))
+            {
+                Directory.CreateDirectory(dataDirectory);
+            }
+        }
+
+        var configPath = Path.Combine(dataDirectory, ConfigurationFilename);
+        if (File.Exists(configPath))
+        {
+            return ChangelogConfiguration.Load(configPath);
+        }
+
+        var config = new ChangelogConfiguration()
+        {
+            Categories = MarkdownChangelog.DefaultCategories
+        };
+        config.Save(configPath);
+        return config;
     }
 }

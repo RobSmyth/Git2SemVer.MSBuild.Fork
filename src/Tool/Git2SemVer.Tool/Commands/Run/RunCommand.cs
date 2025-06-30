@@ -3,7 +3,6 @@ using NoeticTools.Git2SemVer.Framework;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
 using NoeticTools.Git2SemVer.Framework.Persistence;
-using NoeticTools.Git2SemVer.Tool.CommandLine;
 using NoeticTools.Git2SemVer.Tool.Framework;
 
 
@@ -39,7 +38,7 @@ internal sealed class RunCommand(IConsoleIO console) : CommandBase(console), IRu
 
             IOutputsJsonIO outputJsonIO = settings.EnableJsonFileWrite ? new OutputsJsonFileIO() : new ReadOnlyOutputJsonIO();
             var versionGeneratorFactory = new VersionGeneratorFactory(logger);
-            var projectVersioning = new ProjectVersioningFactory(msg => logger.LogInfo(msg),versionGeneratorFactory, logger)
+            var projectVersioning = new ProjectVersioningFactory(msg => logger.LogInfo(msg), versionGeneratorFactory, logger)
                 .Create(inputs, new NullMSBuildGlobalProperties(), outputJsonIO);
             projectVersioning.Run();
 
