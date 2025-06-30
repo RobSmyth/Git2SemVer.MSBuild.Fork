@@ -9,7 +9,7 @@ using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 
 namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
 
-public class ChangelogMarkdown(ILogger logger)
+public class MarkdownChangelog(ILogger logger)
 {
     private const string ReleaseUrl = $"https://www.nuget.org/packages/NoeticTools.Git2SemVer.MSBuild/{VersionPlaceholder}";
     private const string VersionPlaceholder = "%VERSION%";

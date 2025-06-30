@@ -72,7 +72,7 @@ internal sealed class ChangelogCommand(IConsoleIO console)
                                                                               host);
 
             var result = versionGenerator.GenerateVersionOutputs();
-            new ChangelogMarkdown(logger).Generate(settings.WriteToConsole,
+            new MarkdownChangelog(logger).Generate(settings.WriteToConsole,
                                                              settings.OutputFilePath,
                                                        result.Outputs, 
                                                        result.Contributing);
