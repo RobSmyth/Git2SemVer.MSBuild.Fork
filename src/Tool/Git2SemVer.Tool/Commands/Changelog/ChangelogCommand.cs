@@ -1,13 +1,8 @@
 ﻿using System.Diagnostics;
-using JetBrains.Annotations;
-using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Framework.ChangeLogging;
-using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
-using NoeticTools.Git2SemVer.Framework.Framework.Config;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
 using NoeticTools.Git2SemVer.Framework.Persistence;
-using NoeticTools.Git2SemVer.Framework.Tools.CI;
 using NoeticTools.Git2SemVer.Tool.Commands.Run;
 using NoeticTools.Git2SemVer.Tool.Framework;
 
@@ -19,6 +14,7 @@ internal sealed class ChangelogCommand(IConsoleIO console)
     : CommandBase(console), IChangelogCommand
 {
     private const string ConfigurationFilename = "changelog.conf.json";
+    private const string MarkdownTemplateFilename = "MarkdownChangelog.scriban";
 
     public void Execute(ChangelogCommandSettings settings)
     {
@@ -61,14 +57,25 @@ internal sealed class ChangelogCommand(IConsoleIO console)
                                                                               outputsJsonIO,
                                                                               host);
 
-            var result = versionGenerator.GenerateVersionOutputs();
-            var config = GetConfiguration(settings);
+            var (outputs, contributing) = versionGenerator.CalculateSemanticVersion();
+            var configPath = GetConfigFilePath(settings);
+            var config = GetConfiguration(configPath);
+
+            // todo - incremental updates
+            var template = GetTemplate(settings);
+
             var releaseUrl = settings.ArtifactUrl;
-            new MarkdownChangelog(logger, config).Generate(releaseUrl,
+            new MarkdownGenerator(logger, config).Generate(releaseUrl,
                                                            settings.WriteToConsole,
-                                                   settings.OutputFilePath,
-                                                   result.Outputs,
-                                                   result.Contributing);
+                                                           settings.OutputFilePath,
+                                                           outputs,
+                                                           contributing,
+                                                           template);
+
+            config.LastRun.CommitSha = contributing.Head.CommitId.Sha;
+            config.LastRun.CommitWhen = contributing.Head.When;
+            config.LastRun.SemVersion = outputs.Version!.ToString();
+            config.Save(configPath);
 
             stopwatch.Stop();
 
@@ -82,18 +89,24 @@ internal sealed class ChangelogCommand(IConsoleIO console)
         }
     }
 
-    private static IBuildHost GetBuildHost(CompositeLogger logger, GeneratorInputs inputs)
+    private string GetTemplate(ChangelogCommandSettings settings)
     {
-        var config = Git2SemVerConfiguration.Load();
+        var dataDirectory = settings.DataDirectory;
 
-        var host = new BuildHostFactory(config, logger.LogInfo, logger).Create(inputs.HostType,
-                                                                               inputs.BuildNumber,
-                                                                               inputs.BuildContext,
-                                                                               inputs.BuildIdFormat);
-        return host;
+        var templatePath = Path.Combine(dataDirectory, MarkdownTemplateFilename);
+        if (File.Exists(templatePath))
+        {
+            return File.ReadAllText(templatePath);
+        }
+
+        Console.WriteDebugLine($"Creating default template file: {templatePath}");
+        var defaultTemplate = MarkdownGenerator.GetDefaultTemplate();
+        File.WriteAllText(templatePath, defaultTemplate);
+        return defaultTemplate;
+
     }
 
-    private static ChangelogConfiguration GetConfiguration(ChangelogCommandSettings settings)
+    private static string GetConfigFilePath(ChangelogCommandSettings settings)
     {
         var dataDirectory = settings.DataDirectory;
         if (dataDirectory.Length > 0)
@@ -105,14 +118,19 @@ internal sealed class ChangelogCommand(IConsoleIO console)
         }
 
         var configPath = Path.Combine(dataDirectory, ConfigurationFilename);
+        return configPath;
+    }
+
+    private static ChangelogSettings GetConfiguration(string configPath)
+    {
         if (File.Exists(configPath))
         {
-            return ChangelogConfiguration.Load(configPath);
+            return ChangelogSettings.Load(configPath);
         }
 
-        var config = new ChangelogConfiguration()
+        var config = new ChangelogSettings
         {
-            Categories = MarkdownChangelog.DefaultCategories
+            Categories = MarkdownGenerator.DefaultCategories
         };
         config.Save(configPath);
         return config;

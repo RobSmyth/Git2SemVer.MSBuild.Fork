@@ -33,7 +33,7 @@ internal sealed class VersionGenerator(
         var stopwatch = Stopwatch.StartNew();
 
         host.BumpBuildNumber();
-        var outputs = GenerateVersionOutputs().Outputs;
+        var outputs = CalculateSemanticVersion().Outputs;
         SaveGeneratedVersions(outputs);
 
         stopwatch.Stop();
@@ -45,7 +45,7 @@ internal sealed class VersionGenerator(
         return outputs;
     }
 
-    public (VersionOutputs Outputs, ContributingCommits Contributing) GenerateVersionOutputs()
+    public (VersionOutputs Outputs, ContributingCommits Contributing) CalculateSemanticVersion()
     {
         var results = gitWalker.CalculateSemanticVersion();
         var outputs = new VersionOutputs(new GitOutputs(gitTool,

@@ -1,4 +1,7 @@
 ﻿using NoeticTools.Git2SemVer.Core.Logging;
+using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
+using NoeticTools.Git2SemVer.Framework.Framework.Config;
+using NoeticTools.Git2SemVer.Framework.Tools.CI;
 using NoeticTools.Git2SemVer.Tool.Framework;
 
 
@@ -42,5 +45,16 @@ internal abstract class CommandBase
             logger?.Dispose();
             throw;
         }
+    }
+
+    protected static IBuildHost GetBuildHost(CompositeLogger logger, GeneratorInputs inputs)
+    {
+        var config = Git2SemVerConfiguration.Load();
+
+        var host = new BuildHostFactory(config, logger.LogInfo, logger).Create(inputs.HostType,
+                                                                               inputs.BuildNumber,
+                                                                               inputs.BuildContext,
+                                                                               inputs.BuildIdFormat);
+        return host;
     }
 }

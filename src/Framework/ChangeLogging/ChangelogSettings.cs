@@ -9,7 +9,10 @@ using System.Text.Unicode;
 
 namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
 
-public sealed class ChangelogConfiguration : IEquatable<ChangelogConfiguration>
+/// <summary>
+///     Settings to configure how changelog is generated.
+/// </summary>
+public sealed class ChangelogSettings : IEquatable<ChangelogSettings>
 {
     [JsonIgnore]
     private static readonly Mutex FileMutex = new(false, "G2SemVerChangelogConfigFileMutex");
@@ -21,20 +24,22 @@ public sealed class ChangelogConfiguration : IEquatable<ChangelogConfiguration>
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
     };
 
-    [JsonIgnore]
-    private int _onLoadHash;
-
     /// <summary>
     ///     Categories to include in the changelog.
     /// </summary>
-    public ChangelogCategory[] Categories { get; set; } = [];
+    public ChangelogCategorySettings[] Categories { get; set; } = [];
+
+    /// <summary>
+    ///     Information on last changelog generate run.
+    /// </summary>
+    public LastRunData LastRun { get; set; } = new();
 
     /// <summary>
     ///     Configuration file schema revision.
     /// </summary>
     public string Rev { get; set; } = "1.0.0";
 
-    public bool Equals(ChangelogConfiguration? other)
+    public bool Equals(ChangelogSettings? other)
     {
         if (other is null)
         {
@@ -51,7 +56,7 @@ public sealed class ChangelogConfiguration : IEquatable<ChangelogConfiguration>
 
     public override bool Equals(object? obj)
     {
-        return ReferenceEquals(this, obj) || (obj is ChangelogConfiguration other && Equals(other));
+        return ReferenceEquals(this, obj) || (obj is ChangelogSettings other && Equals(other));
     }
 
     public override int GetHashCode()
@@ -70,9 +75,9 @@ public sealed class ChangelogConfiguration : IEquatable<ChangelogConfiguration>
     ///         If the file does not exist it is created.
     ///     </para>
     /// </remarks>
-    public static ChangelogConfiguration Load(string filePath)
+    public static ChangelogSettings Load(string filePath)
     {
-        ChangelogConfiguration instance;
+        ChangelogSettings instance;
 
         FileMutex.WaitOne(TimeSpan.FromSeconds(10));
         try
@@ -80,11 +85,11 @@ public sealed class ChangelogConfiguration : IEquatable<ChangelogConfiguration>
             if (File.Exists(filePath))
             {
                 var json = File.ReadAllText(filePath);
-                instance = JsonSerializer.Deserialize<ChangelogConfiguration>(json)!;
+                instance = JsonSerializer.Deserialize<ChangelogSettings>(json)!;
             }
             else
             {
-                instance = new ChangelogConfiguration();
+                instance = new ChangelogSettings();
             }
         }
         finally
@@ -92,7 +97,6 @@ public sealed class ChangelogConfiguration : IEquatable<ChangelogConfiguration>
             FileMutex.ReleaseMutex();
         }
 
-        instance._onLoadHash = instance.GetHashCode();
         return instance;
     }
 
@@ -106,14 +110,6 @@ public sealed class ChangelogConfiguration : IEquatable<ChangelogConfiguration>
     /// </remarks>
     public void Save(string filePath)
     {
-        var currentHashCode = GetHashCode();
-        if (_onLoadHash == currentHashCode)
-        {
-            return;
-        }
-
-        _onLoadHash = currentHashCode;
-
         var json = JsonSerializer.Serialize(this, SerialiseOptions);
         json = Regex.Unescape(json);
 

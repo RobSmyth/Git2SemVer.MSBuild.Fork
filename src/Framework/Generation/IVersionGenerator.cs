@@ -13,5 +13,5 @@ public interface IVersionGenerator : IDisposable
     /// <summary>
     /// Generate versioning outputs. Build number is not bumped and outputs are not saved.
     /// </summary>
-    (VersionOutputs Outputs, ContributingCommits Contributing) GenerateVersionOutputs();
+    (VersionOutputs Outputs, ContributingCommits Contributing) CalculateSemanticVersion();
 }

@@ -1,0 +1,29 @@
+﻿using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
+using Semver;
+// ReSharper disable UnusedMember.Global
+
+
+namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
+
+internal sealed class ChangelogModel(SemVersion version, 
+                                     ContributingCommits contributing, 
+                                     IReadOnlyList<CategoryChanges> categories)
+{
+    public string BranchName { get; } = contributing.BranchName;
+
+    public IReadOnlyList<CategoryChanges> Categories { get; } = categories;
+
+    public DateTime HeadDateTime { get; } = contributing.Head.When.DateTime;
+
+    public string HeadSha { get; } = contributing.Head.CommitId.Sha;
+
+    public bool IsPrerelease { get; } = version.IsPrerelease;
+
+    public bool IsRelease { get; } = version.IsRelease;
+
+    public int NumberOfCommits { get; } = contributing.Commits.Count;
+
+    public DateTime ReleaseDate { get; } = DateTime.Now;
+
+    public string SemVersion { get; } = version.ToString();
+}
