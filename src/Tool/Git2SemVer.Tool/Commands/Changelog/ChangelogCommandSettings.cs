@@ -15,14 +15,14 @@ public class ChangelogCommandSettings : CommonCommandSettings
     [Description("Optional url to a version's artifacts. Must contain version placeholder '%VERSION%'.")]
     public string ArtifactUrl { get; set; } = "";
 
-    [CommandOption("--host-type <TYPE>")]
-    [Description("Force the host type. Use for testing expected behaviour on other hosts. Valid values are 'Custom', 'Uncontrolled', 'TeamCity', or 'GitHub'.")]
-    public string? HostType { get; set; } = null;
-
     [CommandOption("-m|--meta-directory <DIRECTORY>")]
     [DefaultValue(".changelog")]
     [Description("Directory in which to place the generators metadata file.")]
     public string DataDirectory { get; set; } = "";
+
+    [CommandOption("--host-type <TYPE>")]
+    [Description("Force the host type. Use for testing expected behaviour on other hosts. Valid values are 'Custom', 'Uncontrolled', 'TeamCity', or 'GitHub'.")]
+    public string? HostType { get; set; } = null;
 
     [CommandOption("-o|--output <FILEPATH>")]
     [DefaultValue("CHANGELOG.md")]

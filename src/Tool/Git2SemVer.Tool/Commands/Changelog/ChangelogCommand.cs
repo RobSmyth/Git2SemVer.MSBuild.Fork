@@ -89,23 +89,6 @@ internal sealed class ChangelogCommand(IConsoleIO console)
         }
     }
 
-    private string GetTemplate(ChangelogCommandSettings settings)
-    {
-        var dataDirectory = settings.DataDirectory;
-
-        var templatePath = Path.Combine(dataDirectory, MarkdownTemplateFilename);
-        if (File.Exists(templatePath))
-        {
-            return File.ReadAllText(templatePath);
-        }
-
-        Console.WriteDebugLine($"Creating default template file: {templatePath}");
-        var defaultTemplate = MarkdownGenerator.GetDefaultTemplate();
-        File.WriteAllText(templatePath, defaultTemplate);
-        return defaultTemplate;
-
-    }
-
     private static string GetConfigFilePath(ChangelogCommandSettings settings)
     {
         var dataDirectory = settings.DataDirectory;
@@ -134,5 +117,21 @@ internal sealed class ChangelogCommand(IConsoleIO console)
         };
         config.Save(configPath);
         return config;
+    }
+
+    private string GetTemplate(ChangelogCommandSettings settings)
+    {
+        var dataDirectory = settings.DataDirectory;
+
+        var templatePath = Path.Combine(dataDirectory, MarkdownTemplateFilename);
+        if (File.Exists(templatePath))
+        {
+            return File.ReadAllText(templatePath);
+        }
+
+        Console.WriteDebugLine($"Creating default template file: {templatePath}");
+        var defaultTemplate = MarkdownGenerator.GetDefaultTemplate();
+        File.WriteAllText(templatePath, defaultTemplate);
+        return defaultTemplate;
     }
 }
