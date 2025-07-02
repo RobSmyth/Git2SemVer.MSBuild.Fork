@@ -5,6 +5,7 @@ using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using Scriban;
+using Scriban.Runtime;
 using Semver;
 
 
@@ -159,14 +160,7 @@ public class MarkdownGenerator(ILogger logger, ChangelogSettings config)
                               if change.Issues | array.size == 0
                                 issues = ""
                               else
-                                issues = " ("
-                                for issue in change.Issues
-                                  if issues | string.size > 2
-                                    issues = issues + ","
-                                  end
-                                  issues = issues + issue
-                                end
-                                issues = issues + ")"
+                                issues = "(" + (change.Issues | array.join ",") + ")"
                               end
                             ~}}
                             * {{ change.Description | string.capitalize }}{{ issues }}.
@@ -175,6 +169,7 @@ public class MarkdownGenerator(ILogger logger, ChangelogSettings config)
                             {{~ end ~}}
                             """;
         var template = Template.Parse(sectionHeader);
+
         var model = new ChangelogModel(version, contributing, changes);
         sectionHeader = template.Render(model, member => member.Name);
         writer.WriteLine(sectionHeader);

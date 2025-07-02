@@ -48,21 +48,18 @@ internal sealed class ChangelogCommand(IConsoleIO console)
             };
 
             using var logger = CreateLogger(settings.Verbosity);
-
             var host = GetBuildHost(logger, inputs);
-
-            var outputsJsonIO = new NullJsonFileIO(); // todo - why is this here?
             var versionGenerator = new VersionGeneratorFactory(logger).Create(inputs,
                                                                               new NullMSBuildGlobalProperties(),
-                                                                              outputsJsonIO,
+                                                                              new NullJsonFileIO(),
                                                                               host);
 
             var (outputs, contributing) = versionGenerator.CalculateSemanticVersion();
-            var configPath = GetConfigFilePath(settings);
-            var config = GetConfiguration(configPath);
+            EnsureDataDirectoryExists(settings);
+            var config = GetConfiguration(settings);
+            var template = GetTemplate(settings);
 
             // todo - incremental updates
-            var template = GetTemplate(settings);
 
             var releaseUrl = settings.ArtifactUrl;
             new MarkdownGenerator(logger, config).Generate(releaseUrl,
@@ -75,7 +72,7 @@ internal sealed class ChangelogCommand(IConsoleIO console)
             config.LastRun.CommitSha = contributing.Head.CommitId.Sha;
             config.LastRun.CommitWhen = contributing.Head.When;
             config.LastRun.SemVersion = outputs.Version!.ToString();
-            config.Save(configPath);
+            config.Save(Path.Combine(settings.DataDirectory, ConfigurationFilename));
 
             stopwatch.Stop();
 
@@ -89,9 +86,10 @@ internal sealed class ChangelogCommand(IConsoleIO console)
         }
     }
 
-    private static string GetConfigFilePath(ChangelogCommandSettings settings)
+    private static void EnsureDataDirectoryExists(ChangelogCommandSettings settings)
     {
         var dataDirectory = settings.DataDirectory;
+        // ReSharper disable once InvertIf
         if (dataDirectory.Length > 0)
         {
             if (!Directory.Exists(dataDirectory))
@@ -99,13 +97,12 @@ internal sealed class ChangelogCommand(IConsoleIO console)
                 Directory.CreateDirectory(dataDirectory);
             }
         }
-
-        var configPath = Path.Combine(dataDirectory, ConfigurationFilename);
-        return configPath;
     }
 
-    private static ChangelogSettings GetConfiguration(string configPath)
+    private static ChangelogSettings GetConfiguration(ChangelogCommandSettings settings)
     {
+        var configPath = Path.Combine(settings.DataDirectory, ConfigurationFilename);
+
         if (File.Exists(configPath))
         {
             return ChangelogSettings.Load(configPath);
