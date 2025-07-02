@@ -32,7 +32,7 @@ internal sealed class RemoveCommand : IRemoveCommand
 
     public void Execute(string inputSolutionFile, bool unattended)
     {
-        _console.WriteInfoLine($"Removing Git2SemVer solution versioning{(unattended ? " (unattended)" : "")}.");
+        _console.WriteMarkupInfoLine($"Removing Git2SemVer solution versioning{(unattended ? " (unattended)" : "")}.");
         _console.WriteLine();
 
         var solution = _solutionFinder.Find(inputSolutionFile);
@@ -41,7 +41,7 @@ internal sealed class RemoveCommand : IRemoveCommand
             return;
         }
 
-        _console.MarkupLine($"""
+        _console.WriteMarkupLine($"""
 
                              Ready to remove Git2SemVer versioning from [aqua]{solution!.Name}[/] solution. If the solution is currently open in Visual Studio, close it before proceeding.
 
@@ -64,7 +64,7 @@ internal sealed class RemoveCommand : IRemoveCommand
         var solutionDirectory = solution.Directory!;
 
         var changeMade = false;
-        _console.WriteInfoLine("Running:");
+        _console.WriteMarkupInfoLine("Running:");
         _console.WriteLine();
         changeMade |= RemoveDirectoryPropertiesInclude(solutionDirectory);
         changeMade |= DeleteDirectoryVersioningPropertiesFile(solutionDirectory);
@@ -82,7 +82,7 @@ internal sealed class RemoveCommand : IRemoveCommand
         _console.WriteLine();
         if (changeMade)
         {
-            _console.WriteInfoLine("Done.");
+            _console.WriteMarkupInfoLine("Done.");
         }
         else
         {
@@ -96,7 +96,7 @@ internal sealed class RemoveCommand : IRemoveCommand
         if (directoryVersioningPropsFile.Exists)
         {
             directoryVersioningPropsFile.Delete();
-            _console.WriteInfoLine($"\t- Deleted properties file: '{directoryVersioningPropsFile.Name}.");
+            _console.WriteMarkupInfoLine($"\t- Deleted properties file: '{directoryVersioningPropsFile.Name}.");
             return true;
         }
 
@@ -110,7 +110,7 @@ internal sealed class RemoveCommand : IRemoveCommand
         if (versioningProjectDirectory.Exists)
         {
             versioningProjectDirectory.Delete(true);
-            _console.WriteInfoLine($"\t- Deleted project: '{leaderProjectName}.");
+            _console.WriteMarkupInfoLine($"\t- Deleted project: '{leaderProjectName}.");
             return true;
         }
 
@@ -138,7 +138,7 @@ internal sealed class RemoveCommand : IRemoveCommand
             File.WriteAllText(buildPropsFile.FullName, content);
             //existingContent = existingContent.Replace(includeLine, "", StringComparison.CurrentCultureIgnoreCase);
             //File.WriteAllText(buildPropsFile.FullName, existingContent);
-            _console.WriteInfoLine($"\t- Updated '{buildPropsFile.Name}'.");
+            _console.WriteMarkupInfoLine($"\t- Updated '{buildPropsFile.Name}'.");
             return true;
         }
 
@@ -161,7 +161,7 @@ internal sealed class RemoveCommand : IRemoveCommand
             _console.WriteLine();
             var projectsString = new StringBuilder("\t\t");
             projectsString.AppendJoin("\n\t\t", progResult.projects);
-            _console.WriteInfoLine(projectsString.ToString());
+            _console.WriteMarkupInfoLine(projectsString.ToString());
             return false;
         }
 

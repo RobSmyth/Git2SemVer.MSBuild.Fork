@@ -9,7 +9,7 @@ namespace NoeticTools.Git2SemVer.Tool.Framework;
 [RegisterSingleton]
 public class ConsoleIO : IConsoleIO
 {
-    private const string RegexHighlightMarkupPattern = @"\[(error|warn|em)\]";
+    private const string RegexHighlightMarkupPattern = @"\[(error|warn|em|code|bad|good)\]";
 
     private readonly ILogger _logger;
 
@@ -32,27 +32,27 @@ public class ConsoleIO : IConsoleIO
         }
 
         var result = AnsiConsole.Ask(prompt, defaultValue);
-        WriteDebugLine($"User returned '{result}' to ask '{prompt}'.");
+        WriteMarkupDebugLine($"User returned '{result}' to ask '{prompt}'.");
         return result;
     }
 
-    public void MarkupErrorLine(string message)
+    public void WriteMarkupErrorLine(string message)
     {
-        MarkupLine(message);
-        _logger.LogError(RemoveMarkup(message));
+        WriteMarkupLine(message);
+        _logger.LogError(RemoveNamedColoursMarkup(message));
     }
 
-    public void MarkupLine(string message)
+    public void WriteMarkupLine(string message)
     {
         var markupText = Regex.Replace(message, RegexHighlightMarkupPattern, NamedColoursEvaluator,
                                        RegexOptions.Compiled | RegexOptions.IgnoreCase);
         AnsiConsole.MarkupLine(markupText);
     }
 
-    public void MarkupWarningLine(string message)
+    public void WriteMarkupWarningLine(string message)
     {
-        MarkupLine(message);
-        _logger.LogWarning(RemoveMarkup(message));
+        WriteMarkupLine(message);
+        _logger.LogWarning(RemoveNamedColoursMarkup(message));
     }
 
     public T Prompt<T>(TextPrompt<T> prompt, T defaultValue)
@@ -98,7 +98,7 @@ public class ConsoleIO : IConsoleIO
         return result;
     }
 
-    public void WriteDebugLine(string message)
+    public void WriteMarkupDebugLine(string message)
     {
         if (Level >= LoggingLevel.Debug)
         {
@@ -119,17 +119,17 @@ public class ConsoleIO : IConsoleIO
             return;
         }
 
-        MarkupLine($"[error]Exception: {exception.Message}[/]\nStack Trace: {exception.StackTrace}");
+        WriteMarkupLine($"[error]Exception: {exception.Message}[/]\nStack Trace: {exception.StackTrace}");
         _logger.LogError(exception);
     }
 
     public void WriteErrorLine(string message)
     {
-        MarkupLine("[error]" + message + "[/]");
+        WriteMarkupLine("[error]" + message + "[/]");
         _logger.LogError(message);
     }
 
-    public void WriteInfoLine(string message)
+    public void WriteMarkupInfoLine(string message)
     {
         AnsiConsole.WriteLine(message);
         _logger.LogInfo(message);
@@ -145,22 +145,47 @@ public class ConsoleIO : IConsoleIO
         AnsiConsole.WriteLine(message);
     }
 
+    public string Escape(string message)
+    {
+        return Spectre.Console.Markup.Escape(message);
+    }
+
     public void WriteWarningLine(string message)
     {
-        MarkupLine("[warn]" + message + "[/]");
-        _logger.LogWarning(message);
+        AnsiConsole.WriteLine(message);
+
+        if (_logger.Level >= LoggingLevel.Warning)
+        {
+            _logger.LogWarning(message);
+        }
+    }
+
+    public void WriteCodeLine(string code)
+    {
+        WriteMarkupLine("[code]" + Escape(code) + "[/]");
+    }
+
+    public void WriteHorizontalLine()
+    {
+        AnsiConsole.Write(new Rule());
     }
 
     private static string NamedColoursEvaluator(Match match)
     {
-        if ("[error]".Equals(match.Value, StringComparison.Ordinal))
+        if ("[good]".Equals(match.Value, StringComparison.Ordinal))
+        {
+            return "[green1]";
+        }
+
+        if ("[error]".Equals(match.Value, StringComparison.Ordinal) ||
+            "[bad]".Equals(match.Value, StringComparison.Ordinal))
         {
             return "[red]";
         }
 
         if ("[warn]".Equals(match.Value, StringComparison.Ordinal))
         {
-            return "[fuchsia]";
+            return "[lightsalmon1]";
         }
 
         if ("[em]".Equals(match.Value, StringComparison.Ordinal))
@@ -168,10 +193,15 @@ public class ConsoleIO : IConsoleIO
             return "[aqua]";
         }
 
+        if ("[code]".Equals(match.Value, StringComparison.Ordinal))
+        {
+            return "[teal]";
+        }
+
         return match.Value;
     }
 
-    private static string RemoveMarkup(string message)
+    private static string RemoveNamedColoursMarkup(string message)
     {
         var markupRemovedText = Regex.Replace(message, RegexHighlightMarkupPattern, "",
                                               RegexOptions.Compiled | RegexOptions.IgnoreCase);

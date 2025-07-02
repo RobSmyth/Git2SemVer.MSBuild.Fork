@@ -38,4 +38,9 @@ public class ChangelogCommandSettings : CommonCommandSettings
     [DefaultValue(true)]
     [Description("Enable writing generated changelog to the console.")]
     public bool WriteToConsole { get; set; }
+
+    [CommandOption("-i|--incremental")]
+    [DefaultValue(true)]
+    [Description("Enable incremental changelog updating. Setting this to false will cause the changelog to be overwritten.")]
+    public bool Incremental { get; set; }
 }

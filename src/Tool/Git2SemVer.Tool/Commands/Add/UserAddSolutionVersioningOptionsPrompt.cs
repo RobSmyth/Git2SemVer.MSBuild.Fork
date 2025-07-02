@@ -20,7 +20,7 @@ internal sealed class UserAddSolutionVersioningOptionsPrompt : IUserOptionsPromp
 
     public UserOptions GetOptions(FileInfo solution)
     {
-        _console.MarkupLine($"Projects in the current directory and sub directories will be configured to use Git2SemVer solution versioning. A versioning project will be added to the solution '[em]{solution.Name}[/]' and solution versioning directory properties files will be added to the current directory.");
+        _console.WriteMarkupLine($"Projects in the current directory and sub directories will be configured to use Git2SemVer solution versioning. A versioning project will be added to the solution '[em]{solution.Name}[/]' and solution versioning directory properties files will be added to the current directory.");
 
         var leadingProjectName = _console.Prompt(new TextPrompt<string>("Versioning project name?")
                                                      .Validate(folderName => ValidateFolderDoesNotExist(folderName, solution.Directory!)),
@@ -30,7 +30,7 @@ internal sealed class UserAddSolutionVersioningOptionsPrompt : IUserOptionsPromp
 
         _console.WriteLine();
         var options = new UserOptions(leadingProjectName, versionTagPrefix);
-        _console.MarkupLine($"Ready to add Git2SemVer versioning to '[em]{solution.Name}[/]' solution. If the solution is currently open in Visual Studio, close it before proceeding.");
+        _console.WriteMarkupLine($"Ready to add Git2SemVer versioning to '[em]{solution.Name}[/]' solution. If the solution is currently open in Visual Studio, close it before proceeding.");
         var proceed = _console.Prompt(new TextPrompt<bool>("Proceed?")
                                       .AddChoices([true, false])
                                       .WithConverter(choice => choice ? "y" : "n"),

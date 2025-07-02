@@ -45,7 +45,7 @@ internal sealed class AddCommand : ISetupCommand
 
     public void Execute(string inputSolutionFile, bool unattended)
     {
-        _console.WriteInfoLine($"Adding Git2SemVer solution versioning{(unattended ? " (unattended)" : "")}.");
+        _console.WriteMarkupInfoLine($"Adding Git2SemVer solution versioning{(unattended ? " (unattended)" : "")}.");
         _console.WriteLine();
 
         var solution = _solutionFinder.Find(inputSolutionFile);
@@ -68,7 +68,7 @@ internal sealed class AddCommand : ISetupCommand
             return;
         }
 
-        _console.WriteInfoLine("Running:");
+        _console.WriteMarkupInfoLine("Running:");
         _console.WriteLine();
 
         var propertiesDocument = AddVersioningPropsDocument(solutionDirectory);
@@ -99,11 +99,11 @@ internal sealed class AddCommand : ISetupCommand
         var versioningPropsFile = directory.WithFile(filename);
         if (versioningPropsFile.Exists)
         {
-            _console.WriteDebugLine($"Overwriting file '{filename}'.");
+            _console.WriteMarkupDebugLine($"Overwriting file '{filename}'.");
         }
 
         _embeddedResources.WriteResourceFile(filename, directory);
-        _console.WriteInfoLine($"\t- Added '{filename}' to solution directory.");
+        _console.WriteMarkupInfoLine($"\t- Added '{filename}' to solution directory.");
         return _projectDocumentReader.Read(versioningPropsFile);
     }
 
@@ -119,7 +119,7 @@ internal sealed class AddCommand : ISetupCommand
 
         _embeddedResources.WriteResourceFile(Git2SemVerConstants.SharedVersionJsonPropertiesFilename, sharedDirectory);
 
-        _console.WriteInfoLine($"\t- Added '{Git2SemVerConstants.ShareFolderName}' shared directory to versioning project directory.");
+        _console.WriteMarkupInfoLine($"\t- Added '{Git2SemVerConstants.ShareFolderName}' shared directory to versioning project directory.");
     }
 
     private void CreateVersioningProject(UserOptions userOptions, FileInfo solution)
@@ -129,7 +129,7 @@ internal sealed class AddCommand : ISetupCommand
         _dotNetCli.Solution.AddProject(solution.Name, $"{projectName}/{projectName}.csproj");
         var csxFileDestination = solution.Directory!.WithSubDirectory(projectName).WithFile(Git2SemVerConstants.DefaultScriptFilename);
         _embeddedResources.WriteResourceFile(Git2SemVerConstants.DefaultScriptFilename, csxFileDestination.FullName);
-        _console.WriteInfoLine($"\t- Added '{projectName}' project to solution.");
+        _console.WriteMarkupInfoLine($"\t- Added '{projectName}' project to solution.");
 
         var versioningProjectDirectory = solution.Directory!.WithSubDirectory(userOptions.VersioningProjectName);
         CreateSharedDirectory(versioningProjectDirectory);
@@ -154,7 +154,7 @@ internal sealed class AddCommand : ISetupCommand
                                                                                     </Project>
                                                                                     """,
                                                                                    StringComparison.Ordinal));
-                _console.WriteInfoLine($"\t- Updated '{buildPropsFile.Name}'.");
+                _console.WriteMarkupInfoLine($"\t- Updated '{buildPropsFile.Name}'.");
             }
         }
         else
@@ -164,7 +164,7 @@ internal sealed class AddCommand : ISetupCommand
                                                             <Import Project="{SolutionVersioningConstants.DirectoryVersionPropsFilename}"/>
                                                         </Project>
                                                         """);
-            _console.WriteInfoLine($"\t- Added '{buildPropsFile.Name}' file to solution directory.");
+            _console.WriteMarkupInfoLine($"\t- Added '{buildPropsFile.Name}' file to solution directory.");
         }
     }
 
@@ -188,7 +188,7 @@ internal sealed class AddCommand : ISetupCommand
 
                         """;
             File.WriteAllText(fullName, content);
-            _console.WriteInfoLine($"\t- Added generated version properties file '{Git2SemVerConstants.SharedVersionJsonPropertiesFilename}' to .gitignore file.");
+            _console.WriteMarkupInfoLine($"\t- Added generated version properties file '{Git2SemVerConstants.SharedVersionJsonPropertiesFilename}' to .gitignore file.");
         }
         else
         {

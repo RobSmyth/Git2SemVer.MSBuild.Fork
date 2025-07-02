@@ -51,7 +51,7 @@ internal sealed class AddPreconditionValidator : IAddPreconditionValidator
             return true;
         }
 
-        _console.MarkupErrorLine($"[error]The properties file '[em]{buildPropsFile.Name}[/]' contains a \"Directory.Versioning.Build.Props\" entry. Remove manually.[/]");
+        _console.WriteMarkupErrorLine($"[error]The properties file '[em]{buildPropsFile.Name}[/]' contains a \"Directory.Versioning.Build.Props\" entry. Remove manually.[/]");
         return false;
     }
 
@@ -100,12 +100,12 @@ internal sealed class AddPreconditionValidator : IAddPreconditionValidator
         if (unattended)
         {
             message.AppendLine("[error]Aborting as in unattended mode.[/]");
-            _console.MarkupErrorLine(message.ToString());
+            _console.WriteMarkupErrorLine(message.ToString());
             return false;
         }
 
         message.AppendLine("This may not be a problem but this setup may fail if the prior setup has not been fully removed.");
-        _console.MarkupWarningLine("[warn]" + message + "[/]");
+        _console.WriteMarkupWarningLine("[warn]" + message + "[/]");
 
         Console.WriteLine();
         var proceed = AnsiConsole.Prompt(new TextPrompt<bool>("Proceed?")

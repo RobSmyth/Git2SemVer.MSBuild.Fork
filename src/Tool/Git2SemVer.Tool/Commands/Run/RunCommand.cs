@@ -15,7 +15,7 @@ internal sealed class RunCommand(IConsoleIO console) : CommandBase(console), IRu
     {
         try
         {
-            Console.WriteInfoLine($"Running Git2SemVer version generator{(settings.Unattended ? " (unattended)" : "")}.");
+            Console.WriteMarkupInfoLine($"Running Git2SemVer version generator{(settings.Unattended ? " (unattended)" : "")}.");
             Console.WriteLine();
 
             var inputs = new GeneratorInputs
@@ -42,8 +42,8 @@ internal sealed class RunCommand(IConsoleIO console) : CommandBase(console), IRu
                 .Create(inputs, new NullMSBuildGlobalProperties(), outputJsonIO);
             projectVersioning.Run();
 
-            Console.WriteInfoLine("");
-            Console.WriteInfoLine("Completed");
+            Console.WriteMarkupInfoLine("");
+            Console.WriteMarkupInfoLine("Completed");
         }
         catch (Exception exception)
         {

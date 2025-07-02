@@ -19,7 +19,10 @@ public sealed class VersionGeneratorFactory(ILogger logger)
                                     IOutputsJsonIO outputsJsonIO, 
                                     IBuildHost host)
     {
-        var gitTool = new GitTool(new TagParser(inputs.ReleaseTagFormat)) { RepositoryDirectory = inputs.WorkingDirectory };
+        var gitTool = new GitTool(new TagParser(inputs.ReleaseTagFormat))
+        {
+            RepositoryDirectory = inputs.WorkingDirectory
+        };
         var gitPathsFinder = new GitHistoryWalker(gitTool, logger);
 
         var defaultBuilderFactory = new DefaultVersionBuilderFactory(logger);

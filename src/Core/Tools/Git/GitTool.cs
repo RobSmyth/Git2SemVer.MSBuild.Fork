@@ -24,7 +24,10 @@ public sealed class GitTool : IGitTool
     {
         _tagParser = tagParser;
         _cache = new CommitsCache();
-        RepositoryDirectory = Environment.CurrentDirectory;
+        if (string.IsNullOrEmpty(RepositoryDirectory))
+        {
+            RepositoryDirectory = Environment.CurrentDirectory;
+        }
         _metadataParser = new ConventionalCommitsParser();
     }
 

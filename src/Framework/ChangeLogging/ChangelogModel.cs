@@ -5,13 +5,19 @@ using Semver;
 
 namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
 
-internal sealed class ChangelogModel(SemVersion version, 
-                                     ContributingCommits contributing, 
-                                     IReadOnlyList<CategoryChanges> categories)
+internal sealed class ChangelogModel(SemVersion version,
+                                     ContributingCommits contributing,
+                                     IReadOnlyList<CategoryChanges> categories,
+                                     string releaseUrl)
 {
+    /// <summary>
+    /// The git branch that the head commit is on.
+    /// </summary>
     public string BranchName { get; } = contributing.BranchName;
 
     public IReadOnlyList<CategoryChanges> Categories { get; } = categories;
+
+    public string ReleaseUrl { get; } = releaseUrl;
 
     public DateTime HeadDateTime { get; } = contributing.Head.When.DateTime;
 
