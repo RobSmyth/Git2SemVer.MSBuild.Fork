@@ -2,7 +2,7 @@
 using Spectre.Console;
 
 
-namespace NoeticTools.Git2SemVer.Tool.Framework;
+namespace NoeticTools.Git2SemVer.Core.Console;
 
 public interface IConsoleIO
 {

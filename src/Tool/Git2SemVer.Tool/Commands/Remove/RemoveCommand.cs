@@ -1,8 +1,8 @@
 ﻿using System.Text;
 using NoeticTools.Git2SemVer.Core;
+using NoeticTools.Git2SemVer.Core.Console;
 using NoeticTools.Git2SemVer.Core.Tools;
 using NoeticTools.Git2SemVer.Core.Tools.DotnetCli;
-using NoeticTools.Git2SemVer.Tool.Framework;
 using NoeticTools.Git2SemVer.Tool.MSBuild;
 using NoeticTools.Git2SemVer.Tool.MSBuild.Solutions;
 

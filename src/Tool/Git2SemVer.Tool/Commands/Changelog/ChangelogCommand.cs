@@ -1,19 +1,20 @@
 ﻿using System.Diagnostics;
+using NoeticTools.Git2SemVer.Core.Console;
 using NoeticTools.Git2SemVer.Framework.ChangeLogging;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using NoeticTools.Git2SemVer.Framework.Persistence;
 using NoeticTools.Git2SemVer.Tool.Commands.Run;
-using NoeticTools.Git2SemVer.Tool.Framework;
 
 
 namespace NoeticTools.Git2SemVer.Tool.Commands.Changelog;
 
 [RegisterSingleton]
-internal sealed class ChangelogCommand(IConsoleIO console)
-    : CommandBase(console), IChangelogCommand
+internal sealed class ChangelogCommand(IConsoleIO console) : CommandBase(console), IChangelogCommand
 {
+    private readonly IConsoleIO _console = console;
+
     private const string ConfigurationFilename = "changelog.conf.json";
 
     public void Execute(ChangelogCommandSettings settings)

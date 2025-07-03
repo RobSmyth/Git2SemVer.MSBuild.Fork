@@ -1,22 +1,17 @@
-﻿using NoeticTools.Git2SemVer.Core.Logging;
+﻿using NoeticTools.Git2SemVer.Core.Console;
+using NoeticTools.Git2SemVer.Core.Logging;
 using NoeticTools.Git2SemVer.Framework.Framework.BuildHosting;
 using NoeticTools.Git2SemVer.Framework.Framework.Config;
 using NoeticTools.Git2SemVer.Framework.Tools.CI;
-using NoeticTools.Git2SemVer.Tool.Framework;
 
 
 namespace NoeticTools.Git2SemVer.Tool.Commands.Run;
 
-internal abstract class CommandBase
+internal abstract class CommandBase(IConsoleIO console)
 {
-    protected CommandBase(IConsoleIO console)
-    {
-        Console = console;
-    }
-
     public bool HasError => Console.HasError;
 
-    protected readonly IConsoleIO Console;
+    protected readonly IConsoleIO Console = console;
 
     protected LoggingLevel GetVerbosity(string verbosity)
     {

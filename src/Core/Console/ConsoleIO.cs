@@ -4,21 +4,14 @@ using NoeticTools.Git2SemVer.Core.Logging;
 using Spectre.Console;
 
 
-namespace NoeticTools.Git2SemVer.Tool.Framework;
+namespace NoeticTools.Git2SemVer.Core.Console;
 
 [RegisterSingleton]
-public class ConsoleIO : IConsoleIO
+public class ConsoleIO(ILogger logger) : IConsoleIO
 {
     private const string RegexHighlightMarkupPattern = @"\[(error|warn|em|code|bad|good)\]";
 
-    private readonly ILogger _logger;
-
-    public ConsoleIO(ILogger logger)
-    {
-        _logger = logger;
-    }
-
-    public bool HasError => _logger.HasError;
+    public bool HasError => logger.HasError;
 
     public LoggingLevel Level { get; set; } = LoggingLevel.Info;
 
@@ -39,7 +32,7 @@ public class ConsoleIO : IConsoleIO
     public void WriteMarkupErrorLine(string message)
     {
         WriteMarkupLine(message);
-        _logger.LogError(RemoveNamedColoursMarkup(message));
+        logger.LogError(RemoveNamedColoursMarkup(message));
     }
 
     public void WriteMarkupLine(string message)
@@ -52,12 +45,12 @@ public class ConsoleIO : IConsoleIO
     public void WriteMarkupWarningLine(string message)
     {
         WriteMarkupLine(message);
-        _logger.LogWarning(RemoveNamedColoursMarkup(message));
+        logger.LogWarning(RemoveNamedColoursMarkup(message));
     }
 
     public T Prompt<T>(TextPrompt<T> prompt, T defaultValue)
     {
-        ArgumentNullException.ThrowIfNull(prompt);
+        Git2SemVerArgumentException.ThrowIfNull(prompt, nameof(prompt));
 
         if (Unattended)
         {
@@ -71,13 +64,13 @@ public class ConsoleIO : IConsoleIO
                 }
             }
 
-            _logger.LogDebug($"Unattended used default '{defaultValue}' for prompt '{prompt}'.");
+            logger.LogDebug($"Unattended used default '{defaultValue}' for prompt '{prompt}'.");
             return defaultValue;
         }
 
         {
             var result = AnsiConsole.Prompt(prompt.DefaultValue(defaultValue));
-            _logger.LogDebug($"User returned '{result}' to prompt '{prompt}'.");
+            logger.LogDebug($"User returned '{result}' to prompt '{prompt}'.");
             return result;
         }
     }
@@ -86,7 +79,7 @@ public class ConsoleIO : IConsoleIO
     {
         if (Unattended)
         {
-            _logger.LogDebug($"Unattended used default '{defaultValue}' for yes/no prompt '{prompt}'.");
+            logger.LogDebug($"Unattended used default '{defaultValue}' for yes/no prompt '{prompt}'.");
             return defaultValue;
         }
 
@@ -94,7 +87,7 @@ public class ConsoleIO : IConsoleIO
                                         .AddChoices([true, false])
                                         .DefaultValue(defaultValue)
                                         .WithConverter(choice => choice ? "y" : "n"));
-        _logger.LogDebug($"User returned '{result}' to prompt yes/no '{prompt}'.");
+        logger.LogDebug($"User returned '{result}' to prompt yes/no '{prompt}'.");
         return result;
     }
 
@@ -105,9 +98,9 @@ public class ConsoleIO : IConsoleIO
             AnsiConsole.MarkupLine("[grey]" + message + "[/]");
         }
 
-        if (_logger.Level >= LoggingLevel.Debug)
+        if (logger.Level >= LoggingLevel.Debug)
         {
-            _logger.LogDebug(message);
+            logger.LogDebug(message);
         }
     }
 
@@ -120,19 +113,19 @@ public class ConsoleIO : IConsoleIO
         }
 
         WriteMarkupLine($"[error]Exception: {exception.Message}[/]\nStack Trace: {exception.StackTrace}");
-        _logger.LogError(exception);
+        logger.LogError(exception);
     }
 
     public void WriteErrorLine(string message)
     {
         WriteMarkupLine("[error]" + message + "[/]");
-        _logger.LogError(message);
+        logger.LogError(message);
     }
 
     public void WriteMarkupInfoLine(string message)
     {
         AnsiConsole.WriteLine(message);
-        _logger.LogInfo(message);
+        logger.LogInfo(message);
     }
 
     public void WriteLine()
@@ -154,9 +147,9 @@ public class ConsoleIO : IConsoleIO
     {
         AnsiConsole.WriteLine(message);
 
-        if (_logger.Level >= LoggingLevel.Warning)
+        if (logger.Level >= LoggingLevel.Warning)
         {
-            _logger.LogWarning(message);
+            logger.LogWarning(message);
         }
     }
 
