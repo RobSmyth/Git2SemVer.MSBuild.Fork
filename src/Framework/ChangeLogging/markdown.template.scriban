@@ -22,22 +22,19 @@ None.
   end
 end
 
-func incremental_placeholder_start(name)
+func section_marker_start(name)
   if Incremental
 ~}}
-
-<a id='{{name}}'>
-
+<!-- Start {{name}} section -->
 {{~ 
   end
 end
 
-func incremental_placeholder_end()
+func section_marker_end(name)
   if Incremental
 ~}}
 
-</a>
-
+<!-- End {{name}} section -->
 {{~ 
   end
 end
@@ -51,11 +48,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-<!-- Start version section -->
 {{~
+  section_marker_start "version"
+
   if IsRelease 
 
 ~}}
+
 ## [{{ SemVersion }}]({{ ReleaseUrl }}/{{ SemVersion }}) - _{{ ReleaseDate | date.to_string '%F' }}_
 {{~ 
 
@@ -75,27 +74,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     end # Incremental
 
   end # if else IsRelease
-~}}
-<!-- End version section -->
 
-{{~ 
-  for category in Categories 
+  section_marker_end "version"
+
+  for category in Categories
 ~}}
 
 ### {{ category.Settings.Name }}
 {{~ 
+    section_marker_start category.Settings.ChangeType + " changes"
     category.Changes | render_changes_list
+    section_marker_end category.Settings.ChangeType + " changes"
 
     if Incremental && !IsRelease
 ~}}
 
-<!-- Start {{category.Settings.ChangeType}} incremental changes section -->
+> Incremental changes, if any, will appear below. Move above when reviewed and/or edited.
 
-> Incremental changes, if any, will appear below. Edit and move above (above the html anchor) to preserve the change entry.
-
-<!-- End {{category.Settings.ChangeType}} incremental changes section -->
 {{~
     end
-  end
+
+    section_marker_start category.Settings.ChangeType + " changes to review"
+
+    section_marker_end category.Settings.ChangeType + " changes to review"
+
+  end # for categories
 end # CreateNewDocument
 ~}}

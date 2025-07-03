@@ -4,5 +4,5 @@ internal interface IChangelogCommand
 {
     bool HasError { get; }
 
-    void Execute(ChangelogCommandSettings settings);
+    void Execute(ChangelogCommandSettings cmdLineSettings);
 }

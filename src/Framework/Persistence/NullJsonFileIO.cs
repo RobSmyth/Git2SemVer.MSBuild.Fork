@@ -9,11 +9,11 @@ public sealed class NullJsonFileIO : IOutputsJsonIO
 {
     public IVersionOutputs Load(string directory)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException("NullJsonFileIO");
     }
 
     public void Write(string directory, IVersionOutputs outputs)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException("NullJsonFileIO");
     }
 }

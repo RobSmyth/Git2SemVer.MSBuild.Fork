@@ -1,4 +1,5 @@
 ﻿// ReSharper disable UnusedMember.Global
+
 namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
 
 public sealed class CategoryChanges(ChangelogCategorySettings settings)

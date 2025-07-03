@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Xml.Linq;
 using NoeticTools.Git2SemVer.Core.Console;
 using NoeticTools.Git2SemVer.Framework.ChangeLogging;
 using NoeticTools.Git2SemVer.Framework.Generation;
@@ -17,11 +18,11 @@ internal sealed class ChangelogCommand(IConsoleIO console) : CommandBase(console
 
     private const string ConfigurationFilename = "changelog.conf.json";
 
-    public void Execute(ChangelogCommandSettings settings)
+    public void Execute(ChangelogCommandSettings cmdLineSettings)
     {
         try
         {
-            Console.WriteMarkupInfoLine($"Generating Changelog {(settings.Unattended ? " (unattended)" : "")}.");
+            Console.WriteMarkupInfoLine($"Generating Changelog {(cmdLineSettings.Unattended ? " (unattended)" : "")}.");
             Console.WriteLine("");
 
             var proceed = Console.PromptYesNo("Proceed?");
@@ -36,11 +37,12 @@ internal sealed class ChangelogCommand(IConsoleIO console) : CommandBase(console
             var inputs = new GeneratorInputs
             {
                 VersioningMode = VersioningMode.StandAloneProject,
-                IntermediateOutputDirectory = settings.DataDirectory,
-                HostType = settings.HostType ?? ""
+                IntermediateOutputDirectory = cmdLineSettings.DataDirectory,
+                HostType = cmdLineSettings.HostType ?? ""
             };
 
-            using var logger = CreateLogger(settings.Verbosity);
+            using var logger = CreateLogger(cmdLineSettings.Verbosity);
+            var lastRunData = GetLastRunData(cmdLineSettings);
             var host = GetBuildHost(logger, inputs);
             var versionGenerator = new VersionGeneratorFactory(logger).Create(inputs,
                                                                               new NullMSBuildGlobalProperties(),
@@ -49,55 +51,76 @@ internal sealed class ChangelogCommand(IConsoleIO console) : CommandBase(console
 
             var (outputs, contributing) = versionGenerator.CalculateSemanticVersion();
 
-            EnsureDataDirectoryExists(settings);
-            var config = GetConfiguration(settings);
+            EnsureDataDirectoryExists(cmdLineSettings);
+            var config = GetConfiguration(cmdLineSettings);
 
-            var outputFileExists = File.Exists(settings.OutputFilePath);
-            if (!CanOverwrite(settings, outputFileExists, contributing, config))
+            var outputFileExists = File.Exists(cmdLineSettings.OutputFilePath);
+            var canProceed = CanProceed(cmdLineSettings, outputFileExists, contributing, config);
+            if (!canProceed)
             {
                 Console.WriteLine();
-                Console.WriteMarkupInfoLine("Nothing to do (did not overwrite).");
-                Console.WriteMarkupLine("[bad]Aborted[/]");
+                Console.WriteMarkupInfoLine("[em]Aborted[/]");
                 return;
             }
 
-            var template = GetTemplate(settings);
-
-            // todo - incremental updates
-
-            var releaseUrl = settings.ArtifactUrl;
-            var changelog = new ChangelogGenerator(config)
-                .Generate(releaseUrl,
-                          outputs,
-                          contributing,
-                          template,
-                          incremental: true);
-
-            if (settings.WriteToConsole)
+            var template = GetTemplate(cmdLineSettings);
+            var releaseUrl = cmdLineSettings.ArtifactUrl;
+            var changelogGenerator = new ChangelogGenerator(config);
+            var changelog = "";
+            var changesMade = true;
+            var createNewChangelog = !outputFileExists || !cmdLineSettings.Incremental;
+            if (createNewChangelog)
             {
-                Console.WriteLine("\nGenerated changelog:");
+                changelog = changelogGenerator.Create(releaseUrl,
+                                                      outputs,
+                                                      contributing,
+                                                      template,
+                                                      incremental: cmdLineSettings.Incremental);
+            }
+            else
+            {
+                var existingChangelog = File.ReadAllText(cmdLineSettings.OutputFilePath);
+                changelog = changelogGenerator.Update(releaseUrl,
+                                                      outputs,
+                                                      contributing,
+                                                      template,
+                                                      existingChangelog);
+
+                changesMade = !string.Equals(existingChangelog, changelog);
+            }
+
+            if (!changesMade)
+            {
+                Console.WriteMarkupInfoLine("No changes made.");
+            }
+            else if (cmdLineSettings.WriteToConsole)
+            {
+                Console.WriteLine($"\n{(createNewChangelog ? "Created" : "Updated")} changelog:");
                 Console.WriteHorizontalLine();
                 Console.WriteCodeLine(changelog.TrimEnd());
                 Console.WriteHorizontalLine();
             }
 
-            if (settings.OutputFilePath.Length == 0)
+            if (cmdLineSettings.OutputFilePath.Length == 0)
             {
                 Console.WriteLine();
                 Console.WriteMarkupDebugLine("Write changelog to file is disabled as the file output path is an empty string.");
                 return;
             }
 
+            lastRunData.Update(outputs, contributing);
+            Save(lastRunData, cmdLineSettings);
+
             Console.WriteLine();
-            var verb = settings.Incremental && outputFileExists ? "Updating" :
-                !settings.Incremental && outputFileExists ? "Overwriting" : "Creating";
-            Console.WriteMarkupInfoLine($"{verb} changelog file: {settings.OutputFilePath}");
-            File.WriteAllText(settings.OutputFilePath, changelog);
+            var verb = cmdLineSettings.Incremental && outputFileExists ? "Updating" :
+                !cmdLineSettings.Incremental && outputFileExists ? "Overwriting" : "Creating";
+            Console.WriteMarkupInfoLine($"{verb} changelog file: {cmdLineSettings.OutputFilePath}");
+            File.WriteAllText(cmdLineSettings.OutputFilePath, changelog);
 
             config.LastRun.CommitSha = contributing.Head.CommitId.Sha;
             config.LastRun.CommitWhen = contributing.Head.When;
             config.LastRun.SemVersion = outputs.Version!.ToString();
-            config.Save(Path.Combine(settings.DataDirectory, ConfigurationFilename));
+            config.Save(Path.Combine(cmdLineSettings.DataDirectory, ConfigurationFilename));
 
             stopwatch.Stop();
 
@@ -111,32 +134,36 @@ internal sealed class ChangelogCommand(IConsoleIO console) : CommandBase(console
         }
     }
 
-    private bool CanOverwrite(ChangelogCommandSettings settings, bool outputFileExists, ContributingCommits contributing, ChangelogSettings config)
+    private void Save(LastRunData lastRunData, ChangelogCommandSettings cmdLineSettings)
     {
-        if (settings.Incremental &&
-            outputFileExists &&
-            contributing.Head.CommitId.Equals(config.LastRun.CommitSha))
-        {
-            Console.WriteMarkupWarningLine($"""
-                                            It is not possible to do an incremental update of an existing changelog file ([em]{settings.OutputFilePath}[/]) as the head commit has not changed.
-
-                                            The file can be overwritten. If so, [warn]all manual changes will be lost.[/]
-                                            """);
-            var overwrite = Console.PromptYesNo("Overwrite existing changelog file?", false);
-            if (!overwrite)
-            {
-                return false;
-            }
-
-            Console.WriteLine("");
-        }
-
-        return true;
+        lastRunData.Save(LastRunData.GetFilePath(cmdLineSettings.DataDirectory, cmdLineSettings.OutputFilePath));
     }
 
-    private static void EnsureDataDirectoryExists(ChangelogCommandSettings settings)
+    private bool CanProceed(ChangelogCommandSettings settings, bool outputFileExists, ContributingCommits contributing, ChangelogSettings config)
     {
-        var dataDirectory = settings.DataDirectory;
+        if (settings.Force)
+        {
+            return true;
+        }
+
+        if (!outputFileExists || !contributing.Head.CommitId.Equals(config.LastRun.CommitSha))
+        {
+            return true;
+        }
+
+        Console.WriteMarkupInfoLine("The changelog exists and the head commit has not changed since last run. There should be no changes.");
+
+        if (settings.Unattended)
+        {
+            return false;
+        }
+
+        return Console.PromptYesNo($"{(settings.Incremental ? "Update" : "Recreate")} anyway?", false);
+    }
+
+    private static void EnsureDataDirectoryExists(ChangelogCommandSettings cmdLineSettings)
+    {
+        var dataDirectory = cmdLineSettings.DataDirectory;
         // ReSharper disable once InvertIf
         if (dataDirectory.Length > 0)
         {
@@ -147,20 +174,26 @@ internal sealed class ChangelogCommand(IConsoleIO console) : CommandBase(console
         }
     }
 
-    private static ChangelogSettings GetConfiguration(ChangelogCommandSettings settings)
+    private static LastRunData GetLastRunData(ChangelogCommandSettings cmdLineSettings)
     {
-        var configPath = Path.Combine(settings.DataDirectory, ConfigurationFilename);
+        EnsureDataDirectoryExists(cmdLineSettings);
+        return LastRunData.Load(LastRunData.GetFilePath(cmdLineSettings.DataDirectory, cmdLineSettings.OutputFilePath));
+    }
 
-        if (File.Exists(configPath))
+    private static ChangelogSettings GetConfiguration(ChangelogCommandSettings cmdLineSettings)
+    {
+        var filePath = Path.Combine(cmdLineSettings.DataDirectory, ConfigurationFilename);
+
+        if (File.Exists(filePath))
         {
-            return ChangelogSettings.Load(configPath);
+            return ChangelogSettings.Load(filePath);
         }
 
         var config = new ChangelogSettings
         {
             Categories = ChangelogResources.DefaultCategories
         };
-        config.Save(configPath);
+        config.Save(filePath);
         return config;
     }
 

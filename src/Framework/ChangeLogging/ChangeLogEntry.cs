@@ -5,8 +5,8 @@ namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
 
 public sealed class ChangeLogEntry : IEquatable<ICommitMessageMetadata>
 {
-    private readonly List<string> _issues = [];
     private readonly HashSet<string> _commitIds = [];
+    private readonly List<string> _issues = [];
     private readonly ICommitMessageMetadata _messageMetadata;
 
     public ChangeLogEntry(ICommitMessageMetadata messageMetadata)
@@ -19,6 +19,11 @@ public sealed class ChangeLogEntry : IEquatable<ICommitMessageMetadata>
     public string Description => _messageMetadata.ChangeDescription;
 
     public IReadOnlyList<string> Issues => _issues;
+
+    public void AddCommitId(string commitSha)
+    {
+        _commitIds.Add(commitSha);
+    }
 
     public void AddIssues(IEnumerable<string> issueIds)
     {
@@ -49,6 +54,11 @@ public sealed class ChangeLogEntry : IEquatable<ICommitMessageMetadata>
         return _messageMetadata.GetHashCode();
     }
 
+    public bool HasCommitId(string commitSha)
+    {
+        return _commitIds.Contains(commitSha);
+    }
+
     private void AddIssue(string issueId)
     {
         if (!_issues.Contains(issueId))
@@ -60,15 +70,5 @@ public sealed class ChangeLogEntry : IEquatable<ICommitMessageMetadata>
     private bool Equals(ChangeLogEntry? other)
     {
         return other != null && _messageMetadata.Equals(other._messageMetadata);
-    }
-
-    public void AddCommitId(string commitSha)
-    {
-        _commitIds.Add(commitSha);
-    }
-
-    public bool HasCommitId(string commitSha)
-    {
-        return _commitIds.Contains(commitSha);
     }
 }

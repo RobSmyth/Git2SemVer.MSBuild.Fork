@@ -1,20 +1,15 @@
-﻿using System.Text.RegularExpressions;
-using NoeticTools.Git2SemVer.Core.Exceptions;
+﻿using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
+using NoeticTools.Git2SemVer.Framework.ChangeLogging.Exceptions;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using Scriban;
 using Semver;
+using System.Text.RegularExpressions;
 
 
 namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
 
-/*
- * todo:
- * - Changelog update mode
- * - Read existing file
- * - Store used commits in file of same name as the target changelog file (with .g2sv.json extension)
- */
 public class ChangelogGenerator(ChangelogSettings config)
 {
     /// <summary>
@@ -26,58 +21,72 @@ public class ChangelogGenerator(ChangelogSettings config)
     /// <param name="scribanTemplate"></param>
     /// <param name="incremental"></param>
     /// <returns></returns>
-    public string Generate(string releaseUrl,
-                           IVersionOutputs versioning,
-                           ContributingCommits contributing,
-                           string scribanTemplate,
-                           bool incremental)
+    public string Create(string releaseUrl,
+                         IVersionOutputs versioning,
+                         ContributingCommits contributing,
+                         string scribanTemplate,
+                         bool incremental)
     {
         Git2SemVerArgumentException.ThrowIfNull(releaseUrl, nameof(releaseUrl));
         Git2SemVerArgumentException.ThrowIfNullOrEmpty(scribanTemplate, nameof(scribanTemplate));
 
         var version = versioning.Version!;
         var changes = GetChanges(version, contributing);
-        var template = Template.Parse(scribanTemplate);
+        return Create(releaseUrl, contributing, scribanTemplate, incremental, version, changes);
+    }
+
+    private static string Create(string releaseUrl, ContributingCommits contributing, string scribanTemplate, bool incremental, SemVersion version,
+                                 IReadOnlyList<CategoryChanges> changes)
+    {
         var model = new ChangelogModel(version,
                                        contributing,
                                        changes,
                                        releaseUrl,
                                        incremental,
                                        createNewDocument: true);
-        return template.Render(model, member => member.Name);
+        try
+        {
+            var template = Template.Parse(scribanTemplate);
+            return template.Render(model, member => member.Name);
+        }
+        catch (Exception exception)
+        {
+            throw new Git2SemVerScribanFileParsingException("There was a problem parsing or rendering a Scriban template file.", exception);
+        }
     }
 
-    public string IncrementalUpdate(string releaseUrl,
-                                    IVersionOutputs versioning,
-                                    ContributingCommits contributing,
-                                    string scribanTemplate,
-                                    string changelogToUpdate)
+    public string Update(string releaseUrl,
+                         IVersionOutputs versioning,
+                         ContributingCommits contributing,
+                         string scribanTemplate,
+                         string changelogToUpdate,
+                         bool forceUpdate = false)
     {
         Git2SemVerArgumentException.ThrowIfNull(releaseUrl, nameof(releaseUrl));
         Git2SemVerArgumentException.ThrowIfNullOrEmpty(scribanTemplate, nameof(scribanTemplate));
         Git2SemVerArgumentException.ThrowIfNullOrEmpty(scribanTemplate, nameof(changelogToUpdate));
 
         var version = versioning.Version!;
-        var changeCategories = GetChanges(version, contributing);
-        // todo - trim changes to new changes only
-        var template = Template.Parse(scribanTemplate);
-        var model = new ChangelogModel(version,
-                                       contributing,
-                                       changeCategories,
-                                       releaseUrl,
-                                       incremental: true,
-                                       createNewDocument: false);
-        var render = template.Render(model, member => member.Name);
-
-        changelogToUpdate = ReplaceSection("version", changelogToUpdate, render);
-
-        foreach (var category in changeCategories)
+        var changes = GetChanges(version, contributing); // todo - trim changes to new changes only
+        if (!forceUpdate && changes.Count == 0)
         {
-            // todo - what if category not found in file?
-            changelogToUpdate = ReplaceSection($"{category.Settings.ChangeType} incremental changes", changelogToUpdate, render);
+            return changelogToUpdate;
         }
 
-        return changelogToUpdate;
+        var createdContent = Create(releaseUrl, contributing, scribanTemplate, true, version, changes);
+        var sourceDocument = new ChangelogDocument("generated", createdContent);
+        var destinationDocument = new ChangelogDocument("existing", changelogToUpdate);
+
+        foreach (var category in changes)
+        {
+            // todo - what if category not found in file?
+            var sourceContent = sourceDocument[category.Settings.ChangeType + " changes"].Content;
+            destinationDocument[category.Settings.ChangeType + " changes to review"].Content += sourceContent;
+        }
+
+        destinationDocument["version"].Content = sourceDocument["version"].Content;
+
+        return destinationDocument.Content;
     }
 
     private static List<Commit> Extract(List<Commit> remainingCommits, string changeType)
@@ -132,30 +141,5 @@ public class ChangelogGenerator(ChangelogSettings config)
         }
 
         return changeEntries;
-    }
-
-    private string ReplaceSection(string section, string changelogToUpdate, string render)
-    {
-        var pattern = $"^\\<\\!-- Start {section} section -->.*?$(?<content>.*)^<\\!-- End marker section -->";
-        var regex = new Regex(pattern, RegexOptions.Multiline | RegexOptions.Singleline);
-        var match = regex.Match(render);
-        if (!match.Success)
-        {
-            var message =
-                $"The generated changelog is missing missing a start or end {section} section marker marker like '<!-- Start {section} section -->'.";
-            throw new Git2SemVerInvalidFormatException(message);
-        }
-
-        var content = match.Value;
-
-        match = regex.Match(changelogToUpdate);
-        if (!match.Success)
-        {
-            var message =
-                $"The existing changelog is missing missing a start or end {section} section marker marker like '<!-- Start {section} section -->'.";
-            throw new Git2SemVerInvalidFormatException(message);
-        }
-
-        return regex.Replace(changelogToUpdate, content);
     }
 }

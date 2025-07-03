@@ -87,7 +87,7 @@ internal class ToolIntegrationTests : SolutionTestsBase
         TestContext.Out.WriteLine(result.stdOutput);
 
         Assert.That(Logger.HasError, Is.False);
-        Assert.That(result.returnCode, Is.EqualTo(0));
+        Assert.That(result.returnCode, Is.Zero);
         Assert.That(result.stdOutput, Does.Contain("-h, --help"));
         Assert.That(result.stdOutput, Does.Contain("-u, --unattended"));
         Assert.That(result.stdOutput, Does.Contain("-v, --verbosity"));
@@ -103,7 +103,7 @@ internal class ToolIntegrationTests : SolutionTestsBase
         TestContext.Out.WriteLine(result.stdOutput);
 
         Assert.That(Logger.HasError, Is.False);
-        Assert.That(result.returnCode, Is.EqualTo(0));
+        Assert.That(result.returnCode, Is.Zero);
         Assert.That(result.stdOutput, Does.Contain("-h, --help"));
         Assert.That(result.stdOutput, Does.Not.Contain("-u, --unattended"));
     }
@@ -114,7 +114,7 @@ internal class ToolIntegrationTests : SolutionTestsBase
         var result = ExecuteGit2SemVerTool("--unknown");
 
         TestContext.Out.WriteLine(Logger.Errors);
-        Assert.That(result.returnCode, Is.Not.EqualTo(0));
+        Assert.That(result.returnCode, Is.Not.Zero);
     }
 
     [Test]
@@ -124,7 +124,7 @@ internal class ToolIntegrationTests : SolutionTestsBase
         Console.WriteLine(result.stdOutput);
 
         Assert.That(Logger.HasError, Is.False);
-        Assert.That(result.returnCode, Is.EqualTo(0));
+        Assert.That(result.returnCode, Is.Zero);
     }
 
     protected override string SolutionFolderName => "SolutionVersioning";

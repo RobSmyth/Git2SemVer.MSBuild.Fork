@@ -4,7 +4,7 @@
 namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
 
 /// <summary>
-/// Configuration that defines changelog categories that are included in the changelog.
+///     Configuration that defines changelog categories that are included in the changelog.
 /// </summary>
 public sealed class ChangelogCategorySettings
 {
@@ -23,23 +23,23 @@ public sealed class ChangelogCategorySettings
     }
 
     /// <summary>
-    /// Regular expression pattern matched against Git summary Conventional Commits change type like "feat" or "fix".
+    ///     Regular expression pattern matched against Git summary Conventional Commits change type like "feat" or "fix".
     /// </summary>
     public string ChangeType { get; set; } = "";
 
     /// <summary>
-    /// The category name to show in the changelog. e.g: "Added".
+    ///     The category name to show in the changelog. e.g: "Added".
     /// </summary>
     public string Name { get; set; } = "";
 
     /// <summary>
-    /// The relative order in which the category will appear in the changelog.
-    /// Lower number appears before higher numbers.
+    ///     The relative order in which the category will appear in the changelog.
+    ///     Lower number appears before higher numbers.
     /// </summary>
     public int Order { get; set; }
 
     /// <summary>
-    /// Set to <c>true</c> to skip this category in the changelog if no changes found.
+    ///     Set to <c>true</c> to skip this category in the changelog if no changes found.
     /// </summary>
     public bool SkipIfNone { get; set; }
 
