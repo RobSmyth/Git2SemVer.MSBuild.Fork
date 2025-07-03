@@ -1,0 +1,94 @@
+﻿{{~
+func render_change(change)
+  if change.Issues | array.size == 0
+    issues = ""
+  else
+    issues = " (" + (change.Issues | array.join ",") + ")"
+  end~}}
+* {{ change.Description | string.capitalize }}{{ issues }}.
+{{~
+end
+
+func render_changes_list(changes)
+  if changes | array.size == 0 
+~}}
+
+None.
+{{~ 
+  else 
+    for change in changes
+      change | render_change
+    end
+  end
+end
+
+func incremental_placeholder_start(name)
+  if Incremental
+~}}
+
+<a id='{{name}}'>
+
+{{~ 
+  end
+end
+
+func incremental_placeholder_end()
+  if Incremental
+~}}
+
+</a>
+
+{{~ 
+  end
+end
+~}}
+{{~
+if CreateNewDocument
+~}}
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+{{~ 
+  if IsRelease 
+~}}
+## [{{ SemVersion }}]({{ ReleaseUrl }}/{{ SemVersion }}) - _{{ ReleaseDate | date.to_string '%F' }}_
+{{~ 
+  else
+~}}
+
+## Unreleased: {{ SemVersion }} - _{{ ReleaseDate | date.to_string '%F' }}_
+
+{{~ incremental_placeholder_start "prerelease-banner" ~}}
+> This is a pre-release DRAFT changelog. It includes changes since last release.
+{{~
+    if Incremental
+~}}
+>
+> HTML anchors (``<a ..>...</a>``) are placeholders in the markdown document for incremental changes.
+{{~
+    end
+~}}
+{{~ incremental_placeholder_end ~}}
+
+{{~ 
+    for category in Categories 
+~}}
+
+### {{ category.Settings.Name }}
+{{~ 
+      category.Changes | render_changes_list
+      if Incremental
+        incremental_placeholder_start 'incremental-changes-' + category.Settings.ChangeType
+~}}
+> Incremental changes will appear below. Edit and move above (above the html anchor) to to preserve the change.
+{{~
+        incremental_placeholder_end
+      end
+    end
+  end
+end
+~}}

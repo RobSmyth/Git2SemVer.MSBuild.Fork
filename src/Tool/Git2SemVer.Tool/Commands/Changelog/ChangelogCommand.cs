@@ -1,11 +1,11 @@
-﻿using NoeticTools.Git2SemVer.Framework.ChangeLogging;
+﻿using System.Diagnostics;
+using NoeticTools.Git2SemVer.Framework.ChangeLogging;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.Builders.Scripting;
+using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using NoeticTools.Git2SemVer.Framework.Persistence;
 using NoeticTools.Git2SemVer.Tool.Commands.Run;
 using NoeticTools.Git2SemVer.Tool.Framework;
-using Spectre.Console;
-using System.Diagnostics;
 
 
 namespace NoeticTools.Git2SemVer.Tool.Commands.Changelog;
@@ -15,7 +15,6 @@ internal sealed class ChangelogCommand(IConsoleIO console)
     : CommandBase(console), IChangelogCommand
 {
     private const string ConfigurationFilename = "changelog.conf.json";
-    private const string MarkdownTemplateFilename = "MarkdownChangelog.scriban";
 
     public void Execute(ChangelogCommandSettings settings)
     {
@@ -53,24 +52,12 @@ internal sealed class ChangelogCommand(IConsoleIO console)
             var config = GetConfiguration(settings);
 
             var outputFileExists = File.Exists(settings.OutputFilePath);
-            if (settings.Incremental && 
-                outputFileExists && 
-                contributing.Head.CommitId.Equals(config.LastRun.CommitSha))
+            if (!CanOverwrite(settings, outputFileExists, contributing, config))
             {
-                Console.WriteMarkupWarningLine($"""
-                                           It is not possible to do an incremental update of an existing changelog file ([em]{settings.OutputFilePath}[/]) as the head commit has not changed.
-
-                                           The file can be overwritten. If so, [warn]all manual changes will be lost.[/]
-                                           """);
-                var overwrite = Console.PromptYesNo("Overwrite existing changelog file?", false);
-                if (!overwrite)
-                {
-                    Console.WriteLine();
-                    Console.WriteMarkupInfoLine("Nothing to do (did not overwrite).");
-                    Console.WriteMarkupLine("[bad]Aborted[/]");
-                    return;
-                }
-                Console.WriteLine("");
+                Console.WriteLine();
+                Console.WriteMarkupInfoLine("Nothing to do (did not overwrite).");
+                Console.WriteMarkupLine("[bad]Aborted[/]");
+                return;
             }
 
             var template = GetTemplate(settings);
@@ -82,7 +69,8 @@ internal sealed class ChangelogCommand(IConsoleIO console)
                 .Generate(releaseUrl,
                           outputs,
                           contributing,
-                          template);
+                          template,
+                          incremental: true);
 
             if (settings.WriteToConsole)
             {
@@ -98,14 +86,12 @@ internal sealed class ChangelogCommand(IConsoleIO console)
                 Console.WriteMarkupDebugLine("Write changelog to file is disabled as the file output path is an empty string.");
                 return;
             }
-            else
-            {
-                Console.WriteLine();
-                var verb = (settings.Incremental && outputFileExists) ? "Updating" :
-                    (!settings.Incremental && outputFileExists) ? "Overwriting" : "Creating";
-                Console.WriteMarkupInfoLine($"{verb} changelog file: {settings.OutputFilePath}");
-                File.WriteAllText(settings.OutputFilePath, changelog);
-            }
+
+            Console.WriteLine();
+            var verb = settings.Incremental && outputFileExists ? "Updating" :
+                !settings.Incremental && outputFileExists ? "Overwriting" : "Creating";
+            Console.WriteMarkupInfoLine($"{verb} changelog file: {settings.OutputFilePath}");
+            File.WriteAllText(settings.OutputFilePath, changelog);
 
             config.LastRun.CommitSha = contributing.Head.CommitId.Sha;
             config.LastRun.CommitWhen = contributing.Head.When;
@@ -122,6 +108,29 @@ internal sealed class ChangelogCommand(IConsoleIO console)
             Console.WriteErrorLine(exception);
             throw;
         }
+    }
+
+    private bool CanOverwrite(ChangelogCommandSettings settings, bool outputFileExists, ContributingCommits contributing, ChangelogSettings config)
+    {
+        if (settings.Incremental &&
+            outputFileExists &&
+            contributing.Head.CommitId.Equals(config.LastRun.CommitSha))
+        {
+            Console.WriteMarkupWarningLine($"""
+                                            It is not possible to do an incremental update of an existing changelog file ([em]{settings.OutputFilePath}[/]) as the head commit has not changed.
+
+                                            The file can be overwritten. If so, [warn]all manual changes will be lost.[/]
+                                            """);
+            var overwrite = Console.PromptYesNo("Overwrite existing changelog file?", false);
+            if (!overwrite)
+            {
+                return false;
+            }
+
+            Console.WriteLine("");
+        }
+
+        return true;
     }
 
     private static void EnsureDataDirectoryExists(ChangelogCommandSettings settings)
@@ -148,7 +157,7 @@ internal sealed class ChangelogCommand(IConsoleIO console)
 
         var config = new ChangelogSettings
         {
-            Categories = ChangelogGenerator.DefaultCategories
+            Categories = ChangelogResources.DefaultCategories
         };
         config.Save(configPath);
         return config;
@@ -158,14 +167,14 @@ internal sealed class ChangelogCommand(IConsoleIO console)
     {
         var dataDirectory = settings.DataDirectory;
 
-        var templatePath = Path.Combine(dataDirectory, MarkdownTemplateFilename);
+        var templatePath = Path.Combine(dataDirectory, ChangelogResources.DefaultMarkdownTemplateFilename);
         if (File.Exists(templatePath))
         {
             return File.ReadAllText(templatePath);
         }
 
         Console.WriteMarkupDebugLine($"Creating default template file: {templatePath}");
-        var defaultTemplate = ChangelogGenerator.GetDefaultTemplate();
+        var defaultTemplate = ChangelogResources.GetDefaultTemplate();
         File.WriteAllText(templatePath, defaultTemplate);
         return defaultTemplate;
     }
