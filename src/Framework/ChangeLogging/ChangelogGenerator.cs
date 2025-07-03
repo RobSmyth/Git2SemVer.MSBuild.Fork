@@ -32,7 +32,8 @@ public class ChangelogGenerator(ChangelogSettings config)
                                        changes, 
                                        releaseUrl,
                                        incremental: true,
-                                       createNewDocument: false);
+                                       createNewDocument: false,
+                                       renderVersion: false);
         return template.Render(model, member => member.Name);
     }
 
@@ -59,7 +60,8 @@ public class ChangelogGenerator(ChangelogSettings config)
                                        changes, 
                                        releaseUrl,
                                        incremental,
-                                       createNewDocument: true);
+                                       createNewDocument: true,
+                                       renderVersion: true);
         return template.Render(model, member => member.Name);
     }
 
