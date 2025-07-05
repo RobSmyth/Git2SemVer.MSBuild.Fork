@@ -21,11 +21,17 @@ public sealed class LastRunData
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
     };
 
-    public string CommitSha { get; set; } = "";
+    public string Rev { get; set; } = "1.0.0";
+
+    public string Head { get; set; } = "";
 
     public DateTimeOffset CommitWhen { get; set; } = DateTimeOffset.MinValue;
 
     public string SemVersion { get; set; } = "";
+
+    public string BranchName { get; set; } = "";
+
+    public List<string> CommitIds { get; set; } = [];
 
     public static LastRunData Load(string filePath)
     {
@@ -50,9 +56,12 @@ public sealed class LastRunData
 
     public void Update(VersionOutputs outputs, ContributingCommits contributing)
     {
-        CommitSha = contributing.Head.CommitId.Sha;
+        Head = contributing.Head.CommitId.ShortSha;
         CommitWhen = DateTimeOffset.Now;
         SemVersion = outputs.Version!.ToString();
+        BranchName = contributing.BranchName;
+        CommitIds.AddRange(contributing.Commits.Select(x => x.CommitId.ShortSha));
+        CommitIds = CommitIds.Distinct().ToList();
     }
 
     public static string GetFilePath(string dataDirectory, string targetFilePath)

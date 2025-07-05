@@ -1,11 +1,11 @@
-﻿using NoeticTools.Git2SemVer.Core.Exceptions;
+﻿using System.Text.RegularExpressions;
+using NoeticTools.Git2SemVer.Core.Exceptions;
 using NoeticTools.Git2SemVer.Core.Tools.Git;
 using NoeticTools.Git2SemVer.Framework.ChangeLogging.Exceptions;
 using NoeticTools.Git2SemVer.Framework.Generation;
 using NoeticTools.Git2SemVer.Framework.Generation.GitHistoryWalking;
 using Scriban;
 using Semver;
-using System.Text.RegularExpressions;
 
 
 namespace NoeticTools.Git2SemVer.Framework.ChangeLogging;
@@ -33,26 +33,6 @@ public class ChangelogGenerator(ChangelogSettings config)
         var version = versioning.Version!;
         var changes = GetChanges(version, contributing);
         return Create(releaseUrl, contributing, scribanTemplate, incremental, version, changes);
-    }
-
-    private static string Create(string releaseUrl, ContributingCommits contributing, string scribanTemplate, bool incremental, SemVersion version,
-                                 IReadOnlyList<CategoryChanges> changes)
-    {
-        var model = new ChangelogModel(version,
-                                       contributing,
-                                       changes,
-                                       releaseUrl,
-                                       incremental,
-                                       createNewDocument: true);
-        try
-        {
-            var template = Template.Parse(scribanTemplate);
-            return template.Render(model, member => member.Name);
-        }
-        catch (Exception exception)
-        {
-            throw new Git2SemVerScribanFileParsingException("There was a problem parsing or rendering a Scriban template file.", exception);
-        }
     }
 
     public string Update(string releaseUrl,
@@ -87,6 +67,30 @@ public class ChangelogGenerator(ChangelogSettings config)
         destinationDocument["version"].Content = sourceDocument["version"].Content;
 
         return destinationDocument.Content;
+    }
+
+    private static string Create(string releaseUrl, 
+                                 ContributingCommits contributing, 
+                                 string scribanTemplate, 
+                                 bool incremental, 
+                                 SemVersion version,
+                                 IReadOnlyList<CategoryChanges> changes)
+    {
+        var model = new ChangelogModel(version,
+                                       contributing,
+                                       changes,
+                                       releaseUrl,
+                                       incremental,
+                                       createNewDocument: true);
+        try
+        {
+            var template = Template.Parse(scribanTemplate);
+            return template.Render(model, member => member.Name);
+        }
+        catch (Exception exception)
+        {
+            throw new Git2SemVerScribanFileParsingException("There was a problem parsing or rendering a Scriban template file.", exception);
+        }
     }
 
     private static List<Commit> Extract(List<Commit> remainingCommits, string changeType)

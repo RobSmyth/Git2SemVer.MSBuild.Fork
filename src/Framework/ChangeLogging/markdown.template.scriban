@@ -13,12 +13,17 @@ func render_changes_list(changes)
   if changes | array.size == 0 
 ~}}
 
+{{~ section_marker_start category.Settings.Name + " none label" ~}}
 None.
 {{~ 
+    section_marker_end category.Settings.Name + " none label"
+
   else 
+    section_marker_start category.Settings.Name + " changes"
     for change in changes
       change | render_change
     end
+    section_marker_end category.Settings.Name + " changes"
   end
 end
 
@@ -33,7 +38,6 @@ end
 func section_marker_end(name)
   if Incremental
 ~}}
-
 <!-- End {{name}} section -->
 {{~ 
   end
@@ -54,22 +58,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   if IsRelease 
 
 ~}}
-
 ## [{{ SemVersion }}]({{ ReleaseUrl }}/{{ SemVersion }}) - _{{ ReleaseDate | date.to_string '%F' }}_
 {{~ 
 
   else
 
 ~}}
-
 ## Unreleased
 
 {{~ # hack to overcome syntax highlighting ~}}
-> This is a pre-release DRAFT changelog. It includes changes since last release.
+> This is a DRAFT changelog from a pre-release commit. It includes changes since last release.
 {{~
     if Incremental
 ~}}
-> HTML comments (``<!-- Start .. -->``) are placeholders in the markdown file for incremental changes.
+> HTML comments (``<!-- Start .. --> ... <!-- End .. -->``) mark sections in the markdown file used to make incremental changes.
 {{~
     end # Incremental
 
@@ -82,21 +84,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### {{ category.Settings.Name }}
 {{~ 
-    section_marker_start category.Settings.ChangeType + " changes"
     category.Changes | render_changes_list
-    section_marker_end category.Settings.ChangeType + " changes"
 
     if Incremental && !IsRelease
 ~}}
 
-> Incremental changes, if any, will appear below. Move above when reviewed and/or edited.
+> Incremental changes, if any, will appear below. Move to above section when edited/reviewed.
 
 {{~
     end
 
-    section_marker_start category.Settings.ChangeType + " changes to review"
+    section_marker_start category.Settings.Name + " changes for manual review"
 
-    section_marker_end category.Settings.ChangeType + " changes to review"
+    section_marker_end category.Settings.Name + " changes for manual review"
 
   end # for categories
 end # CreateNewDocument

@@ -41,8 +41,10 @@ internal sealed class ChangelogCommand(IConsoleIO console) : CommandBase(console
                 HostType = cmdLineSettings.HostType ?? ""
             };
 
+            var outputFileExists = File.Exists(cmdLineSettings.OutputFilePath);
+            var createNewChangelog = !outputFileExists || !cmdLineSettings.Incremental;
             using var logger = CreateLogger(cmdLineSettings.Verbosity);
-            var lastRunData = GetLastRunData(cmdLineSettings);
+            var lastRunData = GetLastRunData(cmdLineSettings, createNewChangelog);
             var host = GetBuildHost(logger, inputs);
             var versionGenerator = new VersionGeneratorFactory(logger).Create(inputs,
                                                                               new NullMSBuildGlobalProperties(),
@@ -54,7 +56,6 @@ internal sealed class ChangelogCommand(IConsoleIO console) : CommandBase(console
             EnsureDataDirectoryExists(cmdLineSettings);
             var config = GetConfiguration(cmdLineSettings);
 
-            var outputFileExists = File.Exists(cmdLineSettings.OutputFilePath);
             var canProceed = CanProceed(cmdLineSettings, outputFileExists, contributing, config);
             if (!canProceed)
             {
@@ -63,37 +64,9 @@ internal sealed class ChangelogCommand(IConsoleIO console) : CommandBase(console
                 return;
             }
 
-            var template = GetTemplate(cmdLineSettings);
-            var releaseUrl = cmdLineSettings.ArtifactUrl;
-            var changelogGenerator = new ChangelogGenerator(config);
-            var changelog = "";
-            var changesMade = true;
-            var createNewChangelog = !outputFileExists || !cmdLineSettings.Incremental;
-            if (createNewChangelog)
-            {
-                changelog = changelogGenerator.Create(releaseUrl,
-                                                      outputs,
-                                                      contributing,
-                                                      template,
-                                                      incremental: cmdLineSettings.Incremental);
-            }
-            else
-            {
-                var existingChangelog = File.ReadAllText(cmdLineSettings.OutputFilePath);
-                changelog = changelogGenerator.Update(releaseUrl,
-                                                      outputs,
-                                                      contributing,
-                                                      template,
-                                                      existingChangelog);
+            var changelog = Generate(cmdLineSettings, config, createNewChangelog, outputs, contributing, lastRunData);
 
-                changesMade = !string.Equals(existingChangelog, changelog);
-            }
-
-            if (!changesMade)
-            {
-                Console.WriteMarkupInfoLine("No changes made.");
-            }
-            else if (cmdLineSettings.WriteToConsole)
+            if (cmdLineSettings.WriteToConsole)
             {
                 Console.WriteLine($"\n{(createNewChangelog ? "Created" : "Updated")} changelog:");
                 Console.WriteHorizontalLine();
@@ -117,7 +90,7 @@ internal sealed class ChangelogCommand(IConsoleIO console) : CommandBase(console
             Console.WriteMarkupInfoLine($"{verb} changelog file: {cmdLineSettings.OutputFilePath}");
             File.WriteAllText(cmdLineSettings.OutputFilePath, changelog);
 
-            config.LastRun.CommitSha = contributing.Head.CommitId.Sha;
+            config.LastRun.Head = contributing.Head.CommitId.Sha;
             config.LastRun.CommitWhen = contributing.Head.When;
             config.LastRun.SemVersion = outputs.Version!.ToString();
             config.Save(Path.Combine(cmdLineSettings.DataDirectory, ConfigurationFilename));
@@ -134,7 +107,44 @@ internal sealed class ChangelogCommand(IConsoleIO console) : CommandBase(console
         }
     }
 
-    private void Save(LastRunData lastRunData, ChangelogCommandSettings cmdLineSettings)
+    private string Generate(ChangelogCommandSettings cmdLineSettings,
+                            ChangelogSettings config,
+                            bool createNewChangelog,
+                            VersionOutputs outputs,
+                            ContributingCommits contributing, 
+                            LastRunData lastRunData)
+    {
+        var template = GetTemplate(cmdLineSettings);
+        var releaseUrl = cmdLineSettings.ArtifactUrl;
+        var changelogGenerator = new ChangelogGenerator(config);
+        if (createNewChangelog)
+        {
+            return changelogGenerator.Create(releaseUrl,
+                                             outputs,
+                                             contributing,
+                                             template,
+                                             incremental: cmdLineSettings.Incremental);
+        }
+
+        //xxx; //lastRunData
+        //var commits = lastRunData. contributing.Commits.
+        //var incrementalContibuting = new ContributingCommits(contributing)
+
+
+        var existingChangelog = File.ReadAllText(cmdLineSettings.OutputFilePath);
+        var changelog = changelogGenerator.Update(releaseUrl,
+                                                  outputs,
+                                                  contributing,
+                                                  template,
+                                                  existingChangelog);
+        if (string.Equals(existingChangelog, changelog))
+        {
+            Console.WriteMarkupInfoLine("No updates found.");
+        }
+        return changelog;
+    }
+
+    private static void Save(LastRunData lastRunData, ChangelogCommandSettings cmdLineSettings)
     {
         lastRunData.Save(LastRunData.GetFilePath(cmdLineSettings.DataDirectory, cmdLineSettings.OutputFilePath));
     }
@@ -146,7 +156,7 @@ internal sealed class ChangelogCommand(IConsoleIO console) : CommandBase(console
             return true;
         }
 
-        if (!outputFileExists || !contributing.Head.CommitId.Equals(config.LastRun.CommitSha))
+        if (!outputFileExists || !contributing.Head.CommitId.Equals(config.LastRun.Head))
         {
             return true;
         }
@@ -174,8 +184,12 @@ internal sealed class ChangelogCommand(IConsoleIO console) : CommandBase(console
         }
     }
 
-    private static LastRunData GetLastRunData(ChangelogCommandSettings cmdLineSettings)
+    private static LastRunData GetLastRunData(ChangelogCommandSettings cmdLineSettings, bool reset)
     {
+        if (reset)
+        {
+            return new LastRunData();
+        }
         EnsureDataDirectoryExists(cmdLineSettings);
         return LastRunData.Load(LastRunData.GetFilePath(cmdLineSettings.DataDirectory, cmdLineSettings.OutputFilePath));
     }
